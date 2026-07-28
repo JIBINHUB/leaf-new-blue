@@ -2018,7 +2018,7 @@ const App = () => {
     label
   }));
   const advantageCylinderImages = leafAdvantageMedia
-    .slice(0, isMobileViewport ? 7 : 10)
+    .slice(0, 10)
     .map((item) => ({ src: item.src, alt: item.label }));
   const useSingleLoaderVideo = typeof window === 'undefined'
     ? true
@@ -16023,7 +16023,12 @@ const App = () => {
           }
 
           .advantage-cylinder-carousel {
-            inset: 7.5rem 0 5.2rem;
+            inset: 15.4rem -0.7rem 5rem;
+            perspective: 17em !important;
+          }
+
+          .advantage-cylinder-track {
+            --w: clamp(5.35rem, 24vw, 5.85rem) !important;
           }
 
           .advantage-cylinder-card {
@@ -27362,7 +27367,7 @@ const App = () => {
         .studio-heads-indigo-track {
           width: 100%;
           display: grid;
-          grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.03fr) minmax(0, 0.9fr);
+          grid-template-columns: minmax(0, 1.03fr) minmax(0, 1.03fr) minmax(0, 0.9fr);
           align-items: end;
           gap: clamp(0.75rem, 1.8vw, 1.35rem);
         }
