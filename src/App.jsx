@@ -2459,6 +2459,16 @@ const App = () => {
                     </div>
                   </article>
 
+                  <article className={`studio-heads-indigo-card studio-heads-indigo-card-person is-xandra ${activeStudioHead === 1 ? 'is-active' : ''}`}>
+                    <div className="studio-heads-indigo-image">
+                      <img src={studioHeads[1].image} alt={studioHeads[1].alt} loading="eager" decoding="async" fetchpriority="high" draggable="false" />
+                    </div>
+                    <div className="studio-heads-indigo-person-copy">
+                      <strong>{studioHeads[1].name}</strong>
+                      <small>{studioHeads[1].role}</small>
+                    </div>
+                  </article>
+
                   <article className={`studio-heads-indigo-card studio-heads-indigo-card-note ${activeStudioHead === 1 ? 'is-active' : ''}`}>
                     <div className="studio-heads-indigo-grid" aria-hidden="true"></div>
                     <div>
@@ -2471,16 +2481,6 @@ const App = () => {
                       <span>DESIGN</span>
                       <span>LAUNCH</span>
                     </footer>
-                  </article>
-
-                  <article className={`studio-heads-indigo-card studio-heads-indigo-card-person is-xandra ${activeStudioHead === 1 ? 'is-active' : ''}`}>
-                    <div className="studio-heads-indigo-image">
-                      <img src={studioHeads[1].image} alt={studioHeads[1].alt} loading="eager" decoding="async" fetchpriority="high" draggable="false" />
-                    </div>
-                    <div className="studio-heads-indigo-person-copy">
-                      <strong>{studioHeads[1].name}</strong>
-                      <small>{studioHeads[1].role}</small>
-                    </div>
                   </article>
                 </div>
 
@@ -15283,9 +15283,11 @@ const App = () => {
 
           .service-feature-folder h3 {
             order: 3;
-            font-size: 1.62rem;
-            letter-spacing: -0.045em;
-            max-width: 12rem;
+            max-width: none;
+            font-size: 1.32rem;
+            letter-spacing: -0.035em;
+            line-height: 1.05;
+            white-space: nowrap;
           }
 
           .service-feature-meta {
@@ -27644,7 +27646,7 @@ const App = () => {
           .studio-heads-indigo-stage {
             display: block;
             margin: 0;
-            padding: 3.4rem 2.65rem 1.3rem;
+            padding: 2.85rem 0.65rem 1.45rem;
             overflow: hidden;
             touch-action: pan-y;
           }
@@ -27662,7 +27664,7 @@ const App = () => {
             width: calc(50% - 0.35rem);
             min-width: calc(50% - 0.35rem);
             flex: 0 0 calc(50% - 0.35rem);
-            border-radius: 0.8rem;
+            border-radius: 0.95rem;
           }
 
           .studio-heads-indigo-card-note {
@@ -27696,17 +27698,17 @@ const App = () => {
           }
 
           .studio-heads-indigo-person-copy {
-            right: 0.85rem;
-            bottom: 0.85rem;
-            left: 0.85rem;
+            right: 0.78rem;
+            bottom: 0.78rem;
+            left: 0.78rem;
           }
 
           .studio-heads-indigo-person-copy strong {
-            font-size: 0.72rem;
+            font-size: 0.86rem;
           }
 
           .studio-heads-indigo-person-copy small {
-            font-size: 0.37rem;
+            font-size: 0.43rem;
           }
 
           .studio-heads-indigo-control {
@@ -27719,8 +27721,8 @@ const App = () => {
             box-shadow: 0 0.6rem 1.5rem rgba(0,0,30,0.3);
           }
 
-          .studio-heads-indigo-control-left { left: 0.2rem; }
-          .studio-heads-indigo-control-right { right: 0.2rem; }
+          .studio-heads-indigo-control-left { left: 0.12rem; }
+          .studio-heads-indigo-control-right { right: 0.12rem; }
 
           .studio-heads-indigo-footer {
             grid-template-columns: auto minmax(4rem, 1fr) auto;
