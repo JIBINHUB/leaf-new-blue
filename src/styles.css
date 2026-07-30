@@ -28086,3 +28086,351 @@
             box-shadow: 8px 15px 20px -3px rgba(32, 80, 227, 0.3), inset -2px -2px 5px rgba(255,255,255,0.3); 
           }
         }
+
+        /* Dark mode readability: preserve strong contrast without changing any layout. */
+        html[data-theme='dark'] .app-shell p.text-slate-600,
+        html[data-theme='dark'] .app-shell p.text-gray-700,
+        html[data-theme='dark'] .app-shell p.text-gray-600,
+        html[data-theme='dark'] .app-shell p.text-gray-500,
+        html[data-theme='dark'] .app-shell small.text-gray-600,
+        html[data-theme='dark'] .app-shell small.text-gray-500,
+        html[data-theme='dark'] .app-shell small.text-gray-400 {
+          color: #cbd5e1 !important;
+          opacity: 1 !important;
+        }
+
+        html[data-theme='dark'] .home-welcome-copy > p,
+        html[data-theme='dark'] .workspace-hero-copy > p {
+          color: #cbd5e1 !important;
+          opacity: 1 !important;
+        }
+
+        /* The FAQ remains a light glass surface in both themes, so its copy stays dark. */
+        html[data-theme='dark'] .faq-glass-card .faq-question {
+          color: #334155 !important;
+        }
+
+        html[data-theme='dark'] .faq-glass-card .faq-question.is-active {
+          color: #9a3412 !important;
+        }
+
+        html[data-theme='dark'] .faq-glass-card p,
+        html[data-theme='dark'] .faq-glass-card p.text-gray-600 {
+          color: #475569 !important;
+          opacity: 1 !important;
+          text-shadow: none !important;
+        }
+
+        .faq-warm-glass .faq-intro-copy,
+        html[data-theme='dark'] .faq-warm-glass .faq-intro-copy {
+          color: #475569 !important;
+          opacity: 1 !important;
+          text-shadow: none !important;
+        }
+
+        /* Liquid-glass floating action with clear native brand-colour icons. */
+        .unified-floating-action {
+          overflow: hidden;
+          border: 1px solid rgba(255, 255, 255, 0.72);
+          background:
+            radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.96) 0 8%, rgba(255, 255, 255, 0.34) 26%, transparent 47%),
+            radial-gradient(circle at 78% 84%, rgba(95, 188, 255, 0.24), transparent 52%),
+            linear-gradient(145deg, rgba(255, 255, 255, 0.67), rgba(225, 241, 255, 0.36));
+          box-shadow:
+            0 18px 42px rgba(15, 23, 42, 0.18),
+            0 5px 16px rgba(32, 80, 227, 0.13),
+            inset 0 1px 0 rgba(255, 255, 255, 0.98),
+            inset 0 -10px 20px rgba(83, 164, 255, 0.11);
+          -webkit-backdrop-filter: blur(24px) saturate(1.75);
+          backdrop-filter: blur(24px) saturate(1.75);
+          transform: translateZ(0);
+        }
+
+        .unified-floating-action::before {
+          content: "";
+          position: absolute;
+          inset: 0.22rem;
+          display: block;
+          z-index: -1;
+          pointer-events: none;
+          border: 1px solid rgba(255, 255, 255, 0.58);
+          border-radius: inherit;
+          background:
+            linear-gradient(135deg, rgba(255, 255, 255, 0.48), transparent 38% 67%, rgba(126, 199, 255, 0.2));
+          box-shadow:
+            inset 0 0 1rem rgba(255, 255, 255, 0.28),
+            0 0.18rem 0.55rem rgba(30, 64, 175, 0.08);
+        }
+
+        .unified-floating-action::after {
+          content: "";
+          position: absolute;
+          top: 0.52rem;
+          left: 0.78rem;
+          width: 1.42rem;
+          height: 0.58rem;
+          z-index: 0;
+          pointer-events: none;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.72);
+          filter: blur(0.12rem);
+          transform: rotate(-28deg);
+          opacity: 0.82;
+        }
+
+        .unified-floating-icon,
+        .unified-floating-action > strong {
+          z-index: 2;
+        }
+
+        html[data-theme='dark'] .unified-floating-action {
+          border-color: rgba(255, 255, 255, 0.38);
+          background:
+            radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.52), transparent 36%),
+            radial-gradient(circle at 78% 84%, rgba(72, 149, 255, 0.3), transparent 52%),
+            linear-gradient(145deg, rgba(63, 69, 82, 0.78), rgba(20, 25, 34, 0.56));
+          box-shadow:
+            0 20px 46px rgba(0, 0, 0, 0.38),
+            inset 0 1px 0 rgba(255, 255, 255, 0.55),
+            inset 0 -12px 24px rgba(35, 92, 176, 0.18);
+        }
+
+        /* Keep both portraits on stable layers while the page and mobile track move. */
+        .studio-heads-indigo-card-person,
+        .studio-heads-indigo-image {
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+          contain: paint;
+        }
+
+        .studio-heads-indigo-image {
+          overflow: hidden;
+          transform: translateZ(0);
+        }
+
+        .studio-heads-indigo-image img {
+          max-width: none;
+          transform: none;
+          -webkit-transform: none;
+          pointer-events: none;
+          user-select: none;
+          -webkit-user-drag: none;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          .studio-heads-indigo-card-person:hover .studio-heads-indigo-image img {
+            transform: scale(1.035);
+            -webkit-transform: scale(1.035);
+          }
+        }
+
+        @media (hover: none), (max-width: 760px) {
+          .studio-heads-indigo-track {
+            will-change: auto;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+          }
+
+          .studio-heads-indigo-image img,
+          .studio-heads-indigo-card-person:hover .studio-heads-indigo-image img {
+            transform: none !important;
+            -webkit-transform: none !important;
+            transition: filter 0.25s ease !important;
+          }
+        }
+
+        /* Complete dark-theme contrast pass for every rendered page. */
+        html[data-theme='dark'] .services-page > div:first-child h1,
+        html[data-theme='dark'] .services-page .services-phase-section > div h2 {
+          color: #f8fafc !important;
+        }
+
+        html[data-theme='dark'] .services-page > div:first-child p,
+        html[data-theme='dark'] .services-page .services-phase-section > div > p {
+          color: #cbd5e1 !important;
+          opacity: 1 !important;
+        }
+
+        html[data-theme='dark'] .services-page .services-liquid-filter:not(.is-active) {
+          color: #334155 !important;
+          background: rgba(255, 255, 255, 0.94) !important;
+        }
+
+        html[data-theme='dark'] .services-page .services-liquid-filter.is-active {
+          color: #ffffff !important;
+        }
+
+        html[data-theme='dark'] .services-page .services-liquid-row,
+        html[data-theme='dark'] .services-page .services-liquid-item,
+        html[data-theme='dark'] .services-page .services-liquid-tag,
+        html[data-theme='dark'] .services-page .services-liquid-phase {
+          color: #0f172a !important;
+          background-color: rgba(255, 255, 255, 0.96) !important;
+        }
+
+        html[data-theme='dark'] .services-page .services-liquid-row h2,
+        html[data-theme='dark'] .services-page .services-liquid-row p,
+        html[data-theme='dark'] .services-page .services-liquid-row span,
+        html[data-theme='dark'] .services-page .services-liquid-item span,
+        html[data-theme='dark'] .services-page .services-liquid-tag,
+        html[data-theme='dark'] .services-page .services-liquid-phase h3,
+        html[data-theme='dark'] .services-page .services-liquid-phase p {
+          color: #334155 !important;
+          opacity: 1 !important;
+        }
+
+        html[data-theme='dark'] .services-page .services-liquid-row.is-active h2,
+        html[data-theme='dark'] .services-page .services-liquid-phase h3 {
+          color: #0f172a !important;
+        }
+
+        html[data-theme='dark'] .services-page .services-liquid-row span.text-emerald-500,
+        html[data-theme='dark'] .services-page .services-liquid-row span.text-emerald-600 {
+          color: #059669 !important;
+        }
+
+        /* Launch Cloud uses intentionally light editorial cards in both themes. */
+        html[data-theme='dark'] .launch-simple-page .launch-simple-hero,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-section,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-included {
+          color: #111827 !important;
+        }
+
+        html[data-theme='dark'] .launch-simple-page .launch-simple-hero h1,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-hero h2,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-hero h3,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-hero strong,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-section h2,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-section h3,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-section strong,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-included h2 {
+          color: #111827 !important;
+        }
+
+        html[data-theme='dark'] .launch-simple-page .launch-simple-hero p,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-section p,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-section small,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-section li {
+          color: #4b5563 !important;
+          opacity: 1 !important;
+        }
+
+        html[data-theme='dark'] .launch-simple-page .launch-simple-plans article:nth-child(2),
+        html[data-theme='dark'] .launch-simple-page .launch-simple-cta {
+          color: #ffffff !important;
+        }
+
+        html[data-theme='dark'] .launch-simple-page .launch-simple-plans article:nth-child(2) h3,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-plans article:nth-child(2) p,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-plans article:nth-child(2) strong,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-plans article:nth-child(2) small,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-plans article:nth-child(2) li,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-cta span,
+        html[data-theme='dark'] .launch-simple-page .launch-simple-cta h2 {
+          color: #ffffff !important;
+        }
+
+        /* Home narrative form is also a light glass ticket in dark mode. */
+        html[data-theme='dark'] .access-color-pass,
+        html[data-theme='dark'] .access-color-pass .access-color-title,
+        html[data-theme='dark'] .access-color-pass .access-color-link,
+        html[data-theme='dark'] .access-color-pass .access-narrative-copy,
+        html[data-theme='dark'] .access-color-pass p.text-gray-900,
+        html[data-theme='dark'] .access-color-pass .text-gray-900 {
+          color: #172033 !important;
+        }
+
+        html[data-theme='dark'] .access-color-pass .access-color-protocol,
+        html[data-theme='dark'] .access-color-pass .access-color-label {
+          color: #64748b !important;
+          opacity: 1 !important;
+        }
+
+        html[data-theme='dark'] .access-color-pass .narrative-input,
+        html[data-theme='dark'] .access-color-pass .narrative-select {
+          color: #111827 !important;
+          background-color: rgba(255, 255, 255, 0.76) !important;
+          -webkit-text-fill-color: #111827;
+          opacity: 1 !important;
+        }
+
+        html[data-theme='dark'] .access-color-pass .narrative-input::placeholder {
+          color: #64748b !important;
+          opacity: 1 !important;
+          -webkit-text-fill-color: #64748b;
+        }
+
+        html[data-theme='dark'] .access-color-pass button[type='submit'],
+        html[data-theme='dark'] .access-color-pass button[type='submit'] span {
+          color: #ffffff !important;
+        }
+
+        /* The service-detail overlay remains light and must not inherit white page text. */
+        html[data-theme='dark'] .service-detail-modal {
+          color: #111827 !important;
+        }
+
+        html[data-theme='dark'] .service-detail-modal .text-gray-900,
+        html[data-theme='dark'] .service-detail-modal .text-gray-800,
+        html[data-theme='dark'] .service-detail-modal .text-gray-700 {
+          color: #111827 !important;
+        }
+
+        html[data-theme='dark'] .service-detail-modal .text-gray-600,
+        html[data-theme='dark'] .service-detail-modal .text-gray-500,
+        html[data-theme='dark'] .service-detail-modal p {
+          color: #475569 !important;
+          opacity: 1 !important;
+        }
+
+        /* Improve muted copy on dark native surfaces. */
+        html[data-theme='dark'] .studio-workspace .workspace-hero-copy > p,
+        html[data-theme='dark'] .studio-workspace .workspace-card p,
+        html[data-theme='dark'] .studio-workspace .workspace-card small,
+        html[data-theme='dark'] .studio-workspace .workspace-card span:not(.workspace-orange-badge),
+        html[data-theme='dark'] .portfolio-bento-page .portfolio-hero p,
+        html[data-theme='dark'] .portfolio-bento-page .portfolio-consent-note p,
+        html[data-theme='dark'] .portfolio-bento-page .portfolio-showcase-note p {
+          color: #cbd5e1 !important;
+          opacity: 1 !important;
+        }
+
+        html[data-theme='dark'] .studio-workspace button.is-selected span,
+        html[data-theme='dark'] .studio-workspace button.is-selected small {
+          color: #475569 !important;
+        }
+
+        /* Cart stays a light checkout document in both themes. */
+        html[data-theme='dark'] .request-checkout-page,
+        html[data-theme='dark'] .request-checkout-page p,
+        html[data-theme='dark'] .request-checkout-page small,
+        html[data-theme='dark'] .request-checkout-page label {
+          opacity: 1 !important;
+        }
+
+        html[data-theme='dark'] .request-checkout-page .reference-enquiry-form > p,
+        html[data-theme='dark'] .request-checkout-page .reference-form-title p,
+        html[data-theme='dark'] .request-checkout-page .reference-privacy-note p,
+        html[data-theme='dark'] .request-checkout-page .reference-appointment-card p {
+          color: #4b5563 !important;
+        }
+
+        html[data-theme='dark'] .request-checkout-page .reference-enquiry-form label {
+          color: #334155 !important;
+        }
+
+        /* Always-white liquid glass, including dark mode. */
+        html[data-theme='dark'] .unified-floating-action {
+          border-color: rgba(255, 255, 255, 0.96) !important;
+          background:
+            radial-gradient(circle at 27% 18%, rgba(255, 255, 255, 1) 0 9%, rgba(255, 255, 255, 0.58) 29%, transparent 49%),
+            radial-gradient(circle at 78% 84%, rgba(172, 220, 255, 0.3), transparent 52%),
+            linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(235, 246, 255, 0.68)) !important;
+          box-shadow:
+            0 20px 46px rgba(0, 0, 0, 0.34),
+            0 6px 18px rgba(89, 169, 255, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 1),
+            inset 0 -12px 24px rgba(107, 181, 255, 0.14) !important;
+          -webkit-backdrop-filter: blur(26px) saturate(1.85) !important;
+          backdrop-filter: blur(26px) saturate(1.85) !important;
+        }

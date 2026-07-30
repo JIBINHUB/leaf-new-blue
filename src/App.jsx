@@ -2499,7 +2499,7 @@ const App = () => {
                 <div className="studio-heads-indigo-track">
                   <article className={`studio-heads-indigo-card studio-heads-indigo-card-person is-jibin ${activeStudioHead === 0 ? 'is-active' : ''}`}>
                     <div className="studio-heads-indigo-image">
-                      <img src={studioHeads[0].image} alt={studioHeads[0].alt} loading="eager" decoding="async" fetchpriority="high" draggable="false" />
+                      <img src={studioHeads[0].image} alt={studioHeads[0].alt} width="1888" height="2272" loading="eager" decoding="async" fetchPriority="high" draggable="false" />
                     </div>
                     <div className="studio-heads-indigo-person-copy">
                       <strong>{studioHeads[0].name}</strong>
@@ -2509,7 +2509,7 @@ const App = () => {
 
                   <article className={`studio-heads-indigo-card studio-heads-indigo-card-person is-xandra ${activeStudioHead === 1 ? 'is-active' : ''}`}>
                     <div className="studio-heads-indigo-image">
-                      <img src={studioHeads[1].image} alt={studioHeads[1].alt} loading="eager" decoding="async" fetchpriority="high" draggable="false" />
+                      <img src={studioHeads[1].image} alt={studioHeads[1].alt} width="912" height="1168" loading="eager" decoding="async" fetchPriority="high" draggable="false" />
                     </div>
                     <div className="studio-heads-indigo-person-copy">
                       <strong>{studioHeads[1].name}</strong>
@@ -2639,7 +2639,7 @@ const App = () => {
                     You ask.<br/>
                     <span className="faq-accent-title text-transparent bg-clip-text">We spill.</span>
                  </h2>
-                 <p className="text-gray-600 font-light text-base lg:text-lg leading-relaxed mb-7 max-w-md">
+                 <p className="faq-intro-copy text-gray-600 font-light text-base lg:text-lg leading-relaxed mb-7 max-w-md">
                     No PR fluff. No corporate jargon. Just the raw reality of how we operate and why we're the best at it.
                  </p>
 
@@ -2922,7 +2922,7 @@ const App = () => {
 
       {/* Services View */}
       {activeNav === 'services' && (
-        <main className="max-w-6xl mx-auto px-5 sm:px-6 pt-10 sm:pt-14 pb-32 relative z-10 animate-fade-in">
+        <main className="services-page max-w-6xl mx-auto px-5 sm:px-6 pt-10 sm:pt-14 pb-32 relative z-10 animate-fade-in">
           <div className="mb-10 sm:mb-14 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div className="max-w-3xl">
               <div className="services-liquid-pill inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 w-fit">
@@ -4600,7 +4600,7 @@ const App = () => {
 
       {/* Full Screen Service Details Modal - Liquid Glass UI */}
       {showServiceModal && (
-        <div className="fixed inset-0 z-[100] overflow-y-auto animate-slide-up font-sans hide-scrollbar bg-[#f8f9fc]">
+        <div className="service-detail-modal fixed inset-0 z-[100] overflow-y-auto animate-slide-up font-sans hide-scrollbar bg-[#f8f9fc]">
           
           <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
             <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#2050E3]/20 rounded-full mix-blend-multiply filter blur-[80px] animate-blob"></div>
