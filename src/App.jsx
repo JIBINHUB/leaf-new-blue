@@ -2543,57 +2543,8 @@ const App = () => {
                 </CardSwap>
               </div>
 
-              {/* ── MOBILE ONLY: Pure CSS auto-sliding screenshot carousel (no JS, no iframes) ── */}
-              <div className="mobile-hero-showcase lg:hidden w-full">
-                <div className="mobile-hero-track">
-                  {heroWebsites.map((site, idx) => (
-                    <a
-                      key={site.id}
-                      href={site.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mobile-hero-slide"
-                      style={{ animationDelay: `${-idx * 5}s` }}
-                    >
-                      <div className="mobile-hero-slide-header">
-                        <div className="website-hero-card-dots" aria-hidden="true">
-                          <span className="dot-red"></span>
-                          <span className="dot-yellow"></span>
-                          <span className="dot-green"></span>
-                        </div>
-                        <span className="mobile-hero-slide-url">
-                          <Lock size={9} className="text-emerald-400 flex-shrink-0" />
-                          {site.displayUrl || site.url}
-                        </span>
-                        <span className="website-hero-card-tag">{site.badge || 'LIVE'}</span>
-                      </div>
-                      <div className="mobile-hero-slide-preview">
-                        <img
-                          src={`https://api.screenshotone.com/take?url=${encodeURIComponent(site.url)}&viewport_width=1280&viewport_height=800&format=webp&quality=80&cache=true`}
-                          alt={site.title}
-                          loading="lazy"
-                          className="mobile-hero-slide-img"
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                            e.target.nextSibling.style.display = 'flex';
-                          }}
-                        />
-                        <div className="mobile-hero-slide-fallback" style={{ display: 'none' }}>
-                          <span className="mobile-hero-slide-fallback-domain">{site.displayUrl}</span>
-                          <span className="mobile-hero-slide-fallback-label">Live Project →</span>
-                        </div>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-                <div className="mobile-hero-dots" aria-hidden="true">
-                  {heroWebsites.map((_, i) => (
-                    <span key={i} className="mobile-hero-dot" />
-                  ))}
-                </div>
-              </div>
-
             </div>
+
 
           </div>
 
