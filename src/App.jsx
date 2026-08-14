@@ -2504,12 +2504,13 @@ const App = () => {
                 pauseOnHover={true}
                 skewAmount={-5}
                 easing="elastic"
+                onActiveIndexChange={(idx) => setActiveHeroWebsite(idx)}
                 onCardClick={(index) => {
                   const site = heroWebsites[index];
                   if (site?.url) window.open(site.url, '_blank');
                 }}
               >
-                {heroWebsites.map((site) => (
+                {heroWebsites.map((site, idx) => (
                   <Card key={site.id} customClass="website-hero-card-container">
                     <div className="website-hero-card">
                       {/* Browser Chrome Header */}
@@ -2534,8 +2535,8 @@ const App = () => {
                         <span className="website-hero-card-tag">{site.badge || 'LIVE'}</span>
                       </div>
 
-                      {/* Clean 100% Live Scaled Desktop Viewport - Zero Text Overlay */}
-                      <DesktopIframe url={site.url} title={site.title} />
+                      {/* Only load iframe when this card is the active/front card */}
+                      <DesktopIframe url={site.url} title={site.title} isActive={activeHeroWebsite === idx} />
                     </div>
                   </Card>
                 ))}

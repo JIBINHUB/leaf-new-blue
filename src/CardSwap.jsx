@@ -7,44 +7,61 @@ export const Card = forwardRef(({ customClass, ...rest }, ref) => (
 ));
 Card.displayName = 'Card';
 
-// Responsive Desktop Viewport Scaler: Renders 1280px desktop resolution perfectly scaled to card dimensions
-export const DesktopIframe = ({ url, title }) => {
+// Responsive Desktop Viewport Scaler - loads ONE iframe at a time (mobile-safe)
+export const DesktopIframe = ({ url, title, isActive = false }) => {
   const containerRef = useRef(null);
   const [scale, setScale] = useState(0.40);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const calcScale = () => {
       if (containerRef.current) {
         const width = containerRef.current.clientWidth;
-        if (width > 0) {
-          setScale(width / 1280);
-        }
+        if (width > 0) setScale(width / 1280);
       }
     };
     calcScale();
-    window.addEventListener('resize', calcScale);
+    window.addEventListener('resize', calcScale, { passive: true });
     return () => window.removeEventListener('resize', calcScale);
   }, []);
 
+  // Only render the actual iframe when this card is active (memory-safe)
+  const shouldRender = isActive || loaded;
+
+  // Once activated, keep it loaded to avoid flicker
+  useEffect(() => {
+    if (isActive) setLoaded(true);
+  }, [isActive]);
+
   return (
     <div ref={containerRef} className="website-hero-card-body">
-      <div
-        className="website-iframe-scaler"
-        style={{
-          width: '1280px',
-          height: '920px',
-          transform: `scale(${scale})`,
-          transformOrigin: '0 0'
-        }}
-      >
-        <iframe
-          src={url}
-          title={title}
-          className="website-hero-card-iframe"
-          loading="lazy"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-        />
-      </div>
+      {shouldRender ? (
+        <div
+          className="website-iframe-scaler"
+          style={{
+            width: '1280px',
+            height: '920px',
+            transform: `scale(${scale})`,
+            transformOrigin: '0 0'
+          }}
+        >
+          <iframe
+            src={url}
+            title={title}
+            className="website-hero-card-iframe"
+            loading="lazy"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+          />
+        </div>
+      ) : (
+        // Placeholder skeleton while inactive - saves mobile memory
+        <div className="website-hero-card-skeleton">
+          <div className="website-hero-skeleton-shimmer" />
+          <div className="website-hero-skeleton-bar short" />
+          <div className="website-hero-skeleton-bar" />
+          <div className="website-hero-skeleton-bar medium" />
+        </div>
+      )}
     </div>
   );
 };
@@ -81,7 +98,8 @@ const CardSwap = ({
   onCardClick,
   skewAmount = -5,
   easing = 'elastic',
-  children
+  children,
+  onActiveIndexChange
 }) => {
   const config =
     easing === 'elastic'
@@ -172,8 +190,10 @@ const CardSwap = ({
 
     tl.call(() => {
       order.current = [...rest, front];
+      // Notify parent of new active (front) card index
+      if (onActiveIndexChange) onActiveIndexChange(rest[0]);
     });
-  }, [config.durDrop, config.durMove, config.durReturn, config.ease, config.promoteOverlap, config.returnDelay, cardDistance, verticalDistance, refs]);
+  }, [config.durDrop, config.durMove, config.durReturn, config.ease, config.promoteOverlap, config.returnDelay, cardDistance, verticalDistance, refs, onActiveIndexChange]);
 
   useEffect(() => {
     const total = refs.length;

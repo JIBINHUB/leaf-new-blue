@@ -169,3 +169,43 @@
     transform: scale(0.64);
   }
 }
+
+/* Skeleton Placeholder for inactive cards (memory-safe on mobile) */
+.website-hero-card-skeleton {
+  position: absolute;
+  inset: 0;
+  background: #090d16;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.website-hero-skeleton-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(56, 189, 248, 0.06) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-sweep 1.8s ease-in-out infinite;
+}
+
+@keyframes skeleton-sweep {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.website-hero-skeleton-bar {
+  height: 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  width: 100%;
+}
+
+.website-hero-skeleton-bar.short { width: 40%; height: 1.25rem; margin-bottom: 0.5rem; }
+.website-hero-skeleton-bar.medium { width: 65%; }
