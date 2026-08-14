@@ -209,3 +209,127 @@
 
 .website-hero-skeleton-bar.short { width: 40%; height: 1.25rem; margin-bottom: 0.5rem; }
 .website-hero-skeleton-bar.medium { width: 65%; }
+
+/* =======================================================
+   MOBILE HERO SHOWCASE — Pure CSS, Zero Iframes, Zero GSAP
+   ======================================================= */
+.mobile-hero-showcase {
+  width: 100%;
+  padding: 1rem 0 0.5rem;
+}
+
+.mobile-hero-track {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #070a12;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.55),
+    0 6px 20px rgba(32, 80, 227, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.mobile-hero-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  opacity: 0;
+  animation: mobile-slide-cycle 25s ease-in-out infinite;
+}
+
+/* 5 slides, each visible for 5s out of 25s total */
+.mobile-hero-slide:nth-child(1) { animation-delay: 0s; }
+.mobile-hero-slide:nth-child(2) { animation-delay: -5s; }
+.mobile-hero-slide:nth-child(3) { animation-delay: -10s; }
+.mobile-hero-slide:nth-child(4) { animation-delay: -15s; }
+.mobile-hero-slide:nth-child(5) { animation-delay: -20s; }
+
+@keyframes mobile-slide-cycle {
+  0%        { opacity: 0; transform: scale(0.97); }
+  4%, 16%   { opacity: 1; transform: scale(1); }
+  20%, 100% { opacity: 0; transform: scale(1.02); }
+}
+
+.mobile-hero-slide-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.85rem;
+  background: #05070c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.mobile-hero-slide-url {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  font-family: ui-monospace, monospace;
+  color: #94a3b8;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-hero-slide-preview {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background: #090d16;
+}
+
+.mobile-hero-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.mobile-hero-slide-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #080d1a 0%, #0a1228 100%);
+}
+
+.mobile-hero-slide-fallback-domain {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: ui-monospace, monospace;
+}
+
+.mobile-hero-slide-fallback-label {
+  font-size: 0.75rem;
+  color: #60a5fa;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* Dot Indicators */
+.mobile-hero-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
+.mobile-hero-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: background 0.3s ease;
+}

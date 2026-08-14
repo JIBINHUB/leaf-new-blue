@@ -2493,54 +2493,106 @@ const App = () => {
               </div>
             </div>
 
-            {/* Right Column - Interactive 3D CardSwap Live Website Showcase */}
+            {/* Right Column - Live Website Showcase (Desktop: 3D CardSwap | Mobile: CSS Slideshow) */}
             <div className="home-hero-showcase-column w-full flex items-center justify-center relative">
-              <CardSwap
-                width={500}
-                height={370}
-                cardDistance={48}
-                verticalDistance={42}
-                delay={4000}
-                pauseOnHover={true}
-                skewAmount={-5}
-                easing="elastic"
-                onActiveIndexChange={(idx) => setActiveHeroWebsite(idx)}
-                onCardClick={(index) => {
-                  const site = heroWebsites[index];
-                  if (site?.url) window.open(site.url, '_blank');
-                }}
-              >
-                {heroWebsites.map((site, idx) => (
-                  <Card key={site.id} customClass="website-hero-card-container">
-                    <div className="website-hero-card">
-                      {/* Browser Chrome Header */}
-                      <div className="website-hero-card-header">
+
+              {/* ── DESKTOP ONLY: 3D CardSwap with live iframes ── */}
+              <div className="hidden lg:flex w-full items-center justify-center">
+                <CardSwap
+                  width={500}
+                  height={370}
+                  cardDistance={48}
+                  verticalDistance={42}
+                  delay={4000}
+                  pauseOnHover={true}
+                  skewAmount={-5}
+                  easing="elastic"
+                  onActiveIndexChange={(idx) => setActiveHeroWebsite(idx)}
+                  onCardClick={(index) => {
+                    const site = heroWebsites[index];
+                    if (site?.url) window.open(site.url, '_blank');
+                  }}
+                >
+                  {heroWebsites.map((site, idx) => (
+                    <Card key={site.id} customClass="website-hero-card-container">
+                      <div className="website-hero-card">
+                        <div className="website-hero-card-header">
+                          <div className="website-hero-card-dots" aria-hidden="true">
+                            <span className="dot-red"></span>
+                            <span className="dot-yellow"></span>
+                            <span className="dot-green"></span>
+                          </div>
+                          <a
+                            href={site.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="website-hero-card-url"
+                            onClick={(e) => e.stopPropagation()}
+                            title={`Open ${site.url}`}
+                          >
+                            <Lock size={10} className="text-emerald-400 flex-shrink-0" />
+                            <span>{site.displayUrl || site.url}</span>
+                            <ArrowUpRight size={11} className="text-slate-400 ml-0.5 opacity-80" />
+                          </a>
+                          <span className="website-hero-card-tag">{site.badge || 'LIVE'}</span>
+                        </div>
+                        <DesktopIframe url={site.url} title={site.title} isActive={activeHeroWebsite === idx} />
+                      </div>
+                    </Card>
+                  ))}
+                </CardSwap>
+              </div>
+
+              {/* ── MOBILE ONLY: Pure CSS auto-sliding screenshot carousel (no JS, no iframes) ── */}
+              <div className="mobile-hero-showcase lg:hidden w-full">
+                <div className="mobile-hero-track">
+                  {heroWebsites.map((site, idx) => (
+                    <a
+                      key={site.id}
+                      href={site.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mobile-hero-slide"
+                      style={{ animationDelay: `${-idx * 5}s` }}
+                    >
+                      <div className="mobile-hero-slide-header">
                         <div className="website-hero-card-dots" aria-hidden="true">
                           <span className="dot-red"></span>
                           <span className="dot-yellow"></span>
                           <span className="dot-green"></span>
                         </div>
-                        <a
-                          href={site.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="website-hero-card-url"
-                          onClick={(e) => e.stopPropagation()}
-                          title={`Open ${site.url}`}
-                        >
-                          <Lock size={10} className="text-emerald-400 flex-shrink-0" />
-                          <span>{site.displayUrl || site.url}</span>
-                          <ArrowUpRight size={11} className="text-slate-400 ml-0.5 opacity-80" />
-                        </a>
+                        <span className="mobile-hero-slide-url">
+                          <Lock size={9} className="text-emerald-400 flex-shrink-0" />
+                          {site.displayUrl || site.url}
+                        </span>
                         <span className="website-hero-card-tag">{site.badge || 'LIVE'}</span>
                       </div>
+                      <div className="mobile-hero-slide-preview">
+                        <img
+                          src={`https://api.screenshotone.com/take?url=${encodeURIComponent(site.url)}&viewport_width=1280&viewport_height=800&format=webp&quality=80&cache=true`}
+                          alt={site.title}
+                          loading="lazy"
+                          className="mobile-hero-slide-img"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                        <div className="mobile-hero-slide-fallback" style={{ display: 'none' }}>
+                          <span className="mobile-hero-slide-fallback-domain">{site.displayUrl}</span>
+                          <span className="mobile-hero-slide-fallback-label">Live Project →</span>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+                <div className="mobile-hero-dots" aria-hidden="true">
+                  {heroWebsites.map((_, i) => (
+                    <span key={i} className="mobile-hero-dot" />
+                  ))}
+                </div>
+              </div>
 
-                      {/* Only load iframe when this card is the active/front card */}
-                      <DesktopIframe url={site.url} title={site.title} isActive={activeHeroWebsite === idx} />
-                    </div>
-                  </Card>
-                ))}
-              </CardSwap>
             </div>
 
           </div>
