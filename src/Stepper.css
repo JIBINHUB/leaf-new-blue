@@ -1,0 +1,359 @@
+/* ---- Stepper.css (Leaf Creationism Luxury Project Stepper) ---- */
+.cart-stepper-outer {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0 2rem;
+}
+
+.cart-stepper-card {
+  width: 100%;
+  max-width: 58rem;
+  margin: 0 auto;
+  border-radius: 2rem;
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(32, 80, 227, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Stepper Header & Indicator Bar */
+.cart-stepper-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.5rem 2rem 1.25rem;
+  background: #05070c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cart-stepper-title-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cart-stepper-icon-badge {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 0.75rem;
+  background: rgba(32, 80, 227, 0.18);
+  border: 1px solid rgba(32, 80, 227, 0.35);
+  color: #60a5fa;
+  display: grid;
+  place-items: center;
+}
+
+.cart-stepper-heading-text span {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  text-transform: uppercase;
+  display: block;
+}
+
+.cart-stepper-heading-text h2 {
+  font-size: 1.35rem;
+  font-weight: 850;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+
+.cart-stepper-summary-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.cart-stepper-summary-pill strong {
+  color: #60a5fa;
+}
+
+/* Indicators Row */
+.step-indicator-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem 1rem;
+  background: #070a12;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.step-indicator-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+.step-indicator-wrapper:hover .step-indicator-inner {
+  transform: scale(1.08);
+}
+
+.step-indicator {
+  position: relative;
+  outline: none;
+}
+
+.step-indicator-inner {
+  display: flex;
+  height: 2.2rem;
+  width: 2.2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.82rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.step-indicator-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.step-indicator-label small {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.step-indicator-label strong {
+  font-size: 0.78rem;
+  font-weight: 750;
+  color: #cbd5e1;
+}
+
+.step-indicator-wrapper.is-active .step-indicator-label strong {
+  color: #60a5fa;
+}
+
+.step-indicator-wrapper.is-complete .step-indicator-label strong {
+  color: #e2e8f0;
+}
+
+.active-dot {
+  height: 0.7rem;
+  width: 0.7rem;
+  border-radius: 999px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.step-connector {
+  position: relative;
+  margin: 0 0.5rem;
+  height: 0.15rem;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.step-connector-inner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 999px;
+}
+
+.check-icon {
+  height: 1.1rem;
+  width: 1.1rem;
+  color: #ffffff;
+}
+
+/* Step Content Section */
+.step-content-default {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  transition: height 0.35s ease;
+}
+
+.step-default {
+  padding: 1.75rem 2rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.step-content-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.step-content-head h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.step-content-head p {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin: 0.15rem 0 0;
+}
+
+.step-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(32, 80, 227, 0.15);
+  border: 1px solid rgba(32, 80, 227, 0.35);
+  color: #60a5fa;
+  font-size: 0.74rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.step-action-btn:hover {
+  background: #2050E3;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Footer Navigation Controls */
+.footer-container {
+  padding: 1.25rem 2rem 1.75rem;
+  background: #05070c;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-nav {
+  display: flex;
+  align-items: center;
+}
+
+.footer-nav.spread {
+  justify-content: space-between;
+}
+
+.footer-nav.end {
+  justify-content: flex-end;
+}
+
+.back-button {
+  transition: all 0.25s ease;
+  border-radius: 999px;
+  padding: 0.55rem 1.25rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-size: 0.82rem;
+  font-weight: 750;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  transform: translateX(-2px);
+}
+
+.back-button.inactive {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.next-button {
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2050E3 0%, #153bb5 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: -0.01em;
+  padding: 0.6rem 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(32, 80, 227, 0.45);
+}
+
+.next-button:hover {
+  background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(32, 80, 227, 0.6);
+}
+
+.next-button:active {
+  transform: translateY(1px);
+}
+
+.next-button.is-complete-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45);
+}
+
+.next-button.is-complete-btn:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.6);
+}
+
+@media (max-width: 640px) {
+  .cart-stepper-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.25rem 1.25rem 1rem;
+  }
+
+  .step-indicator-row {
+    padding: 1rem 0.75rem;
+  }
+
+  .step-indicator-label {
+    display: none;
+  }
+
+  .step-default {
+    padding: 1.25rem 1rem;
+  }
+
+  .footer-container {
+    padding: 1rem 1.25rem;
+  }
+}

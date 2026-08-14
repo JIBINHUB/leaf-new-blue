@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
+import './DarkMode.css';
+import CardSwap, { Card, DesktopIframe } from './CardSwap';
+import Stepper, { Step } from './Stepper';
 import { 
   Mail, 
   Home, 
@@ -605,6 +608,89 @@ const App = () => {
       position: "38% 50%"
     }
   ];
+
+  // 5 Featured Company Websites Showcase in Hero Section
+  const [activeHeroWebsite, setActiveHeroWebsite] = useState(0);
+
+  const heroWebsites = [
+    {
+      id: 1,
+      title: "Coveo Music Studio & Sync",
+      shortTitle: "Coveo Music",
+      client: "Coveo Music",
+      category: "Audio Platform & Music Sync",
+      tech: ["React", "Web Audio API", "Next.js", "Tailwind"],
+      url: "https://coveomusic.com/",
+      displayUrl: "coveomusic.com",
+      badge: "FEATURED LAUNCH",
+      stat: "+180% Stream Growth",
+      image: "/assets/portfolio/new-work/podlight-uiux-case-study.jpg",
+      desc: "Immersive digital audio platform and music ecosystem engineered for seamless discovery, licensing, and artist showcase."
+    },
+    {
+      id: 2,
+      title: "Vero Studio Architecture & Spaces",
+      shortTitle: "Vero Studio",
+      client: "Vero Studio",
+      category: "Architectural & Spatial Design",
+      tech: ["Next.js", "WebGL", "Tailwind", "Motion"],
+      url: "https://www.verostudio.com/",
+      displayUrl: "verostudio.com",
+      badge: "CLIENT SHOWCASE",
+      stat: "Awwwards Nominee",
+      image: "/assets/portfolio/new-work/navo-identity-cover.jpg",
+      desc: "Architectural and spatial studio portfolio showcasing bespoke structural concepts, high-fidelity renders, and dynamic typography."
+    },
+    {
+      id: 3,
+      title: "Jibin Chacko Creative Technologist",
+      shortTitle: "Jibin Chacko",
+      client: "Jibin Chacko",
+      category: "Personal Portfolio & Creative Systems",
+      tech: ["React", "GSAP", "Tailwind", "Vite"],
+      url: "https://jibinchacko.online/",
+      displayUrl: "jibinchacko.online",
+      badge: "FOUNDER PORTFOLIO",
+      stat: "100/100 Lighthouse",
+      image: "/assets/team/jibin-founder-hq.jpg",
+      desc: "Personal portfolio showcasing brand design systems, creative direction, high-performance web development, and digital ventures."
+    },
+    {
+      id: 4,
+      title: "Nainu Interactive Digital Experience",
+      shortTitle: "Nainu App",
+      client: "Nainu App",
+      category: "Web Application & Digital Product",
+      tech: ["React", "Next.js", "Vercel", "Tailwind"],
+      url: "https://nainu.vercel.app/",
+      displayUrl: "nainu.vercel.app",
+      badge: "LIVE DEPLOYMENT",
+      stat: "Sub-50ms Response",
+      image: "/assets/portfolio/new-work/frodir-mobile-dashboard.webp",
+      desc: "Next-generation reactive web application featuring fluid touch gestures, instant page state updates, and clean modular UI."
+    },
+    {
+      id: 5,
+      title: "Drift N Threads Contemporary Apparel",
+      shortTitle: "Drift N Threads",
+      client: "Drift N Threads Co.",
+      category: "E-Commerce & Streetwear Brand",
+      tech: ["Shopify Plus", "React", "Tailwind", "Stripe"],
+      url: "https://driftnthreads.com/",
+      displayUrl: "driftnthreads.com",
+      badge: "COMMERCE BUILD",
+      stat: "+210% Conversion Lift",
+      image: "/assets/portfolio/new-work/denim-product-campaign.jpg",
+      desc: "High-converting streetwear e-commerce storefront with seamless product drops, curated visual lookbooks, and instant checkout."
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveHeroWebsite((prev) => (prev + 1) % 5);
+    }, 4600);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -2306,10 +2392,10 @@ const App = () => {
         <main className="home-screen max-w-6xl mx-auto px-4 sm:px-6 pt-0 sm:pt-4 pb-0 relative z-10 animate-fade-in flex flex-col gap-16 lg:gap-24">
           
           {/* SECTION 1: Top Hero (Two Columns - Completely separated from About) */}
-          <div className="home-hero-layout flex flex-col gap-8 lg:gap-12 items-start relative z-20">
+          <div className="home-hero-layout grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-12 items-center relative z-20">
             
             {/* Left Column - Hero Text, Ads, and Services Icons */}
-            <div className="home-hero-copy w-full lg:max-w-3xl pt-2 sm:pt-4 lg:pt-8 flex flex-col gap-6 lg:gap-8">
+            <div className="home-hero-copy w-full pt-2 sm:pt-4 lg:pt-8 flex flex-col gap-6 lg:gap-8">
               
               {/* Horizontal Banner Carousel */}
               <div className="home-promo-card relative w-full max-w-xl overflow-hidden rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] group bg-white">
@@ -2382,7 +2468,7 @@ const App = () => {
 
               {/* Welcome Text */}
               <div className="home-welcome-copy">
-                <h1 className={`dia-headline text-[38px] sm:text-4xl md:text-5xl lg:text-[56px] leading-[1.05] text-gray-900 font-light mb-3 sm:mb-4 tracking-tight ${showLoader ? '' : 'is-ready'}`}>
+                <h1 className={`dia-headline text-[38px] sm:text-4xl md:text-5xl lg:text-[54px] leading-[1.05] text-gray-900 font-light mb-3 sm:mb-4 tracking-tight ${showLoader ? '' : 'is-ready'}`}>
                   <span className="dia-headline-base">
                     Design, build, and grow your <span className="font-medium">next digital product.</span>
                   </span>
@@ -2405,6 +2491,55 @@ const App = () => {
                   pushForce={12}
                 />
               </div>
+            </div>
+
+            {/* Right Column - Interactive 3D CardSwap Live Website Showcase */}
+            <div className="home-hero-showcase-column w-full flex items-center justify-center relative">
+              <CardSwap
+                width={500}
+                height={370}
+                cardDistance={48}
+                verticalDistance={42}
+                delay={4000}
+                pauseOnHover={true}
+                skewAmount={-5}
+                easing="elastic"
+                onCardClick={(index) => {
+                  const site = heroWebsites[index];
+                  if (site?.url) window.open(site.url, '_blank');
+                }}
+              >
+                {heroWebsites.map((site) => (
+                  <Card key={site.id} customClass="website-hero-card-container">
+                    <div className="website-hero-card">
+                      {/* Browser Chrome Header */}
+                      <div className="website-hero-card-header">
+                        <div className="website-hero-card-dots" aria-hidden="true">
+                          <span className="dot-red"></span>
+                          <span className="dot-yellow"></span>
+                          <span className="dot-green"></span>
+                        </div>
+                        <a
+                          href={site.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="website-hero-card-url"
+                          onClick={(e) => e.stopPropagation()}
+                          title={`Open ${site.url}`}
+                        >
+                          <Lock size={10} className="text-emerald-400 flex-shrink-0" />
+                          <span>{site.displayUrl || site.url}</span>
+                          <ArrowUpRight size={11} className="text-slate-400 ml-0.5 opacity-80" />
+                        </a>
+                        <span className="website-hero-card-tag">{site.badge || 'LIVE'}</span>
+                      </div>
+
+                      {/* Clean 100% Live Scaled Desktop Viewport - Zero Text Overlay */}
+                      <DesktopIframe url={site.url} title={site.title} />
+                    </div>
+                  </Card>
+                ))}
+              </CardSwap>
             </div>
 
           </div>
@@ -2499,7 +2634,7 @@ const App = () => {
                 <div className="studio-heads-indigo-track">
                   <article className={`studio-heads-indigo-card studio-heads-indigo-card-person is-jibin ${activeStudioHead === 0 ? 'is-active' : ''}`}>
                     <div className="studio-heads-indigo-image">
-                      <img src={studioHeads[0].image} alt={studioHeads[0].alt} width="1888" height="2272" loading="eager" decoding="async" fetchPriority="high" draggable="false" />
+                      <img src={studioHeads[0].image} alt={studioHeads[0].alt} width="1888" height="2272" loading="eager" decoding="async" draggable="false" />
                     </div>
                     <div className="studio-heads-indigo-person-copy">
                       <strong>{studioHeads[0].name}</strong>
@@ -2509,7 +2644,7 @@ const App = () => {
 
                   <article className={`studio-heads-indigo-card studio-heads-indigo-card-person is-xandra ${activeStudioHead === 1 ? 'is-active' : ''}`}>
                     <div className="studio-heads-indigo-image">
-                      <img src={studioHeads[1].image} alt={studioHeads[1].alt} width="912" height="1168" loading="eager" decoding="async" fetchPriority="high" draggable="false" />
+                      <img src={studioHeads[1].image} alt={studioHeads[1].alt} width="912" height="1168" loading="eager" decoding="async" draggable="false" />
                     </div>
                     <div className="studio-heads-indigo-person-copy">
                       <strong>{studioHeads[1].name}</strong>
@@ -2555,9 +2690,17 @@ const App = () => {
               <div className="service-feature-dashboard" aria-label="Leaf Creationism service features">
                 <div className="service-feature-topbar">
                   <div className="service-feature-duration">
-                    <span>Service suite</span>
-                    <strong>08</strong>
-                    <small>core services</small>
+                    <div className="service-feature-live-indicator">
+                      <span className="live-pulse-dot"></span>
+                      <span>SERVICE SUITE</span>
+                    </div>
+                    <strong className="service-feature-number">08</strong>
+                    <div className="service-feature-sub">
+                      <small>core services</small>
+                      <div className="service-signal-bars" aria-hidden="true">
+                        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                      </div>
+                    </div>
                   </div>
                   <button
                     className="service-feature-book"
@@ -2566,35 +2709,51 @@ const App = () => {
                       navigateTo('workspace');
                     }}
                   >
-                    Book a Strategy Call
+                    <span className="service-book-shimmer"></span>
+                    <span className="service-book-content">
+                      <span className="service-book-label">Book a Strategy Call</span>
+                      <ArrowUpRight size={22} className="service-book-arrow" />
+                    </span>
                   </button>
                   <div className="service-feature-avatar" aria-label="Leaf Creationism">
+                    <div className="service-avatar-ring"></div>
                     <img src={localLeafLogoWhite} alt="Leaf Creationism logo" />
                   </div>
                 </div>
 
                 <div className="service-feature-grid">
                   <article className="service-feature-card service-feature-clock">
-                    <div className="service-feature-service-icon">
-                      <PenTool size={34} strokeWidth={1.55} />
+                    <div className="service-feature-card-header">
+                      <div className="service-feature-service-icon">
+                        <PenTool size={30} strokeWidth={1.75} />
+                      </div>
+                      <span className="service-card-tag">SYSTEMS</span>
                     </div>
                     <div className="service-feature-note">
                       <span>Experience design</span>
                       <p><strong>UI/UX systems</strong> for apps, websites, landing pages, and product flows.</p>
+                      <div className="service-pill-row">
+                        <span>Figma</span>
+                        <span>Design Systems</span>
+                        <span>Prototypes</span>
+                      </div>
                     </div>
                   </article>
 
                   <article className="service-feature-card service-feature-folder">
-                    <div className="service-feature-menu" aria-hidden="true">
-                      <span></span><span></span><span></span>
-                    </div>
-                    <div className="service-feature-folder-icon">
-                      <MonitorSmartphone size={42} strokeWidth={1.55} />
+                    <div className="service-feature-card-header">
+                      <div className="service-feature-folder-icon">
+                        <MonitorSmartphone size={32} strokeWidth={1.75} />
+                      </div>
+                      <div className="service-feature-menu" aria-hidden="true">
+                        <span></span><span></span><span></span>
+                      </div>
                     </div>
                     <span className="service-feature-label">Build studio</span>
                     <h3>Web & app systems</h3>
                     <div className="service-feature-meta">
                       <span>React</span>
+                      <span>Next.js</span>
                       <span>Shopify</span>
                       <span>No-code</span>
                     </div>
@@ -2603,7 +2762,9 @@ const App = () => {
 
                 <div className="service-feature-bottom">
                   <div className="service-feature-plus" aria-hidden="true">
-                    <Cpu size={34} strokeWidth={1.55} />
+                    <div className="plus-icon-pulse">
+                      <Cpu size={36} strokeWidth={1.65} />
+                    </div>
                   </div>
                   <button
                     className="service-feature-card service-feature-message"
@@ -2613,8 +2774,17 @@ const App = () => {
                     }}
                     aria-label="Open active projects page"
                   >
-                    <span>Active project</span>
+                    <div className="service-message-top">
+                      <span className="service-status-pill">
+                        <span className="live-status-dot"></span>
+                        Active Production
+                      </span>
+                      <span className="service-stage-badge">SPRINT 04</span>
+                    </div>
                     <p><strong>3D motion brand kit</strong>, two full-stack websites, and launch assets in progress.</p>
+                    <div className="service-progress-track">
+                      <div className="service-progress-fill" style={{ width: '78%' }}></div>
+                    </div>
                     <small>Tap for full project details <ArrowUpRight size={16} strokeWidth={1.8} /></small>
                   </button>
                 </div>
@@ -4338,59 +4508,58 @@ const App = () => {
       )}
 
       {activeNav === 'referenceCart' && (
-        <main className="reference-cart-page request-checkout-page max-w-6xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 pb-36 relative z-10 animate-fade-in">
-          <section className="request-checkout-hero" aria-labelledby="request-checkout-title">
-            <div className="request-checkout-heading">
-              <div className="request-checkout-title-icon" aria-hidden="true">
-                <ShoppingBag size={27} />
+        <main className="reference-cart-page request-checkout-page max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-36 relative z-10 animate-fade-in">
+          {/* Top Hero Banner */}
+          <section className="cart-stepper-header mb-6 rounded-[2rem] bg-[#090d16] border border-white/10 p-6 flex flex-wrap items-center justify-between gap-4 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#153bb5] to-[#406af5] flex items-center justify-center text-white shadow-[0_8px_20px_rgba(32,80,227,0.35)]">
+                <ShoppingBag size={24} />
               </div>
               <div>
-                <span>Leaf Creationism / Checkout</span>
-                <h2 id="request-checkout-title">Project cart</h2>
+                <span className="text-[11px] font-bold tracking-widest text-[#60a5fa] uppercase block">Leaf Creationism / Project Cart</span>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Project Cart & Launch Flow</h1>
               </div>
             </div>
-
-            <div className="request-goal-card">
-              <div className="request-goal-topline">
-                <span>Cart summary</span>
-                <Briefcase size={18} />
-              </div>
-              <div className="request-goal-content">
-                <span><Check size={15} /> {selectedServiceItems.length} service{selectedServiceItems.length === 1 ? '' : 's'}</span>
-                <strong>{selectedReferenceItems.length} visual reference{selectedReferenceItems.length === 1 ? '' : 's'}</strong>
-                <button type="button" onClick={() => navigateTo('portfolio')} aria-label="Add a portfolio reference">
-                  <Plus size={15} />
-                </button>
-              </div>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#05070c] border border-white/10 text-xs font-semibold text-slate-300">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>{selectedServiceItems.length} service{selectedServiceItems.length === 1 ? '' : 's'}</span>
+              <span className="opacity-40">•</span>
+              <span>{selectedReferenceItems.length} reference{selectedReferenceItems.length === 1 ? '' : 's'}</span>
+              <span className="opacity-40">•</span>
+              <strong className="text-emerald-400">₹0 due now</strong>
             </div>
-
-            <div className="request-progress-shell" aria-label="Project request progress">
-              <div className="request-progress-fill" aria-hidden="true" />
-              <span className="is-current"><b><ShoppingBag size={17} /></b><em>1</em><strong>Cart</strong></span>
-              <span className="is-complete"><b><Calendar size={17} /></b><em>2</em><strong>Appointment</strong></span>
-              <span><b><Mail size={17} /></b><em>3</em><strong>Details</strong></span>
-            </div>
-
-            <p className="request-checkout-tip">Review your selections, add contact details, and send the project request.</p>
           </section>
 
-          <section className="reference-cart-panel">
-            <div className="reference-cart-grid">
-              <div className="reference-selected-list">
-                <div className="reference-list-head">
-                  <div>
-                    <span>Step 1</span>
-                    <strong>{selectedServiceItems.length} service{selectedServiceItems.length === 1 ? '' : 's'} selected</strong>
-                  </div>
-                  <button type="button" onClick={() => navigateTo('home')}>Edit services</button>
+          {/* Luxury Animated Stepper */}
+          <Stepper
+            initialStep={1}
+            stepLabels={['Services', 'Strategy Call', 'References', 'Contact']}
+            onFinalStepCompleted={() => {
+              const submitBtn = document.getElementById('reference-cart-submit-btn');
+              if (submitBtn) submitBtn.click();
+            }}
+          >
+            {/* STEP 1: Core Services */}
+            <Step>
+              <div className="step-content-head">
+                <div>
+                  <h3>Selected Service Suite</h3>
+                  <p>Choose the core creative and engineering services for your project.</p>
                 </div>
-                <div className="reference-service-summary">
-                  {selectedServiceItems.length > 0 ? (
-                    selectedServiceItems.map((service) => {
+                <button type="button" className="step-action-btn" onClick={() => navigateTo('home')}>
+                  <Plus size={14} />
+                  <span>Add Services</span>
+                </button>
+              </div>
+
+              <div className="reference-service-summary pt-2">
+                {selectedServiceItems.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {selectedServiceItems.map((service) => {
                       const ServiceIcon = service.icon;
                       return (
                         <div className="reference-service-chip" key={service.id}>
-                          <ServiceIcon size={16} />
+                          <ServiceIcon size={18} />
                           <span>
                             <strong>{service.title}</strong>
                             <small>{service.desc}</small>
@@ -4400,77 +4569,113 @@ const App = () => {
                           </button>
                         </div>
                       );
-                    })
-                  ) : (
-                    <div className="reference-empty-card">
-                      <strong>No service selected yet</strong>
-                      <p>Go back to Home and choose services in Build Your Project, or submit only with references.</p>
-                      <button type="button" onClick={() => navigateTo('home')}>Choose services</button>
-                    </div>
-                  )}
-                </div>
-                <div className="reference-appointment-card">
-                  <div>
-                    <span>Step 2 / Online appointment</span>
-                    <strong>{selectedSchedule.title}</strong>
-                    <p>{selectedAppointment.full} / {selectedSlot.time} IST / {selectedSlot.note}</p>
+                    })}
                   </div>
-                  <button type="button" onClick={() => navigateTo('workspace')}>Change</button>
-                </div>
-                <div className="reference-list-head">
-                  <div>
-                    <span>Step 3 / Optional references</span>
-                    <strong>{selectedReferenceItems.length} portfolio reference{selectedReferenceItems.length === 1 ? '' : 's'}</strong>
+                ) : (
+                  <div className="reference-empty-card">
+                    <strong>No service selected yet</strong>
+                    <p>Go back to Home and choose services in Build Your Project, or continue with your custom brief.</p>
+                    <button type="button" onClick={() => navigateTo('home')}>Choose services</button>
                   </div>
-                  <button type="button" onClick={() => navigateTo('portfolio')}>Add reference</button>
+                )}
+              </div>
+            </Step>
+
+            {/* STEP 2: Strategy Call */}
+            <Step>
+              <div className="step-content-head">
+                <div>
+                  <h3>Strategy Consultation & Schedule</h3>
+                  <p>Confirmed slot with the Leaf creative directors.</p>
                 </div>
-                {selectedReferenceItems.map((item) => (
-                  <article
-                    key={item.src}
-                    className={`reference-selected-card ratio-${getPortfolioRatio(item)}`}
-                    style={{ '--portfolio-ratio': getPortfolioAspectRatio(item) }}
-                  >
-                    <div>
-                      {item.type === 'video' ? (
-                        <video
-                          src={item.src}
-                          muted
-                          playsInline
-                          preload="metadata"
-                          onLoadedMetadata={(event) => rememberPortfolioRatio(item.src, event.currentTarget.videoWidth, event.currentTarget.videoHeight)}
-                        />
-                      ) : (
-                        <img
-                          src={item.src}
-                          alt={item.title}
-                          loading="lazy"
-                          onLoad={(event) => rememberPortfolioRatio(item.src, event.currentTarget.naturalWidth, event.currentTarget.naturalHeight)}
-                        />
-                      )}
-                    </div>
-                    <section>
-                      <span>{item.category}</span>
-                      <strong>{item.title}</strong>
-                      <p>{item.format} reference saved for your enquiry.</p>
-                      <button type="button" onClick={() => togglePortfolioReference(item)}>Remove</button>
-                    </section>
-                  </article>
-                ))}
+                <button type="button" className="step-action-btn" onClick={() => navigateTo('workspace')}>
+                  <Calendar size={14} />
+                  <span>Change Time</span>
+                </button>
+              </div>
+
+              <div className="reference-appointment-card">
+                <div>
+                  <span>Online Consultation</span>
+                  <strong>{selectedSchedule.title}</strong>
+                  <p>{selectedAppointment.full} / {selectedSlot.time} IST / {selectedSlot.note}</p>
+                </div>
+                <button type="button" onClick={() => navigateTo('workspace')}>Reschedule</button>
+              </div>
+            </Step>
+
+            {/* STEP 3: Portfolio References */}
+            <Step>
+              <div className="step-content-head">
+                <div>
+                  <h3>Visual Inspiration & References (Optional)</h3>
+                  <p>Saved portfolio references to guide the aesthetic direction.</p>
+                </div>
+                <button type="button" className="step-action-btn" onClick={() => navigateTo('portfolio')}>
+                  <Plus size={14} />
+                  <span>Browse Work</span>
+                </button>
+              </div>
+
+              <div className="reference-references-container pt-2">
+                {selectedReferenceItems.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {selectedReferenceItems.map((item) => (
+                      <article
+                        key={item.src}
+                        className={`reference-selected-card ratio-${getPortfolioRatio(item)}`}
+                        style={{ '--portfolio-ratio': getPortfolioAspectRatio(item) }}
+                      >
+                        <div>
+                          {item.type === 'video' ? (
+                            <video
+                              src={item.src}
+                              muted
+                              playsInline
+                              preload="metadata"
+                              onLoadedMetadata={(event) => rememberPortfolioRatio(item.src, event.currentTarget.videoWidth, event.currentTarget.videoHeight)}
+                            />
+                          ) : (
+                            <img
+                              src={item.src}
+                              alt={item.title}
+                              loading="lazy"
+                              onLoad={(event) => rememberPortfolioRatio(item.src, event.currentTarget.naturalWidth, event.currentTarget.naturalHeight)}
+                            />
+                          )}
+                        </div>
+                        <section>
+                          <span>{item.category}</span>
+                          <strong>{item.title}</strong>
+                          <p>{item.format} reference saved for your enquiry.</p>
+                          <button type="button" onClick={() => togglePortfolioReference(item)}>Remove</button>
+                        </section>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="reference-empty-card">
+                    <strong>No visual references added yet</strong>
+                    <p>You can add visual references from our portfolio gallery, or skip to contact details.</p>
+                    <button type="button" onClick={() => navigateTo('portfolio')}>Explore Portfolio</button>
+                  </div>
+                )}
+              </div>
+            </Step>
+
+            {/* STEP 4: Client Contact & Project Brief */}
+            <Step>
+              <div className="step-content-head">
+                <div>
+                  <h3>Client Contact & Project Brief</h3>
+                  <p>Tell us about your brand and where we should send the proposal.</p>
+                </div>
               </div>
 
               <form
                 className="reference-enquiry-form"
                 onSubmit={submitReferenceEnquiry}
               >
-                <div className="reference-simple-summary">
-                  <div><ShoppingBag size={18} /><span>{selectedServiceItems.length} services / {selectedReferenceItems.length} references</span></div>
-                  <strong>₹0 due now</strong>
-                </div>
-                <div className="reference-form-title">
-                  <span>Step 4</span>
-                  <strong>Contact details</strong>
-                  <p>We use this only to reply to your enquiry and prepare the project estimate.</p>
-                </div>
                 {formStatus === 'reference-sent' && (
                   <div className="reference-success-hero" role="status">
                     <div className="reference-success-orbit">
@@ -4480,30 +4685,34 @@ const App = () => {
                     <p>We will reach you within 24 hours. Your data is safe with us.</p>
                   </div>
                 )}
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <label>
+                    Name
+                    <input
+                      name="Name"
+                      type="text"
+                      required
+                      value={referenceForm.name}
+                      onChange={(event) => updateReferenceField('name', event.target.value)}
+                      placeholder="Your full name"
+                    />
+                  </label>
+                  <label>
+                    Gmail / Email
+                    <input
+                      name="Email"
+                      type="email"
+                      required
+                      value={referenceForm.email}
+                      onChange={(event) => updateReferenceField('email', event.target.value)}
+                      placeholder="you@gmail.com"
+                    />
+                  </label>
+                </div>
+
                 <label>
-                  Name
-                  <input
-                    name="Name"
-                    type="text"
-                    required
-                    value={referenceForm.name}
-                    onChange={(event) => updateReferenceField('name', event.target.value)}
-                    placeholder="Your name"
-                  />
-                </label>
-                <label>
-                  Gmail / Email
-                  <input
-                    name="Email"
-                    type="email"
-                    required
-                    value={referenceForm.email}
-                    onChange={(event) => updateReferenceField('email', event.target.value)}
-                    placeholder="you@gmail.com"
-                  />
-                </label>
-                <label>
-                  WhatsApp number
+                  WhatsApp Phone Number
                   <input
                     name="Phone"
                     type="tel"
@@ -4513,6 +4722,7 @@ const App = () => {
                     placeholder="+91 ..."
                   />
                 </label>
+
                 <label>
                   What do you want to create?
                   <textarea
@@ -4520,8 +4730,8 @@ const App = () => {
                     required
                     value={referenceForm.project}
                     onChange={(event) => updateReferenceField('project', event.target.value)}
-                    placeholder="Tell us about your brand, product, or campaign."
-                    rows="4"
+                    placeholder="Tell us about your brand, product, or campaign vision."
+                    rows="3"
                   />
                 </label>
 
@@ -4534,12 +4744,13 @@ const App = () => {
 
                 <div className="reference-submit-row">
                   <button
+                    id="reference-cart-submit-btn"
                     type="submit"
                     className={`reference-submit-button ${!canSubmitReferenceEnquiry ? 'is-disabled' : ''} ${formStatus === 'sending' ? 'is-sending' : ''} ${formStatus === 'reference-sent' ? 'is-sent' : ''}`}
                     disabled={!canSubmitReferenceEnquiry || formStatus === 'sending' || formStatus === 'reference-sent'}
                   >
                     {formStatus === 'reference-sent' ? <Check size={18} /> : <Mail size={18} />}
-                    {formStatus === 'sending' ? 'Preparing request...' : formStatus === 'reference-sent' ? 'Sent - 24h reply' : 'Submit enquiry'}
+                    {formStatus === 'sending' ? 'Preparing request...' : formStatus === 'reference-sent' ? 'Sent - 24h reply' : 'Submit Project Request'}
                   </button>
                   <a
                     className="reference-whatsapp-button"
@@ -4550,16 +4761,16 @@ const App = () => {
                     WhatsApp <ArrowUpRight size={16} />
                   </a>
                 </div>
+
                 {formStatus === 'reference-sent' && (
                   <p className="reference-form-success">Enquiry sent. We received your services, appointment, references, and contact details.</p>
                 )}
                 {formStatus === 'error' && (
                   <p className="reference-form-error">Could not send right now. Please try again or use WhatsApp.</p>
                 )}
-                <p>Submit enquiry sends selected services, appointment details, optional references, and client details securely. WhatsApp is only a quick backup option.</p>
               </form>
-            </div>
-          </section>
+            </Step>
+          </Stepper>
         </main>
       )}
 

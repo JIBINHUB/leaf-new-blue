@@ -1,0 +1,171 @@
+/* ---- CardSwap.css ---- */
+.card-swap-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+  overflow: visible;
+  padding: 1.5rem 0;
+}
+
+.card-swap-container {
+  position: relative;
+  perspective: 1000px;
+  overflow: visible;
+  transform-style: preserve-3d;
+}
+
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #070a12;
+  box-shadow:
+    0 32px 75px rgba(0, 0, 0, 0.65),
+    0 10px 28px rgba(32, 80, 227, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow:
+    0 36px 85px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(56, 189, 248, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Custom design for live website cards inside CardSwap */
+.website-hero-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #070a12;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.website-hero-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: #05070c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.website-hero-card-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.website-hero-card-dots span {
+  width: 0.58rem;
+  height: 0.58rem;
+  border-radius: 50%;
+}
+
+.website-hero-card-dots .dot-red { background: #ef4444; }
+.website-hero-card-dots .dot-yellow { background: #f59e0b; }
+.website-hero-card-dots .dot-green { background: #10b981; }
+
+.website-hero-card-url {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  font-family: ui-monospace, monospace;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  max-width: 17rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.website-hero-card-url:hover {
+  background: rgba(32, 80, 227, 0.3);
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #38bdf8;
+}
+
+.website-hero-card-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.website-hero-card-body {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  height: calc(100% - 2.8rem);
+  overflow: hidden;
+  background: #090d16;
+}
+
+.website-iframe-scaler {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1280px;
+  height: 920px;
+  transform-origin: 0 0;
+  pointer-events: auto;
+}
+
+.website-hero-card-iframe {
+  width: 1280px;
+  height: 920px;
+  border: none;
+  background: #090d16;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .card-swap-wrapper {
+    min-height: 380px;
+  }
+  .card-swap-container {
+    transform: scale(0.8);
+  }
+}
+
+@media (max-width: 480px) {
+  .card-swap-wrapper {
+    min-height: 300px;
+  }
+  .card-swap-container {
+    transform: scale(0.64);
+  }
+}

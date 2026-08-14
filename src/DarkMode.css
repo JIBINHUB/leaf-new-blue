@@ -1,0 +1,629 @@
+/* ==========================================================================
+   LEAF CREATIONISM - MASTER DARK MODE ENGINE (Obsidian Luxury & Ultra Legibility)
+   ========================================================================== */
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* 1. Global App Foundations */
+html[data-theme='dark'] body,
+html[data-theme='dark'] .app-shell {
+  background-color: #060911 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Universal Typography High-Contrast Overrides */
+html[data-theme='dark'] h1,
+html[data-theme='dark'] h2,
+html[data-theme='dark'] h3,
+html[data-theme='dark'] h4,
+html[data-theme='dark'] h5,
+html[data-theme='dark'] h6,
+html[data-theme='dark'] .text-gray-950,
+html[data-theme='dark'] .text-gray-900,
+html[data-theme='dark'] .text-slate-900,
+html[data-theme='dark'] .text-zinc-900,
+html[data-theme='dark'] .text-black,
+html[data-theme='dark'] strong,
+html[data-theme='dark'] b {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] p,
+html[data-theme='dark'] .text-gray-800,
+html[data-theme='dark'] .text-gray-700,
+html[data-theme='dark'] .text-slate-800,
+html[data-theme='dark'] .text-slate-700,
+html[data-theme='dark'] .text-zinc-800,
+html[data-theme='dark'] .text-zinc-700,
+html[data-theme='dark'] li {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .text-gray-600,
+html[data-theme='dark'] .text-gray-500,
+html[data-theme='dark'] .text-slate-600,
+html[data-theme='dark'] .text-slate-500,
+html[data-theme='dark'] .text-zinc-600,
+html[data-theme='dark'] .text-zinc-500,
+html[data-theme='dark'] small,
+html[data-theme='dark'] em {
+  color: #94a3b8 !important;
+}
+
+/* Global Light Background Replacements */
+html[data-theme='dark'] .bg-white,
+html[data-theme='dark'] .bg-gray-50,
+html[data-theme='dark'] .bg-gray-100,
+html[data-theme='dark'] .bg-slate-50,
+html[data-theme='dark'] .bg-slate-100,
+html[data-theme='dark'] .bg-zinc-50,
+html[data-theme='dark'] .bg-zinc-100 {
+  background-color: #0c1220 !important;
+  color: #f1f5f9 !important;
+}
+
+html[data-theme='dark'] .border-gray-100,
+html[data-theme='dark'] .border-gray-200,
+html[data-theme='dark'] .border-gray-300,
+html[data-theme='dark'] .border-slate-100,
+html[data-theme='dark'] .border-slate-200,
+html[data-theme='dark'] .border-slate-300,
+html[data-theme='dark'] .border-zinc-200 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ==========================================================================
+   2. TOP NAVIGATION & HEADER BAR
+   ========================================================================== */
+html[data-theme='dark'] .app-shell > nav {
+  background: rgba(6, 9, 17, 0.88) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5) !important;
+}
+
+html[data-theme='dark'] .header-status-card {
+  background: #0d1322 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html[data-theme='dark'] .header-status-copy strong,
+html[data-theme='dark'] .header-status-rotator span {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .header-theme-switch {
+  background: #090d16 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   3. HOME PAGE (Every Single Section Polished)
+   ========================================================================== */
+
+/* Promo Banner Slider */
+html[data-theme='dark'] .home-promo-card {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Hero Welcome Headline & Subtext */
+html[data-theme='dark'] .home-welcome-copy .dia-headline,
+html[data-theme='dark'] .home-welcome-copy .dia-headline-base,
+html[data-theme='dark'] .home-welcome-copy .dia-headline-sweep {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme='dark'] .home-welcome-copy p {
+  color: #cbd5e1 !important;
+}
+
+/* SECTION 2: The Leaf Advantage */
+html[data-theme='dark'] .home-about-section .home-about-shell {
+  background: rgba(12, 18, 32, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6) !important;
+}
+
+html[data-theme='dark'] .advantage-gallery-topline span {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .advantage-pill {
+  background: rgba(32, 80, 227, 0.18) !important;
+  border: 1px solid rgba(32, 80, 227, 0.35) !important;
+}
+
+html[data-theme='dark'] .advantage-pill strong {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .advantage-media-stage h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .advantage-media-stage p {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .advantage-stat-card {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme='dark'] .advantage-stat-card span {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .advantage-stat-card strong {
+  color: #94a3b8 !important;
+}
+
+/* SECTION 3: Studio Heads */
+html[data-theme='dark'] .studio-heads-shell {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme='dark'] .studio-heads-indigo-heading span {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .studio-heads-indigo-heading h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .studio-heads-indigo-heading p {
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .studio-heads-indigo-card-person {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+html[data-theme='dark'] .studio-heads-indigo-person-copy strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .studio-heads-indigo-person-copy small {
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .studio-heads-indigo-card-note {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+html[data-theme='dark'] .studio-heads-indigo-card-note h3 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .studio-heads-indigo-card-note p {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .studio-heads-indigo-control {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .studio-heads-indigo-footer span {
+  color: #94a3b8 !important;
+}
+
+/* SECTION 3.5: FAQ Section (High Contrast) */
+html[data-theme='dark'] .home-faq-section {
+  background: transparent !important;
+}
+
+html[data-theme='dark'] .faq-kicker {
+  background: rgba(32, 80, 227, 0.18) !important;
+  border: 1px solid rgba(32, 80, 227, 0.35) !important;
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .home-faq-section h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .faq-accent-title {
+  background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+html[data-theme='dark'] .faq-intro-copy {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .faq-glass-card {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme='dark'] .faq-glass-card:hover {
+  border-color: rgba(56, 189, 248, 0.35) !important;
+}
+
+html[data-theme='dark'] .faq-question {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .faq-chevron {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .faq-glass-card p {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .faq-divider {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* SECTION 4: VIP Pass & Narrative Form */
+html[data-theme='dark'] .access-color-pass {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7) !important;
+}
+
+html[data-theme='dark'] .access-color-stub {
+  background: #060911 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html[data-theme='dark'] .access-color-badge {
+  background: rgba(32, 80, 227, 0.2) !important;
+  border: 1px solid rgba(32, 80, 227, 0.4) !important;
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .access-color-title {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .access-color-protocol,
+html[data-theme='dark'] .access-color-label {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .access-color-link {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .access-color-reply {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme='dark'] .access-color-reply p {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .access-narrative-copy {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .access-color-pass .narrative-input,
+html[data-theme='dark'] .access-color-pass .narrative-select {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme='dark'] .access-color-pass .narrative-input:focus,
+html[data-theme='dark'] .access-color-pass .narrative-select:focus {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3) !important;
+}
+
+html[data-theme='dark'] .access-color-pass .narrative-input::placeholder {
+  color: #64748b !important;
+  -webkit-text-fill-color: #64748b !important;
+}
+
+html[data-theme='dark'] .access-color-pass button[type='submit'] {
+  background: #2050E3 !important;
+  color: #ffffff !important;
+}
+
+/* Home Status & Footer */
+html[data-theme='dark'] .status-footer-shell {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme='dark'] .status-footer-topline span {
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .status-footer-hero p {
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .status-footer-hero h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .status-footer-hero h2 span {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .status-footer-metrics article {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme='dark'] .status-footer-metrics article span {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .status-footer-metrics article strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .status-footer-metrics article p {
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .status-footer-contact-rail span,
+html[data-theme='dark'] .status-footer-contact-rail a {
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .status-footer-contact-rail a:hover {
+  color: #60a5fa !important;
+}
+
+/* ==========================================================================
+   4. LAUNCH CLOUD PAGE (All Cards, Plans & Text Made High Contrast)
+   ========================================================================== */
+
+html[data-theme='dark'] .launch-simple-page {
+  background: transparent !important;
+  color: #f1f5f9 !important;
+}
+
+/* Hero */
+html[data-theme='dark'] .launch-simple-hero {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5) !important;
+}
+
+html[data-theme='dark'] .launch-simple-hero span {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .launch-simple-hero h1 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .launch-simple-hero p {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .launch-simple-hero button {
+  background: #2050E3 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+html[data-theme='dark'] .launch-simple-hero aside article {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme='dark'] .launch-simple-hero aside article span {
+  background: rgba(32, 80, 227, 0.25) !important;
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .launch-simple-hero aside article strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .launch-simple-hero aside article p {
+  color: #94a3b8 !important;
+}
+
+/* Guide Outcomes Grid */
+html[data-theme='dark'] .launch-simple-guide article {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #f1f5f9 !important;
+}
+
+html[data-theme='dark'] .launch-simple-guide article span {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .launch-simple-guide article h3 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .launch-simple-guide article p {
+  color: #cbd5e1 !important;
+}
+
+/* 3-Tier Launch Plans Grid */
+html[data-theme='dark'] .launch-simple-plans article {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article:nth-child(2) {
+  background: linear-gradient(180deg, #0d1733 0%, #090d16 100%) !important;
+  border: 1px solid rgba(32, 80, 227, 0.5) !important;
+  box-shadow: 0 20px 50px rgba(32, 80, 227, 0.25) !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article span {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article h3 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article p {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article small {
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article li {
+  color: #e2e8f0 !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article button {
+  background: #2050E3 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article button:hover {
+  background: #2563eb !important;
+}
+
+/* Provider Stacks */
+html[data-theme='dark'] .launch-simple-providers article {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme='dark'] .launch-simple-providers article strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .launch-simple-providers article p {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .launch-simple-providers article section span {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #94a3b8 !important;
+}
+
+/* Included Features List */
+html[data-theme='dark'] .launch-simple-included {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme='dark'] .launch-simple-included span {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .launch-simple-included h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .launch-simple-included div:last-child span {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #e2e8f0 !important;
+}
+
+/* Bottom Launch CTA */
+html[data-theme='dark'] .launch-simple-cta {
+  background: linear-gradient(135deg, #0c152e 0%, #080c16 100%) !important;
+  border: 1px solid rgba(32, 80, 227, 0.35) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+}
+
+html[data-theme='dark'] .launch-simple-cta span {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .launch-simple-cta h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .launch-simple-cta button {
+  background: #2050E3 !important;
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   5. SERVICES PAGE
+   ========================================================================== */
+html[data-theme='dark'] .services-liquid-pill {
+  background: rgba(32, 80, 227, 0.18) !important;
+  border: 1px solid rgba(32, 80, 227, 0.35) !important;
+}
+
+html[data-theme='dark'] .services-liquid-pill span {
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .services-liquid-filter:not(.is-active) {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .services-liquid-filter.is-active {
+  background: #2050E3 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .services-liquid-row {
+  background: #090d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme='dark'] .services-liquid-row.is-active {
+  border-color: rgba(32, 80, 227, 0.5) !important;
+  box-shadow: 0 16px 40px rgba(32, 80, 227, 0.15) !important;
+}
+
+html[data-theme='dark'] .services-liquid-row h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .services-liquid-panel p {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .services-liquid-tag {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #94a3b8 !important;
+}
+
+/* ==========================================================================
+   6. BOTTOM DOCK & FLOATING ACTION
+   ========================================================================== */
+html[data-theme='dark'] .leaf-dock-shell nav,
+html[data-theme='dark'] .mobile-tabbar {
+  background: rgba(6, 9, 17, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7) !important;
+}
+
+html[data-theme='dark'] .mobile-tabbar-item:not(.is-active) {
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .mobile-tabbar-item.is-active {
+  color: #38bdf8 !important;
+}
