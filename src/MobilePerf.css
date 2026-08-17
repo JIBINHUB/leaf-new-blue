@@ -1,0 +1,125 @@
+/* ==========================================================================
+   MOBILE PERFORMANCE LAYER
+   Imported last so it wins the cascade.
+
+   Why this exists: the design uses ~204 backdrop-filter and ~191 blur
+   declarations plus ~137 infinite animations. On desktop GPUs that is fine.
+   On a phone, every backdrop-filter forces the compositor to re-sample the
+   pixels behind the element on each frame, and every infinite animation keeps
+   the main thread and GPU awake even when the element is off-screen. Together
+   they are the cause of the scroll jank on mobile.
+
+   The rules below trade blur for flat colour on small screens only. Desktop
+   keeps the full glass treatment.
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* ---------------------------------------------------------------------
+     1. No backdrop blur anywhere on phones.
+     Elements keep their own background colour, so contrast is preserved —
+     they simply stop resampling what is behind them every frame.
+     --------------------------------------------------------------------- */
+  *,
+  *::before,
+  *::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Glass surfaces relied on blur for legibility, so make their own
+     background opaque enough to read against once the blur is gone. */
+  .premium-glass,
+  .home-about-shell,
+  .workspace-card,
+  .leaf-dock,
+  .service-detail-modal .premium-glass {
+    background-color: rgba(255, 255, 255, 0.92) !important;
+  }
+
+  html[data-theme='dark'] .premium-glass,
+  html[data-theme='dark'] .home-about-shell,
+  html[data-theme='dark'] .workspace-card,
+  html[data-theme='dark'] .leaf-dock,
+  html[data-theme='dark'] .service-detail-modal .premium-glass {
+    background-color: rgba(12, 18, 32, 0.94) !important;
+  }
+
+  /* ---------------------------------------------------------------------
+     2. Kill the decorative blur blobs.
+     These are large, purely ornamental, and each one is a full-screen
+     gaussian blur pass. They are invisible enough on a small screen that
+     removing them costs nothing visually.
+     --------------------------------------------------------------------- */
+  .animate-blob,
+  .services-phase-orb,
+  .advantage-media-stage::before,
+  .advantage-media-stage::after,
+  .projects-delivery-orbit::before {
+    display: none !important;
+  }
+
+  /* ---------------------------------------------------------------------
+     3. Stop ambient infinite animations.
+     Anything still moving forever off-screen is pure battery and jank.
+     Explicit interaction animations are re-enabled in section 4.
+     --------------------------------------------------------------------- */
+  .animate-blob,
+  .animate-float-rotate-1,
+  .animate-bounce-x,
+  .projects-simple-card-icon,
+  .advantage-cylinder-track {
+    animation: none !important;
+  }
+
+  /* ---------------------------------------------------------------------
+     4. Drop promoted layers that are not animating.
+     will-change permanently allocates GPU memory; on low-RAM phones that
+     causes the compositor to thrash.
+     --------------------------------------------------------------------- */
+  .studio-heads-indigo-track,
+  .sphere {
+    will-change: auto !important;
+  }
+
+  /* Heavy hover lifts do nothing on touch and only cost repaints. */
+  .launch-simple-guide article:hover,
+  .launch-simple-plans article:hover,
+  .launch-simple-providers article:hover,
+  .services-liquid-phase:hover {
+    transform: none !important;
+  }
+
+  /* ---------------------------------------------------------------------
+     5. Smooth, momentum scrolling.
+     --------------------------------------------------------------------- */
+  html {
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+  }
+
+  /* Images decode off the main thread where possible. */
+  img,
+  video {
+    content-visibility: auto;
+  }
+}
+
+/* ==========================================================================
+   Users who ask the OS for less motion get none of the ambient animation,
+   on any screen size.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

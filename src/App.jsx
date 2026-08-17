@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 import './DarkMode.css';
+// Last import wins the cascade — this strips backdrop blur and ambient
+// animation on phones, where they are the main cause of scroll jank.
+import './MobilePerf.css';
 import Stepper, { Step } from './Stepper';
 import DomeGallery from './DomeGallery';
 import { 
@@ -798,7 +801,7 @@ const App = () => {
       id: 'uiux', name: 'UI/UX Design', icon: PenTool,
       title: "Making Apps Less Annoying.",
       heroDesc: "Stop giving your users a digital headache. We design interfaces so intuitive, even your grandma's cat could order pizza on them.",
-      img: "/assets/services/uiux-3d.png",
+      img: "/assets/services/uiux-3d.jpg",
       problem: "Your current app looks like it was built in 1998 by a stressed intern. Users are rage-clicking the 'Cancel' button when they mean 'Buy', and your bounce rate is higher than a kangaroo on a trampoline.",
       solution: "We sprinkle UX magic dust (deep user research, logical wireframing, and lots of coffee) to make customer journeys smoother than a freshly paved highway. Oh, and the UI? We make it so pretty it hurts.",
       process: [
@@ -811,7 +814,7 @@ const App = () => {
       id: 'web', name: 'Web Dev', icon: MonitorSmartphone,
       title: "Websites That Don't Break.",
       heroDesc: "We write code so clean you could eat off it. Say goodbye to loading screens that last longer than a movie sequel.",
-      img: "/assets/services/web-3d.png",
+      img: "/assets/services/web-3d.jpg",
       problem: "Your website currently takes 14 seconds to load, half the buttons lead to 404 pages, and it looks like a Picasso painting when viewed on a mobile phone.",
       solution: "We build scalable, lightning-fast digital platforms using modern tech stacks. If a user blinks, the page has already loaded. Mobile responsive isn't a feature; it's a religion here.",
       process: [
@@ -824,7 +827,7 @@ const App = () => {
       id: 'ai', name: 'AI Ads', icon: Cpu,
       title: "Robots Finding Customers.",
       heroDesc: "We unleash algorithmic sorcery to target people who didn't even know they wanted your product yet.",
-      img: "/assets/services/ai-ads-3d.png",
+      img: "/assets/services/ai-ads-3d.jpg",
       problem: "You are throwing money at Facebook and Google, hoping someone clicks your ad. It's basically a very expensive digital lottery ticket.",
       solution: "We let the machines do the heavy lifting. Predictive modeling, automated A/B testing, and AI-driven targeting that finds your perfect customer with terrifying accuracy.",
       process: [
@@ -837,7 +840,7 @@ const App = () => {
       id: 'adv', name: 'Advertising', icon: Megaphone,
       title: "Campaigns People Actually Notice.",
       heroDesc: "We build sharp, scroll-stopping campaigns that turn attention into leads, sales, and brand recall.",
-      img: "/assets/services/advertising-3d.png",
+      img: "/assets/services/advertising-3d.jpg",
       problem: "Your ads are blending into the feed. People scroll past them, platforms eat the budget, and the campaign report looks busy without proving real business impact.",
       solution: "We craft campaign strategy, creative direction, media angles, and performance loops so your message lands with the right people at the right time.",
       process: [
@@ -850,7 +853,7 @@ const App = () => {
       id: 'brand', name: 'Branding', icon: LeafIcon,
       title: "More Than A Fancy Logo.",
       heroDesc: "We'll give your company a personality so magnetic, people will want to invite it to dinner.",
-      img: "/assets/services/branding-3d.png",
+      img: "/assets/services/branding-3d.jpg",
       problem: "Your brand looks like everyone else's corporate clone. Your logo is generic, and your brand voice sounds like a robot reading a legal disclaimer.",
       solution: "We create cohesive visual identities and brand guidelines that scream 'We know exactly what we are doing.' You won't just get a logo; you'll get a vibe.",
       process: [
@@ -863,7 +866,7 @@ const App = () => {
       id: 'apps', name: 'Mobile Apps', icon: Smartphone,
       title: "Pocket-Sized Powerhouses.",
       heroDesc: "We build mobile apps so addictive, your users will forget to blink. From iOS to Android, we make sure it runs smoother than butter on a hot pan.",
-      img: "/assets/services/mobile-apps-3d.png",
+      img: "/assets/services/mobile-apps-3d.jpg",
       problem: "Your current app concept is just a clunky mobile website disguised as an app. It crashes when you look at it funny, drains battery life, and is slowly racking up 1-star reviews.",
       solution: "We engineer native-feeling experiences that are blisteringly fast, deeply intuitive, and don't make people want to throw their phones into the ocean. Real apps for real humans.",
       process: [
@@ -876,7 +879,7 @@ const App = () => {
       id: 'nocode', name: 'No Code Web', icon: Blocks,
       title: "Websites Without The Wait.",
       heroDesc: "We build insanely fast, gorgeous websites using modern no-code wizardry. Because waiting 6 months for a developer to change a headline is so 2015.",
-      img: "/assets/services/nocode-web-3d.png",
+      img: "/assets/services/nocode-web-3d.jpg",
       problem: "Traditional dev agencies are quoting you the price of a small yacht and a timeline that ends sometime next century. And when it's done? You need a PhD in computer science just to update a typo.",
       solution: "We use elite no-code platforms to visually engineer your site in weeks, not months. It's pixel-perfect, lightning-fast, and we give you the power to edit it yourself without breaking the entire internet.",
       process: [
@@ -889,7 +892,7 @@ const App = () => {
       id: 'shopify', name: 'Shopify Dev', icon: ShoppingBag,
       title: "Stores That Sell While You Sleep.",
       heroDesc: "We build polished Shopify storefronts, product systems, and checkout journeys that make buying feel effortless.",
-      img: "/assets/services/shopify-3d.png",
+      img: "/assets/services/shopify-3d.jpg",
       problem: "Your online store looks generic, loads slowly, and makes customers work too hard before checkout. Every awkward product page is quietly leaking revenue.",
       solution: "We design and develop Shopify stores with premium product pages, clean navigation, conversion-focused sections, app integrations, and a checkout path built for trust.",
       process: [
@@ -902,8 +905,18 @@ const App = () => {
 
   const activeCategoryData = serviceCategories.find(c => c.id === activeCategory);
 
+  // Warm the service modal images so the modal opens instantly.
+  // Skipped on phones and on metered/slow connections: prefetching every
+  // service image competes with the page itself for a limited connection,
+  // which is exactly what made mobile feel sluggish.
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (isMobileViewport) return;
+
+    const connection = navigator.connection;
+    if (connection?.saveData) return;
+    if (connection?.effectiveType && /2g|slow-2g|3g/.test(connection.effectiveType)) return;
+
     const timer = window.setTimeout(() => {
       serviceCategories.forEach(({ img }) => {
         if (!img) return;
@@ -911,10 +924,10 @@ const App = () => {
         serviceImage.decoding = 'async';
         serviceImage.src = img;
       });
-    }, 800);
+    }, 1500);
 
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [isMobileViewport]);
 
   const capabilities = [
     {
@@ -4349,10 +4362,14 @@ const App = () => {
               </section>
 
               <section className="portfolio-dome-shell">
+                {/* Each segment renders 5 tiles, so 20 segments = 100 images in
+                    3D space. That is far too much for a phone to composite, so
+                    mobile gets roughly half the geometry. */}
                 <DomeGallery
                   images={domeGalleryImages}
                   overlayBlurColor="#05070c"
-                  segments={20}
+                  segments={isMobileViewport ? 14 : 20}
+                  minRadius={isMobileViewport ? 360 : 600}
                   grayscale={false}
                 />
               </section>
