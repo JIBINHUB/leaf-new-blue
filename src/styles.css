@@ -15459,6 +15459,24 @@
           font-weight: 900;
         }
 
+        .portfolio-dome-shell {
+          position: relative;
+          width: 100%;
+          height: min(75vh, 620px);
+          min-height: 22rem;
+          border-radius: 1.75rem;
+          overflow: hidden;
+          background: #05070c;
+          border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        @media (max-width: 640px) {
+          .portfolio-dome-shell {
+            height: min(65vh, 480px);
+            border-radius: 1.35rem;
+          }
+        }
+
         .portfolio-gallery-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -20169,10 +20187,11 @@
         }
 
         .launch-simple-section {
-          padding: clamp(1rem, 2.5vw, 1.5rem);
+          padding: clamp(1.15rem, 2.8vw, 1.85rem);
           border: 1px solid #e3e7eb;
-          border-radius: 1rem;
+          border-radius: 1.25rem;
           background: #ffffff;
+          box-shadow: 0 1px 2px rgba(15,23,42,0.03);
         }
 
         .launch-simple-heading h2,
@@ -20205,9 +20224,9 @@
         .launch-simple-guide article,
         .launch-simple-plans article,
         .launch-simple-providers article {
-          padding: 0.9rem;
+          padding: 1.05rem;
           border: 1px solid #e4e8ed;
-          border-radius: 0.75rem;
+          border-radius: 0.9rem;
           background: #f8fafb;
         }
 
@@ -20216,7 +20235,7 @@
         }
 
         .launch-simple-guide article > span,
-        .launch-simple-plans article > span {
+        .launch-tier-label {
           display: block;
           margin-top: 0.7rem;
           color: #2050e3;
@@ -20226,13 +20245,21 @@
           text-transform: uppercase;
         }
 
+        .launch-tier-top {
+          margin-top: 0.1rem;
+        }
+
+        .launch-tier-label {
+          margin-top: 0;
+        }
+
         .launch-simple-guide h3,
         .launch-simple-plans h3 {
-          margin-top: 0.35rem;
+          margin-top: 0.4rem;
           color: #111827;
-          font-size: 1rem;
-          line-height: 1.15;
-          font-weight: 590;
+          font-size: 1.05rem;
+          line-height: 1.2;
+          font-weight: 610;
         }
 
         .launch-simple-guide p,
@@ -20244,31 +20271,16 @@
           line-height: 1.48;
         }
 
-        .launch-simple-plans article:nth-child(2) {
-          color: #ffffff;
-          border-color: #2050e3;
-          background: #2050e3;
-        }
-
-        .launch-simple-plans article:nth-child(2) span,
-        .launch-simple-plans article:nth-child(2) h3,
-        .launch-simple-plans article:nth-child(2) p,
-        .launch-simple-plans article:nth-child(2) strong,
-        .launch-simple-plans article:nth-child(2) small,
-        .launch-simple-plans article:nth-child(2) li {
-          color: #ffffff;
-        }
-
         .launch-simple-plans article > strong,
         .launch-simple-plans article > small {
           display: block;
         }
 
         .launch-simple-plans article > strong {
-          margin-top: 0.8rem;
+          margin-top: 0.85rem;
           color: #111827;
-          font-size: 1.45rem;
-          font-weight: 590;
+          font-size: 1.5rem;
+          font-weight: 610;
         }
 
         .launch-simple-plans article > small {
@@ -20280,7 +20292,7 @@
         .launch-simple-plans ul {
           display: grid;
           gap: 0.4rem;
-          margin-top: 0.85rem;
+          margin-top: 0.9rem;
         }
 
         .launch-simple-plans li {
@@ -20294,13 +20306,16 @@
 
         .launch-simple-plans article > button {
           width: 100%;
-          margin-top: 1rem;
-          background: #111827;
-        }
-
-        .launch-simple-plans article:nth-child(2) > button {
+          margin-top: 1.1rem;
           color: #2050e3;
           background: #ffffff;
+          border: 1.5px solid #2050e3;
+        }
+
+        .launch-simple-plans article.is-selected > button {
+          color: #ffffff;
+          background: #2050e3;
+          border: 1.5px solid #2050e3;
         }
 
         .launch-simple-providers {
@@ -21105,109 +21120,85 @@
 
         @keyframes delivery-orbit-spin { to { transform: rotate(360deg); } }
 
-        /* Launch Cloud: lilac and coral liquid glass */
-        body:has(.launch-simple-page) { background: #eeeaf4; }
-
+        /* Launch Cloud: solid, professional card system (no glass/blur) */
         .launch-simple-page {
           max-width: 74rem !important;
-          gap: 0.9rem;
-          color: #211d2c;
-        }
-
-        .launch-simple-hero,
-        .launch-simple-section,
-        .launch-simple-included,
-        .launch-simple-cta {
-          border: 1px solid rgba(255,255,255,0.78);
-          border-radius: 1.45rem;
-          background:
-            radial-gradient(circle at 92% 4%, rgba(255,153,138,0.32), transparent 17rem),
-            radial-gradient(circle at 8% 92%, rgba(166,139,255,0.27), transparent 19rem),
-            rgba(255,255,255,0.52);
-          backdrop-filter: blur(18px) saturate(1.25);
-          -webkit-backdrop-filter: blur(18px) saturate(1.25);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.96), 0 1.6rem 3.8rem rgba(82,62,113,0.09);
+          gap: 1.1rem;
         }
 
         .launch-simple-hero h1,
         .launch-simple-heading h2,
         .launch-simple-included h2,
         .launch-simple-cta h2 {
-          color: #211d2c;
           font-family: var(--font-display);
           font-weight: 430;
           letter-spacing: -0.052em;
         }
 
-        .launch-simple-hero > div > span,
-        .launch-simple-heading > span,
-        .launch-simple-included > div:first-child > span { color: #7657c8; }
-
-        .launch-simple-hero > aside {
-          border-color: rgba(255,255,255,0.8);
-          border-radius: 1.1rem;
-          background: rgba(255,255,255,0.5);
-          backdrop-filter: blur(13px);
-          -webkit-backdrop-filter: blur(13px);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
-        }
-
-        .launch-simple-live { color: #6248aa; background: rgba(228,219,255,0.62); }
-
-        .launch-simple-hero aside > article > span {
-          color: #4a325f;
-          background: linear-gradient(135deg, #ffd1c9, #cfc1ff);
-          box-shadow: 0 0.65rem 1.3rem rgba(122,83,177,0.16);
-        }
-
         .launch-simple-guide article,
         .launch-simple-plans article,
         .launch-simple-providers article {
-          border-color: rgba(255,255,255,0.82);
-          border-radius: 1rem;
-          background: rgba(255,255,255,0.54);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.92);
-          transition: transform 0.32s cubic-bezier(0.22,1,0.36,1), box-shadow 0.32s ease;
+          transition: transform 0.28s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s ease, border-color 0.28s ease;
         }
 
         .launch-simple-guide article:hover,
-        .launch-simple-plans article:hover,
         .launch-simple-providers article:hover {
-          transform: translateY(-0.28rem);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.96), 0 1.2rem 2.5rem rgba(90,64,126,0.12);
+          transform: translateY(-0.25rem);
         }
 
-        .launch-simple-guide article > svg,
-        .launch-simple-guide article > span,
-        .launch-simple-plans article > span { color: #7657c8; }
-
-        .launch-simple-plans article:nth-child(2) {
-          border-color: rgba(255,255,255,0.42);
-          background: linear-gradient(145deg, rgba(95,67,161,0.94), rgba(205,105,141,0.9));
-          box-shadow: 0 1.25rem 2.8rem rgba(109,65,145,0.2), inset 0 1px 0 rgba(255,255,255,0.28);
+        .launch-simple-plans article {
+          position: relative;
+          cursor: pointer;
         }
 
-        .launch-simple-providers article > section span {
-          color: #554b63;
-          border-color: rgba(118,87,200,0.14);
-          background: rgba(248,245,255,0.78);
+        .launch-simple-plans article:hover {
+          transform: translateY(-0.25rem);
         }
 
-        .launch-simple-included > div:last-child span {
-          color: #55436f;
-          background: rgba(255,255,255,0.62);
+        /* In normal flow (not absolutely positioned) so it can never overlap
+           or clip against the icon row below it at any card width. */
+        .launch-tier-badge {
+          display: inline-flex;
+          width: fit-content;
+          margin-bottom: 0.7rem;
+          padding: 0.28rem 0.65rem;
+          border-radius: 999px;
+          background: #2050e3;
+          color: #ffffff;
+          font-size: 0.58rem;
+          font-weight: 800;
+          font-style: normal;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
         }
 
-        .launch-simple-cta {
-          color: #fff;
-          border-color: rgba(255,255,255,0.18);
-          background:
-            radial-gradient(circle at 87% 18%, rgba(255,184,126,0.34), transparent 13rem),
-            linear-gradient(135deg, #31263f, #67518b);
+        .launch-tier-top {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
         }
 
-        .launch-simple-cta span,
-        .launch-simple-cta h2 { color: #fff; }
+        .launch-tier-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 2.15rem;
+          height: 2.15rem;
+          border-radius: 0.65rem;
+          background: rgba(32,80,227,0.1);
+          color: #2050e3;
+          flex-shrink: 0;
+        }
+
+        .launch-simple-plans article.is-selected {
+          border-color: #2050e3;
+          box-shadow: 0 1.25rem 2.8rem rgba(32,80,227,0.16);
+        }
+
+        .launch-simple-plans article.is-selected .launch-tier-icon {
+          background: #2050e3;
+          color: #ffffff;
+        }
 
         /* Schedule: clean white and lavender journey system */
         body:has(.schedule-dashboard-v2) { background: #ececef; }
@@ -24616,6 +24607,12 @@
           font-family: var(--font-body);
         }
 
+        html[data-theme='dark'] .studio-workspace {
+          --workspace-mid: #cbd5e1;
+          --workspace-muted: #a1a1aa;
+          --workspace-line: #3f3f46;
+        }
+
         .workspace-hero {
           display: grid;
           grid-template-columns: minmax(0, 1.18fr) minmax(20rem, 0.82fr);
@@ -26378,7 +26375,7 @@
         .launch-simple-included > div:first-child > span,
         .launch-simple-cta > div > span,
         .launch-simple-guide article > span,
-        .launch-simple-plans article > span {
+        .launch-tier-label {
           font-size: 0.76rem !important;
           line-height: 1.4 !important;
           letter-spacing: 0.045em !important;
@@ -28016,66 +28013,26 @@
         /* =========================================================
            SOLID FLOATING ACTION: REAL WHATSAPP & BLUE CART
            ========================================================= */
-        @keyframes float-action-breathe {
-          0%, 100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-6px);
-          }
-        }
-
-        @keyframes whatsapp-radar-pulse {
+        @keyframes unified-ring-arrive {
           0% {
-            transform: scale(0.95);
-            opacity: 0.8;
-          }
-          70% {
-            transform: scale(1.48);
-            opacity: 0;
+            transform: scale(0.85);
+            opacity: 0.55;
           }
           100% {
-            transform: scale(1.5);
+            transform: scale(1.22);
             opacity: 0;
           }
         }
 
-        @keyframes cart-radar-pulse {
-          0% {
-            transform: scale(0.95);
-            opacity: 0.8;
-          }
-          70% {
-            transform: scale(1.48);
-            opacity: 0;
-          }
-          100% {
-            transform: scale(1.5);
-            opacity: 0;
-          }
-        }
-
-        @keyframes cart-shake-bounce {
+        @keyframes unified-pop {
           0% {
             transform: scale(1);
           }
-          15% {
-            transform: scale(1.2) rotate(-8deg);
-          }
-          30% {
-            transform: scale(1.2) rotate(8deg);
-          }
-          45% {
-            transform: scale(1.15) rotate(-5deg);
-          }
-          60% {
-            transform: scale(1.15) rotate(5deg);
-          }
-          75% {
-            transform: scale(1.05) rotate(0);
+          40% {
+            transform: scale(1.14);
           }
           100% {
-            transform: scale(1) rotate(0);
+            transform: scale(1);
           }
         }
 
@@ -28094,25 +28051,14 @@
           }
         }
 
-        @keyframes icon-active-wobble {
-          0%, 100% {
-            transform: rotate(0deg) scale(1);
-          }
-          25% {
-            transform: rotate(-10deg) scale(1.05);
-          }
-          75% {
-            transform: rotate(10deg) scale(1.05);
-          }
-        }
-
+        /* One clean, minimal circle that morphs between WhatsApp and cart */
         .unified-floating-action {
           position: fixed;
           right: clamp(1rem, 2.5vw, 2.5rem);
           bottom: clamp(1.8rem, 3.5vw, 2.8rem);
           z-index: 70;
-          width: 4.35rem;
-          height: 4.35rem;
+          width: 3.9rem;
+          height: 3.9rem;
           display: grid;
           place-items: center;
           padding: 0;
@@ -28122,92 +28068,72 @@
           border: none;
           outline: none;
           isolation: isolate;
-          animation: float-action-breathe 4s ease-in-out infinite;
           transition:
-            transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-            background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-            box-shadow 0.4s ease,
-            border-color 0.4s ease;
+            transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+            background 0.35s ease,
+            box-shadow 0.3s ease;
           -webkit-tap-highlight-color: transparent;
         }
 
-        /* Ambient animated radar pulse ring */
+        /* Static minimal outer ring, no motion at rest */
         .unified-floating-action::before {
           content: "";
           position: absolute;
-          inset: -3px;
+          inset: -6px;
           border-radius: 50%;
+          border: 1px solid currentColor;
+          opacity: 0.22;
+          pointer-events: none;
+          z-index: -1;
+        }
+
+        /* A single, quiet ring that arrives once when the button first appears */
+        .unified-floating-action::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: 50%;
+          border: 1.5px solid currentColor;
           pointer-events: none;
           z-index: -1;
           opacity: 0;
-        }
-
-        .unified-floating-action::after {
-          display: none !important;
+          animation: unified-ring-arrive 0.9s ease-out;
         }
 
         /* --- WhatsApp Solid State --- */
         .unified-floating-action.is-whatsapp {
-          background: linear-gradient(135deg, #25D366 0%, #1EBE5D 100%);
-          color: #ffffff;
-          border: 2px solid rgba(255, 255, 255, 0.28);
-          box-shadow:
-            0 10px 28px rgba(37, 211, 102, 0.48),
-            0 4px 12px rgba(18, 140, 126, 0.32),
-            inset 0 1.5px 2px rgba(255, 255, 255, 0.4);
-        }
-
-        .unified-floating-action.is-whatsapp::before {
-          border: 2.5px solid #25D366;
-          animation: whatsapp-radar-pulse 2.6s cubic-bezier(0.1, 0.7, 0.1, 1) infinite;
+          background: #25D366;
+          color: #25D366;
+          border: none;
+          box-shadow: 0 8px 22px rgba(37, 211, 102, 0.38);
         }
 
         .unified-floating-action.is-whatsapp:hover {
-          background: linear-gradient(135deg, #2ae06d 0%, #20c863 100%);
-          transform: translateY(-7px) scale(1.08);
-          box-shadow:
-            0 16px 36px rgba(37, 211, 102, 0.58),
-            0 6px 16px rgba(18, 140, 126, 0.38),
-            inset 0 2px 2px rgba(255, 255, 255, 0.55);
+          transform: translateY(-4px);
+          box-shadow: 0 12px 28px rgba(37, 211, 102, 0.46);
         }
 
         .unified-floating-action.is-whatsapp:active {
-          transform: translateY(-2px) scale(0.96);
-          box-shadow:
-            0 6px 18px rgba(37, 211, 102, 0.45),
-            inset 0 1px 1px rgba(0, 0, 0, 0.15);
+          transform: translateY(-1px) scale(0.96);
+          box-shadow: 0 6px 16px rgba(37, 211, 102, 0.35);
         }
 
-        /* --- Cart Solid Blue State --- */
+        /* --- Cart Solid State --- */
         .unified-floating-action.is-cart {
-          background: linear-gradient(135deg, #2050E3 0%, #173eb5 100%);
-          color: #ffffff;
-          border: 2px solid rgba(255, 255, 255, 0.28);
-          box-shadow:
-            0 10px 28px rgba(32, 80, 227, 0.5),
-            0 4px 12px rgba(23, 62, 181, 0.35),
-            inset 0 1.5px 2px rgba(255, 255, 255, 0.4);
-        }
-
-        .unified-floating-action.is-cart::before {
-          border: 2.5px solid #2050E3;
-          animation: cart-radar-pulse 2.6s cubic-bezier(0.1, 0.7, 0.1, 1) infinite;
+          background: #2050E3;
+          color: #2050E3;
+          border: none;
+          box-shadow: 0 8px 22px rgba(32, 80, 227, 0.4);
         }
 
         .unified-floating-action.is-cart:hover {
-          background: linear-gradient(135deg, #2d5ef7 0%, #1b44c7 100%);
-          transform: translateY(-7px) scale(1.08);
-          box-shadow:
-            0 16px 36px rgba(32, 80, 227, 0.6),
-            0 6px 16px rgba(23, 62, 181, 0.45),
-            inset 0 2px 2px rgba(255, 255, 255, 0.55);
+          transform: translateY(-4px);
+          box-shadow: 0 12px 28px rgba(32, 80, 227, 0.48);
         }
 
         .unified-floating-action.is-cart:active {
-          transform: translateY(-2px) scale(0.96);
-          box-shadow:
-            0 6px 18px rgba(32, 80, 227, 0.45),
-            inset 0 1px 1px rgba(0, 0, 0, 0.15);
+          transform: translateY(-1px) scale(0.96);
+          box-shadow: 0 6px 16px rgba(32, 80, 227, 0.36);
         }
 
         /* --- Morphing Icons --- */
@@ -28218,12 +28144,11 @@
           place-items: center;
           opacity: 0;
           color: #ffffff;
-          transform: scale(0.4) rotate(-35deg);
+          transform: scale(0.55) rotate(-12deg);
           transition:
-            opacity 0.38s ease,
-            transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity 0.3s ease,
+            transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
           pointer-events: none;
-          filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.18));
         }
 
         .unified-floating-icon.is-active {
@@ -28231,33 +28156,24 @@
           transform: scale(1) rotate(0deg);
         }
 
-        .unified-floating-icon.is-whatsapp,
-        .unified-floating-icon.is-cart {
-          color: #ffffff;
-        }
-
-        .unified-floating-action:hover .unified-floating-icon.is-active {
-          animation: icon-active-wobble 0.7s ease-in-out infinite alternate;
-        }
-
         /* --- Cart Badge Counter --- */
         .unified-floating-action > strong {
           position: absolute;
-          top: -0.22rem;
-          right: -0.15rem;
+          top: -0.18rem;
+          right: -0.12rem;
           z-index: 5;
-          min-width: 1.45rem;
-          height: 1.45rem;
+          min-width: 1.3rem;
+          height: 1.3rem;
           display: grid;
           place-items: center;
-          padding: 0 0.28rem;
+          padding: 0 0.24rem;
           color: #2050E3;
           border: 2px solid #ffffff;
           border-radius: 999px;
           background: #ffffff;
-          font-size: 0.68rem;
-          font-weight: 900;
-          box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+          font-size: 0.64rem;
+          font-weight: 800;
+          box-shadow: 0 3px 10px rgba(15, 23, 42, 0.22);
           opacity: 0;
           transform: scale(0);
           transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -28269,32 +28185,28 @@
           animation: badge-spring-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* --- Pulse Burst on adding items --- */
+        /* --- Quiet pop on adding items --- */
         .unified-floating-action.is-pulsing {
-          animation: cart-shake-bounce 0.85s cubic-bezier(0.22, 1, 0.36, 1) !important;
+          animation: unified-pop 0.4s ease-out !important;
         }
 
         /* --- Dark Mode Optimization --- */
         html[data-theme='dark'] .unified-floating-action.is-whatsapp {
-          background: linear-gradient(135deg, #25D366 0%, #1da851 100%);
-          border-color: rgba(255, 255, 255, 0.22);
-          box-shadow:
-            0 12px 30px rgba(37, 211, 102, 0.55),
-            0 4px 12px rgba(0, 0, 0, 0.5);
+          background: #25D366;
+          color: #25D366;
+          box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45);
         }
 
         html[data-theme='dark'] .unified-floating-action.is-cart {
-          background: linear-gradient(135deg, #2b5df0 0%, #1a42be 100%);
-          border-color: rgba(255, 255, 255, 0.22);
-          box-shadow:
-            0 12px 30px rgba(43, 93, 240, 0.55),
-            0 4px 12px rgba(0, 0, 0, 0.5);
+          background: #3763f4;
+          color: #3763f4;
+          box-shadow: 0 8px 24px rgba(55, 99, 244, 0.5);
         }
 
         html[data-theme='dark'] .unified-floating-action > strong {
           background: #ffffff;
           color: #173eb5;
-          border-color: #2b5df0;
+          border-color: #0b0f16;
         }
 
         .request-checkout-page .request-checkout-heading {
@@ -28969,34 +28881,6 @@
           opacity: 1 !important;
         }
 
-        html[data-theme='dark'] .services-page .services-liquid-filter:not(.is-active) {
-          color: #334155 !important;
-          background: rgba(255, 255, 255, 0.94) !important;
-        }
-
-        html[data-theme='dark'] .services-page .services-liquid-filter.is-active {
-          color: #ffffff !important;
-        }
-
-        html[data-theme='dark'] .services-page .services-liquid-row,
-        html[data-theme='dark'] .services-page .services-liquid-item,
-        html[data-theme='dark'] .services-page .services-liquid-tag,
-        html[data-theme='dark'] .services-page .services-liquid-phase {
-          color: #0f172a !important;
-          background-color: rgba(255, 255, 255, 0.96) !important;
-        }
-
-        html[data-theme='dark'] .services-page .services-liquid-row h2,
-        html[data-theme='dark'] .services-page .services-liquid-row p,
-        html[data-theme='dark'] .services-page .services-liquid-row span,
-        html[data-theme='dark'] .services-page .services-liquid-item span,
-        html[data-theme='dark'] .services-page .services-liquid-tag,
-        html[data-theme='dark'] .services-page .services-liquid-phase h3,
-        html[data-theme='dark'] .services-page .services-liquid-phase p {
-          color: #334155 !important;
-          opacity: 1 !important;
-        }
-
-/* Dark mode rules are handled in DarkMode.css (imported after this file in App.jsx) */
+/* Dark mode rules for this page are handled in DarkMode.css (imported after this file in App.jsx) */
 
 

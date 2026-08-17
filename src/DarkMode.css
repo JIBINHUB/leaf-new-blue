@@ -109,6 +109,21 @@ html[data-theme='dark'] .home-promo-card {
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
+/* Individual banner slides carry their own light/dark background (banner.theme)
+   independent of the site theme — keep their text legible against that background
+   instead of the universal dark-mode text-color overrides below. */
+html[data-theme='dark'] .home-promo-card .text-gray-900 {
+  color: #111827 !important;
+}
+
+html[data-theme='dark'] .home-promo-card .text-gray-800 {
+  color: #1f2937 !important;
+}
+
+html[data-theme='dark'] .home-promo-card .text-gray-700 {
+  color: #374151 !important;
+}
+
 /* Hero Welcome Headline & Subtext */
 html[data-theme='dark'] .home-welcome-copy .dia-headline,
 html[data-theme='dark'] .home-welcome-copy .dia-headline-base,
@@ -128,8 +143,16 @@ html[data-theme='dark'] .home-about-section .home-about-shell {
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6) !important;
 }
 
+html[data-theme='dark'] .advantage-media-stage {
+  background: rgba(9, 13, 22, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.55) !important;
+}
+
 html[data-theme='dark'] .advantage-gallery-topline span {
   color: #60a5fa !important;
+  background: rgba(32, 80, 227, 0.18) !important;
+  border: 1px solid rgba(32, 80, 227, 0.35) !important;
 }
 
 html[data-theme='dark'] .advantage-pill {
@@ -141,11 +164,19 @@ html[data-theme='dark'] .advantage-pill strong {
   color: #60a5fa !important;
 }
 
-html[data-theme='dark'] .advantage-media-stage h2 {
+html[data-theme='dark'] .advantage-gallery-center {
+  background: rgba(9, 13, 22, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.55) !important;
+}
+
+html[data-theme='dark'] .advantage-media-stage h2,
+html[data-theme='dark'] .advantage-gallery-center h2 {
   color: #ffffff !important;
 }
 
-html[data-theme='dark'] .advantage-media-stage p {
+html[data-theme='dark'] .advantage-media-stage p,
+html[data-theme='dark'] .advantage-gallery-center p {
   color: #cbd5e1 !important;
 }
 
@@ -393,6 +424,16 @@ html[data-theme='dark'] .launch-simple-page {
   color: #f1f5f9 !important;
 }
 
+/* Every section shell gets a solid dark card, matching the rest of the site */
+html[data-theme='dark'] .launch-simple-hero,
+html[data-theme='dark'] .launch-simple-section,
+html[data-theme='dark'] .launch-simple-included,
+html[data-theme='dark'] .launch-simple-cta {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4) !important;
+}
+
 /* Hero */
 html[data-theme='dark'] .launch-simple-hero {
   background: #090d16 !important;
@@ -418,9 +459,19 @@ html[data-theme='dark'] .launch-simple-hero button {
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
-html[data-theme='dark'] .launch-simple-hero aside article {
+html[data-theme='dark'] .launch-simple-hero > aside {
   background: #0c1220 !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme='dark'] .launch-simple-live {
+  background: rgba(32, 80, 227, 0.16) !important;
+  color: #93c5fd !important;
+}
+
+html[data-theme='dark'] .launch-simple-hero aside article {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
 html[data-theme='dark'] .launch-simple-hero aside article span {
@@ -463,10 +514,25 @@ html[data-theme='dark'] .launch-simple-plans article {
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4) !important;
 }
 
-html[data-theme='dark'] .launch-simple-plans article:nth-child(2) {
+html[data-theme='dark'] .launch-simple-plans article.is-selected {
   background: linear-gradient(180deg, #0d1733 0%, #090d16 100%) !important;
   border: 1px solid rgba(32, 80, 227, 0.5) !important;
   box-shadow: 0 20px 50px rgba(32, 80, 227, 0.25) !important;
+}
+
+html[data-theme='dark'] .launch-tier-icon {
+  background: rgba(32, 80, 227, 0.18) !important;
+  color: #60a5fa !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article.is-selected .launch-tier-icon {
+  background: #2050e3 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .launch-tier-badge {
+  background: #2050e3 !important;
+  color: #ffffff !important;
 }
 
 html[data-theme='dark'] .launch-simple-plans article span {
@@ -494,12 +560,22 @@ html[data-theme='dark'] .launch-simple-plans article li {
 }
 
 html[data-theme='dark'] .launch-simple-plans article button {
+  background: transparent !important;
+  color: #60a5fa !important;
+  border: 1.5px solid #2050E3 !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article.is-selected button {
   background: #2050E3 !important;
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border: 1.5px solid #2050E3 !important;
 }
 
 html[data-theme='dark'] .launch-simple-plans article button:hover {
+  background: rgba(32, 80, 227, 0.15) !important;
+}
+
+html[data-theme='dark'] .launch-simple-plans article.is-selected button:hover {
   background: #2563eb !important;
 }
 
@@ -607,6 +683,22 @@ html[data-theme='dark'] .services-liquid-panel p {
 html[data-theme='dark'] .services-liquid-tag {
   background: #0c1220 !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .services-liquid-item {
+  background: #0c1220 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .services-liquid-phase {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4) !important;
+}
+
+html[data-theme='dark'] .services-liquid-phase p {
   color: #94a3b8 !important;
 }
 

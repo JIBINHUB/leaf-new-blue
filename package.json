@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 4174",
-    "build": "vite build && mkdir -p dist/assets && cp -R assets/. dist/assets/ && cp favicon.ico favicon.png favicon-32x32.png favicon-48x48.png apple-touch-icon.png icon-192.png icon-512.png site.webmanifest dist/",
+    "build": "vite build && mkdir -p dist/assets && cp -R assets/. dist/assets/ && cp favicon.ico favicon.png favicon-32x32.png favicon-48x48.png apple-touch-icon.png icon-192.png icon-512.png site.webmanifest dist/ && node scripts/generate-seo.mjs",
     "preview": "vite preview --host 127.0.0.1 --port 4174"
   },
   "dependencies": {
+    "@use-gesture/react": "^10.3.1",
     "framer-motion": "^13.1.0",
     "gsap": "^3.15.0",
     "lucide-react": "^0.468.0",

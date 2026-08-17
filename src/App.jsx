@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 import './DarkMode.css';
-import CardSwap, { Card, DesktopIframe } from './CardSwap';
 import Stepper, { Step } from './Stepper';
+import DomeGallery from './DomeGallery';
 import { 
   Mail, 
   Home, 
@@ -29,7 +29,6 @@ import {
   Command,
   Globe,
   Shield,
-  Lock,
   MapPin,
   Send,
   ChevronDown,
@@ -469,6 +468,7 @@ const App = () => {
   const [activeFaq, setActiveFaq] = useState(0);
   const [activeCapability, setActiveCapability] = useState(0);
   const [selectedScheduleType, setSelectedScheduleType] = useState('discovery');
+  const [selectedLaunchPlan, setSelectedLaunchPlan] = useState(1);
   const [selectedAppointmentDay, setSelectedAppointmentDay] = useState(1);
   const [selectedAppointmentTime, setSelectedAppointmentTime] = useState('11:30 AM');
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -608,89 +608,6 @@ const App = () => {
       position: "38% 50%"
     }
   ];
-
-  // 5 Featured Company Websites Showcase in Hero Section
-  const [activeHeroWebsite, setActiveHeroWebsite] = useState(0);
-
-  const heroWebsites = [
-    {
-      id: 1,
-      title: "Coveo Music Studio & Sync",
-      shortTitle: "Coveo Music",
-      client: "Coveo Music",
-      category: "Audio Platform & Music Sync",
-      tech: ["React", "Web Audio API", "Next.js", "Tailwind"],
-      url: "https://coveomusic.com/",
-      displayUrl: "coveomusic.com",
-      badge: "FEATURED LAUNCH",
-      stat: "+180% Stream Growth",
-      image: "/assets/portfolio/new-work/podlight-uiux-case-study.jpg",
-      desc: "Immersive digital audio platform and music ecosystem engineered for seamless discovery, licensing, and artist showcase."
-    },
-    {
-      id: 2,
-      title: "Vero Studio Architecture & Spaces",
-      shortTitle: "Vero Studio",
-      client: "Vero Studio",
-      category: "Architectural & Spatial Design",
-      tech: ["Next.js", "WebGL", "Tailwind", "Motion"],
-      url: "https://www.verostudio.com/",
-      displayUrl: "verostudio.com",
-      badge: "CLIENT SHOWCASE",
-      stat: "Awwwards Nominee",
-      image: "/assets/portfolio/new-work/navo-identity-cover.jpg",
-      desc: "Architectural and spatial studio portfolio showcasing bespoke structural concepts, high-fidelity renders, and dynamic typography."
-    },
-    {
-      id: 3,
-      title: "Jibin Chacko Creative Technologist",
-      shortTitle: "Jibin Chacko",
-      client: "Jibin Chacko",
-      category: "Personal Portfolio & Creative Systems",
-      tech: ["React", "GSAP", "Tailwind", "Vite"],
-      url: "https://jibinchacko.online/",
-      displayUrl: "jibinchacko.online",
-      badge: "FOUNDER PORTFOLIO",
-      stat: "100/100 Lighthouse",
-      image: "/assets/team/jibin-founder-hq.jpg",
-      desc: "Personal portfolio showcasing brand design systems, creative direction, high-performance web development, and digital ventures."
-    },
-    {
-      id: 4,
-      title: "Nainu Interactive Digital Experience",
-      shortTitle: "Nainu App",
-      client: "Nainu App",
-      category: "Web Application & Digital Product",
-      tech: ["React", "Next.js", "Vercel", "Tailwind"],
-      url: "https://nainu.vercel.app/",
-      displayUrl: "nainu.vercel.app",
-      badge: "LIVE DEPLOYMENT",
-      stat: "Sub-50ms Response",
-      image: "/assets/portfolio/new-work/frodir-mobile-dashboard.webp",
-      desc: "Next-generation reactive web application featuring fluid touch gestures, instant page state updates, and clean modular UI."
-    },
-    {
-      id: 5,
-      title: "Drift N Threads Contemporary Apparel",
-      shortTitle: "Drift N Threads",
-      client: "Drift N Threads Co.",
-      category: "E-Commerce & Streetwear Brand",
-      tech: ["Shopify Plus", "React", "Tailwind", "Stripe"],
-      url: "https://driftnthreads.com/",
-      displayUrl: "driftnthreads.com",
-      badge: "COMMERCE BUILD",
-      stat: "+210% Conversion Lift",
-      image: "/assets/portfolio/new-work/denim-product-campaign.jpg",
-      desc: "High-converting streetwear e-commerce storefront with seamless product drops, curated visual lookbooks, and instant checkout."
-    }
-  ];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveHeroWebsite((prev) => (prev + 1) % 5);
-    }, 4600);
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -881,7 +798,7 @@ const App = () => {
       id: 'uiux', name: 'UI/UX Design', icon: PenTool,
       title: "Making Apps Less Annoying.",
       heroDesc: "Stop giving your users a digital headache. We design interfaces so intuitive, even your grandma's cat could order pizza on them.",
-      img: "/assets/services/editorial/uiux.png",
+      img: "/assets/services/uiux-3d.png",
       problem: "Your current app looks like it was built in 1998 by a stressed intern. Users are rage-clicking the 'Cancel' button when they mean 'Buy', and your bounce rate is higher than a kangaroo on a trampoline.",
       solution: "We sprinkle UX magic dust (deep user research, logical wireframing, and lots of coffee) to make customer journeys smoother than a freshly paved highway. Oh, and the UI? We make it so pretty it hurts.",
       process: [
@@ -894,7 +811,7 @@ const App = () => {
       id: 'web', name: 'Web Dev', icon: MonitorSmartphone,
       title: "Websites That Don't Break.",
       heroDesc: "We write code so clean you could eat off it. Say goodbye to loading screens that last longer than a movie sequel.",
-      img: "/assets/services/editorial/web.png",
+      img: "/assets/services/web-3d.png",
       problem: "Your website currently takes 14 seconds to load, half the buttons lead to 404 pages, and it looks like a Picasso painting when viewed on a mobile phone.",
       solution: "We build scalable, lightning-fast digital platforms using modern tech stacks. If a user blinks, the page has already loaded. Mobile responsive isn't a feature; it's a religion here.",
       process: [
@@ -907,7 +824,7 @@ const App = () => {
       id: 'ai', name: 'AI Ads', icon: Cpu,
       title: "Robots Finding Customers.",
       heroDesc: "We unleash algorithmic sorcery to target people who didn't even know they wanted your product yet.",
-      img: "/assets/services/editorial/ai.png",
+      img: "/assets/services/ai-ads-3d.png",
       problem: "You are throwing money at Facebook and Google, hoping someone clicks your ad. It's basically a very expensive digital lottery ticket.",
       solution: "We let the machines do the heavy lifting. Predictive modeling, automated A/B testing, and AI-driven targeting that finds your perfect customer with terrifying accuracy.",
       process: [
@@ -920,7 +837,7 @@ const App = () => {
       id: 'adv', name: 'Advertising', icon: Megaphone,
       title: "Campaigns People Actually Notice.",
       heroDesc: "We build sharp, scroll-stopping campaigns that turn attention into leads, sales, and brand recall.",
-      img: "/assets/services/editorial/advertising.png",
+      img: "/assets/services/advertising-3d.png",
       problem: "Your ads are blending into the feed. People scroll past them, platforms eat the budget, and the campaign report looks busy without proving real business impact.",
       solution: "We craft campaign strategy, creative direction, media angles, and performance loops so your message lands with the right people at the right time.",
       process: [
@@ -933,7 +850,7 @@ const App = () => {
       id: 'brand', name: 'Branding', icon: LeafIcon,
       title: "More Than A Fancy Logo.",
       heroDesc: "We'll give your company a personality so magnetic, people will want to invite it to dinner.",
-      img: "/assets/services/editorial/branding.png",
+      img: "/assets/services/branding-3d.png",
       problem: "Your brand looks like everyone else's corporate clone. Your logo is generic, and your brand voice sounds like a robot reading a legal disclaimer.",
       solution: "We create cohesive visual identities and brand guidelines that scream 'We know exactly what we are doing.' You won't just get a logo; you'll get a vibe.",
       process: [
@@ -946,7 +863,7 @@ const App = () => {
       id: 'apps', name: 'Mobile Apps', icon: Smartphone,
       title: "Pocket-Sized Powerhouses.",
       heroDesc: "We build mobile apps so addictive, your users will forget to blink. From iOS to Android, we make sure it runs smoother than butter on a hot pan.",
-      img: "/assets/services/editorial/mobile-apps.png",
+      img: "/assets/services/mobile-apps-3d.png",
       problem: "Your current app concept is just a clunky mobile website disguised as an app. It crashes when you look at it funny, drains battery life, and is slowly racking up 1-star reviews.",
       solution: "We engineer native-feeling experiences that are blisteringly fast, deeply intuitive, and don't make people want to throw their phones into the ocean. Real apps for real humans.",
       process: [
@@ -959,7 +876,7 @@ const App = () => {
       id: 'nocode', name: 'No Code Web', icon: Blocks,
       title: "Websites Without The Wait.",
       heroDesc: "We build insanely fast, gorgeous websites using modern no-code wizardry. Because waiting 6 months for a developer to change a headline is so 2015.",
-      img: "/assets/services/editorial/no-code.png",
+      img: "/assets/services/nocode-web-3d.png",
       problem: "Traditional dev agencies are quoting you the price of a small yacht and a timeline that ends sometime next century. And when it's done? You need a PhD in computer science just to update a typo.",
       solution: "We use elite no-code platforms to visually engineer your site in weeks, not months. It's pixel-perfect, lightning-fast, and we give you the power to edit it yourself without breaking the entire internet.",
       process: [
@@ -972,7 +889,7 @@ const App = () => {
       id: 'shopify', name: 'Shopify Dev', icon: ShoppingBag,
       title: "Stores That Sell While You Sleep.",
       heroDesc: "We build polished Shopify storefronts, product systems, and checkout journeys that make buying feel effortless.",
-      img: "/assets/services/editorial/shopify.png",
+      img: "/assets/services/shopify-3d.png",
       problem: "Your online store looks generic, loads slowly, and makes customers work too hard before checkout. Every awkward product page is quietly leaking revenue.",
       solution: "We design and develop Shopify stores with premium product pages, clean navigation, conversion-focused sections, app integrations, and a checkout path built for trust.",
       process: [
@@ -1140,6 +1057,31 @@ const App = () => {
     setActiveCategory(id);
     setShowServiceModal(true);
   };
+
+  /**
+   * Send the visitor straight into an enquiry for one specific service.
+   * Every service surface (homepage stack, service modal, /cart?service=) routes
+   * through here so the submitted enquiry always names the service requested.
+   */
+  const enquireAboutService = (id) => {
+    if (id) {
+      setCompletedSteps((steps) => (steps.includes(id) ? steps : [...steps, id]));
+      setReferenceCartPulse(true);
+      window.setTimeout(() => setReferenceCartPulse(false), 900);
+    }
+    setShowServiceModal(false);
+    navigateTo('referenceCart');
+  };
+
+  // Deep links such as /cart?service=uiux (used by the static SEO layer and by
+  // ad campaigns) preselect that service so the lead is attributed correctly.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const requested = new URLSearchParams(window.location.search).get('service');
+    if (!requested) return;
+    if (!solutionsList.some((service) => service.id === requested)) return;
+    setCompletedSteps((steps) => (steps.includes(requested) ? steps : [...steps, requested]));
+  }, []);
 
   const indiaTime = currentTime.toLocaleTimeString('en-IN', {
     timeZone: 'Asia/Kolkata',
@@ -2056,49 +1998,9 @@ const App = () => {
       src: '/assets/portfolio/new-work/crimson-floral-portrait.jpg'
     }
   ];
-  const portfolioFamilyPatterns = [
-    'Nutrixa',
-    'Friends Tax',
-    'PodLight',
-    'Motion Study',
-    'Robotic',
-    'Machine Mind',
-    'Follicle',
-    'Frodir',
-    'Golden Hour',
-    'Noble Energy',
-    'NAVO',
-    'Floral Portrait'
-  ];
-  const getPortfolioFamily = (item) => (
-    portfolioFamilyPatterns.find((family) => item.title.includes(family)) || item.title
-  );
-  const portfolioDisplayItems = (() => {
-    const familyQueues = [];
-    const familyIndex = new Map();
-
-    portfolioItems.forEach((item) => {
-      const family = getPortfolioFamily(item);
-      if (!familyIndex.has(family)) {
-        familyIndex.set(family, familyQueues.length);
-        familyQueues.push([]);
-      }
-      familyQueues[familyIndex.get(family)].push(item);
-    });
-
-    const mixedItems = [];
-    let hasItems = true;
-    while (hasItems) {
-      hasItems = false;
-      familyQueues.forEach((queue) => {
-        if (queue.length) {
-          mixedItems.push(queue.shift());
-          hasItems = true;
-        }
-      });
-    }
-    return mixedItems;
-  })();
+  const domeGalleryImages = portfolioItems
+    .filter((item) => item.type === 'image')
+    .map((item) => ({ src: item.src, alt: item.title }));
   const featuredPortfolioItems = portfolioItems.slice(0, 3);
   const togglePortfolioLike = (key) => {
     setLikedPortfolioItems((items) => (
@@ -2392,10 +2294,10 @@ const App = () => {
         <main className="home-screen max-w-6xl mx-auto px-4 sm:px-6 pt-0 sm:pt-4 pb-0 relative z-10 animate-fade-in flex flex-col gap-16 lg:gap-24">
           
           {/* SECTION 1: Top Hero (Two Columns - Completely separated from About) */}
-          <div className="home-hero-layout grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-12 items-center relative z-20">
-            
-            {/* Left Column - Hero Text, Ads, and Services Icons */}
-            <div className="home-hero-copy w-full pt-2 sm:pt-4 lg:pt-8 flex flex-col gap-6 lg:gap-8">
+          <div className="home-hero-layout grid grid-cols-1 gap-8 items-center relative z-20">
+
+            {/* Hero Text, Ads, and Services Icons */}
+            <div className="home-hero-copy w-full max-w-2xl mx-auto pt-2 sm:pt-4 lg:pt-8 flex flex-col gap-6 lg:gap-8">
               
               {/* Horizontal Banner Carousel */}
               <div className="home-promo-card relative w-full max-w-xl overflow-hidden rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] group bg-white">
@@ -2492,59 +2394,6 @@ const App = () => {
                 />
               </div>
             </div>
-
-            {/* Right Column - Live Website Showcase (Desktop: 3D CardSwap | Mobile: CSS Slideshow) */}
-            <div className="home-hero-showcase-column w-full flex items-center justify-center relative">
-
-              {/* ── DESKTOP ONLY: 3D CardSwap with live iframes ── */}
-              <div className="hidden lg:flex w-full items-center justify-center">
-                <CardSwap
-                  width={500}
-                  height={370}
-                  cardDistance={48}
-                  verticalDistance={42}
-                  delay={4000}
-                  pauseOnHover={true}
-                  skewAmount={-5}
-                  easing="elastic"
-                  onActiveIndexChange={(idx) => setActiveHeroWebsite(idx)}
-                  onCardClick={(index) => {
-                    const site = heroWebsites[index];
-                    if (site?.url) window.open(site.url, '_blank');
-                  }}
-                >
-                  {heroWebsites.map((site, idx) => (
-                    <Card key={site.id} customClass="website-hero-card-container">
-                      <div className="website-hero-card">
-                        <div className="website-hero-card-header">
-                          <div className="website-hero-card-dots" aria-hidden="true">
-                            <span className="dot-red"></span>
-                            <span className="dot-yellow"></span>
-                            <span className="dot-green"></span>
-                          </div>
-                          <a
-                            href={site.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="website-hero-card-url"
-                            onClick={(e) => e.stopPropagation()}
-                            title={`Open ${site.url}`}
-                          >
-                            <Lock size={10} className="text-emerald-400 flex-shrink-0" />
-                            <span>{site.displayUrl || site.url}</span>
-                            <ArrowUpRight size={11} className="text-slate-400 ml-0.5 opacity-80" />
-                          </a>
-                          <span className="website-hero-card-tag">{site.badge || 'LIVE'}</span>
-                        </div>
-                        <DesktopIframe url={site.url} title={site.title} isActive={activeHeroWebsite === idx} />
-                      </div>
-                    </Card>
-                  ))}
-                </CardSwap>
-              </div>
-
-            </div>
-
 
           </div>
 
@@ -4052,17 +3901,47 @@ const App = () => {
               <p>Start lean, add backend power, or combine development with a complete creative launch.</p>
             </div>
             <div className="launch-simple-plans">
-              {launchPlans.map((plan) => (
-                <article key={plan.title}>
-                  <span>{plan.label}</span>
-                  <h3>{plan.title}</h3>
-                  <p>{plan.desc}</p>
-                  <strong>{plan.price}</strong>
-                  <small>{plan.priceNote}</small>
-                  <ul>{plan.items.map((item) => <li key={item}><Check size={14} /> {item}</li>)}</ul>
-                  <button type="button" onClick={() => navigateTo('workspace')}>Choose plan</button>
-                </article>
-              ))}
+              {launchPlans.map((plan, index) => {
+                const PlanIcon = plan.icon;
+                const isSelected = selectedLaunchPlan === index;
+                return (
+                  <article
+                    key={plan.title}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={isSelected}
+                    className={isSelected ? 'is-selected' : ''}
+                    onClick={() => setSelectedLaunchPlan(index)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        setSelectedLaunchPlan(index);
+                      }
+                    }}
+                  >
+                    {plan.badge && <em className="launch-tier-badge">{plan.badge}</em>}
+                    <div className="launch-tier-top">
+                      {PlanIcon && <span className="launch-tier-icon"><PlanIcon size={18} /></span>}
+                      <span className="launch-tier-label">{plan.label}</span>
+                    </div>
+                    <h3>{plan.title}</h3>
+                    <p>{plan.desc}</p>
+                    <strong>{plan.price}</strong>
+                    <small>{plan.priceNote}</small>
+                    <ul>{plan.items.map((item) => <li key={item}><Check size={14} /> {item}</li>)}</ul>
+                    <button
+                      type="button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setSelectedLaunchPlan(index);
+                        navigateTo('workspace');
+                      }}
+                    >
+                      {isSelected ? <><Check size={15} /> Selected · Continue</> : 'Choose plan'}
+                    </button>
+                  </article>
+                );
+              })}
             </div>
           </section>
 
@@ -4469,42 +4348,13 @@ const App = () => {
                 <p>Scroll through the archive. Every public piece is shown with client permission; private launches and internal systems stay confidential.</p>
               </section>
 
-              <section className="portfolio-gallery-grid">
-                {portfolioDisplayItems.map((item, index) => (
-                  <article
-                    className={`portfolio-media-card is-${item.type} span-${item.span} tone-${item.tone} ratio-${getPortfolioRatio(item)}`}
-                    key={`${item.title}-${index}`}
-                    style={{
-                      '--portfolio-delay': `${Math.min(index, 10) * 0.055}s`,
-                    '--portfolio-ratio': getPortfolioAspectRatio(item)
-                  }}
-                >
-                    <div className="portfolio-media-frame">
-                      {item.type === 'video' ? (
-                        <video
-                          src={item.src}
-                          muted
-                          loop
-                          playsInline
-                          preload="none"
-                          data-portfolio-video="true"
-                          disablePictureInPicture
-                          onLoadedMetadata={(event) => {
-                            rememberPortfolioRatio(item.src, event.currentTarget.videoWidth, event.currentTarget.videoHeight);
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src={item.src}
-                          alt={item.title}
-                          loading="lazy"
-                          decoding="async"
-                          onLoad={(event) => rememberPortfolioRatio(item.src, event.currentTarget.naturalWidth, event.currentTarget.naturalHeight)}
-                        />
-                      )}
-                    </div>
-                  </article>
-                ))}
+              <section className="portfolio-dome-shell">
+                <DomeGallery
+                  images={domeGalleryImages}
+                  overlayBlurColor="#05070c"
+                  segments={20}
+                  grayscale={false}
+                />
               </section>
             </div>
           </section>
@@ -4840,7 +4690,11 @@ const App = () => {
                    {activeCategoryData?.name}
                  </span>
               </div>
-              <button className="px-5 sm:px-6 py-2.5 rounded-full bg-[#2050E3] text-white text-xs sm:text-sm font-medium hover:bg-blue-700 hover:shadow-[0_4px_15px_rgba(32,80,227,0.4)] transition-all transform hover:-translate-y-0.5">
+              <button
+                type="button"
+                onClick={() => enquireAboutService(activeCategoryData?.id)}
+                className="px-5 sm:px-6 py-2.5 rounded-full bg-[#2050E3] text-white text-xs sm:text-sm font-medium hover:bg-blue-700 hover:shadow-[0_4px_15px_rgba(32,80,227,0.4)] transition-all transform hover:-translate-y-0.5"
+              >
                 Get Quote
               </button>
             </div>
@@ -4856,7 +4710,11 @@ const App = () => {
                 <p className="text-base sm:text-xl lg:text-2xl text-gray-700 font-light leading-relaxed mb-6 sm:mb-10 max-w-lg">
                   {activeCategoryData?.heroDesc}
                 </p>
-                <button className="w-full sm:w-fit inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full premium-glass hover:bg-white/80 text-gray-900 text-sm sm:text-lg font-medium transition-all duration-300 group hover:shadow-lg hover:-translate-y-1 border border-white/60">
+                <button
+                  type="button"
+                  onClick={() => document.getElementById('service-process')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                  className="w-full sm:w-fit inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full premium-glass hover:bg-white/80 text-gray-900 text-sm sm:text-lg font-medium transition-all duration-300 group hover:shadow-lg hover:-translate-y-1 border border-white/60"
+                >
                   <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2050E3] flex items-center justify-center text-white group-hover:scale-110 transition-transform shrink-0">
                      <ArrowRight size={14} className="sm:w-4 sm:h-4" />
                   </span>
@@ -4911,7 +4769,7 @@ const App = () => {
                </div>
             </div>
 
-            <div className="w-full">
+            <div className="w-full" id="service-process">
               <h2 className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-center text-gray-900 mb-3 sm:mb-4 tracking-tight drop-shadow-sm">How the magic happens.</h2>
               <p className="text-center text-gray-500 mb-8 sm:mb-16 font-light text-sm sm:text-lg px-4">Our proven 3-step formula to pure digital bliss.</p>
               
@@ -4941,11 +4799,12 @@ const App = () => {
                <div className="premium-glass p-6 sm:p-16 rounded-[2rem] sm:rounded-[4rem] border border-white/60 shadow-[0_10px_30px_rgba(0,0,0,0.05)] w-full max-w-4xl relative overflow-hidden">
                  <div className="absolute inset-0 bg-gradient-to-t from-[#2050E3]/10 to-transparent pointer-events-none"></div>
                  <h2 className="text-2xl sm:text-5xl font-semibold text-gray-900 mb-6 sm:mb-8 tracking-tight relative z-10">Ready to stop being boring?</h2>
-                 <button 
-                   onClick={() => setShowServiceModal(false)}
+                 <button
+                   type="button"
+                   onClick={() => enquireAboutService(activeCategoryData?.id)}
                    className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 sm:px-10 py-3.5 sm:py-5 rounded-full bg-gray-900 text-white text-sm sm:text-lg font-medium hover:bg-[#2050E3] hover:shadow-[0_10px_30px_rgba(32,80,227,0.3)] hover:-translate-y-1 transition-all duration-300 relative z-10 group"
                  >
-                   Let's Build It <ArrowUpRight size={18} className="sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                   Enquire about {activeCategoryData?.name} <ArrowUpRight size={18} className="sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                  </button>
                </div>
             </div>
