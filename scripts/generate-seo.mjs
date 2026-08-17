@@ -23,6 +23,7 @@ import { fileURLToPath } from 'node:url';
 import {
   SITE_URL,
   business,
+  verification,
   locations,
   cityList,
   services,
@@ -208,8 +209,17 @@ function buildHead(route) {
   if (route.faq?.length) schemas.push(faqSchema(route.faq));
   if (route.key === 'home' || route.key === 'services') schemas.push(...serviceSchemas);
 
+  // Only emitted once a token is filled in, so an empty value adds nothing.
+  const verifyTags = [
+    verification.google
+      ? `<meta name="google-site-verification" content="${escapeHtml(verification.google)}" />`
+      : null,
+    verification.bing ? `<meta name="msvalidate.01" content="${escapeHtml(verification.bing)}" />` : null
+  ].filter(Boolean);
+
   return [
     `<title>${escapeHtml(route.title)}</title>`,
+    ...verifyTags,
     `<meta name="description" content="${escapeHtml(route.description)}" />`,
     `<meta name="keywords" content="${escapeHtml(keywords)}" />`,
     `<link rel="canonical" href="${url}" />`,

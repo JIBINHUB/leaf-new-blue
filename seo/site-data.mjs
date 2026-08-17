@@ -43,6 +43,22 @@ export const business = {
   sameAs: []
 };
 
+/**
+ * Search-engine ownership verification tokens.
+ *
+ * Paste the code between the quotes and redeploy — the matching meta tag is
+ * emitted on every page automatically. Leave a value empty and no tag is added.
+ *
+ * Google:  Search Console -> Add property -> URL prefix -> https://leafcreationism.in
+ *          -> "HTML tag" method -> copy only the content="..." value.
+ * Bing:    Bing Webmaster Tools can instead "Import from Google Search Console",
+ *          which needs no token at all.
+ */
+export const verification = {
+  google: '',
+  bing: ''
+};
+
 /** Kerala cities targeted for local search and "near me" style queries. */
 export const locations = [
   { name: 'Kochi', alt: 'Ernakulam' },
