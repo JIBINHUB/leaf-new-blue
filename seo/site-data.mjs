@@ -532,17 +532,19 @@ export const routes = [
     key: 'workspace',
     priority: '0.7',
     changefreq: 'monthly',
-    title: `Book a Consultation | Studio Workspace | ${business.name}`,
-    description: `Book a free discovery call, design review, or launch planning session with ${business.name} in Kerala. Sessions run ${business.openingHours.opens}–${business.openingHours.closes} IST, seven days a week.`,
-    h1: 'Book a Consultation with Leaf Creationism',
-    intro: `Choose a focused session, pick a date and time, and send your project brief. ${business.name} runs consultations from ${business.openingHours.opens} to ${business.openingHours.closes} IST, seven days a week, online or by phone.`,
+    title: `Service Store | Buy Design, Web, App and Ad Services | ${business.name}`,
+    description: `Browse ${business.name} services with starting prices and delivery timelines. Add the services you need to your cart and send one enquiry to receive a written quote.`,
+    h1: 'Leaf Creationism Service Store',
+    intro: `Browse every ${business.name} service with an indicative starting price and delivery window, add what you need to your cart, and send a single enquiry. Final pricing is always confirmed in writing after we review your brief — nothing is charged up front.`,
     sections: [
       {
-        h2: 'Session types',
+        h2: 'How buying works',
         bullets: [
-          'Discovery Call (25 minutes) — clarify goals, scope, budget, and the best first step',
-          'Design Review (40 minutes) — audit your existing product, website, brand, or campaign',
-          'Launch Plan (55 minutes) — map build phases, priorities, assets, and delivery rhythm'
+          'Browse services by category: design, development, or marketing',
+          'Add the services you need to your cart, or use Buy now for a single service',
+          'Send one enquiry with your brief, budget, and deadline',
+          'Receive a written quote and timeline before any work begins',
+          'No advance payment is taken before you approve the quote'
         ]
       },
       {
@@ -557,8 +559,16 @@ export const routes = [
     ],
     faq: [
       {
+        q: 'Are the prices shown on the website final?',
+        a: 'No. The prices shown are indicative starting points. Leaf Creationism confirms the final cost in writing after reviewing your brief, and no payment is taken before you approve that quote.'
+      },
+      {
         q: 'Is the first consultation free?',
-        a: 'Yes. The initial discovery call with Leaf Creationism is free and carries no obligation. You receive a clear recommendation on scope and next steps whether or not you proceed.'
+        a: 'Yes. The initial 25-minute discovery call with Leaf Creationism is free and carries no obligation. You receive a clear recommendation on scope and next steps whether or not you proceed.'
+      },
+      {
+        q: 'Can I buy more than one service together?',
+        a: 'Yes. Add as many services as you need to the cart and send them as a single enquiry. Combined projects are quoted as one scope with one timeline.'
       },
       {
         q: 'Can we meet in person in Kerala?',

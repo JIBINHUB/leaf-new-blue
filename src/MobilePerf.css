@@ -59,15 +59,15 @@
   }
 
   /* ---------------------------------------------------------------------
-     3. Stop ambient infinite animations.
-     Anything still moving forever off-screen is pure battery and jank.
-     Explicit interaction animations are re-enabled in section 4.
+     3. Stop ambient infinite animations that repaint on the main thread.
+     Note: transform-only animations (like .advantage-cylinder-track) are
+     composited on the GPU and are cheap, so they keep running — killing
+     them only removed character without meaningfully helping frame rate.
      --------------------------------------------------------------------- */
   .animate-blob,
   .animate-float-rotate-1,
   .animate-bounce-x,
-  .projects-simple-card-icon,
-  .advantage-cylinder-track {
+  .projects-simple-card-icon {
     animation: none !important;
   }
 

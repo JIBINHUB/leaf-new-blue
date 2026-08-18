@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
+import './ServiceSuite.css';
+import './ServiceStore.css';
+import './StudioHeads.css';
 import './DarkMode.css';
 // Last import wins the cascade — this strips backdrop blur and ambient
 // animation on phones, where they are the main cause of scroll jank.
@@ -39,6 +42,7 @@ import {
   Volume2,
   VolumeX,
   ShoppingBag,
+  Store,
   Server,
   Cloud,
   Database,
@@ -367,8 +371,8 @@ const pageSeo = {
   },
   workspace: {
     path: '/workspace',
-    title: 'Studio Workspace | Schedule & Delivery at Leaf Creationism',
-    description: 'Book a focused studio call and follow Leaf Creationism delivery progress from one clear creative production workspace.'
+    title: 'Service Store | Buy UI/UX, Web, App, Branding & Ads | Leaf Creationism',
+    description: 'Browse Leaf Creationism services with starting prices and delivery timelines. Add services to your cart and send one enquiry to get a written quote.'
   },
   launch: {
     path: '/launch-cloud',
@@ -502,6 +506,7 @@ const App = () => {
   const [formStatus, setFormStatus] = useState('');
   const [headerStatusIndex, setHeaderStatusIndex] = useState(0);
   const [activeStudioHead, setActiveStudioHead] = useState(0);
+  const [storeFilter, setStoreFilter] = useState('All');
   const studioHeadsTouchStartX = useRef(null);
   const [isMobileViewport, setIsMobileViewport] = useState(() => (
     typeof window !== 'undefined' ? window.matchMedia('(max-width: 639px)').matches : false
@@ -790,7 +795,7 @@ const App = () => {
   const navItems = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'services', label: 'Services', icon: Layers },
-    { id: 'workspace', label: 'Workspace', icon: Calendar, hasNotification: true },
+    { id: 'workspace', label: 'Service Store', icon: Store, hasNotification: true },
     { id: 'launch', label: 'Launch Cloud', icon: Server },
     { id: 'portfolio', label: 'Portfolio', icon: Briefcase },
   ];
@@ -904,6 +909,38 @@ const App = () => {
   ];
 
   const activeCategoryData = serviceCategories.find(c => c.id === activeCategory);
+
+  /* ------------------------------------------------------------------
+     STORE PRICING — REVIEW THESE BEFORE GOING LIVE.
+     These are placeholder starting prices, not quotes from the studio.
+     Every card says "Starting from" and the checkout still ends in a
+     written quote, but change these to your real numbers.
+     ------------------------------------------------------------------ */
+  const servicePricing = {
+    uiux:    { from: 25000, weeks: '2-3 weeks', group: 'Design' },
+    web:     { from: 35000, weeks: '3-4 weeks', group: 'Development' },
+    ai:      { from: 20000, weeks: '1-2 weeks', group: 'Marketing' },
+    adv:     { from: 30000, weeks: '2-4 weeks', group: 'Marketing' },
+    brand:   { from: 40000, weeks: '3-5 weeks', group: 'Design' },
+    apps:    { from: 75000, weeks: '6-10 weeks', group: 'Development' },
+    nocode:  { from: 18000, weeks: '1-2 weeks', group: 'Development' },
+    shopify: { from: 45000, weeks: '3-5 weeks', group: 'Development' }
+  };
+
+  const formatInr = (value) => `₹${value.toLocaleString('en-IN')}`;
+
+  /* Short, factual one-liners for the service grid. The heroDesc copy is
+     deliberately jokey and too long to scan in a card. */
+  const serviceTaglines = {
+    uiux: 'Interfaces for apps, websites, dashboards, and products.',
+    web: 'Fast, responsive websites and web applications.',
+    ai: 'AI-generated ad creatives and performance campaigns.',
+    adv: 'Campaign strategy, creative direction, and media.',
+    brand: 'Logos, identity systems, and brand guidelines.',
+    apps: 'Native iOS and Android mobile applications.',
+    nocode: 'Webflow, Framer, and WordPress builds you can edit.',
+    shopify: 'Storefronts, product pages, and checkout flows.'
+  };
 
   // Warm the service modal images so the modal opens instantly.
   // Skipped on phones and on metered/slow connections: prefetching every
@@ -2011,9 +2048,15 @@ const App = () => {
       src: '/assets/portfolio/new-work/crimson-floral-portrait.jpg'
     }
   ];
+  /* The dome renders each image at roughly 250px wide, so it loads 640px
+     thumbnails rather than the full-resolution originals. Serving the
+     originals here meant ~20MB of downloads just to fill the sphere. */
   const domeGalleryImages = portfolioItems
     .filter((item) => item.type === 'image')
-    .map((item) => ({ src: item.src, alt: item.title }));
+    .map((item) => ({
+      src: `/assets/portfolio/thumbs/${item.src.split('/').pop().replace(/\.(jpg|jpeg|png|webp)$/i, '.jpg')}`,
+      alt: item.title
+    }));
   const featuredPortfolioItems = portfolioItems.slice(0, 3);
   const togglePortfolioLike = (key) => {
     setLikedPortfolioItems((items) => (
@@ -2466,197 +2509,107 @@ const App = () => {
           </div>
 
           {/* SECTION 3: Studio Heads */}
-          <section className="home-clients-section studio-heads-section" aria-label="Leaf Creationism leadership">
-            <div className="studio-heads-shell">
-              <header className="studio-heads-indigo-heading">
-                <span>STUDIO HEADS / LEAF CREATIONISM</span>
-                <h2>Creative work, led by</h2>
-                <p>the people behind every launch</p>
-              </header>
+          {/* SECTION 3: Studio Heads — editorial numbered profiles */}
+          <section className="heads" aria-label="Leaf Creationism leadership">
+            <header className="heads-head">
+              <span className="heads-eyebrow">Studio Heads</span>
+              <h2>Two people behind<br />every single launch.</h2>
+              <p>
+                No account managers, no handoffs to a junior team. The people who design and
+                direct your project are the ones you talk to.
+              </p>
+            </header>
 
-              <div
-                className="studio-heads-indigo-stage"
-                style={{ '--studio-translate': activeStudioHead === 0 ? '0%' : 'calc(-50% - 0.35rem)' }}
-                onTouchStart={(event) => {
-                  studioHeadsTouchStartX.current = event.touches[0]?.clientX ?? null;
-                }}
-                onTouchEnd={(event) => {
-                  if (studioHeadsTouchStartX.current === null) return;
-                  const endX = event.changedTouches[0]?.clientX ?? studioHeadsTouchStartX.current;
-                  const delta = endX - studioHeadsTouchStartX.current;
-                  if (Math.abs(delta) > 42) {
-                    setActiveStudioHead((current) => delta < 0 ? 1 : 0);
-                  }
-                  studioHeadsTouchStartX.current = null;
-                }}
-              >
-                <button
-                  className="studio-heads-indigo-control studio-heads-indigo-control-left"
-                  type="button"
-                  aria-label="Previous studio head card"
-                  onClick={() => setActiveStudioHead((current) => current === 0 ? 1 : 0)}
-                >‹</button>
-
-                <div className="studio-heads-indigo-track">
-                  <article className={`studio-heads-indigo-card studio-heads-indigo-card-person is-jibin ${activeStudioHead === 0 ? 'is-active' : ''}`}>
-                    <div className="studio-heads-indigo-image">
-                      <img src={studioHeads[0].image} alt={studioHeads[0].alt} width="1888" height="2272" loading="eager" decoding="async" draggable="false" />
-                    </div>
-                    <div className="studio-heads-indigo-person-copy">
-                      <strong>{studioHeads[0].name}</strong>
-                      <small>{studioHeads[0].role}</small>
-                    </div>
-                  </article>
-
-                  <article className={`studio-heads-indigo-card studio-heads-indigo-card-person is-xandra ${activeStudioHead === 1 ? 'is-active' : ''}`}>
-                    <div className="studio-heads-indigo-image">
-                      <img src={studioHeads[1].image} alt={studioHeads[1].alt} width="912" height="1168" loading="eager" decoding="async" draggable="false" />
-                    </div>
-                    <div className="studio-heads-indigo-person-copy">
-                      <strong>{studioHeads[1].name}</strong>
-                      <small>{studioHeads[1].role}</small>
-                    </div>
-                  </article>
-
-                  <article className={`studio-heads-indigo-card studio-heads-indigo-card-note ${activeStudioHead === 1 ? 'is-active' : ''}`}>
-                    <div className="studio-heads-indigo-grid" aria-hidden="true"></div>
-                    <div>
-                      <span>ONE STUDIO / TWO CREATIVE HEADS</span>
-                      <h3>Built around clear thinking and brave execution.</h3>
-                      <p>From brand direction and product systems to campaigns and launches, every decision stays close to the people leading the work.</p>
-                    </div>
-                    <footer>
-                      <span>STRATEGY</span>
-                      <span>DESIGN</span>
-                      <span>LAUNCH</span>
-                    </footer>
-                  </article>
-                </div>
-
-                <button
-                  className="studio-heads-indigo-control studio-heads-indigo-control-right"
-                  type="button"
-                  aria-label="Next studio head card"
-                  onClick={() => setActiveStudioHead((current) => current === 1 ? 0 : 1)}
-                >›</button>
-              </div>
-
-              <footer className="studio-heads-indigo-footer">
-                <span>0{activeStudioHead + 1}</span>
-                <i><b style={{ width: `${((activeStudioHead + 1) / 2) * 100}%` }}></b></i>
-                <span>02</span>
-                <button type="button" onClick={() => navigateTo('workspace')}>WORK WITH THE STUDIO <ArrowUpRight size={14} /></button>
-              </footer>
+            <div className="heads-grid">
+              {studioHeads.map((person, index) => (
+                <article className="heads-card" key={person.name} data-accent={index}>
+                  <span className="heads-index" aria-hidden="true">0{index + 1}</span>
+                  <div className="heads-photo">
+                    <img
+                      src={person.image}
+                      alt={person.alt}
+                      loading="lazy"
+                      decoding="async"
+                      draggable="false"
+                    />
+                  </div>
+                  <div className="heads-info">
+                    <h3>{person.name}</h3>
+                    <span className="heads-role">{person.role}</span>
+                    <p>{person.description}</p>
+                    <ul className="heads-tags">
+                      {(index === 0
+                        ? ['Creative systems', 'Product direction', 'Launch execution']
+                        : ['Visual direction', 'Storytelling', 'Brand experience']
+                      ).map((tag) => (
+                        <li key={tag}>{tag}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </article>
+              ))}
             </div>
+
+            <footer className="heads-foot">
+              <p>
+                <strong>One studio. Two creative heads.</strong> From brand direction and product
+                systems to campaigns and launches, every decision stays close to the people
+                leading the work.
+              </p>
+              <button type="button" onClick={() => navigateTo('workspace')}>
+                Work with the studio <ArrowUpRight size={15} />
+              </button>
+            </footer>
           </section>
 
           {/* SECTION 3.1: Service Features Dashboard */}
-          <div className="service-feature-section relative left-1/2 w-screen -translate-x-1/2 z-10 overflow-hidden">
-            <div className="service-feature-shell">
-              <div className="service-feature-dashboard" aria-label="Leaf Creationism service features">
-                <div className="service-feature-topbar">
-                  <div className="service-feature-duration">
-                    <div className="service-feature-live-indicator">
-                      <span className="live-pulse-dot"></span>
-                      <span>SERVICE SUITE</span>
-                    </div>
-                    <strong className="service-feature-number">08</strong>
-                    <div className="service-feature-sub">
-                      <small>core services</small>
-                      <div className="service-signal-bars" aria-hidden="true">
-                        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                      </div>
-                    </div>
-                  </div>
+          {/* Service suite — clean, flat, Google-style grid. Every card opens
+              that service and can be enquired about directly. */}
+          <section className="gsuite" aria-label="Leaf Creationism services">
+            <header className="gsuite-head">
+              <span className="gsuite-eyebrow">Service Suite</span>
+              <h2>Everything your brand needs, from one studio.</h2>
+              <p>
+                Eight core services covering strategy, design, engineering, and advertising —
+                delivered by the same team in Kerala, India.
+              </p>
+            </header>
+
+            <div className="gsuite-grid">
+              {serviceCategories.map((service, index) => {
+                const ServiceIcon = service.icon;
+                return (
                   <button
-                    className="service-feature-book"
+                    key={service.id}
                     type="button"
-                    onClick={() => {
-                      navigateTo('workspace');
-                    }}
+                    className="gsuite-card"
+                    data-accent={index % 4}
+                    onClick={() => openServiceModal(service.id)}
+                    aria-label={`View ${service.name} service`}
                   >
-                    <span className="service-book-shimmer"></span>
-                    <span className="service-book-content">
-                      <span className="service-book-label">Book a Strategy Call</span>
-                      <ArrowUpRight size={22} className="service-book-arrow" />
+                    <span className="gsuite-icon">
+                      <ServiceIcon size={24} strokeWidth={1.9} />
+                    </span>
+                    <h3>{service.name}</h3>
+                    <p>{serviceTaglines[service.id]}</p>
+                    <span className="gsuite-cta">
+                      Learn more
+                      <ArrowRight size={15} strokeWidth={2} />
                     </span>
                   </button>
-                  <div className="service-feature-avatar" aria-label="Leaf Creationism">
-                    <div className="service-avatar-ring"></div>
-                    <img src={localLeafLogoWhite} alt="Leaf Creationism logo" />
-                  </div>
-                </div>
-
-                <div className="service-feature-grid">
-                  <article className="service-feature-card service-feature-clock">
-                    <div className="service-feature-card-header">
-                      <div className="service-feature-service-icon">
-                        <PenTool size={30} strokeWidth={1.75} />
-                      </div>
-                      <span className="service-card-tag">SYSTEMS</span>
-                    </div>
-                    <div className="service-feature-note">
-                      <span>Experience design</span>
-                      <p><strong>UI/UX systems</strong> for apps, websites, landing pages, and product flows.</p>
-                      <div className="service-pill-row">
-                        <span>Figma</span>
-                        <span>Design Systems</span>
-                        <span>Prototypes</span>
-                      </div>
-                    </div>
-                  </article>
-
-                  <article className="service-feature-card service-feature-folder">
-                    <div className="service-feature-card-header">
-                      <div className="service-feature-folder-icon">
-                        <MonitorSmartphone size={32} strokeWidth={1.75} />
-                      </div>
-                      <div className="service-feature-menu" aria-hidden="true">
-                        <span></span><span></span><span></span>
-                      </div>
-                    </div>
-                    <span className="service-feature-label">Build studio</span>
-                    <h3>Web & app systems</h3>
-                    <div className="service-feature-meta">
-                      <span>React</span>
-                      <span>Next.js</span>
-                      <span>Shopify</span>
-                      <span>No-code</span>
-                    </div>
-                  </article>
-                </div>
-
-                <div className="service-feature-bottom">
-                  <div className="service-feature-plus" aria-hidden="true">
-                    <div className="plus-icon-pulse">
-                      <Cpu size={36} strokeWidth={1.65} />
-                    </div>
-                  </div>
-                  <button
-                    className="service-feature-card service-feature-message"
-                    type="button"
-                    onClick={() => {
-                      navigateTo('workspace');
-                    }}
-                    aria-label="Open active projects page"
-                  >
-                    <div className="service-message-top">
-                      <span className="service-status-pill">
-                        <span className="live-status-dot"></span>
-                        Active Production
-                      </span>
-                      <span className="service-stage-badge">SPRINT 04</span>
-                    </div>
-                    <p><strong>3D motion brand kit</strong>, two full-stack websites, and launch assets in progress.</p>
-                    <div className="service-progress-track">
-                      <div className="service-progress-fill" style={{ width: '78%' }}></div>
-                    </div>
-                    <small>Tap for full project details <ArrowUpRight size={16} strokeWidth={1.8} /></small>
-                  </button>
-                </div>
-              </div>
+                );
+              })}
             </div>
-          </div>
+
+            <div className="gsuite-actions">
+              <button type="button" className="gsuite-btn" onClick={() => navigateTo('workspace')}>
+                Book a strategy call
+              </button>
+              <button type="button" className="gsuite-btn is-ghost" onClick={() => navigateTo('services')}>
+                Explore all services
+              </button>
+            </div>
+          </section>
 
           {/* SECTION 3.5: Edgy Editorial FAQ Section */}
           <div className="home-faq-section faq-warm-glass w-full relative z-10 -mt-2 lg:-mt-4 mb-16 lg:mb-24 group/faq">
@@ -3160,204 +3113,124 @@ const App = () => {
       )}
 
       {/* Unified Schedule + Delivery Workspace */}
+      {/* SERVICE STORE — browse services like products, add to cart or buy now */}
       {activeNav === 'workspace' && (
-        <main className="studio-workspace max-w-6xl mx-auto px-4 sm:px-6 pt-5 sm:pt-10 pb-36 relative z-10 animate-fade-in">
-          <section className="workspace-hero">
-            <div className="workspace-hero-copy">
-              <div className="workspace-eyebrow">
-                <span>Studio workspace</span>
-                <i></i>
-                <strong>{isStudioOnline ? 'Online now' : 'Next window 10 AM'}</strong>
-              </div>
-              <h1>Plan the call.<br />Track the build.</h1>
+        <main className="store-page max-w-6xl mx-auto px-4 sm:px-6 pt-5 sm:pt-10 pb-36 relative z-10 animate-fade-in">
+          <header className="store-head">
+            <div>
+              <span className="store-eyebrow">Leaf Creationism / Service Store</span>
+              <h1>Buy our services.</h1>
               <p>
-                One clear place to book your next studio session and see how active Leaf projects move from idea to launch.
+                Pick the services you need, add them to your cart, and send one enquiry.
+                You receive a written quote and timeline before any work starts.
               </p>
-              <div className="workspace-hero-actions">
-                <a href={appointmentMailHref}>Confirm session <ArrowUpRight size={17} /></a>
-                <a href={appointmentWhatsAppHref} target="_blank" rel="noopener noreferrer">WhatsApp us</a>
-              </div>
             </div>
+            <button type="button" className="store-cart-chip" onClick={() => navigateTo('referenceCart')}>
+              <ShoppingBag size={18} />
+              <span>
+                <strong>{selectedServiceItems.length}</strong>
+                {selectedServiceItems.length === 1 ? ' service' : ' services'} in cart
+              </span>
+              <ArrowRight size={16} />
+            </button>
+          </header>
 
-            <aside className="workspace-overview" aria-label="Studio overview">
-              <div className="workspace-overview-head">
-                <span>Live studio signal</span>
-                <strong>{indiaTime} <small>IST</small></strong>
-              </div>
-              <div className="workspace-overview-stats">
-                <article>
-                  <strong>03</strong>
-                  <span>active<br />projects</span>
-                </article>
-                <article>
-                  <strong>{projectAverageProgress}%</strong>
-                  <span>average<br />delivery</span>
-                </article>
-                <article>
-                  <strong>{projectLaunchPrep.daysToLaunch}</strong>
-                  <span>days to next<br />launch</span>
-                </article>
-              </div>
-              <div className="workspace-overview-foot">
-                <span className={isStudioOnline ? 'is-online' : ''}></span>
-                <p>{projectCycleLabel} production cycle</p>
-                <Activity size={17} />
-              </div>
-            </aside>
-          </section>
+          <div className="store-filters" role="group" aria-label="Filter services">
+            {['All', 'Design', 'Development', 'Marketing'].map((group) => (
+              <button
+                key={group}
+                type="button"
+                className={storeFilter === group ? 'is-active' : ''}
+                onClick={() => setStoreFilter(group)}
+                aria-pressed={storeFilter === group}
+              >
+                {group}
+              </button>
+            ))}
+          </div>
 
-          <section className="workspace-grid">
-            <div className="workspace-booking-card workspace-card">
-              <header className="workspace-section-head">
-                <div>
-                  <span>01 / Schedule</span>
-                  <h2>Choose a focused session.</h2>
-                </div>
-                <div className="workspace-availability"><i></i> 10 AM—9 PM IST</div>
-              </header>
-
-              <div className="workspace-call-types" role="group" aria-label="Choose call type">
-                {scheduleTypes.map((type) => {
-                  const TypeIcon = type.icon;
-                  const isSelected = selectedScheduleType === type.id;
-                  return (
+          <div className="store-grid">
+            {serviceCategories
+              .filter((service) => storeFilter === 'All' || servicePricing[service.id]?.group === storeFilter)
+              .map((service, index) => {
+                const ServiceIcon = service.icon;
+                const price = servicePricing[service.id];
+                const inCart = completedSteps.includes(service.id);
+                return (
+                  <article key={service.id} className="store-card" data-accent={index % 4}>
                     <button
-                      key={type.id}
                       type="button"
-                      className={isSelected ? 'is-selected' : ''}
-                      onClick={() => setSelectedScheduleType(type.id)}
-                      aria-pressed={isSelected}
+                      className="store-card-media"
+                      onClick={() => openServiceModal(service.id)}
+                      aria-label={`View ${service.name} details`}
                     >
-                      <TypeIcon size={17} />
-                      <span><strong>{type.title}</strong><small>{type.time}</small></span>
-                      {isSelected && <Check size={15} />}
+                      <span className="store-card-icon"><ServiceIcon size={30} strokeWidth={1.7} /></span>
+                      <span className="store-card-group">{price?.group}</span>
                     </button>
-                  );
-                })}
-              </div>
 
-              <div className="workspace-date-label">
-                <span>Pick a date</span>
-                <small>Next seven studio days</small>
-              </div>
-              <div className="workspace-date-strip" aria-label="Choose appointment day">
-                {appointmentDays.map((day) => (
-                  <button
-                    key={day.id}
-                    type="button"
-                    onClick={() => setSelectedAppointmentDay(day.id)}
-                    className={selectedAppointmentDay === day.id ? 'is-selected' : ''}
-                    aria-pressed={selectedAppointmentDay === day.id}
-                  >
-                    <span>{day.label}</span>
-                    <strong>{day.date.split(' ')[0]}</strong>
-                    <small>{day.date.split(' ')[1]}</small>
-                  </button>
-                ))}
-              </div>
+                    <div className="store-card-body">
+                      <h2>{service.name}</h2>
+                      <p>{serviceTaglines[service.id]}</p>
 
-              <div className="workspace-date-label">
-                <span>Pick a time</span>
-                <small>Fixed IST slots</small>
-              </div>
-              <div className="workspace-time-grid" aria-label="Choose appointment time">
-                {appointmentSlots.map((slot) => (
-                  <button
-                    key={slot.time}
-                    type="button"
-                    onClick={() => setSelectedAppointmentTime(slot.time)}
-                    className={selectedAppointmentTime === slot.time ? 'is-selected' : ''}
-                    aria-pressed={selectedAppointmentTime === slot.time}
-                  >
-                    <strong>{slot.time}</strong>
-                    <span>{slot.label}</span>
-                  </button>
-                ))}
-              </div>
-
-              <div className="workspace-booking-summary">
-                <div className="workspace-summary-icon"><Calendar size={20} /></div>
-                <div>
-                  <span>Ready to book</span>
-                  <strong>{selectedAppointment.label}, {selectedAppointment.date} · {selectedSlot.time}</strong>
-                  <small>{selectedSchedule.title} · {selectedSchedule.time}</small>
-                </div>
-                <button type="button" onClick={() => navigateTo('referenceCart')}>Continue <ArrowRight size={16} /></button>
-              </div>
-            </div>
-
-            <aside className="workspace-delivery-card workspace-card">
-              <header className="workspace-section-head">
-                <div>
-                  <span>02 / Delivery</span>
-                  <h2>Work in motion.</h2>
-                </div>
-                <span className="workspace-orange-badge">Live</span>
-              </header>
-
-              <div className="workspace-project-list">
-                {activeProjects.map((project, index) => {
-                  const ProjectIcon = project.icon;
-                  return (
-                    <article key={project.title}>
-                      <div className="workspace-project-top">
-                        <div className="workspace-project-icon"><ProjectIcon size={18} /></div>
-                        <span>0{index + 1}</span>
+                      <div className="store-card-price">
+                        <span className="store-price-label">Starting from</span>
+                        <strong>{formatInr(price?.from ?? 0)}</strong>
+                        <small>Final price quoted after your brief</small>
                       </div>
-                      <small>{project.type}</small>
-                      <h3>{project.title}</h3>
-                      <div className="workspace-project-status">
-                        <span>{project.status}</span>
-                        <strong>{project.progress}%</strong>
-                      </div>
-                      <i className="workspace-progress"><b style={{ width: `${project.progress}%` }}></b></i>
-                      <p>{project.timeline}</p>
-                    </article>
-                  );
-                })}
-              </div>
 
-              <div className="workspace-next-launch">
+                      <div className="store-card-meta">
+                        <span><Clock size={13} /> {price?.weeks}</span>
+                        <span><Shield size={13} /> Written quote first</span>
+                      </div>
+                    </div>
+
+                    <div className="store-card-actions">
+                      <button
+                        type="button"
+                        className={`store-btn is-cart ${inCart ? 'is-added' : ''}`}
+                        onClick={() => toggleStep(service.id)}
+                        aria-pressed={inCart}
+                      >
+                        {inCart ? <><Check size={16} /> Added</> : <><Plus size={16} /> Add to cart</>}
+                      </button>
+                      <button
+                        type="button"
+                        className="store-btn is-buy"
+                        onClick={() => enquireAboutService(service.id)}
+                      >
+                        Buy now
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+          </div>
+
+          <section className="store-assurance">
+            {[
+              [Shield, 'No advance payment', 'You approve a written quote before work begins.'],
+              [Clock, 'Clear timelines', 'Every service ships to an agreed delivery window.'],
+              [Check, 'One team, end to end', 'Design, build, and campaigns handled in house.']
+            ].map(([Icon, title, text]) => (
+              <div key={title}>
+                <span><Icon size={18} /></span>
                 <div>
-                  <span>Next launch window</span>
-                  <strong>{projectLaunchPrep.title}</strong>
-                  <small>{projectLaunchPrep.timeline}</small>
+                  <strong>{title}</strong>
+                  <small>{text}</small>
                 </div>
-                <ArrowUpRight size={20} />
               </div>
-            </aside>
+            ))}
           </section>
 
-          <section className="workspace-lower-grid">
-            <article className="workspace-roadmap workspace-card">
-              <header className="workspace-section-head">
-                <div>
-                  <span>Production rhythm</span>
-                  <h2>Three projects. One clear system.</h2>
-                </div>
-              </header>
-              <div className="workspace-roadmap-list">
-                {activeProjects.map((project, index) => (
-                  <div key={project.title}>
-                    <span>0{index + 1}</span>
-                    <section>
-                      <strong>{project.title}</strong>
-                      <small>{project.status} · {project.daysToLaunch} days to launch</small>
-                    </section>
-                    <b>{project.progress}%</b>
-                  </div>
-                ))}
-              </div>
-            </article>
-
-            <article className="workspace-prep workspace-card">
-              <span className="workspace-orange-badge">Before we talk</span>
-              <h2>Bring the essentials.<br />We’ll bring the clarity.</h2>
-              <div>
-                {schedulePrep.map((item) => <span key={item}><Check size={14} /> {item}</span>)}
-              </div>
-              <a href="mailto:leafcreationism@gmail.com">leafcreationism@gmail.com <ArrowUpRight size={15} /></a>
-            </article>
+          <section className="store-callout">
+            <div>
+              <span>Not sure what you need?</span>
+              <h2>Book a free 25-minute discovery call.</h2>
+              <p>We map scope, budget, and the best first step — no obligation.</p>
+            </div>
+            <a href={appointmentWhatsAppHref} target="_blank" rel="noopener noreferrer">
+              Talk on WhatsApp <ArrowUpRight size={16} />
+            </a>
           </section>
         </main>
       )}
@@ -4365,11 +4238,15 @@ const App = () => {
                 {/* Each segment renders 5 tiles, so 20 segments = 100 images in
                     3D space. That is far too much for a phone to composite, so
                     mobile gets roughly half the geometry. */}
+                {/* fit drives tile scale: a larger value pushes the sphere
+                    closer to the camera so each image reads bigger. */}
                 <DomeGallery
                   images={domeGalleryImages}
                   overlayBlurColor="#05070c"
-                  segments={isMobileViewport ? 14 : 20}
-                  minRadius={isMobileViewport ? 360 : 600}
+                  segments={isMobileViewport ? 13 : 17}
+                  minRadius={isMobileViewport ? 380 : 620}
+                  fit={isMobileViewport ? 0.62 : 0.58}
+                  padFactor={0.18}
                   grayscale={false}
                 />
               </section>

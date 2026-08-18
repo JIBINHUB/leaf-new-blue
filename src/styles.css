@@ -15462,17 +15462,24 @@
         .portfolio-dome-shell {
           position: relative;
           width: 100%;
-          height: min(75vh, 620px);
-          min-height: 22rem;
+          height: min(88vh, 860px);
+          min-height: 30rem;
           border-radius: 1.75rem;
           overflow: hidden;
           background: #05070c;
           border: 1px solid rgba(255,255,255,0.08);
         }
 
+        @media (max-width: 1023px) {
+          .portfolio-dome-shell {
+            height: min(80vh, 680px);
+          }
+        }
+
         @media (max-width: 640px) {
           .portfolio-dome-shell {
-            height: min(65vh, 480px);
+            height: min(78vh, 620px);
+            min-height: 26rem;
             border-radius: 1.35rem;
           }
         }
@@ -18739,9 +18746,12 @@
         .portfolio-bento-page .portfolio-feed-header .portfolio-consent-note {
           position: relative;
           z-index: 2;
-          max-width: 21rem;
+          /* Fill the hero column instead of sitting as a narrow slab with
+             dead space beside it. */
+          max-width: none;
+          width: 100%;
           margin-top: auto;
-          padding: 1rem;
+          padding: 1.15rem 1.25rem;
           display: grid;
           grid-template-columns: 2.25rem minmax(0, 1fr);
           gap: 0.65rem;
@@ -28801,27 +28811,12 @@
           opacity: 1 !important;
         }
 
-        /* The FAQ remains a light glass surface in both themes, so its copy stays dark. */
-        html[data-theme='dark'] .faq-glass-card .faq-question {
-          color: #334155 !important;
-        }
-
-        html[data-theme='dark'] .faq-glass-card .faq-question.is-active {
-          color: #9a3412 !important;
-        }
-
-        html[data-theme='dark'] .faq-glass-card p,
-        html[data-theme='dark'] .faq-glass-card p.text-gray-600 {
-          color: #475569 !important;
-          opacity: 1 !important;
-          text-shadow: none !important;
-        }
-
-        .faq-warm-glass .faq-intro-copy,
-        html[data-theme='dark'] .faq-warm-glass .faq-intro-copy {
-          color: #475569 !important;
-          opacity: 1 !important;
-          text-shadow: none !important;
+        /* Dark-theme FAQ colours live in DarkMode.css, which turns the card
+           into a dark surface. Light theme only below. */
+        .faq-warm-glass .faq-intro-copy {
+          color: #475569;
+          opacity: 1;
+          text-shadow: none;
         }
 
 
