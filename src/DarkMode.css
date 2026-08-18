@@ -110,18 +110,25 @@ html[data-theme='dark'] .home-promo-card {
 }
 
 /* Individual banner slides carry their own light/dark background (banner.theme)
-   independent of the site theme — keep their text legible against that background
-   instead of the universal dark-mode text-color overrides below. */
-html[data-theme='dark'] .home-promo-card .text-gray-900 {
+   independent of the site theme, so their copy must stay dark even in dark mode.
+   These selectors are deliberately verbose: styles.css has a
+   `html[data-theme='dark'] .app-shell p.text-gray-700` rule whose specificity
+   (0,3,2) beats a plainer `.home-promo-card .text-gray-700` (0,3,1), so the
+   .app-shell and element qualifiers are required to win. */
+html[data-theme='dark'] .app-shell .home-promo-card .text-gray-900,
+html[data-theme='dark'] .app-shell .home-promo-card h3.text-gray-900 {
   color: #111827 !important;
 }
 
-html[data-theme='dark'] .home-promo-card .text-gray-800 {
+html[data-theme='dark'] .app-shell .home-promo-card .text-gray-800,
+html[data-theme='dark'] .app-shell .home-promo-card span.text-gray-800 {
   color: #1f2937 !important;
 }
 
-html[data-theme='dark'] .home-promo-card .text-gray-700 {
+html[data-theme='dark'] .app-shell .home-promo-card .text-gray-700,
+html[data-theme='dark'] .app-shell .home-promo-card p.text-gray-700 {
   color: #374151 !important;
+  opacity: 1 !important;
 }
 
 /* Hero Welcome Headline & Subtext */
