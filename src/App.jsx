@@ -335,6 +335,18 @@ const PortfolioReferenceIcon = ({ active = false }) => (
   </svg>
 );
 
+/**
+ * Map a full-size portfolio asset to its 640px thumbnail.
+ * Generated thumbnails live in /assets/portfolio/thumbs and are always .jpg.
+ * Non-portfolio paths are returned untouched.
+ */
+const toThumb = (src) => {
+  if (!src || !src.includes('/assets/portfolio/')) return src;
+  if (src.includes('/thumbs/')) return src;
+  if (!/\.(jpg|jpeg|png|webp)$/i.test(src)) return src;
+  return `/assets/portfolio/thumbs/${src.split('/').pop().replace(/\.[^.]+$/, '.jpg')}`;
+};
+
 const navPathMap = {
   home: '/',
   services: '/services',
@@ -2053,10 +2065,7 @@ const App = () => {
      originals here meant ~20MB of downloads just to fill the sphere. */
   const domeGalleryImages = portfolioItems
     .filter((item) => item.type === 'image')
-    .map((item) => ({
-      src: `/assets/portfolio/thumbs/${item.src.split('/').pop().replace(/\.(jpg|jpeg|png|webp)$/i, '.jpg')}`,
-      alt: item.title
-    }));
+    .map((item) => ({ src: toThumb(item.src), alt: item.title }));
   const featuredPortfolioItems = portfolioItems.slice(0, 3);
   const togglePortfolioLike = (key) => {
     setLikedPortfolioItems((items) => (
@@ -2269,9 +2278,12 @@ const App = () => {
     src: `/assets/portfolio/new-work/${file}`,
     label
   }));
+  /* Both the advantage cylinder and the portfolio dome render these images at
+     roughly 250px wide, so they load the 640px thumbnails instead of the
+     multi-megabyte originals. */
   const advantageCylinderImages = leafAdvantageMedia
     .slice(0, 10)
-    .map((item) => ({ src: item.src, alt: item.label }));
+    .map((item) => ({ src: toThumb(item.src), alt: item.label }));
   return (
     <div className="app-shell min-h-screen bg-[#FDFDFD] text-gray-800 font-sans relative overflow-hidden selection:bg-[#2050E3] selection:text-white">
       {showLoader && (
