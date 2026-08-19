@@ -956,14 +956,38 @@ const App = () => {
      written quote, but change these to your real numbers.
      ------------------------------------------------------------------ */
   const servicePricing = {
-    uiux:    { from: 25000, weeks: '2-3 weeks', group: 'Design' },
-    web:     { from: 35000, weeks: '3-4 weeks', group: 'Development' },
-    ai:      { from: 20000, weeks: '1-2 weeks', group: 'Marketing' },
-    adv:     { from: 30000, weeks: '2-4 weeks', group: 'Marketing' },
-    brand:   { from: 40000, weeks: '3-5 weeks', group: 'Design' },
-    apps:    { from: 75000, weeks: '6-10 weeks', group: 'Development' },
-    nocode:  { from: 18000, weeks: '1-2 weeks', group: 'Development' },
-    shopify: { from: 45000, weeks: '3-5 weeks', group: 'Development' }
+    uiux: {
+      from: 25000, weeks: '2-3 weeks', group: 'Design',
+      includes: ['User research & flows', 'Wireframes & prototypes', 'Full UI design system']
+    },
+    web: {
+      from: 35000, weeks: '3-4 weeks', group: 'Development',
+      includes: ['Mobile-responsive build', 'Speed & Core Web Vitals', 'On-page SEO setup']
+    },
+    ai: {
+      from: 20000, weeks: '1-2 weeks', group: 'Marketing', badge: 'Fastest delivery',
+      includes: ['AI-generated ad creatives', 'Meta & Google campaign setup', 'A/B testing framework']
+    },
+    adv: {
+      from: 30000, weeks: '2-4 weeks', group: 'Marketing',
+      includes: ['Campaign strategy', 'Creative direction & copy', 'Performance reporting']
+    },
+    brand: {
+      from: 40000, weeks: '3-5 weeks', group: 'Design',
+      includes: ['Logo & visual identity', 'Colour & type system', 'Brand guideline document']
+    },
+    apps: {
+      from: 75000, weeks: '6-10 weeks', group: 'Development',
+      includes: ['iOS & Android build', 'Backend, API & database', 'App Store submission']
+    },
+    nocode: {
+      from: 18000, weeks: '1-2 weeks', group: 'Development', badge: 'Best value',
+      includes: ['Webflow / Framer build', 'CMS you can edit yourself', 'Training & handover']
+    },
+    shopify: {
+      from: 45000, weeks: '3-5 weeks', group: 'Development',
+      includes: ['Custom theme build', 'Checkout optimisation', 'Payment gateway setup']
+    }
   };
 
   const formatInr = (value) => `₹${value.toLocaleString('en-IN')}`;
@@ -2628,6 +2652,10 @@ const App = () => {
               ))}
             </div>
 
+            <p className="heads-swipe-hint" aria-hidden="true">
+              <i></i> Swipe to meet the team
+            </p>
+
             <footer className="heads-foot">
               <p>
                 <strong>One studio. Two creative heads.</strong> From brand direction and product
@@ -3195,18 +3223,35 @@ const App = () => {
         <main className="store-page max-w-6xl mx-auto px-4 sm:px-6 pt-5 sm:pt-10 pb-36 relative z-10 animate-fade-in">
           <header className="store-head">
             <div>
-              <span className="store-eyebrow">Leaf Creationism / Service Store</span>
-              <h1>Buy our services.</h1>
+              <span className="store-eyebrow">
+                <Store size={13} /> Leaf Creationism / Service Store
+              </span>
+              <h1>Build your project,<br />one service at a time.</h1>
               <p>
-                Pick the services you need, add them to your cart, and send one enquiry.
-                You receive a written quote and timeline before any work starts.
+                Eight services, clear starting prices, real delivery windows. Add what you
+                need to the cart and send a single enquiry — we reply with a written quote
+                within 2 hours during studio hours.
               </p>
+              <div className="store-head-trust">
+                <span><Check size={13} /> Written quote first</span>
+                <span><Check size={13} /> Fixed delivery windows</span>
+                <span><Check size={13} /> One in-house team</span>
+              </div>
             </div>
             <button type="button" className="store-cart-chip" onClick={() => navigateTo('referenceCart')}>
-              <ShoppingBag size={18} />
-              <span>
-                <strong>{selectedServiceItems.length}</strong>
-                {selectedServiceItems.length === 1 ? ' service' : ' services'} in cart
+              <span className="store-cart-chip-icon">
+                <ShoppingBag size={18} />
+                {selectedServiceItems.length > 0 && (
+                  <i aria-hidden="true">{selectedServiceItems.length}</i>
+                )}
+              </span>
+              <span className="store-cart-chip-copy">
+                <strong>
+                  {selectedServiceItems.length === 0
+                    ? 'Your cart is empty'
+                    : `${selectedServiceItems.length} ${selectedServiceItems.length === 1 ? 'service' : 'services'} added`}
+                </strong>
+                <small>{selectedServiceItems.length === 0 ? 'Add a service to begin' : 'Review & send enquiry'}</small>
               </span>
               <ArrowRight size={16} />
             </button>
@@ -3234,30 +3279,38 @@ const App = () => {
                 const price = servicePricing[service.id];
                 const inCart = completedSteps.includes(service.id);
                 return (
-                  <article key={service.id} className="store-card" data-accent={index % 4}>
+                  <article
+                    key={service.id}
+                    className={`store-card ${inCart ? 'is-in-cart' : ''}`}
+                    data-accent={index % 4}
+                  >
+                    {price?.badge && <em className="store-card-badge">{price.badge}</em>}
+
                     <button
                       type="button"
                       className="store-card-media"
                       onClick={() => openServiceModal(service.id)}
                       aria-label={`View ${service.name} details`}
                     >
-                      <span className="store-card-icon"><ServiceIcon size={30} strokeWidth={1.7} /></span>
+                      <span className="store-card-icon"><ServiceIcon size={28} strokeWidth={1.7} /></span>
                       <span className="store-card-group">{price?.group}</span>
+                      <span className="store-card-view">View details <ArrowUpRight size={12} /></span>
                     </button>
 
                     <div className="store-card-body">
                       <h2>{service.name}</h2>
                       <p>{serviceTaglines[service.id]}</p>
 
+                      <ul className="store-card-includes">
+                        {price?.includes?.map((item) => (
+                          <li key={item}><Check size={12} /> {item}</li>
+                        ))}
+                      </ul>
+
                       <div className="store-card-price">
                         <span className="store-price-label">Starting from</span>
                         <strong>{formatInr(price?.from ?? 0)}</strong>
-                        <small>Final price quoted after your brief</small>
-                      </div>
-
-                      <div className="store-card-meta">
-                        <span><Clock size={13} /> {price?.weeks}</span>
-                        <span><Shield size={13} /> Written quote first</span>
+                        <small><Clock size={11} /> Delivery in {price?.weeks}</small>
                       </div>
                     </div>
 
@@ -3285,7 +3338,7 @@ const App = () => {
 
           <section className="store-assurance">
             {[
-              [Shield, 'No advance payment', 'You approve a written quote before work begins.'],
+              [Shield, 'Transparent pricing', 'A written quote is agreed before work begins — no surprise costs later.'],
               [Clock, 'Clear timelines', 'Every service ships to an agreed delivery window.'],
               [Check, 'One team, end to end', 'Design, build, and campaigns handled in house.']
             ].map(([Icon, title, text]) => (

@@ -305,10 +305,72 @@ html[data-theme='dark'] .heads-foot button:hover {
 }
 
 @media (max-width: 900px) {
+  /* Mobile: the two profiles become a swipeable, snapping carousel instead of
+     stacking. CSS scroll-snap only — no JS, no library, and it keeps working
+     with native momentum scrolling. */
   .heads-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    display: flex;
+    grid-template-columns: none;
+    gap: 1rem;
+    /* Bleed to the section edges so cards can peek in from the sides. */
+    margin-inline: calc(clamp(1rem, 3vw, 2.5rem) * -1);
+    padding-inline: clamp(1rem, 3vw, 2.5rem);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: clamp(1rem, 3vw, 2.5rem);
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
   }
+
+  .heads-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .heads-card {
+    flex: 0 0 86%;
+    scroll-snap-align: start;
+    /* Cards must not slide in from below on a horizontal track — the reveal
+       is handled by the section fading in as a whole instead. */
+    transform: none;
+  }
+
+  .heads.is-visible .heads-card {
+    transform: none;
+  }
+
+  .heads.is-visible .heads-card[data-accent='0'],
+  .heads.is-visible .heads-card[data-accent='1'] {
+    transition-delay: 0.12s;
+  }
+
+  /* Swipe affordance under the track. Scoped through .heads so it outranks
+     the base `display: none` below, which is declared later in the file. */
+  .heads .heads-swipe-hint {
+    display: flex;
+  }
+}
+
+/* Hidden on desktop, where both profiles are already side by side. */
+.heads-swipe-hint {
+  display: none;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  color: var(--h-muted);
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.heads-swipe-hint i {
+  display: block;
+  width: 1.6rem;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--h-accent-0);
+  opacity: 0.5;
 }
 
 @media (max-width: 560px) {

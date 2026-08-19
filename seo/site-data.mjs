@@ -535,7 +535,7 @@ export const routes = [
     title: `Service Store | Buy Design, Web, App and Ad Services | ${business.name}`,
     description: `Browse ${business.name} services with starting prices and delivery timelines. Add the services you need to your cart and send one enquiry to receive a written quote.`,
     h1: 'Leaf Creationism Service Store',
-    intro: `Browse every ${business.name} service with an indicative starting price and delivery window, add what you need to your cart, and send a single enquiry. Final pricing is always confirmed in writing after we review your brief — nothing is charged up front.`,
+    intro: `Browse every ${business.name} service with an indicative starting price and delivery window, add what you need to your cart, and send a single enquiry. Final pricing is always confirmed in writing after we review your brief.`,
     sections: [
       {
         h2: 'How buying works',
@@ -544,7 +544,7 @@ export const routes = [
           'Add the services you need to your cart, or use Buy now for a single service',
           'Send one enquiry with your brief, budget, and deadline',
           'Receive a written quote and timeline before any work begins',
-          'No advance payment is taken before you approve the quote'
+          'Payment terms are agreed in writing along with the quote'
         ]
       },
       {
@@ -560,7 +560,7 @@ export const routes = [
     faq: [
       {
         q: 'Are the prices shown on the website final?',
-        a: 'No. The prices shown are indicative starting points. Leaf Creationism confirms the final cost in writing after reviewing your brief, and no payment is taken before you approve that quote.'
+        a: 'No. The prices shown are indicative starting points. Leaf Creationism confirms the final cost and payment terms in writing after reviewing your brief, so you always know the full cost before agreeing to the project.'
       },
       {
         q: 'Is the first consultation free?',
