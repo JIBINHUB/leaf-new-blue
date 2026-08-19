@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 import './ServiceSuite.css';
+import './CoreFeatures.css';
 import './ServiceStore.css';
 import './StudioHeads.css';
 import './DarkMode.css';
@@ -22,6 +23,7 @@ import {
   PenTool,
   Megaphone,
   Cpu,
+  Sparkles,
   Layers,
   Search,
   FileText,
@@ -517,9 +519,9 @@ const App = () => {
   });
   const [formStatus, setFormStatus] = useState('');
   const [headerStatusIndex, setHeaderStatusIndex] = useState(0);
-  const [activeStudioHead, setActiveStudioHead] = useState(0);
   const [storeFilter, setStoreFilter] = useState('All');
-  const studioHeadsTouchStartX = useRef(null);
+  const [headsVisible, setHeadsVisible] = useState(false);
+  const headsRef = useRef(null);
   const [isMobileViewport, setIsMobileViewport] = useState(() => (
     typeof window !== 'undefined' ? window.matchMedia('(max-width: 639px)').matches : false
   ));
@@ -585,7 +587,27 @@ const App = () => {
       description: 'Shapes visual direction, premium taste, storytelling, and brand experience mentoring.'
     }
   ];
-  const selectedStudioHead = studioHeads[activeStudioHead];
+
+  // Reveal the Studio Heads section once, the first time it scrolls into
+  // view. transform/opacity only — cheap to animate, no layout thrash.
+  useEffect(() => {
+    const node = headsRef.current;
+    if (!node || typeof IntersectionObserver === 'undefined') {
+      setHeadsVisible(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHeadsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   const promoBanners = [
     { 
@@ -796,12 +818,17 @@ const App = () => {
   const solutionsList = [
     { id: 'uiux', title: 'UI/UX Design', desc: 'User-centric interfaces', icon: PenTool },
     { id: 'web', title: 'Websites & Apps', desc: 'Scalable digital platforms', icon: MonitorSmartphone },
-    { id: 'ai', title: 'AI Ads', desc: 'Smart, targeted campaigns', icon: Cpu },
+    { id: 'ai', title: 'AI Ads', desc: 'Smart, targeted campaigns', icon: Sparkles },
     { id: 'adv', title: 'Advertising', desc: 'Brand growth strategies', icon: Megaphone },
     { id: 'brand', title: 'Branding', desc: 'Identity systems', icon: LeafIcon },
     { id: 'apps', title: 'Mobile Apps', desc: 'Native-feeling products', icon: Smartphone },
     { id: 'nocode', title: 'No Code Web', desc: 'Fast visual builds', icon: Blocks },
     { id: 'shopify', title: 'Shopify Dev', desc: 'Conversion stores', icon: ShoppingBag },
+    // Launch Cloud plans — added to the cart the same way as a service when
+    // chosen from the Launch Cloud "Three clear levels" grid.
+    { id: 'launch-web', title: 'Web Launch', desc: 'Launch Cloud · for websites', icon: Globe },
+    { id: 'launch-business', title: 'Business Cloud', desc: 'Launch Cloud · for web apps', icon: Database },
+    { id: 'launch-scale', title: 'Scale Stack', desc: 'Launch Cloud · for custom stacks', icon: Server },
   ];
 
   const navItems = [
@@ -840,8 +867,8 @@ const App = () => {
         { step: "03", title: "Bug Squashing", desc: "We aggressively hunt down glitches so your users don't have to." }
       ]
     },
-    { 
-      id: 'ai', name: 'AI Ads', icon: Cpu,
+    {
+      id: 'ai', name: 'AI Ads', icon: Sparkles,
       title: "Robots Finding Customers.",
       heroDesc: "We unleash algorithmic sorcery to target people who didn't even know they wanted your product yet.",
       img: "/assets/services/ai-ads-3d.jpg",
@@ -1135,6 +1162,25 @@ const App = () => {
     navigateTo('referenceCart');
   };
 
+  const launchPlanIds = ['launch-web', 'launch-business', 'launch-scale'];
+
+  /**
+   * "Choose plan" on Launch Cloud goes straight to the cart with that plan
+   * already added — no separate checkout page. Only one Launch Cloud plan
+   * can be in the cart at a time (they're alternative hosting tiers, not
+   * services you'd combine), so picking a new one swaps out any previous one.
+   */
+  const chooseLaunchPlan = (plan, index) => {
+    setCompletedSteps((steps) => {
+      const withoutOtherPlans = steps.filter((id) => !launchPlanIds.includes(id));
+      return [...withoutOtherPlans, plan.id];
+    });
+    setSelectedLaunchPlan(index);
+    setReferenceCartPulse(true);
+    window.setTimeout(() => setReferenceCartPulse(false), 900);
+    navigateTo('referenceCart');
+  };
+
   // Deep links such as /cart?service=uiux (used by the static SEO layer and by
   // ad campaigns) preselect that service so the lead is attributed correctly.
   useEffect(() => {
@@ -1293,7 +1339,7 @@ const App = () => {
       daysToLaunch: 14,
       desc: 'A campaign engine with audience angles, AI-assisted creative variations, landing flow, and weekly performance readouts.',
       tags: ['AI ads', 'Creative tests', 'Growth'],
-      icon: Cpu,
+      icon: Sparkles,
       preview: 'web'
     },
     {
@@ -1367,6 +1413,7 @@ const App = () => {
   ];
   const launchPlans = [
     {
+      id: 'launch-web',
       title: 'Web Launch',
       icon: Globe,
       label: 'For websites',
@@ -1379,6 +1426,7 @@ const App = () => {
       items: ['Deployment workflow', 'Static or SPA hosting', 'Basic performance pass', 'Analytics-ready structure', 'Launch handover']
     },
     {
+      id: 'launch-business',
       title: 'Business Cloud',
       icon: Database,
       label: 'For web apps',
@@ -1391,6 +1439,7 @@ const App = () => {
       items: ['Backend service mapping', 'Production and preview setup', 'Supabase, Firebase, MongoDB Atlas, PostgreSQL, or PlanetScale planning', 'Admin-ready flow', 'Security checklist']
     },
     {
+      id: 'launch-scale',
       title: 'Scale Stack',
       icon: Server,
       label: 'For custom stacks',
@@ -1421,7 +1470,7 @@ const App = () => {
     {
       title: 'AI Ads Engine',
       label: 'Growth launch',
-      icon: Cpu,
+      icon: Sparkles,
       desc: 'AI-assisted ad angles, landing page hooks, creative testing structure, and performance-ready campaigns.',
       includes: ['Ad creative routes', 'Landing page hooks', 'Testing framework']
     },
@@ -2438,17 +2487,30 @@ const App = () => {
 
               {/* Welcome Text */}
               <div className="home-welcome-copy">
-                <h1 className={`dia-headline text-[38px] sm:text-4xl md:text-5xl lg:text-[54px] leading-[1.05] text-gray-900 font-light mb-3 sm:mb-4 tracking-tight ${showLoader ? '' : 'is-ready'}`}>
-                  <span className="dia-headline-base">
-                    Design, build, and grow your <span className="font-medium">next digital product.</span>
-                  </span>
-                  <span className="dia-headline-sweep" aria-hidden="true">
-                    Design, build, and grow your <span className="font-medium">next digital product.</span>
-                  </span>
+                <h1 className="font-sans text-gray-900 text-[38px] sm:text-4xl md:text-5xl lg:text-[54px] leading-[1.05] font-light tracking-tight mb-3 sm:mb-4">
+                  Design, build, and grow your <span className="font-medium">next digital product.</span>
                 </h1>
-                <p className="text-slate-600 font-light text-base sm:text-lg leading-relaxed">
-                  UI/UX, websites, mobile apps, AI ads, branding, and motion - one focused creative team from idea to launch.
+                <p className="font-sans text-slate-600 font-light text-base sm:text-lg leading-relaxed mb-5 sm:mb-6">
+                  UI/UX, websites, mobile apps, AI ads, branding, and motion — one focused creative team from idea to launch.
                 </p>
+                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+                  <button
+                    type="button"
+                    onClick={() => navigateTo('portfolio')}
+                    className="group font-sans inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-gray-900 text-white rounded-full px-7 py-3 text-sm font-medium transition-colors duration-200 hover:bg-[#2050E3]"
+                  >
+                    See our work
+                    <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => navigateTo('workspace')}
+                    className="group font-sans inline-flex items-center justify-center gap-2 w-full sm:w-auto border border-gray-900/25 text-gray-900 rounded-full px-7 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-900/[0.06] hover:border-gray-900/40"
+                  >
+                    Book a call
+                    <ArrowUpRight size={15} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </button>
+                </div>
               </div>
 
               {/* Elastic Service Stack */}
@@ -2522,7 +2584,11 @@ const App = () => {
 
           {/* SECTION 3: Studio Heads */}
           {/* SECTION 3: Studio Heads — editorial numbered profiles */}
-          <section className="heads" aria-label="Leaf Creationism leadership">
+          <section
+            className={`heads ${headsVisible ? 'is-visible' : ''}`}
+            aria-label="Leaf Creationism leadership"
+            ref={headsRef}
+          >
             <header className="heads-head">
               <span className="heads-eyebrow">Studio Heads</span>
               <h2>Two people behind<br />every single launch.</h2>
@@ -2574,52 +2640,51 @@ const App = () => {
             </footer>
           </section>
 
-          {/* SECTION 3.1: Service Features Dashboard */}
-          {/* Service suite — clean, flat, Google-style grid. Every card opens
-              that service and can be enquired about directly. */}
-          <section className="gsuite" aria-label="Leaf Creationism services">
-            <header className="gsuite-head">
-              <span className="gsuite-eyebrow">Service Suite</span>
-              <h2>Everything your brand needs, from one studio.</h2>
-              <p>
-                Eight core services covering strategy, design, engineering, and advertising —
-                delivered by the same team in Kerala, India.
+          {/* SECTION 3.1: Service Suite — gradient card design, real services */}
+          <section className="c1-section" aria-label="Leaf Creationism services">
+            <div className="c1-container">
+              <span className="c1-badge">Service Suite</span>
+              <h2 className="c1-title">Everything your brand needs, from one studio.</h2>
+              <p className="c1-subtitle">
+                Eight core services covering strategy, design,
+                <br />
+                engineering, and advertising.
               </p>
-            </header>
 
-            <div className="gsuite-grid">
-              {serviceCategories.map((service, index) => {
-                const ServiceIcon = service.icon;
-                return (
-                  <button
-                    key={service.id}
-                    type="button"
-                    className="gsuite-card"
-                    data-accent={index % 4}
-                    onClick={() => openServiceModal(service.id)}
-                    aria-label={`View ${service.name} service`}
-                  >
-                    <span className="gsuite-icon">
-                      <ServiceIcon size={24} strokeWidth={1.9} />
-                    </span>
-                    <h3>{service.name}</h3>
-                    <p>{serviceTaglines[service.id]}</p>
-                    <span className="gsuite-cta">
-                      Learn more
-                      <ArrowRight size={15} strokeWidth={2} />
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+              <div className="c1-svc-grid">
+                {serviceCategories.map((service, index) => {
+                  const ServiceIcon = service.icon;
+                  return (
+                    <button
+                      key={service.id}
+                      type="button"
+                      className="c1-svc-card"
+                      data-accent={index % 4}
+                      onClick={() => openServiceModal(service.id)}
+                      aria-label={`View ${service.name} service`}
+                    >
+                      <span className="c1-svc-icon">
+                        <ServiceIcon size={22} strokeWidth={1.9} />
+                      </span>
+                      <h3>{service.name}</h3>
+                      <p>{serviceTaglines[service.id]}</p>
+                      <span className="c1-svc-cta">
+                        Learn more
+                        <ArrowRight size={14} strokeWidth={2} />
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
 
-            <div className="gsuite-actions">
-              <button type="button" className="gsuite-btn" onClick={() => navigateTo('workspace')}>
-                Book a strategy call
-              </button>
-              <button type="button" className="gsuite-btn is-ghost" onClick={() => navigateTo('services')}>
-                Explore all services
-              </button>
+              <div className="c1-actions">
+                <button type="button" className="c1-btn" onClick={() => navigateTo('workspace')}>
+                  Book a strategy call
+                </button>
+                <button type="button" className="c1-btn is-ghost" onClick={() => navigateTo('services')}>
+                  Explore all services
+                </button>
+              </div>
             </div>
           </section>
 
@@ -3804,7 +3869,7 @@ const App = () => {
                 const isSelected = selectedLaunchPlan === index;
                 return (
                   <article
-                    key={plan.title}
+                    key={plan.id}
                     role="button"
                     tabIndex={0}
                     aria-pressed={isSelected}
@@ -3831,8 +3896,7 @@ const App = () => {
                       type="button"
                       onClick={(event) => {
                         event.stopPropagation();
-                        setSelectedLaunchPlan(index);
-                        navigateTo('workspace');
+                        chooseLaunchPlan(plan, index);
                       }}
                     >
                       {isSelected ? <><Check size={15} /> Selected · Continue</> : 'Choose plan'}
@@ -4341,17 +4405,74 @@ const App = () => {
               </div>
             </Step>
 
-            {/* STEP 2: Strategy Call */}
+            {/* STEP 2: Strategy Call — picked right here, no separate page */}
             <Step>
               <div className="step-content-head">
                 <div>
                   <h3>Strategy Consultation & Schedule</h3>
-                  <p>Confirmed slot with the Leaf creative directors.</p>
+                  <p>Pick a session type, date, and time with the Leaf creative directors.</p>
                 </div>
-                <button type="button" className="step-action-btn" onClick={() => navigateTo('workspace')}>
-                  <Calendar size={14} />
-                  <span>Change Time</span>
-                </button>
+              </div>
+
+              <div className="studio-workspace reference-schedule-picker">
+                <div className="workspace-call-types" role="group" aria-label="Choose call type">
+                  {scheduleTypes.map((type) => {
+                    const TypeIcon = type.icon;
+                    const isSelected = selectedScheduleType === type.id;
+                    return (
+                      <button
+                        key={type.id}
+                        type="button"
+                        className={isSelected ? 'is-selected' : ''}
+                        onClick={() => setSelectedScheduleType(type.id)}
+                        aria-pressed={isSelected}
+                      >
+                        <TypeIcon size={17} />
+                        <span><strong>{type.title}</strong><small>{type.time}</small></span>
+                        {isSelected && <Check size={15} />}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="workspace-date-label">
+                  <span>Pick a date</span>
+                  <small>Next seven studio days</small>
+                </div>
+                <div className="workspace-date-strip" aria-label="Choose appointment day">
+                  {appointmentDays.map((day) => (
+                    <button
+                      key={day.id}
+                      type="button"
+                      onClick={() => setSelectedAppointmentDay(day.id)}
+                      className={selectedAppointmentDay === day.id ? 'is-selected' : ''}
+                      aria-pressed={selectedAppointmentDay === day.id}
+                    >
+                      <span>{day.label}</span>
+                      <strong>{day.date.split(' ')[0]}</strong>
+                      <small>{day.date.split(' ')[1]}</small>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="workspace-date-label">
+                  <span>Pick a time</span>
+                  <small>Fixed IST slots</small>
+                </div>
+                <div className="workspace-time-grid" aria-label="Choose appointment time">
+                  {appointmentSlots.map((slot) => (
+                    <button
+                      key={slot.time}
+                      type="button"
+                      onClick={() => setSelectedAppointmentTime(slot.time)}
+                      className={selectedAppointmentTime === slot.time ? 'is-selected' : ''}
+                      aria-pressed={selectedAppointmentTime === slot.time}
+                    >
+                      <strong>{slot.time}</strong>
+                      <span>{slot.label}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="reference-appointment-card">
@@ -4360,7 +4481,6 @@ const App = () => {
                   <strong>{selectedSchedule.title}</strong>
                   <p>{selectedAppointment.full} / {selectedSlot.time} IST / {selectedSlot.note}</p>
                 </div>
-                <button type="button" onClick={() => navigateTo('workspace')}>Reschedule</button>
               </div>
             </Step>
 

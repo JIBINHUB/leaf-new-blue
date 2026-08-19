@@ -1,0 +1,250 @@
+/* ==========================================================================
+   SERVICE SUITE — gradient card design
+   Visual language borrowed from a gradient-card spec (badge, radial-gradient
+   card backgrounds, 20px radius, soft shadow, Inter type) applied to the
+   site's real 8 services, each opening its own enquiry.
+   ========================================================================== */
+
+.c1-section {
+  width: 100%;
+  padding: 80px 20px;
+  display: flex;
+  justify-content: center;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+.c1-container {
+  max-width: 1100px;
+  width: 100%;
+  text-align: center;
+}
+
+.c1-badge {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #f5c344, #f28482, #b567c2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.c1-title {
+  margin: 0 0 12px;
+  font-size: 2.75rem;
+  font-weight: 500;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.c1-subtitle {
+  margin: 0 0 50px;
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ---------- Service grid ---------- */
+.c1-svc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.c1-svc-card {
+  --tint-a: #f5c344;
+  --tint-b: #f28482;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 220px;
+  padding: 22px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 20px;
+  text-align: left;
+  cursor: pointer;
+  background: radial-gradient(circle at 30% 0%, var(--tint-a) 0%, var(--tint-b) 32%, #f4f8f9 68%, #f4f8f9 100%);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.c1-svc-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px -10px rgba(0, 0, 0, 0.22);
+}
+
+.c1-svc-card:focus-visible {
+  outline: 2px solid #0f172a;
+  outline-offset: 2px;
+}
+
+.c1-svc-card[data-accent='0'] { --tint-a: #ffb347; --tint-b: #f9ed96; }
+.c1-svc-card[data-accent='1'] { --tint-a: #f8aca0; --tint-b: #e5a1f5; }
+.c1-svc-card[data-accent='2'] { --tint-a: #b6e3ff; --tint-b: #93c5fd; }
+.c1-svc-card[data-accent='3'] { --tint-a: #bbf7c9; --tint-b: #86efac; }
+
+.c1-svc-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  margin-bottom: auto;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.75);
+  color: #0f172a;
+  flex-shrink: 0;
+}
+
+.c1-svc-card h3 {
+  margin: 0.9rem 0 0.3rem;
+  font-size: 1rem;
+  font-weight: 650;
+  color: #1e293b;
+  letter-spacing: -0.01em;
+}
+
+.c1-svc-card p {
+  margin: 0;
+  color: #475569;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.c1-svc-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.6rem;
+  color: #0f172a;
+  font-size: 0.76rem;
+  font-weight: 650;
+}
+
+.c1-svc-card:hover .c1-svc-cta svg {
+  transform: translateX(3px);
+}
+
+.c1-svc-cta svg {
+  transition: transform 0.2s ease;
+}
+
+/* ---------- Actions ---------- */
+.c1-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2.25rem;
+}
+
+.c1-btn {
+  min-height: 2.75rem;
+  padding: 0 1.6rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.c1-btn:hover {
+  background: #1e293b;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
+}
+
+.c1-btn.is-ghost {
+  background: transparent;
+  border-color: rgba(15, 23, 42, 0.2);
+  color: #0f172a;
+}
+
+.c1-btn.is-ghost:hover {
+  background: rgba(15, 23, 42, 0.05);
+  border-color: rgba(15, 23, 42, 0.4);
+  box-shadow: none;
+}
+
+/* ---------- Dark theme ---------- */
+/* Cards keep their own light gradient regardless of site theme, so their
+   text must stay dark even in dark mode. DarkMode.css forces every h3 to
+   white — scope past that here, same as .home-promo-card earlier. */
+html[data-theme='dark'] .c1-svc-card h3 {
+  color: #1e293b !important;
+}
+
+html[data-theme='dark'] .c1-svc-card p {
+  color: #475569 !important;
+}
+
+html[data-theme='dark'] .c1-svc-cta {
+  color: #0f172a !important;
+}
+
+html[data-theme='dark'] .c1-title {
+  color: #f8fafc;
+}
+
+html[data-theme='dark'] .c1-subtitle {
+  color: #94a3b8;
+}
+
+html[data-theme='dark'] .c1-btn {
+  background: #2050e3;
+}
+
+html[data-theme='dark'] .c1-btn:hover {
+  background: #2563eb;
+}
+
+html[data-theme='dark'] .c1-btn.is-ghost {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+}
+
+html[data-theme='dark'] .c1-btn.is-ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1023px) {
+  .c1-svc-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .c1-section {
+    padding: 56px 16px;
+  }
+
+  .c1-title {
+    font-size: 2.1rem;
+  }
+
+  .c1-svc-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .c1-svc-card {
+    height: auto;
+    min-height: 11rem;
+  }
+
+  .c1-actions .c1-btn {
+    flex: 1 1 100%;
+  }
+}

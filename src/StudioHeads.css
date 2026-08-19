@@ -23,6 +23,38 @@
   color: var(--h-text);
 }
 
+/* ---------- Scroll reveal ---------- */
+/* Everything starts a beat below and faded out, then eases up and in once
+   the section crosses the viewport — cards stagger after the heading, the
+   accent rule under each photo draws in last. transform/opacity/width only,
+   so it stays cheap on mobile; prefers-reduced-motion is handled globally. */
+.heads-head,
+.heads-card,
+.heads-foot {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.heads.is-visible .heads-head {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.heads.is-visible .heads-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.heads.is-visible .heads-card[data-accent='0'] { transition-delay: 0.12s; }
+.heads.is-visible .heads-card[data-accent='1'] { transition-delay: 0.24s; }
+
+.heads.is-visible .heads-foot {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.38s;
+}
+
 /* ---------- Heading ---------- */
 .heads-head {
   max-width: 44rem;
@@ -109,15 +141,28 @@
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* A thin accent rule anchors the portrait to its number. */
+/* A thin accent rule anchors the portrait to its number. It draws in from
+   the left edge once the card has revealed, like an underline being signed. */
 .heads-photo::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 100%;
+  width: 0%;
   height: 3px;
   background: var(--accent);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: 0.3s;
+}
+
+.heads.is-visible .heads-card[data-accent='0'] .heads-photo::after {
+  width: 100%;
+  transition-delay: 0.45s;
+}
+
+.heads.is-visible .heads-card[data-accent='1'] .heads-photo::after {
+  width: 100%;
+  transition-delay: 0.57s;
 }
 
 .heads-info {
@@ -238,8 +283,24 @@ html[data-theme='dark'] .heads-foot button:hover {
 
 /* ---------- Responsive ---------- */
 @media (hover: hover) and (pointer: fine) {
+  .heads.is-visible .heads-card:hover {
+    transform: translateY(-4px);
+  }
+
   .heads-card:hover .heads-photo img {
-    transform: scale(1.04);
+    transform: scale(1.05);
+  }
+
+  .heads-card:hover .heads-photo {
+    box-shadow: 0 16px 32px -12px color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+
+  .heads-card:hover .heads-index {
+    transform: translateX(2px);
+  }
+
+  .heads-index {
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s ease;
   }
 }
 

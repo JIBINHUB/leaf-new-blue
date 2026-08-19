@@ -12195,7 +12195,11 @@
           width: min(42rem, calc(100% - 1.7rem));
           transform: translateX(-50%);
           display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+          /* The last cell ("1 YEAR 103 DAYS / Experience active") carries far
+             more text than the other three, so it gets a wider share of the
+             pill instead of an equal quarter — otherwise the text crowds the
+             rounded end-cap. */
+          grid-template-columns: 0.86fr 0.86fr 0.86fr 1.42fr !important;
           gap: 0;
           margin: 0 !important;
           padding: 0.34rem;
@@ -12257,8 +12261,8 @@
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 0.38rem;
-          font-size: 1.12rem;
+          gap: 0.28rem;
+          font-size: clamp(0.82rem, 2.1vw, 1.02rem);
           line-height: 1;
         }
 
@@ -25475,10 +25479,20 @@
           background: #f4f4f5;
         }
 
+        /* strong needs an explicit override here: the universal dark-mode
+           rule forces every <strong> to white with !important, which beats
+           inheriting the dark #09090b set on the selected pill above and
+           left "Discovery Call" / the date number unreadable on this light
+           selected background. */
+        html[data-theme='dark'] .workspace-call-types button.is-selected strong,
+        html[data-theme='dark'] .workspace-date-strip button.is-selected strong {
+          color: #09090b !important;
+        }
+
         html[data-theme='dark'] .workspace-call-types button.is-selected small,
         html[data-theme='dark'] .workspace-date-strip button.is-selected span,
         html[data-theme='dark'] .workspace-date-strip button.is-selected small {
-          color: #52525b;
+          color: #52525b !important;
         }
 
         html[data-theme='dark'] .workspace-project-list article,
