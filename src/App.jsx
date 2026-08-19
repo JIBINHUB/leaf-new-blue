@@ -474,6 +474,33 @@ const CylinderCarousel = React.forwardRef(({
 
 CylinderCarousel.displayName = 'CylinderCarousel';
 
+/**
+ * Flat 2D marquee used instead of CylinderCarousel on phones.
+ *
+ * The 3D version relies on transform-style: preserve-3d with ten stacked,
+ * rotated image layers. Mobile Safari and Chrome both fail to paint those
+ * layers reliably — the strip renders as blank white cards — so small screens
+ * get this instead: one row, plain translateX, no 3D and no backface tricks.
+ * The list is duplicated so the loop has no visible seam.
+ */
+const FlatMarquee = ({ images, ariaLabel }) => (
+  <div className="advantage-flat-marquee" aria-label={ariaLabel}>
+    <div className="advantage-flat-track">
+      {[...images, ...images].map((image, index) => (
+        <img
+          key={`${image.src}-${index}`}
+          src={image.src}
+          alt={index < images.length ? (image.alt || '') : ''}
+          aria-hidden={index >= images.length}
+          loading="lazy"
+          decoding="async"
+          draggable="false"
+        />
+      ))}
+    </div>
+  </div>
+);
+
 const App = () => {
   const [activeNav, setActiveNav] = useState(getNavFromPath);
   const [theme, setTheme] = useState(() => {
@@ -2577,10 +2604,17 @@ const App = () => {
                   </p>
                 </div>
 
-                <CylinderCarousel
-                  images={advantageCylinderImages}
-                  aria-label="Selected Leaf Creationism work"
-                />
+                {isMobileViewport ? (
+                  <FlatMarquee
+                    images={advantageCylinderImages}
+                    ariaLabel="Selected Leaf Creationism work"
+                  />
+                ) : (
+                  <CylinderCarousel
+                    images={advantageCylinderImages}
+                    aria-label="Selected Leaf Creationism work"
+                  />
+                )}
 
                 <div className="advantage-stat-grid">
                   {[

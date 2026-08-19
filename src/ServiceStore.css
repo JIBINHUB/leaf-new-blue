@@ -590,9 +590,12 @@ html[data-theme='dark'] .store-callout {
     justify-content: center;
   }
 
+  /* One column on phones. Two columns left each card ~167px wide, which is
+     not enough for a title, description, three bullets, a price and two
+     buttons — and it made the category chip and the badge collide. */
   .store-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.6rem;
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
   }
 
   .store-card-media {
@@ -604,8 +607,9 @@ html[data-theme='dark'] .store-callout {
     height: 3.2rem;
   }
 
+  /* Full width means the two actions fit side by side again. */
   .store-card-actions {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .store-callout a {

@@ -110,6 +110,61 @@
 }
 
 /* ==========================================================================
+   FLAT MARQUEE — mobile replacement for the 3D advantage cylinder
+   Rendered only under 640px (see FlatMarquee in App.jsx). Deliberately plain:
+   one flex row and a single translateX animation, so there is no preserve-3d
+   layer stack for mobile Safari/Chrome to drop.
+   ========================================================================== */
+/* Occupies the same slot the 3D cylinder used inside .advantage-media-stage:
+   pinned below the centred headline card and above the stat pill. */
+.advantage-flat-marquee {
+  position: absolute;
+  inset: 15.4rem 0 5rem;
+  z-index: 16;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.advantage-flat-track {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: max-content;
+  animation: advantage-flat-scroll 38s linear infinite;
+  will-change: transform;
+}
+
+.advantage-flat-track img {
+  width: 8.4rem;
+  aspect-ratio: 7 / 10;
+  object-fit: cover;
+  border-radius: 0.85rem;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+}
+
+/* Half the distance, because the image list is rendered twice. */
+@keyframes advantage-flat-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .advantage-flat-track {
+    animation: none;
+  }
+
+  .advantage-flat-marquee {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+}
+
+/* ==========================================================================
    Users who ask the OS for less motion get none of the ambient animation,
    on any screen size.
    ========================================================================== */
