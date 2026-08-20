@@ -2,6 +2,10 @@
   "name": "Leaf Creationism",
   "short_name": "Leaf",
   "description": "Leaf Creationism creative studio portfolio, services, projects, and launch cloud.",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "lang": "en-IN",
   "icons": [
     {
       "src": "/favicon-48x48.png",
@@ -11,16 +15,29 @@
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
+  "shortcuts": [
+    { "name": "Service Store", "url": "/workspace" },
+    { "name": "Portfolio", "url": "/portfolio" },
+    { "name": "Send an enquiry", "url": "/cart" }
+  ],
   "theme_color": "#1f66e5",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "background_color": "#050505",
+  "display": "standalone",
+  "orientation": "portrait-primary"
 }

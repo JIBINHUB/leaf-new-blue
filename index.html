@@ -58,5 +58,16 @@
   <body>
     <div id="root"><!--@SEO_BODY--></div>
     <script type="module" src="/src/App.jsx"></script>
+    <script>
+      // Register the service worker only in production. On localhost it would
+      // serve stale bundles and make dev changes look like they did not apply.
+      if ('serviceWorker' in navigator && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js').catch(function () {
+            /* Offline caching is an enhancement — never block the page on it. */
+          });
+        });
+      }
+    </script>
   </body>
 </html>

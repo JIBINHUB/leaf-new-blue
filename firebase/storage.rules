@@ -1,0 +1,19 @@
+rules_version = '2';
+
+// Leaf Creationism asset bucket.
+//
+// Assets are public website files (images, video) so anyone may read them.
+// Nobody may write through the client SDK — uploads happen only from
+// scripts/upload-assets-to-firebase.mjs using a service account, which
+// bypasses these rules. That keeps the bucket read-only from the internet.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /assets/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
