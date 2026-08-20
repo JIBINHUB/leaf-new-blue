@@ -233,7 +233,7 @@ export default function AccountPanel({ open, onClose, onOpenDashboard }) {
                   <Lock size={16} aria-hidden="true" />
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    required minLength={8} placeholder="Password (min 8 characters)"
+                    required minLength={6} placeholder="Password (min 6 characters)"
                     autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
                     value={form.password} onChange={update('password')}
                   />
