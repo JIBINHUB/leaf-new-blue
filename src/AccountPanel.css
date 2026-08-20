@@ -337,3 +337,202 @@ html[data-theme='dark'] .account-order-note { color: #94a3b8; }
 }
 
 html[data-theme='dark'] .account-signout { border-color: rgba(148, 163, 184, 0.22); }
+
+/* ===========================================================================
+   Sign in / create account — brand panel, segmented switcher, perks.
+   =========================================================================== */
+
+.account-auth { display: flex; flex-direction: column; }
+
+/* Brand header. Full-bleed out of the panel's padding so it reads as a
+   surface rather than a floating box. */
+.account-hero {
+  position: relative;
+  margin: -3.25rem -1.5rem 1.4rem;
+  padding: 3.4rem 1.5rem 1.6rem;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 12% 0%, rgba(56, 189, 248, 0.35), transparent 60%),
+    linear-gradient(135deg, #1f66e5 0%, #2b3fd0 45%, #6d28d9 100%);
+  color: #fff;
+}
+
+.account-hero-glow {
+  position: absolute;
+  top: -45%;
+  right: -18%;
+  width: 17rem;
+  height: 17rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.55), transparent 68%);
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+.account-hero-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  margin-bottom: 0.75rem;
+  border-radius: 0.95rem;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(6px);
+}
+
+.account-hero-mark img { width: 1.6rem; height: 1.6rem; object-fit: contain; }
+
+.account-hero-kicker {
+  position: relative;
+  margin: 0 0 0.2rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.account-hero-title {
+  position: relative;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #fff;
+}
+
+/* The close button sits on the gradient now, so it needs its own contrast. */
+.account-auth ~ * .account-close,
+.account-overlay .account-panel:has(.account-auth) .account-close {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* Segmented switcher. The thumb is a separate element that slides, which
+   animates far more cheaply than restyling both buttons. */
+.account-segmented {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.15rem;
+  margin-bottom: 1.15rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.07);
+}
+
+html[data-theme='dark'] .account-segmented { background: rgba(148, 163, 184, 0.14); }
+
+.account-segmented-thumb {
+  position: absolute;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  width: calc(50% - 0.25rem);
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.14);
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.account-segmented-thumb.is-right { transform: translateX(100%); }
+
+html[data-theme='dark'] .account-segmented-thumb {
+  background: #1e293b;
+  box-shadow: 0 2px 8px rgba(2, 6, 23, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account-segmented-thumb { transition: none; }
+}
+
+.account-segmented button {
+  position: relative;
+  z-index: 1;
+  padding: 0.5rem 0.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: #64748b;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.account-segmented button.is-active { color: #1f66e5; }
+html[data-theme='dark'] .account-segmented button.is-active { color: #e2e8f0; }
+
+/* Reveal toggle inside the password field. */
+.account-peek {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 0;
+  border-radius: 0.45rem;
+  background: none;
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.account-peek:hover { color: #1f66e5; }
+
+.account-submit {
+  gap: 0.55rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, #1f66e5, #6d28d9);
+  box-shadow: 0 10px 24px rgba(31, 102, 229, 0.28);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.account-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(31, 102, 229, 0.34);
+}
+
+/* Icon trails the label on the CTA. */
+.account-submit svg { order: 2; }
+
+.account-perks {
+  margin: 1.2rem 0 0;
+  padding: 0.9rem 1rem;
+  list-style: none;
+  border-radius: 0.85rem;
+  background: rgba(31, 102, 229, 0.06);
+  border: 1px solid rgba(31, 102, 229, 0.14);
+}
+
+html[data-theme='dark'] .account-perks {
+  background: rgba(31, 102, 229, 0.1);
+  border-color: rgba(99, 133, 255, 0.22);
+}
+
+.account-perks li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.22rem 0;
+  font-size: 0.83rem;
+  color: #475569;
+}
+
+html[data-theme='dark'] .account-perks li { color: #cbd5e1; }
+
+.account-perks svg { flex-shrink: 0; color: #16a34a; }
+
+.account-switch { justify-items: center; margin-top: 1rem; }
+
+@media (max-width: 26rem) {
+  .account-hero-title { font-size: 1.32rem; }
+}
+
+/* The close button precedes .account-auth in the DOM, so the hero's own
+   background painted straight over it. Lift it above the gradient. */
+.account-close { z-index: 3; }

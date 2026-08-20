@@ -64,7 +64,9 @@ export function AuthProvider({ children }) {
           password,
           options: {
             data: { full_name: fullName || '' },
-            emailRedirectTo: `${window.location.origin}/account`
+            // Must be a real page AND on Supabase's redirect allowlist.
+            // detectSessionInUrl picks the token up from the root.
+            emailRedirectTo: `${window.location.origin}/?welcome=1`
           }
         });
         if (!error && data.user && phone) {
@@ -78,12 +80,12 @@ export function AuthProvider({ children }) {
       signInWithGoogle: () =>
         supabase.auth.signInWithOAuth({
           provider: 'google',
-          options: { redirectTo: `${window.location.origin}/account` }
+          options: { redirectTo: `${window.location.origin}/?welcome=1` }
         }),
 
       resetPassword: (email) =>
         supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}/account`
+          redirectTo: `${window.location.origin}/?recovery=1`
         }),
 
       signOut: () => supabase.auth.signOut(),

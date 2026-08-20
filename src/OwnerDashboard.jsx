@@ -10,7 +10,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   X, Package, Inbox, Image as ImageIcon, Tag, Upload, Trash2,
-  Loader2, RefreshCw, ShieldAlert
+  Loader2, RefreshCw, ShieldAlert, Users, ShoppingCart, MailCheck
 } from 'lucide-react';
 import { supabase, SITE_MEDIA_BUCKET } from './lib/supabase';
 import { useAuth } from './lib/useAuth';
@@ -476,9 +476,102 @@ function ProductsTab() {
 
 /* -------------------------------------------------------------------------- */
 
+function CustomersTab() {
+  const [rows, setRows] = useState(null);
+  const [query, setQuery] = useState('');
+
+  const load = useCallback(async () => {
+    // RPC rather than a table read: the list joins auth.users, which the
+    // browser cannot query directly. The function checks is_owner() itself.
+    const { data } = await supabase.rpc('owner_customer_list');
+    setRows(data || []);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  if (rows === null) return <p className="od-empty">Loading customers…</p>;
+  if (!rows.length) return <p className="od-empty">Nobody has created an account yet.</p>;
+
+  const needle = query.trim().toLowerCase();
+  const visible = needle
+    ? rows.filter((row) =>
+        [row.full_name, row.email, row.phone].some((field) =>
+          (field || '').toLowerCase().includes(needle)
+        ))
+    : rows;
+
+  const customerCount = rows.filter((row) => row.role !== 'owner').length;
+
+  return (
+    <div className="od-list">
+      <div className="od-people-head">
+        <p className="od-hint" style={{ margin: 0 }}>
+          <strong>{rows.length}</strong> account{rows.length === 1 ? '' : 's'}
+          {customerCount !== rows.length && <> · {customerCount} customer{customerCount === 1 ? '' : 's'}</>}
+        </p>
+        <input
+          className="od-input"
+          type="search"
+          placeholder="Search name, email, or phone"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          aria-label="Search accounts"
+        />
+      </div>
+
+      {visible.length === 0 && <p className="od-empty">No account matches “{query}”.</p>}
+
+      {visible.map((row) => (
+        <article key={row.id} className="od-card od-person">
+          <span className="od-person-avatar" aria-hidden="true">
+            {(row.full_name || row.email || '?').trim().charAt(0).toUpperCase()}
+          </span>
+
+          <div className="od-person-body">
+            <div className="od-person-top">
+              <strong>{row.full_name || 'No name given'}</strong>
+              {row.role === 'owner' && <span className="od-role-pill">owner</span>}
+              {!row.email_confirmed && (
+                <span className="od-flag" title="This address was never confirmed">
+                  <MailCheck size={12} aria-hidden="true" /> unconfirmed
+                </span>
+              )}
+            </div>
+
+            <p className="od-contact">
+              <a href={`mailto:${row.email}`}>{row.email}</a>
+              {row.phone && <> · <a href={`tel:${row.phone}`}>{row.phone}</a></>}
+            </p>
+
+            <p className="od-muted od-person-stats">
+              <span>Joined {formatWhen(row.created_at)}</span>
+              <span>
+                {row.last_sign_in_at ? `Last seen ${formatWhen(row.last_sign_in_at)}` : 'Never signed in'}
+              </span>
+              {row.order_count > 0 && (
+                <span className="od-stat-strong">
+                  <Package size={12} aria-hidden="true" /> {row.order_count} order{row.order_count === 1 ? '' : 's'}
+                </span>
+              )}
+              {row.cart_item_count > 0 && (
+                <span className="od-stat-strong">
+                  <ShoppingCart size={12} aria-hidden="true" /> {row.cart_item_count} in cart
+                </span>
+              )}
+            </p>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
 const TABS = [
   { key: 'orders', label: 'Orders', icon: Package, Component: OrdersTab },
   { key: 'enquiries', label: 'Enquiries', icon: Inbox, Component: EnquiriesTab },
+  { key: 'customers', label: 'Customers', icon: Users, Component: CustomersTab },
   { key: 'media', label: 'Media', icon: ImageIcon, Component: MediaTab },
   { key: 'products', label: 'Pricing', icon: Tag, Component: ProductsTab }
 ];

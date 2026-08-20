@@ -5,7 +5,10 @@
  */
 
 import { useCallback, useEffect, useState } from 'react';
-import { X, Mail, Lock, User, Phone, LogOut, Package, Loader2, ShieldCheck } from 'lucide-react';
+import {
+  X, Mail, Lock, User, Phone, LogOut, Package, Loader2, ShieldCheck,
+  ArrowRight, Check, Eye, EyeOff
+} from 'lucide-react';
 import { supabase } from './lib/supabase';
 import { useAuth } from './lib/useAuth';
 import './AccountPanel.css';
@@ -84,6 +87,7 @@ export default function AccountPanel({ open, onClose, onOpenDashboard }) {
   const [mode, setMode] = useState('signin');
   const [form, setForm] = useState({ email: '', password: '', fullName: '', phone: '' });
   const [status, setStatus] = useState({ busy: false, error: '', message: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const [orders, setOrders] = useState(null);
 
   const update = (key) => (event) => setForm((prev) => ({ ...prev, [key]: event.target.value }));
@@ -159,12 +163,42 @@ export default function AccountPanel({ open, onClose, onOpenDashboard }) {
 
         {!user ? (
           <div className="account-auth">
-            <h2>{mode === 'signup' ? 'Create your account' : mode === 'reset' ? 'Reset password' : 'Sign in'}</h2>
-            <p className="account-sub">
-              {mode === 'reset'
-                ? 'We will email you a link to set a new password.'
-                : 'Save your cart, track every project, and pick up where you left off.'}
-            </p>
+            {/* Brand panel. Gives the form somewhere to sit and makes the
+                overlay feel like part of the site rather than a stock modal. */}
+            <div className="account-hero" aria-hidden="true">
+              <span className="account-hero-glow" />
+              <span className="account-hero-mark">
+                <img src="/assets/brand/leaf-creationism-logo-white.png" alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+              </span>
+              <p className="account-hero-kicker">Leaf Creationism</p>
+              <h2 className="account-hero-title">
+                {mode === 'reset' ? 'Reset your password' : 'Your studio account'}
+              </h2>
+            </div>
+
+            {mode !== 'reset' && (
+              <div className="account-segmented" role="tablist" aria-label="Account mode">
+                <span className={`account-segmented-thumb${mode === 'signup' ? ' is-right' : ''}`} aria-hidden="true" />
+                <button
+                  type="button" role="tab" aria-selected={mode === 'signin'}
+                  className={mode === 'signin' ? 'is-active' : ''}
+                  onClick={() => { setMode('signin'); setStatus({ busy: false, error: '', message: '' }); }}
+                >
+                  Sign in
+                </button>
+                <button
+                  type="button" role="tab" aria-selected={mode === 'signup'}
+                  className={mode === 'signup' ? 'is-active' : ''}
+                  onClick={() => { setMode('signup'); setStatus({ busy: false, error: '', message: '' }); }}
+                >
+                  Create account
+                </button>
+              </div>
+            )}
+
+            {mode === 'reset' && (
+              <p className="account-sub">We will email you a link to set a new password.</p>
+            )}
 
             <form onSubmit={submit} className="account-form">
               {mode === 'signup' && (
@@ -198,10 +232,19 @@ export default function AccountPanel({ open, onClose, onOpenDashboard }) {
                 <label className="account-field">
                   <Lock size={16} aria-hidden="true" />
                   <input
-                    type="password" required minLength={8} placeholder="Password (min 8 characters)"
+                    type={showPassword ? 'text' : 'password'}
+                    required minLength={8} placeholder="Password (min 8 characters)"
                     autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
                     value={form.password} onChange={update('password')}
                   />
+                  <button
+                    type="button"
+                    className="account-peek"
+                    onClick={() => setShowPassword((shown) => !shown)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
                 </label>
               )}
 
@@ -209,19 +252,26 @@ export default function AccountPanel({ open, onClose, onOpenDashboard }) {
               {status.message && <p className="account-message">{status.message}</p>}
 
               <button type="submit" className="account-submit" disabled={status.busy}>
-                {status.busy && <Loader2 size={16} className="account-spin" aria-hidden="true" />}
-                {mode === 'signup' ? 'Create account' : mode === 'reset' ? 'Send reset link' : 'Sign in'}
+                {status.busy
+                  ? <Loader2 size={16} className="account-spin" aria-hidden="true" />
+                  : <ArrowRight size={16} aria-hidden="true" />}
+                {mode === 'signup' ? 'Create my account' : mode === 'reset' ? 'Send reset link' : 'Sign in'}
               </button>
             </form>
 
+            {mode !== 'reset' && (
+              <ul className="account-perks">
+                <li><Check size={13} aria-hidden="true" /> Your cart saves across devices</li>
+                <li><Check size={13} aria-hidden="true" /> Track every project stage by stage</li>
+                <li><Check size={13} aria-hidden="true" /> Your brief and quotes in one place</li>
+              </ul>
+            )}
+
             <div className="account-switch">
               {mode === 'signin' && (
-                <>
-                  <button type="button" onClick={() => setMode('signup')}>New here? Create an account</button>
-                  <button type="button" onClick={() => setMode('reset')}>Forgot password?</button>
-                </>
+                <button type="button" onClick={() => setMode('reset')}>Forgot your password?</button>
               )}
-              {mode !== 'signin' && (
+              {mode === 'reset' && (
                 <button type="button" onClick={() => setMode('signin')}>Back to sign in</button>
               )}
             </div>

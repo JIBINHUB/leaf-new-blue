@@ -383,3 +383,73 @@ html[data-theme='dark'] .od-tile-actions .od-danger { color: #fca5a5; }
   .od-product-row { flex-direction: column; }
   .od-price .od-input { width: 100%; }
 }
+
+/* --- Customers ---------------------------------------------------------- */
+
+.od-people-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.3rem;
+}
+
+.od-people-head .od-input { flex: 1 1 14rem; min-width: 0; }
+
+.od-person { display: flex; gap: 0.85rem; align-items: flex-start; }
+
+.od-person-avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1f66e5, #7c3aed);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.od-person-body { flex: 1; min-width: 0; }
+
+.od-person-top {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.15rem;
+}
+
+.od-person-top strong { font-size: 0.95rem; }
+
+.od-role-pill {
+  padding: 0.16rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.14);
+  color: #6d28d9;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+html[data-theme='dark'] .od-role-pill { color: #c4b5fd; }
+
+.od-person .od-contact { margin-bottom: 0.3rem; word-break: break-word; }
+
+.od-person-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.85rem;
+  margin: 0;
+}
+
+.od-person-stats .od-stat-strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #1f66e5;
+  font-weight: 600;
+}
