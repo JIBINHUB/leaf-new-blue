@@ -28893,3 +28893,70 @@
 /* Dark mode rules for this page are handled in DarkMode.css (imported after this file in App.jsx) */
 
 
+
+
+/* ---------------------------------------------------------------------------
+   Header status card sizing.
+
+   The rules above pin the card to a fixed clamp() width. Its contents — the
+   clock, the status pill, the rotating line, the theme switch and CONTACT US —
+   add up to more than that width, and because the card is `overflow: hidden`
+   the excess was silently cut off rather than wrapping. That is what clipped
+   the time to "11 AM" and the status line to "LINE AT 10:00 AM".
+
+   Sizing to content fixes it at every width instead of tuning one breakpoint:
+   the card is now as wide as it needs to be, capped so it cannot crowd the
+   logo, with the copy column as the only part allowed to shrink.
+--------------------------------------------------------------------------- */
+
+.app-shell .header-status-card {
+  width: auto;
+  max-width: min(100%, 30rem);
+  flex-shrink: 1;
+}
+
+/* min-width: 0 lets a flex child shrink below its content width — without it
+   the copy column refuses to narrow and pushes the button out of the card. */
+.app-shell .header-status-copy {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.app-shell .header-status-topline {
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.app-shell .header-status-copy strong {
+  white-space: nowrap;
+}
+
+.app-shell .header-status-topline small {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* The rotator holds three absolutely stacked lines; ellipsis keeps the longest
+   from deciding the card's width. */
+.app-shell .header-status-rotator {
+  min-width: 0;
+}
+
+.app-shell .header-status-rotator span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The theme switch and CONTACT US are fixed-size targets — never squeeze them. */
+.app-shell .header-status-card .header-theme-switch,
+.app-shell .header-status-action {
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .app-shell .header-status-card {
+    max-width: calc(100vw - 5.5rem);   /* room for the logo and nav padding */
+  }
+}
