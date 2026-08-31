@@ -13,7 +13,7 @@ import './MobilePerf.css';
 // surfaces win over the shared glass treatments.
 import './HomeTracky.css';
 import {
-  Squiggle, Blob, Sparkle, TimerPill, Sprout, AnnotatedArrow,
+  Squiggle, Blob, Sparkle, TimerPill, LeafMark, AnnotatedArrow,
   ConnectorLine, CircleScribble, MarqueeStrip, useSectionReveals, useParallax
 } from './TrackyBits';
 import Stepper, { Step } from './Stepper';
@@ -2653,7 +2653,7 @@ const App = () => {
                 <AnnotatedArrow label="start here" className="tk-annot-start" />
                 <AnnotatedArrow label="we reply fast" className="tk-annot-timer" flip />
 
-                <Sprout className="tk-hero-mascot" />
+                <LeafMark className="tk-hero-mascot" />
               </div>
 
               {/* Elastic Service Stack */}

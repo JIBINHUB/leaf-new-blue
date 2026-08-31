@@ -70,79 +70,45 @@ export function TimerPill({ label = 'Replies within one working day' }) {
 }
 
 /* --------------------------------------------------------------------------
-   Sprout — the studio mascot.
+   LeafMark — a single-weight line drawing that draws itself, holds, and
+   redraws on a loop.
 
-   Leaf Creationism's own character rather than a borrowed one: a leaf with a
-   face, drawn in the same navy line weight as the rest of the doodles.
+   SVG rather than a GIF on purpose: the background is genuinely transparent
+   (GIF alpha is 1-bit, so a shape like this comes out with jagged, haloed
+   edges over the ash canvas), the line stays crisp at any size, it recolours
+   from the palette, and the whole thing is well under a kilobyte.
 
-   Three idle behaviours, all pure CSS on transform so none of them trigger
-   layout: a slow bob, a periodic blink, and a waving arm. Limbs are filled
-   capsules rotated about the shoulder or hip — the same construction that
-   separates a character from a stick figure.
+   Each path carries pathLength="1", so one keyframe drives the draw-on
+   regardless of geometry, and the three strokes are sequenced by delay:
+   stem, then outline, then vein — the order a hand would draw them.
    -------------------------------------------------------------------------- */
 
-export function Sprout({ className = '' }) {
-  const ink = 'var(--tk-navy)';
-  const stroke = { stroke: ink, strokeWidth: 5, strokeLinecap: 'round', strokeLinejoin: 'round' };
+export function LeafMark({ className = '' }) {
+  const stroke = {
+    fill: 'none',
+    stroke: 'var(--tk-navy)',
+    strokeWidth: 4,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    pathLength: 1
+  };
 
   return (
     <svg
-      className={`tk-sprout ${className}`}
-      viewBox="0 0 260 290"
+      className={`tk-leafmark ${className}`}
+      viewBox="0 0 210 200"
       role="img"
-      aria-label="Sprout, the Leaf Creationism mascot, waving"
+      aria-label="A leaf being drawn"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g className="tk-sprout-bob">
-        {/* legs and feet, behind the body */}
-        <rect x="99" y="203" width="20" height="44" rx="10" fill={ink} />
-        <rect x="123" y="203" width="20" height="44" rx="10" fill={ink} />
-        <ellipse cx="101" cy="252" rx="20" ry="11" fill={ink} {...stroke} />
-        <ellipse cx="141" cy="252" rx="20" ry="11" fill={ink} {...stroke} />
-
-        {/* resting arm */}
-        <rect x="40" y="140" width="18" height="56" rx="9"
-              fill="var(--tk-mint)" transform="rotate(20 49 149)" {...stroke} />
-        <circle cx="36" cy="185" r="11" fill="var(--tk-paper)" {...stroke} />
-
-        {/* waving arm — rotates about the shoulder */}
-        <g className="tk-sprout-wave">
-          <rect x="182" y="120" width="18" height="56" rx="9"
-                fill="var(--tk-mint)" transform="rotate(-140 191 129)" {...stroke} />
-          <circle cx="215" cy="100" r="11" fill="var(--tk-paper)" {...stroke} />
-        </g>
-
-        {/* stem and sprig */}
-        <path d="M120 50c-2-16 2-26 8-34" fill="none" {...stroke} />
-        <path d="M128 16c12-8 24-4 28 6-10 8-22 6-28-6Z" fill="var(--tk-mint)" {...stroke} />
-
-        {/* leaf body */}
+      <g className="tk-leafmark-sway">
+        <path className="tk-leafmark-stem" d="M82 126c-8 8-16 18-24 28" {...stroke} />
         <path
-          d="M120 46c66 22 78 100 46 146-18 24-74 24-92 0C42 146 54 68 120 46Z"
-          fill="var(--tk-mint)"
+          className="tk-leafmark-outline"
+          d="M82 126c-8-30 8-58 40-64 14-3 26-4 34-4 0 16-8 38-28 52-14 10-32 16-46 16Z"
           {...stroke}
         />
-
-        {/* Veins stay in the upper leaf only. Running the midrib the full
-            height put lines straight across the eyes and mouth, which read as
-            a scowl rather than as texture. */}
-        <g stroke={ink} strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.4">
-          <path d="M120 62v40" />
-          <path d="M120 84 96 72M120 84l24-12" />
-        </g>
-
-        {/* blush */}
-        <circle cx="82" cy="160" r="10" fill="var(--tk-coral)" opacity="0.45" />
-        <circle cx="158" cy="160" r="10" fill="var(--tk-coral)" opacity="0.45" />
-
-        {/* face */}
-        <g className="tk-sprout-blink">
-          <circle cx="101" cy="138" r="9" fill={ink} />
-          <circle cx="139" cy="138" r="9" fill={ink} />
-          <circle cx="104" cy="135" r="3" fill="var(--tk-paper)" />
-          <circle cx="142" cy="135" r="3" fill="var(--tk-paper)" />
-        </g>
-        <path d="M100 162c11 15 29 15 40 0" fill="none" {...stroke} />
+        <path className="tk-leafmark-vein" d="M82 126c20-16 46-40 74-68" {...stroke} />
       </g>
     </svg>
   );

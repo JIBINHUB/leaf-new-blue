@@ -595,51 +595,66 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
    leaving a half-drawn line.
    ========================================================================= */
 
-/* --- Sprout, the mascot -------------------------------------------------- */
+/* --- LeafMark ------------------------------------------------------------ */
 
-.tk-sprout {
+.tk-leafmark {
   display: block;
   width: 100%;
-  max-width: 220px;
+  max-width: 240px;
   height: auto;
   overflow: visible;
+  /* Fades out as one, then the strokes restart together. */
+  animation: tk-leaf-cycle 7s ease-in-out infinite;
 }
 
-@keyframes tk-bob {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-10px) rotate(-1.5deg); }
+.tk-leafmark path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation-duration: 7s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
 }
 
-.tk-sprout-bob {
-  animation: tk-bob 5s ease-in-out infinite;
+/* The stagger is encoded in the keyframes rather than in animation-delay, so
+   all three strokes wrap at exactly the same instant. With delays they would
+   restart out of phase and the loop would visibly tear. */
+.tk-leafmark-stem    { animation-name: tk-leaf-stem; }
+.tk-leafmark-outline { animation-name: tk-leaf-outline; }
+.tk-leafmark-vein    { animation-name: tk-leaf-vein; }
+
+@keyframes tk-leaf-stem {
+  0%        { stroke-dashoffset: 1; }
+  10%, 100% { stroke-dashoffset: 0; }
+}
+
+@keyframes tk-leaf-outline {
+  0%, 8%    { stroke-dashoffset: 1; }
+  40%, 100% { stroke-dashoffset: 0; }
+}
+
+@keyframes tk-leaf-vein {
+  0%, 38%   { stroke-dashoffset: 1; }
+  54%, 100% { stroke-dashoffset: 0; }
+}
+
+/* Held drawn for most of the cycle, then dissolved. Opacity returns to 1 at
+   the wrap while the strokes are still undrawn, so the reset is invisible. */
+@keyframes tk-leaf-cycle {
+  0%, 88%   { opacity: 1; }
+  96%, 100% { opacity: 0; }
+}
+
+/* A slow sway pivoting on the stem base, so it reads as a leaf rather than
+   as a static mark. */
+@keyframes tk-leaf-sway {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(4deg); }
+}
+
+.tk-leafmark-sway {
+  animation: tk-leaf-sway 6.5s ease-in-out infinite;
   transform-box: view-box;
-  transform-origin: 120px 200px;
-}
-
-/* Rotates about the shoulder joint, not the group's own centre. */
-@keyframes tk-wave {
-  0%, 60%, 100% { transform: rotate(0deg); }
-  70%           { transform: rotate(-18deg); }
-  80%           { transform: rotate(6deg); }
-  90%           { transform: rotate(-12deg); }
-}
-
-.tk-sprout-wave {
-  animation: tk-wave 3.4s ease-in-out infinite;
-  transform-box: view-box;
-  transform-origin: 191px 129px;
-}
-
-/* Eyes squash rather than disappear, so a blink reads as a blink. */
-@keyframes tk-blink {
-  0%, 92%, 100% { transform: scaleY(1); }
-  95%           { transform: scaleY(0.12); }
-}
-
-.tk-sprout-blink {
-  animation: tk-blink 4.6s ease-in-out infinite;
-  transform-box: view-box;
-  transform-origin: 120px 138px;
+  transform-origin: 58px 154px;
 }
 
 /* --- Self-drawing strokes ------------------------------------------------ */
@@ -740,16 +755,22 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
 
 /* Phones keep the character and the entrances but drop the idle loops —
    continuous animation is what made this site feel heavy on mobile before. */
+/* Phones keep the drawing but not the loop: it settles fully drawn and stays
+   there, so nothing animates continuously in the background. */
 @media (max-width: 767px) {
-  .tk-sprout-bob,
-  .tk-sprout-wave,
-  .tk-sprout-blink { animation: none; }
+  .tk-leafmark,
+  .tk-leafmark path,
+  .tk-leafmark-sway { animation: none; }
+
+  .tk-leafmark path { stroke-dashoffset: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tk-sprout-bob,
-  .tk-sprout-wave,
-  .tk-sprout-blink { animation: none; }
+  .tk-leafmark,
+  .tk-leafmark path,
+  .tk-leafmark-sway { animation: none; }
+
+  .tk-leafmark path { stroke-dashoffset: 0; }
 
   /* Resolve to the finished drawing rather than a half-drawn line. */
   .tk-draw path {
