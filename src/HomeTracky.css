@@ -1124,25 +1124,6 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   overflow: hidden;
 }
 
-/* --- Advantage marquee --------------------------------------------------- */
-
-/* The strip now runs at every width, so it needs desktop sizing too — it was
-   previously only ever seen below 768px. */
-@media (min-width: 768px) {
-  .app-shell[data-route='home'] .advantage-flat-marquee {
-    inset: 17rem 0 6rem;
-  }
-
-  .app-shell[data-route='home'] .advantage-flat-track {
-    gap: 1rem;
-  }
-
-  .app-shell[data-route='home'] .advantage-flat-track img {
-    width: 11.5rem;
-    border-radius: var(--tk-r-card);
-  }
-}
-
 /* --- Narrative contact form ---------------------------------------------- */
 
 /* The form was set at 28px copy with 54px-tall inputs, which made a short

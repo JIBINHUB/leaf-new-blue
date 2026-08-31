@@ -178,3 +178,54 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================================
+   ProjectedCylinder — the desktop ring, projected to 2D for phones.
+
+   Occupies the same slot inside .advantage-media-stage that the 3D carousel
+   uses on desktop. Cards are absolutely positioned on a single centre point;
+   the component writes translate/scale per frame, so nothing here sets a
+   transform that would fight it.
+   ========================================================================== */
+
+.adv-ring {
+  position: absolute;
+  inset: 15.4rem 0 5rem;
+  z-index: 16;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+
+.adv-ring-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Every card shares one origin; the projection does the rest. */
+.adv-ring-stage img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -7.4rem;
+  margin-left: -3.25rem;
+  aspect-ratio: 7 / 10;
+  object-fit: cover;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+  will-change: transform, opacity;
+  /* No transform here: the component owns it and a value would be overwritten
+     mid-frame, or worse, win before the first paint. */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adv-ring-stage img { will-change: auto; }
+}

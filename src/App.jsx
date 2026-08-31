@@ -490,6 +490,131 @@ const CylinderCarousel = React.forwardRef(({
 CylinderCarousel.displayName = 'CylinderCarousel';
 
 /**
+ * ProjectedCylinder — the desktop carousel's look, on phones.
+ *
+ * CylinderCarousel builds a real 3D ring: `perspective` on the container,
+ * `transform-style: preserve-3d` on the track, and each card pushed back with
+ * translateZ. Mobile Safari and Chrome both fail to paint that stack of ten
+ * layered images — the blank white cards reported from a real iPhone.
+ *
+ * So rather than hand phones a different animation, this does the perspective
+ * projection itself and emits only 2D transforms, which every browser paints.
+ * For a card at angle t on a ring of radius R, with the camera f in front of
+ * the ring's near edge:
+ *
+ *     depth = R - R*cos(t)        // 0 at the front, 2R at the back
+ *     scale = f / (f + depth)
+ *     x     = R*sin(t) * scale
+ *
+ * which is exactly what the browser computes for the 3D version. Same ring,
+ * same motion, no 3D context.
+ */
+const ProjectedCylinder = ({ images, ariaLabel, cardWidth = 104, gap = 6 }) => {
+  const stageRef = useRef(null);
+  const cardsRef = useRef([]);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return undefined;
+
+    const n = images.length;
+    if (!n) return undefined;
+
+    const step = (Math.PI * 2) / n;
+    const radius = (cardWidth / 2 + gap) / Math.tan(step / 2);
+    // Matches the 35em perspective the desktop version uses, as a ratio of
+    // its own radius, so the two read at the same depth.
+    const focal = radius * 1.37;
+
+    const paint = (angle) => {
+      for (let i = 0; i < n; i += 1) {
+        const card = cardsRef.current[i];
+        if (!card) continue;
+
+        const t = i * step + angle;
+        const cos = Math.cos(t);
+        const scale = focal / (focal + radius - radius * cos);
+        const x = radius * Math.sin(t) * scale;
+
+        card.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0) scale(${scale.toFixed(3)})`;
+        card.style.zIndex = String(Math.round(cos * 100) + 100);
+        // Back of the ring recedes rather than disappearing.
+        card.style.opacity = (0.45 + 0.55 * ((cos + 1) / 2)).toFixed(2);
+      }
+    };
+
+    paint(0);
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    let angle = 0;
+    let last = 0;
+    let frame = null;
+    let running = false;
+
+    const tick = (now) => {
+      if (!running) return;
+      if (last) angle += ((now - last) / 1000) * 0.32;   // radians per second
+      last = now;
+      paint(angle);
+      frame = window.requestAnimationFrame(tick);
+    };
+
+    const start = () => {
+      if (running) return;
+      running = true;
+      last = 0;
+      frame = window.requestAnimationFrame(tick);
+    };
+
+    const stop = () => {
+      running = false;
+      if (frame !== null) window.cancelAnimationFrame(frame);
+      frame = null;
+    };
+
+    // Only animate while the section is actually on screen, and never while
+    // the tab is in the background — this runs on phones, where a permanently
+    // spinning rAF loop is exactly the wrong thing.
+    const observer = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? start() : stop()),
+      { threshold: 0.05 }
+    );
+    observer.observe(stage);
+
+    const onVisibility = () => (document.hidden ? stop() : undefined);
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+      document.removeEventListener('visibilitychange', onVisibility);
+      stop();
+    };
+  }, [images, cardWidth, gap]);
+
+  return (
+    <div className="adv-ring" ref={stageRef} aria-label={ariaLabel}>
+      <div className="adv-ring-stage">
+        {images.map((image, index) => (
+          <img
+            key={`${image.src}-${index}`}
+            ref={(node) => { cardsRef.current[index] = node; }}
+            src={image.src}
+            alt={index === 0 ? (image.alt || '') : ''}
+            aria-hidden={index !== 0}
+            loading="lazy"
+            decoding="async"
+            draggable="false"
+            style={{ width: `${cardWidth}px` }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/**
  * Flat 2D marquee used instead of CylinderCarousel on phones.
  *
  * The 3D version relies on transform-style: preserve-3d with ten stacked,
@@ -2755,20 +2880,17 @@ const App = () => {
                   </p>
                 </div>
 
-                {/* One marquee on every viewport, so the section animates
-                    identically on desktop and phone.
-
-                    This replaces a split where desktop got a 3D cylinder and
-                    mobile a flat strip. The cylinder stacks ten rotated layers
-                    under transform-style: preserve-3d, which mobile Safari and
-                    Chrome both fail to paint — that is what rendered as blank
-                    white cards on a real iPhone. Matching the two by moving the
-                    cylinder onto mobile would bring that back, so both sides
-                    use the strip, which paints reliably anywhere. */}
-                <FlatMarquee
-                  images={advantageCylinderImages}
-                  ariaLabel="Selected Leaf Creationism work"
-                />
+                {isMobileViewport ? (
+                  <ProjectedCylinder
+                    images={advantageCylinderImages}
+                    ariaLabel="Selected Leaf Creationism work"
+                  />
+                ) : (
+                  <CylinderCarousel
+                    images={advantageCylinderImages}
+                    aria-label="Selected Leaf Creationism work"
+                  />
+                )}
 
                 <div className="advantage-stat-grid">
                   {[
