@@ -612,3 +612,176 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   .tk-actions .tk-btn { flex: 1 1 auto; justify-content: center; }
   .tk-timer-label { display: none; }
 }
+
+/* ===========================================================================
+   Character, annotations and motion.
+
+   Only transform, opacity and stroke-dashoffset are animated, so nothing here
+   triggers layout. Every looping animation stops under prefers-reduced-motion,
+   and the draw-on animations resolve to their finished state rather than
+   leaving a half-drawn line.
+   ========================================================================= */
+
+/* --- Sprout, the mascot -------------------------------------------------- */
+
+.tk-sprout {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  overflow: visible;
+}
+
+@keyframes tk-bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-10px) rotate(-1.5deg); }
+}
+
+.tk-sprout-bob {
+  animation: tk-bob 5s ease-in-out infinite;
+  transform-box: view-box;
+  transform-origin: 120px 200px;
+}
+
+/* Rotates about the shoulder joint, not the group's own centre. */
+@keyframes tk-wave {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  70%           { transform: rotate(-18deg); }
+  80%           { transform: rotate(6deg); }
+  90%           { transform: rotate(-12deg); }
+}
+
+.tk-sprout-wave {
+  animation: tk-wave 3.4s ease-in-out infinite;
+  transform-box: view-box;
+  transform-origin: 191px 129px;
+}
+
+/* Eyes squash rather than disappear, so a blink reads as a blink. */
+@keyframes tk-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95%           { transform: scaleY(0.12); }
+}
+
+.tk-sprout-blink {
+  animation: tk-blink 4.6s ease-in-out infinite;
+  transform-box: view-box;
+  transform-origin: 120px 138px;
+}
+
+/* --- Self-drawing strokes ------------------------------------------------ */
+
+/* pathLength="1" normalises every path to a 0..1 dash, so the same two rules
+   drive any arrow or squiggle regardless of its real geometry. */
+.tk-draw path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tk-draw.is-in path { stroke-dashoffset: 0; }
+
+/* The second path of an arrow is its head — it should land after the shaft. */
+.tk-draw.is-in path:nth-child(2) { transition-delay: 0.55s; }
+
+/* --- Annotations --------------------------------------------------------- */
+
+.tk-annot {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.tk-annot-label {
+  font-family: var(--tk-display);
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: 0.03em;
+  color: var(--tk-navy);
+  transform: rotate(-6deg);
+  white-space: nowrap;
+}
+
+.tk-annot-arrow { width: 62px; height: auto; }
+
+.tk-annot.is-flipped { align-items: flex-end; }
+.tk-annot.is-flipped .tk-annot-arrow { transform: scaleX(-1); }
+.tk-annot.is-flipped .tk-annot-label { transform: rotate(6deg); }
+
+/* Placement in the hero. Off on small screens, where there is no free margin
+   and an absolutely positioned label would land on the headline. */
+/* Positioned against measured targets: the actions row sits at 75% of the
+   hero's height and the timer pill at 88%, so each arrow lands on the thing
+   its label is talking about rather than in empty margin. */
+.tk-annot-start { top: 58%;  left: 19%; }
+.tk-annot-timer { bottom: 1%; right: 25%; }
+
+@media (max-width: 1000px) {
+  .tk-annot { display: none; }
+}
+
+/* --- Hero layout with the mascot ----------------------------------------- */
+
+.tk-hero-mascot {
+  position: absolute;
+  right: 2%;
+  top: 8%;
+  width: 190px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@media (max-width: 1000px) {
+  /* Below the collage width the mascot stops floating and sits in the flow,
+     under the buttons, where it cannot cover the headline. */
+  .tk-hero-mascot {
+    position: static;
+    width: 132px;
+    margin: 24px auto 0;
+  }
+}
+
+/* --- Card hover ---------------------------------------------------------- */
+
+@media (hover: hover) {
+  .app-shell[data-route='home'] .c1-svc-card {
+    transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.26s ease;
+  }
+
+  .app-shell[data-route='home'] .c1-svc-card:hover {
+    transform: translateY(-5px) rotate(-0.7deg);
+    box-shadow: rgba(138, 133, 125, 0.32) 0 6px 16px !important;
+  }
+
+  .tk-overlap { transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+  .tk-feature:hover .tk-overlap-a { transform: rotate(-5deg) translateY(-3px); }
+  .tk-feature:hover .tk-overlap-b { transform: rotate(5deg) translateY(3px); }
+}
+
+/* --- Motion budget ------------------------------------------------------- */
+
+/* Phones keep the character and the entrances but drop the idle loops —
+   continuous animation is what made this site feel heavy on mobile before. */
+@media (max-width: 767px) {
+  .tk-sprout-bob,
+  .tk-sprout-wave,
+  .tk-sprout-blink { animation: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-sprout-bob,
+  .tk-sprout-wave,
+  .tk-sprout-blink { animation: none; }
+
+  /* Resolve to the finished drawing rather than a half-drawn line. */
+  .tk-draw path {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+}
