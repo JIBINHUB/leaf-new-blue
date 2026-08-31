@@ -1142,3 +1142,91 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
     border-radius: var(--tk-r-card);
   }
 }
+
+/* --- Narrative contact form ---------------------------------------------- */
+
+/* The form was set at 28px copy with 54px-tall inputs, which made a short
+   paragraph fill most of a screen. Brought down to a standard reading size,
+   with the line-height still generous enough that the inline fields sit on
+   the baseline without colliding. */
+.app-shell[data-route='home'] .access-narrative-copy {
+  font-family: var(--tk-sans) !important;
+  font-size: clamp(15px, 2vw, 19px) !important;
+  line-height: 2.3 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--tk-navy) !important;
+}
+
+.app-shell[data-route='home'] .narrative-input,
+.app-shell[data-route='home'] .narrative-select {
+  height: 38px !important;
+  padding: 0 12px !important;
+  margin: 0 4px !important;
+  border-radius: var(--tk-r-ui) !important;
+  background: var(--tk-ash) !important;
+  border: 1px solid var(--tk-stone) !important;
+  font-family: var(--tk-sans) !important;
+  font-size: 15px !important;
+  color: var(--tk-navy) !important;
+  max-width: 100%;
+}
+
+/* Widths are set per field by Tailwind; these keep each one proportional to
+   what it actually holds. */
+.app-shell[data-route='home'] .access-input-name    { width: 130px !important; }
+.app-shell[data-route='home'] .access-input-company { width: 165px !important; }
+.app-shell[data-route='home'] .access-input-email   { width: 185px !important; }
+.app-shell[data-route='home'] .access-input-service { width: 175px !important; }
+
+.app-shell[data-route='home'] .access-color-form {
+  padding: 40px !important;
+}
+
+@media (max-width: 640px) {
+  .app-shell[data-route='home'] .access-color-form { padding: 24px 20px !important; }
+  .app-shell[data-route='home'] .access-narrative-copy { line-height: 2.4 !important; }
+
+  .app-shell[data-route='home'] .access-input-name    { width: 118px !important; }
+  .app-shell[data-route='home'] .access-input-company { width: 145px !important; }
+  .app-shell[data-route='home'] .access-input-email   { width: 160px !important; }
+  .app-shell[data-route='home'] .access-input-service { width: 155px !important; }
+}
+
+/* --- Service grid on phones ---------------------------------------------- */
+
+/* Two up rather than one. The card content is far lighter than it was when
+   this was forced to a single column — 15px body, no bullet list — so a
+   ~163px column now holds a title, one line of description and the button
+   without the crowding that caused the original single-column fix. */
+@media (max-width: 640px) {
+  .app-shell[data-route='home'] .c1-svc-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  .app-shell[data-route='home'] .c1-svc-card {
+    padding: 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .app-shell[data-route='home'] .c1-svc-card h3 {
+    font-size: 15px !important;
+    line-height: 1.3 !important;
+  }
+
+  .app-shell[data-route='home'] .c1-svc-card p {
+    font-size: 12.5px !important;
+    line-height: 1.45 !important;
+  }
+
+  .app-shell[data-route='home'] .c1-svc-icon {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .app-shell[data-route='home'] .c1-svc-cta {
+    padding: 7px 10px !important;
+    font-size: 12px !important;
+  }
+}
