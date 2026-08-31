@@ -87,7 +87,7 @@ export function LeafMark({ className = '' }) {
   const stroke = {
     fill: 'none',
     stroke: 'var(--tk-navy)',
-    strokeWidth: 4,
+    strokeWidth: 5,
     strokeLinecap: 'round',
     strokeLinejoin: 'round',
     pathLength: 1
@@ -96,19 +96,26 @@ export function LeafMark({ className = '' }) {
   return (
     <svg
       className={`tk-leafmark ${className}`}
-      viewBox="0 0 210 200"
+      viewBox="0 0 210 190"
       role="img"
       aria-label="A leaf being drawn"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g className="tk-leafmark-sway">
-        <path className="tk-leafmark-stem" d="M82 126c-8 8-16 18-24 28" {...stroke} />
+        {/* Stem: a loose tail off the base, not a straight rule. */}
+        <path className="tk-leafmark-stem" d="M78 132c-7 11-14 22-22 34" {...stroke} />
+
+        {/* Body: plump and slightly wavy, tapering to a point at the tip.
+            The two halves meet at (168,62) with their handles aimed through
+            it, which is what gives a sharp tip rather than a soft dome. */}
         <path
           className="tk-leafmark-outline"
-          d="M82 126c-8-30 8-58 40-64 14-3 26-4 34-4 0 16-8 38-28 52-14 10-32 16-46 16Z"
+          d="M78 132C68 108 76 82 98 70c14-8 30-12 44-12 10 0 20 1 26 4-2 14-10 32-24 46-14 14-36 25-54 26-6 0-10-1-12-2Z"
           {...stroke}
         />
-        <path className="tk-leafmark-vein" d="M82 126c20-16 46-40 74-68" {...stroke} />
+
+        {/* One vein, curving base to tip. */}
+        <path className="tk-leafmark-vein" d="M78 132c18-14 44-36 90-70" {...stroke} />
       </g>
     </svg>
   );
@@ -196,30 +203,6 @@ export function CircleScribble({ className = '', color = 'var(--tk-coral)' }) {
         strokeLinecap="round"
       />
     </svg>
-  );
-}
-
-/* --------------------------------------------------------------------------
-   Scrolling word strip. The list is rendered twice and the track animates by
-   exactly -50%, so the loop is seamless with no JS driving it.
-   -------------------------------------------------------------------------- */
-
-export function MarqueeStrip({ words }) {
-  return (
-    <div className="tk-marquee" aria-hidden="true">
-      <div className="tk-marquee-track">
-        {[0, 1].map((copy) => (
-          <div className="tk-marquee-set" key={copy}>
-            {words.map((word) => (
-              <span key={`${copy}-${word}`}>
-                {word}
-                <i className="tk-marquee-dot" />
-              </span>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
   );
 }
 

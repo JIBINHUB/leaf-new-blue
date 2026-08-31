@@ -14,8 +14,9 @@ import './MobilePerf.css';
 import './HomeTracky.css';
 import {
   Squiggle, Blob, Sparkle, TimerPill, LeafMark, AnnotatedArrow,
-  ConnectorLine, CircleScribble, MarqueeStrip, useSectionReveals, useParallax
+  ConnectorLine, CircleScribble, useSectionReveals, useParallax
 } from './TrackyBits';
+import TextLoop from './TextLoop';
 import Stepper, { Step } from './Stepper';
 import AccountPanel from './AccountPanel';
 import OwnerDashboard from './OwnerDashboard';
@@ -2670,12 +2671,24 @@ const App = () => {
 
           </div>
 
-          <MarqueeStrip
-            words={[
-              'UI/UX Design', 'Web Development', 'AI Ads', 'Branding',
-              'Mobile Apps', 'Advertising', 'No-Code Builds', 'Shopify Stores'
-            ]}
-          />
+          {/* Text running along a wave, in the studio palette. Curviness is
+              dialled down from the default so the band crops to a sensible
+              height without the wave's peaks being cut off. */}
+          <div className="tk-textloop">
+            <TextLoop
+              text="Design · Build · Grow"
+              separator="✦"
+              shape="wave"
+              curviness={40}
+              ribbonColor="#86e0c1"
+              color="#151b31"
+              ribbonWidth={86}
+              fontSize={44}
+              fontWeight={400}
+              letterSpacing={1}
+              speed={70}
+            />
+          </div>
 
           <ConnectorLine variant="a" className="tk-connector-left" />
 

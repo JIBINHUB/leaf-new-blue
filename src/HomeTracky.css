@@ -24,7 +24,10 @@
   --tk-ash: #f2f2f2;
   --tk-paper: #ffffff;
 
-  --tk-display: 'Bagel Fat One', 'GRIFTER', 'Bowlby One', ui-sans-serif, system-ui, sans-serif;
+  /* GRIFTER is a commercial face. Archivo Black is the closest free match for
+     its heavy geometric grotesque weight — Bagel Fat One, the spec's first
+     substitute, reads far rounder and more cartoonish than the reference. */
+  --tk-display: 'Archivo Black', 'GRIFTER', 'Archivo', ui-sans-serif, system-ui, sans-serif;
   --tk-sans: 'Inter', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
 
   --tk-r-ui: 8px;
@@ -122,10 +125,10 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   margin: 0 auto 24px;
   max-width: 16ch;
   font-family: var(--tk-display);
-  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
   font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: 0.03em;
+  line-height: 1.06;
+  letter-spacing: -0.02em;   /* Archivo Black is wide; positive tracking sprawls */
   color: var(--tk-navy);
 }
 
@@ -261,7 +264,7 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   font-family: var(--tk-display) !important;
   font-weight: 400 !important;
   line-height: 1.16 !important;
-  letter-spacing: 0.03em !important;
+  letter-spacing: -0.02em !important;
   color: var(--tk-navy) !important;
   background: none !important;
   -webkit-text-fill-color: var(--tk-navy) !important;
@@ -412,7 +415,7 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   font-size: clamp(1.6rem, 3.2vw, 2.5rem);
   font-weight: 400;
   line-height: 1.16;
-  letter-spacing: 0.03em;
+  letter-spacing: -0.02em;
   color: #ffffff;
 }
 
@@ -506,7 +509,7 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   font-size: clamp(1.75rem, 3.6vw, 3rem);
   font-weight: 400;
   line-height: 1.16;
-  letter-spacing: 0.03em;
+  letter-spacing: -0.02em;
   color: var(--tk-navy);
 }
 
@@ -688,7 +691,7 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   font-family: var(--tk-display);
   font-size: 15px;
   line-height: 1.2;
-  letter-spacing: 0.03em;
+  letter-spacing: -0.01em;
   color: var(--tk-navy);
   transform: rotate(-6deg);
   white-space: nowrap;
@@ -878,51 +881,6 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
 .tk-feature h2 em,
 .tk-band h2 em { position: relative; display: inline-block; }
 
-/* --- Scrolling word strip ------------------------------------------------ */
-
-.tk-marquee {
-  width: 100vw;
-  margin-inline: calc(50% - 50vw);
-  overflow: hidden;
-  padding: 14px 0;
-  border-block: 2px solid var(--tk-navy);
-  background: var(--tk-mint);
-}
-
-.tk-marquee-track {
-  display: flex;
-  width: max-content;
-  /* Exactly -50% of a doubled track, so the seam is invisible. */
-  animation: tk-slide 30s linear infinite;
-}
-
-@keyframes tk-slide {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-.tk-marquee-set { display: flex; align-items: center; flex-shrink: 0; }
-
-.tk-marquee-set span {
-  display: inline-flex;
-  align-items: center;
-  gap: 20px;
-  padding-right: 20px;
-  font-family: var(--tk-display);
-  font-size: clamp(1rem, 2vw, 1.6rem);
-  font-weight: 400;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
-  color: #151b31;
-}
-
-.tk-marquee-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--tk-coral);
-}
-
 /* --- Scroll parallax ----------------------------------------------------- */
 
 /* `translate` is a separate property from `transform`, so the parallax offset
@@ -960,11 +918,9 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
     transition: none;
   }
 
-  .tk-marquee-track { animation: none; }
 }
 
 @media (max-width: 767px) {
-  .tk-marquee-track { animation-duration: 42s; }
 }
 
 /* --- Card entrance ------------------------------------------------------- */
@@ -977,4 +933,209 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
 
 .app-shell[data-route='home'] .c1-svc-card.tk-reveal.is-in {
   transform: none;
+}
+
+/* ===========================================================================
+   Studio heads.
+
+   Restyled to the system's inversion move: the two leads sit on opposite
+   surfaces — one paper, one navy — tilted in opposite directions like two
+   cards dropped on a desk, with an oversized index numeral lapping each
+   corner. Hover straightens them.
+   ========================================================================= */
+
+.app-shell[data-route='home'] .heads {
+  position: relative;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  padding: 0 !important;
+}
+
+.app-shell[data-route='home'] .heads-head {
+  max-width: 46rem;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.app-shell[data-route='home'] .heads-eyebrow {
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 8px 14px;
+  border-radius: var(--tk-r-ui);
+  background: var(--tk-butter);
+  color: #151b31 !important;
+  -webkit-text-fill-color: #151b31 !important;
+  font-family: var(--tk-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.app-shell[data-route='home'] .heads-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  align-items: start;
+}
+
+/* Cards are dropped at opposing angles rather than aligned to a grid. */
+.app-shell[data-route='home'] .heads-card {
+  position: relative;
+  overflow: visible !important;
+  padding: 24px !important;
+  border-radius: var(--tk-r-feature) !important;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s ease;
+}
+
+.app-shell[data-route='home'] .heads-card:nth-child(1) { transform: rotate(-1.6deg); }
+.app-shell[data-route='home'] .heads-card:nth-child(2) { transform: rotate(1.6deg); }
+
+/* The second lead sits on navy — the inversion this system uses to keep a
+   single column from reading flat. */
+.app-shell[data-route='home'] .heads-card:nth-child(2) {
+  background: #151b31 !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-route='home'] .heads-card:nth-child(2) h3 { color: #ffffff !important; }
+
+.app-shell[data-route='home'] .heads-card:nth-child(2) p {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+@media (hover: hover) {
+  .app-shell[data-route='home'] .heads-card:hover {
+    transform: rotate(0deg) translateY(-6px);
+    box-shadow: rgba(138, 133, 125, 0.34) 0 8px 22px !important;
+  }
+}
+
+/* Oversized index numeral lapping the top corner. */
+.app-shell[data-route='home'] .heads-index {
+  position: absolute;
+  top: -18px;
+  left: -10px;
+  z-index: 2;
+  width: auto !important;
+  height: auto !important;
+  padding: 4px 12px !important;
+  border-radius: var(--tk-r-ui) !important;
+  background: var(--tk-coral) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  font-family: var(--tk-display) !important;
+  font-size: 20px !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transform: rotate(-8deg);
+}
+
+.app-shell[data-route='home'] .heads-card:nth-child(2) .heads-index {
+  background: var(--tk-mint) !important;
+  color: #151b31 !important;
+  -webkit-text-fill-color: #151b31 !important;
+  transform: rotate(8deg);
+}
+
+.app-shell[data-route='home'] .heads-photo {
+  border-radius: var(--tk-r-card) !important;
+  overflow: hidden;
+  border: 3px solid var(--tk-navy);
+}
+
+.app-shell[data-route='home'] .heads-card:nth-child(2) .heads-photo {
+  border-color: var(--tk-mint);
+}
+
+.app-shell[data-route='home'] .heads-photo img {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .app-shell[data-route='home'] .heads-card:hover .heads-photo img {
+    transform: scale(1.06);
+  }
+}
+
+.app-shell[data-route='home'] .heads-role {
+  font-family: var(--tk-sans) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  color: var(--tk-coral) !important;
+  -webkit-text-fill-color: var(--tk-coral) !important;
+  text-transform: none !important;
+}
+
+.app-shell[data-route='home'] .heads-card:nth-child(2) .heads-role {
+  color: var(--tk-mint) !important;
+  -webkit-text-fill-color: var(--tk-mint) !important;
+}
+
+.app-shell[data-route='home'] .heads-tags li {
+  padding: 6px 12px !important;
+  border-radius: var(--tk-r-ui) !important;
+  background: var(--tk-ash) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  font-family: var(--tk-sans);
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--tk-navy) !important;
+  -webkit-text-fill-color: var(--tk-navy) !important;
+}
+
+.app-shell[data-route='home'] .heads-card:nth-child(2) .heads-tags li {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.app-shell[data-route='home'] .heads-foot {
+  margin-top: 32px;
+  padding: 24px !important;
+  border-radius: var(--tk-r-feature) !important;
+  background: var(--tk-paper) !important;
+  border: 0 !important;
+  box-shadow: var(--tk-shadow-card) !important;
+}
+
+.app-shell[data-route='home'] .heads-foot button {
+  border-radius: var(--tk-r-ui) !important;
+  background: var(--tk-navy) !important;
+  border: 0 !important;
+  box-shadow: var(--tk-shadow-btn) !important;
+  color: var(--tk-ash) !important;
+  font-family: var(--tk-sans) !important;
+  font-weight: 600 !important;
+}
+
+/* The mobile carousel keeps its scroll-snap; only the tilt is dropped, since
+   rotated cards inside a horizontal scroller clip against each other. */
+@media (max-width: 860px) {
+  .app-shell[data-route='home'] .heads-grid { grid-template-columns: 1fr; }
+
+  .app-shell[data-route='home'] .heads-card:nth-child(1),
+  .app-shell[data-route='home'] .heads-card:nth-child(2) { transform: none; }
+
+  .app-shell[data-route='home'] .heads-index { top: -14px; left: -6px; }
+}
+
+/* --- TextLoop band ------------------------------------------------------- */
+
+/* The component's viewBox is 1200x520, so at full width it would be over
+   500px tall. Cropping it in a centred grid keeps the wave band at a sane
+   height without distorting the aspect ratio. */
+.tk-textloop {
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  height: clamp(160px, 34vw, 300px);
+  overflow: hidden;
 }
