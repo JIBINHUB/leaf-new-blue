@@ -194,6 +194,63 @@ export function AnnotatedArrow({ label, className = '', flip = false }) {
 }
 
 /* --------------------------------------------------------------------------
+   Connector line — a wandering dashed path that links one section to the
+   next, drawing itself in as it scrolls into view.
+
+   Decorative only, and hidden on narrow screens where there is no free
+   margin for it to wander through.
+   -------------------------------------------------------------------------- */
+
+export function ConnectorLine({ variant = 'a', className = '' }) {
+  const paths = {
+    a: 'M100 4C40 44 168 78 100 120s-60 62 8 92',
+    b: 'M108 4C176 40 44 76 112 116s52 60-12 96',
+    c: 'M100 4C150 40 50 70 100 104s40 66-4 108'
+  };
+
+  return (
+    <div className={`tk-connector ${className}`} aria-hidden="true">
+      <svg viewBox="0 0 200 216" fill="none" className="tk-draw tk-connector-svg">
+        <path
+          d={paths[variant] || paths.a}
+          pathLength="1"
+          stroke="var(--tk-navy)"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeDasharray="1"
+          opacity="0.45"
+        />
+      </svg>
+    </div>
+  );
+}
+
+/* --------------------------------------------------------------------------
+   Circle scribble — a hand-drawn ring around a phrase. The path overshoots
+   its start so it reads as drawn by hand rather than as a clean ellipse.
+   -------------------------------------------------------------------------- */
+
+export function CircleScribble({ className = '', color = 'var(--tk-coral)' }) {
+  return (
+    <svg
+      className={`tk-scribble tk-draw ${className}`}
+      viewBox="0 0 300 90"
+      preserveAspectRatio="none"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M150 8C60 8 12 26 12 45s52 37 138 37 138-16 138-37S246 9 154 8c-24 0-52 3-74 9"
+        pathLength="1"
+        stroke={color}
+        strokeWidth="4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/* --------------------------------------------------------------------------
    Section reveals.
 
    Applied by observing existing nodes and toggling a class, rather than
@@ -209,7 +266,8 @@ const REVEAL_TARGETS = [
   '.home-contact-section',
   '.tk-feature',
   '.tk-band',
-  '.tk-draw'
+  '.tk-draw',
+  '.tk-connector'
 ];
 
 export function useSectionReveals(active) {

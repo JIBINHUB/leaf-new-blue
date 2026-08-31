@@ -785,3 +785,101 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
     transition: none;
   }
 }
+
+/* --- Connector lines ----------------------------------------------------- */
+
+/* A wandering dashed path that links one section to the next. Purely
+   decorative, so it is removed rather than shrunk on narrow screens where
+   there is no free margin for it to wander through. */
+.tk-connector {
+  display: flex;
+  justify-content: center;
+  margin: -32px 0;
+  pointer-events: none;
+}
+
+.tk-connector-svg {
+  width: 150px;
+  height: auto;
+}
+
+.tk-connector-left  { justify-content: flex-start; padding-left: 8%; }
+.tk-connector-right { justify-content: flex-end; padding-right: 10%; }
+
+/* Dashes travel along the path once it has finished drawing. */
+@keyframes tk-march { to { stroke-dashoffset: -1; } }
+
+.tk-connector.is-in .tk-connector-svg path {
+  animation: tk-march 14s linear 1.1s infinite;
+}
+
+@media (max-width: 900px) {
+  .tk-connector { display: none; }
+}
+
+/* --- Circle scribble ----------------------------------------------------- */
+
+.tk-scribble {
+  position: absolute;
+  left: -8%;
+  top: -22%;
+  width: 116%;
+  height: 148%;
+  pointer-events: none;
+}
+
+/* The ring is one continuous stroke, so it draws slower than a short arrow. */
+.tk-scribble path { transition-duration: 1.1s; }
+
+/* --- Sparkle twinkle ----------------------------------------------------- */
+
+@keyframes tk-twinkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50%      { transform: scale(0.72) rotate(22deg); opacity: 0.65; }
+}
+
+.tk-sparkle {
+  animation: tk-twinkle 3.6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.tk-hero-doodles .tk-sparkle-b { animation-delay: 1.4s; }
+
+/* Blobs drift slowly so the canvas is never completely static. */
+@keyframes tk-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(10px, -14px) scale(1.04); }
+}
+
+.tk-blob { animation: tk-drift 11s ease-in-out infinite; }
+.tk-hero-doodles .tk-blob-b { animation-delay: 3s; }
+
+/* --- More annotation placements ------------------------------------------ */
+
+.tk-annot-team    { top: 8%; right: 6%; }
+.tk-annot-band    { bottom: 8%; left: 12%; }
+
+.tk-feature { position: relative; }
+.tk-band { position: relative; }
+
+/* --- Motion budget ------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .tk-sparkle,
+  .tk-blob,
+  .tk-connector.is-in .tk-connector-svg path { animation: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-sparkle,
+  .tk-blob,
+  .tk-connector.is-in .tk-connector-svg path { animation: none; }
+
+  .tk-scribble path { transition: none; }
+}
+
+/* The scribble and squiggle are absolutely positioned inside the emphasised
+   phrase, so that phrase has to establish the containing block. */
+.tk-feature h2 em,
+.tk-band h2 em { position: relative; display: inline-block; }

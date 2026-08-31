@@ -13,7 +13,8 @@ import './MobilePerf.css';
 // surfaces win over the shared glass treatments.
 import './HomeTracky.css';
 import {
-  Squiggle, Blob, Sparkle, TimerPill, Sprout, AnnotatedArrow, useSectionReveals
+  Squiggle, Blob, Sparkle, TimerPill, Sprout, AnnotatedArrow,
+  ConnectorLine, CircleScribble, useSectionReveals
 } from './TrackyBits';
 import Stepper, { Step } from './Stepper';
 import AccountPanel from './AccountPanel';
@@ -2674,11 +2675,19 @@ const App = () => {
 
           </div>
 
+          <ConnectorLine variant="a" className="tk-connector-left" />
+
           {/* Dark feature card with tilted white cards overlapping its edge —
               the inversion moment this system uses to break up the page. */}
           <section className="tk-feature" aria-label="How Leaf Creationism works">
             <div>
-              <h2>One team, from first sketch to <em>launch day</em></h2>
+              <h2>
+                One team, from first sketch to{' '}
+                <em>
+                  launch day
+                  <CircleScribble />
+                </em>
+              </h2>
               <p>
                 No account managers, no handoffs to a junior team. The people who design and
                 direct your project are the ones you talk to — through strategy, design,
@@ -2688,6 +2697,8 @@ const App = () => {
                 Start a project
               </button>
             </div>
+
+            <AnnotatedArrow label="that's us" className="tk-annot-team" flip />
 
             <div className="tk-feature-stack">
               <div className="tk-overlap tk-overlap-a">
@@ -2826,6 +2837,8 @@ const App = () => {
               </button>
             </footer>
           </section>
+
+          <ConnectorLine variant="b" className="tk-connector-right" />
 
           {/* SECTION 3.1: Service Suite — gradient card design, real services */}
           <section className="c1-section" aria-label="Leaf Creationism services">
@@ -3170,13 +3183,23 @@ const App = () => {
               </div>
             </div>
           </section>
+          <ConnectorLine variant="c" />
+
           {/* Closing band on paper white. */}
           <section className="tk-band" aria-label="Start a project with Leaf Creationism">
-            <h2>Let's make something <em>worth looking at</em></h2>
+            <h2>
+              Let's make something{' '}
+              <em>
+                worth looking at
+                <Squiggle />
+              </em>
+            </h2>
             <p>
               Tell us what you are building. We will come back with a written quote,
               a timeline, and the team who would actually do the work.
             </p>
+            <AnnotatedArrow label="one click" className="tk-annot-band" />
+
             <div className="tk-actions">
               <button type="button" className="tk-btn tk-btn-primary" onClick={() => navigateTo('workspace')}>
                 Get started
