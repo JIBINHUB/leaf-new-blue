@@ -13,7 +13,7 @@ import './MobilePerf.css';
 // surfaces win over the shared glass treatments.
 import './HomeTracky.css';
 import {
-  Squiggle, Blob, Sparkle, TimerPill, LeafMark, AnnotatedArrow,
+  Squiggle, Blob, Sparkle, TimerPill, TangleMark, AnnotatedArrow,
   ConnectorLine, CircleScribble, useSectionReveals, useParallax
 } from './TrackyBits';
 import TextLoop from './TextLoop';
@@ -2654,7 +2654,7 @@ const App = () => {
                 <AnnotatedArrow label="start here" className="tk-annot-start" />
                 <AnnotatedArrow label="we reply fast" className="tk-annot-timer" flip />
 
-                <LeafMark className="tk-hero-mascot" />
+                <TangleMark className="tk-hero-mascot" />
               </div>
 
               {/* Elastic Service Stack */}
@@ -2755,17 +2755,20 @@ const App = () => {
                   </p>
                 </div>
 
-                {isMobileViewport ? (
-                  <FlatMarquee
-                    images={advantageCylinderImages}
-                    ariaLabel="Selected Leaf Creationism work"
-                  />
-                ) : (
-                  <CylinderCarousel
-                    images={advantageCylinderImages}
-                    aria-label="Selected Leaf Creationism work"
-                  />
-                )}
+                {/* One marquee on every viewport, so the section animates
+                    identically on desktop and phone.
+
+                    This replaces a split where desktop got a 3D cylinder and
+                    mobile a flat strip. The cylinder stacks ten rotated layers
+                    under transform-style: preserve-3d, which mobile Safari and
+                    Chrome both fail to paint — that is what rendered as blank
+                    white cards on a real iPhone. Matching the two by moving the
+                    cylinder onto mobile would bring that back, so both sides
+                    use the strip, which paints reliably anywhere. */}
+                <FlatMarquee
+                  images={advantageCylinderImages}
+                  ariaLabel="Selected Leaf Creationism work"
+                />
 
                 <div className="advantage-stat-grid">
                   {[

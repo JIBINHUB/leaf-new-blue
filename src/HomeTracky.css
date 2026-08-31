@@ -598,66 +598,52 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
    leaving a half-drawn line.
    ========================================================================= */
 
-/* --- LeafMark ------------------------------------------------------------ */
+/* --- TangleMark ---------------------------------------------------------- */
 
-.tk-leafmark {
+.tk-tangle {
   display: block;
   width: 100%;
-  max-width: 240px;
+  max-width: 320px;
   height: auto;
   overflow: visible;
-  /* Fades out as one, then the strokes restart together. */
-  animation: tk-leaf-cycle 7s ease-in-out infinite;
+  animation: tk-tangle-cycle 8s ease-in-out infinite;
 }
 
-.tk-leafmark path {
+.tk-tangle path {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  animation-duration: 7s;
+  animation-duration: 8s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
-/* The stagger is encoded in the keyframes rather than in animation-delay, so
-   all three strokes wrap at exactly the same instant. With delays they would
-   restart out of phase and the loop would visibly tear. */
-.tk-leafmark-stem    { animation-name: tk-leaf-stem; }
-.tk-leafmark-outline { animation-name: tk-leaf-outline; }
-.tk-leafmark-vein    { animation-name: tk-leaf-vein; }
+/* Sequenced through the keyframes rather than animation-delay, so all three
+   strokes wrap on the same frame. With delays they restart out of phase with
+   the group fade and the loop visibly tears. */
+.tk-tangle-knot { animation-name: tk-tangle-knot; }
+.tk-tangle-line { animation-name: tk-tangle-line; }
+.tk-tangle-head { animation-name: tk-tangle-head; }
 
-@keyframes tk-leaf-stem {
+@keyframes tk-tangle-knot {
   0%        { stroke-dashoffset: 1; }
-  10%, 100% { stroke-dashoffset: 0; }
+  42%, 100% { stroke-dashoffset: 0; }
 }
 
-@keyframes tk-leaf-outline {
-  0%, 8%    { stroke-dashoffset: 1; }
-  40%, 100% { stroke-dashoffset: 0; }
+@keyframes tk-tangle-line {
+  0%, 40%   { stroke-dashoffset: 1; }
+  62%, 100% { stroke-dashoffset: 0; }
 }
 
-@keyframes tk-leaf-vein {
-  0%, 38%   { stroke-dashoffset: 1; }
-  54%, 100% { stroke-dashoffset: 0; }
+@keyframes tk-tangle-head {
+  0%, 60%   { stroke-dashoffset: 1; }
+  70%, 100% { stroke-dashoffset: 0; }
 }
 
-/* Held drawn for most of the cycle, then dissolved. Opacity returns to 1 at
-   the wrap while the strokes are still undrawn, so the reset is invisible. */
-@keyframes tk-leaf-cycle {
+/* Held complete for most of the cycle, then dissolved. Opacity returns to 1
+   at the wrap while the strokes are still undrawn, so the reset is invisible. */
+@keyframes tk-tangle-cycle {
   0%, 88%   { opacity: 1; }
   96%, 100% { opacity: 0; }
-}
-
-/* A slow sway pivoting on the stem base, so it reads as a leaf rather than
-   as a static mark. */
-@keyframes tk-leaf-sway {
-  0%, 100% { transform: rotate(0deg); }
-  50%      { transform: rotate(4deg); }
-}
-
-.tk-leafmark-sway {
-  animation: tk-leaf-sway 6.5s ease-in-out infinite;
-  transform-box: view-box;
-  transform-origin: 58px 154px;
 }
 
 /* --- Self-drawing strokes ------------------------------------------------ */
@@ -761,19 +747,17 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
 /* Phones keep the drawing but not the loop: it settles fully drawn and stays
    there, so nothing animates continuously in the background. */
 @media (max-width: 767px) {
-  .tk-leafmark,
-  .tk-leafmark path,
-  .tk-leafmark-sway { animation: none; }
+  .tk-tangle,
+  .tk-tangle path { animation: none; }
 
-  .tk-leafmark path { stroke-dashoffset: 0; }
+  .tk-tangle path { stroke-dashoffset: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tk-leafmark,
-  .tk-leafmark path,
-  .tk-leafmark-sway { animation: none; }
+  .tk-tangle,
+  .tk-tangle path { animation: none; }
 
-  .tk-leafmark path { stroke-dashoffset: 0; }
+  .tk-tangle path { stroke-dashoffset: 0; }
 
   /* Resolve to the finished drawing rather than a half-drawn line. */
   .tk-draw path {
@@ -1138,4 +1122,23 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   margin-inline: calc(50% - 50vw);
   height: clamp(160px, 34vw, 300px);
   overflow: hidden;
+}
+
+/* --- Advantage marquee --------------------------------------------------- */
+
+/* The strip now runs at every width, so it needs desktop sizing too — it was
+   previously only ever seen below 768px. */
+@media (min-width: 768px) {
+  .app-shell[data-route='home'] .advantage-flat-marquee {
+    inset: 17rem 0 6rem;
+  }
+
+  .app-shell[data-route='home'] .advantage-flat-track {
+    gap: 1rem;
+  }
+
+  .app-shell[data-route='home'] .advantage-flat-track img {
+    width: 11.5rem;
+    border-radius: var(--tk-r-card);
+  }
 }

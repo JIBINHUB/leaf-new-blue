@@ -70,24 +70,22 @@ export function TimerPill({ label = 'Replies within one working day' }) {
 }
 
 /* --------------------------------------------------------------------------
-   LeafMark — a single-weight line drawing that draws itself, holds, and
-   redraws on a loop.
+   TangleMark — a knot of scribble that unwinds into a clean arrow.
 
-   SVG rather than a GIF on purpose: the background is genuinely transparent
-   (GIF alpha is 1-bit, so a shape like this comes out with jagged, haloed
-   edges over the ash canvas), the line stays crisp at any size, it recolours
-   from the palette, and the whole thing is well under a kilobyte.
+   One continuous stroke: it starts as a mess, works itself loose, and lands
+   as a straight line with an arrowhead. That is the studio's pitch in a
+   single gesture — tangled idea in, clear direction out — and it is the same
+   line vocabulary as the annotation arrows elsewhere on the page.
 
-   Each path carries pathLength="1", so one keyframe drives the draw-on
-   regardless of geometry, and the three strokes are sequenced by delay:
-   stem, then outline, then vein — the order a hand would draw them.
+   SVG, so the background is genuinely transparent, the line stays crisp at
+   any size, it recolours from the palette, and the whole mark is about a
+   kilobyte.
    -------------------------------------------------------------------------- */
 
-export function LeafMark({ className = '' }) {
+export function TangleMark({ className = '' }) {
   const stroke = {
     fill: 'none',
-    stroke: 'var(--tk-navy)',
-    strokeWidth: 5,
+    strokeWidth: 4,
     strokeLinecap: 'round',
     strokeLinejoin: 'round',
     pathLength: 1
@@ -95,28 +93,35 @@ export function LeafMark({ className = '' }) {
 
   return (
     <svg
-      className={`tk-leafmark ${className}`}
-      viewBox="0 0 210 190"
+      className={`tk-tangle ${className}`}
+      viewBox="0 0 300 170"
       role="img"
-      aria-label="A leaf being drawn"
+      aria-label="A tangled line working itself loose into a clear arrow"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g className="tk-leafmark-sway">
-        {/* Stem: a loose tail off the base, not a straight rule. */}
-        <path className="tk-leafmark-stem" d="M78 132c-7 11-14 22-22 34" {...stroke} />
+      {/* The knot. Drawn as one path so the stroke never appears to jump. */}
+      <path
+        className="tk-tangle-knot"
+        stroke="var(--tk-navy)"
+        d="M46 96c-14-10-6-32 12-30s20 26 4 34-34-6-28-26 34-24 48-6 2 42-18 44-30-16-16-28 34-6 40 10-6 30-18 28-14-18-2-22 20 6 18 16"
+        {...stroke}
+      />
 
-        {/* Body: plump and slightly wavy, tapering to a point at the tip.
-            The two halves meet at (168,62) with their handles aimed through
-            it, which is what gives a sharp tip rather than a soft dome. */}
-        <path
-          className="tk-leafmark-outline"
-          d="M78 132C68 108 76 82 98 70c14-8 30-12 44-12 10 0 20 1 26 4-2 14-10 32-24 46-14 14-36 25-54 26-6 0-10-1-12-2Z"
-          {...stroke}
-        />
+      {/* The resolution: the same weight of line, now going somewhere. */}
+      <path
+        className="tk-tangle-line"
+        stroke="var(--tk-navy)"
+        d="M92 108c22 10 44 6 62-6 20-13 40-20 72-20"
+        {...stroke}
+      />
 
-        {/* One vein, curving base to tip. */}
-        <path className="tk-leafmark-vein" d="M78 132c18-14 44-36 90-70" {...stroke} />
-      </g>
+      {/* Arrowhead, in the accent, landing last. */}
+      <path
+        className="tk-tangle-head"
+        stroke="var(--tk-coral)"
+        d="M212 66l16 16-16 16"
+        {...stroke}
+      />
     </svg>
   );
 }
