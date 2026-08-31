@@ -14,7 +14,7 @@ import './MobilePerf.css';
 import './HomeTracky.css';
 import {
   Squiggle, Blob, Sparkle, TimerPill, Sprout, AnnotatedArrow,
-  ConnectorLine, CircleScribble, useSectionReveals
+  ConnectorLine, CircleScribble, MarqueeStrip, useSectionReveals, useParallax
 } from './TrackyBits';
 import Stepper, { Step } from './Stepper';
 import AccountPanel from './AccountPanel';
@@ -883,6 +883,7 @@ const App = () => {
 
   // Entrance animations for the home page sections.
   useSectionReveals(activeNav === 'home');
+  useParallax(activeNav === 'home');
 
   const solutionsList = [
     { id: 'uiux', title: 'UI/UX Design', desc: 'User-centric interfaces', icon: PenTool },
@@ -2535,12 +2536,6 @@ const App = () => {
       {/* Main Content - Home View */}
       {activeNav === 'home' && (
         <main className="home-screen max-w-6xl mx-auto px-4 sm:px-6 pt-0 sm:pt-4 pb-0 relative z-10 animate-fade-in flex flex-col gap-16 lg:gap-24">
-          {/* Full-width announcement strip — the system opens with one. */}
-          <div className="tk-banner" role="note">
-            🔥 Launch Cloud hosting is included with eligible website builds.
-            <button type="button" onClick={() => navigateTo('launch')}>See what's covered</button>
-          </div>
-
           
           {/* SECTION 1: Top Hero (Two Columns - Completely separated from About) */}
           <div className="home-hero-layout grid grid-cols-1 gap-8 items-center relative z-20">
@@ -2622,10 +2617,10 @@ const App = () => {
                   hand-drawn annotation overlapping the text. */}
               <div className="home-welcome-copy tk-hero">
                 <div className="tk-hero-doodles" aria-hidden="true">
-                  <Blob className="tk-blob-a" color="var(--tk-mint)" />
-                  <Blob className="tk-blob-b" color="#bcd7f5" />
-                  <Sparkle className="tk-sparkle-a" />
-                  <Sparkle className="tk-sparkle-b" color="var(--tk-coral)" />
+                  <Blob className="tk-blob-a" color="var(--tk-mint)" data-parallax="0.18" />
+                  <Blob className="tk-blob-b" color="#bcd7f5" data-parallax="-0.12" />
+                  <Sparkle className="tk-sparkle-a" data-parallax="0.26" />
+                  <Sparkle className="tk-sparkle-b" color="var(--tk-coral)" data-parallax="-0.2" />
                 </div>
 
                 <p className="tk-eyebrow">Creative studio · Kerala, India</p>
@@ -2674,6 +2669,13 @@ const App = () => {
             </div>
 
           </div>
+
+          <MarqueeStrip
+            words={[
+              'UI/UX Design', 'Web Development', 'AI Ads', 'Branding',
+              'Mobile Apps', 'Advertising', 'No-Code Builds', 'Shopify Stores'
+            ]}
+          />
 
           <ConnectorLine variant="a" className="tk-connector-left" />
 

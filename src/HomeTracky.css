@@ -94,33 +94,6 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   .tk-reveal { opacity: 1; transform: none; transition: none; }
 }
 
-/* --- Announcement banner ------------------------------------------------- */
-
-/* Full-bleed via margins, not transform — the reveal owns transform on
-   sections, and a translateY there would cancel a translateX bleed. */
-.tk-banner {
-  width: 100vw;
-  margin-inline: calc(50% - 50vw);
-  padding: 10px 20px;
-  background: var(--tk-butter);
-  color: #151b31;           /* fixed: the banner stays yellow in both themes */
-  font-family: var(--tk-sans);
-  font-size: 15px;
-  text-align: center;
-}
-
-.tk-banner button {
-  margin-left: 8px;
-  border: 0;
-  background: none;
-  padding: 0;
-  font: inherit;
-  font-weight: 600;
-  color: var(--tk-coral);
-  cursor: pointer;
-  text-decoration: underline;
-}
-
 /* --- Hero ---------------------------------------------------------------- */
 
 .tk-hero {
@@ -883,3 +856,104 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
    phrase, so that phrase has to establish the containing block. */
 .tk-feature h2 em,
 .tk-band h2 em { position: relative; display: inline-block; }
+
+/* --- Scrolling word strip ------------------------------------------------ */
+
+.tk-marquee {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  overflow: hidden;
+  padding: 14px 0;
+  border-block: 2px solid var(--tk-navy);
+  background: var(--tk-mint);
+}
+
+.tk-marquee-track {
+  display: flex;
+  width: max-content;
+  /* Exactly -50% of a doubled track, so the seam is invisible. */
+  animation: tk-slide 30s linear infinite;
+}
+
+@keyframes tk-slide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.tk-marquee-set { display: flex; align-items: center; flex-shrink: 0; }
+
+.tk-marquee-set span {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  padding-right: 20px;
+  font-family: var(--tk-display);
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  color: #151b31;
+}
+
+.tk-marquee-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--tk-coral);
+}
+
+/* --- Scroll parallax ----------------------------------------------------- */
+
+/* `translate` is a separate property from `transform`, so the parallax offset
+   and the idle drift/twinkle animations can both run without overwriting each
+   other. */
+[data-parallax] {
+  translate: 0 var(--tk-par, 0px);
+  will-change: translate;
+}
+
+@media (max-width: 900px) {
+  [data-parallax] { translate: none; will-change: auto; }
+}
+
+/* --- Heading wipe -------------------------------------------------------- */
+
+/* Headings are revealed by raising a clip edge rather than fading, so they
+   read as being written onto the page. */
+.tk-wipe {
+  clip-path: inset(0 0 105% 0);
+  transform: translateY(14px);
+  transition: clip-path 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tk-wipe.is-in {
+  clip-path: inset(0 0 -35% 0);   /* negative, so descenders are not shaved */
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-wipe {
+    clip-path: none;
+    transform: none;
+    transition: none;
+  }
+
+  .tk-marquee-track { animation: none; }
+}
+
+@media (max-width: 767px) {
+  .tk-marquee-track { animation-duration: 42s; }
+}
+
+/* --- Card entrance ------------------------------------------------------- */
+
+/* Cards arrive with a slight scale and tilt, then settle square — a little
+   more life than a straight fade, without moving anything after it lands. */
+.app-shell[data-route='home'] .c1-svc-card.tk-reveal {
+  transform: translateY(22px) scale(0.97) rotate(-0.8deg);
+}
+
+.app-shell[data-route='home'] .c1-svc-card.tk-reveal.is-in {
+  transform: none;
+}

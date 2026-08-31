@@ -29,27 +29,10 @@ export function Squiggle({ className = '', color = 'var(--tk-coral)' }) {
   );
 }
 
-/** Curved hand-drawn arrow with a head, pointing down-right. */
-export function CurvedArrow({ className = '', color = 'var(--tk-navy)' }) {
-  return (
-    <svg className={`tk-arrow ${className}`} viewBox="0 0 120 100" fill="none" aria-hidden="true">
-      <path
-        d="M8 8c34 4 62 22 76 52"
-        stroke={color} strokeWidth="4" strokeLinecap="round"
-        strokeDasharray="0 0"
-      />
-      <path
-        d="M70 46c8 6 12 12 14 20-9-1-16 1-23 6"
-        stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 /** Organic blob used as soft background atmosphere behind cards. */
-export function Blob({ className = '', color = 'var(--tk-mint)' }) {
+export function Blob({ className = '', color = 'var(--tk-mint)', ...rest }) {
   return (
-    <svg className={`tk-blob ${className}`} viewBox="0 0 200 200" aria-hidden="true">
+    <svg className={`tk-blob ${className}`} viewBox="0 0 200 200" aria-hidden="true" {...rest}>
       <path
         fill={color}
         d="M42 -62c14 12 22 32 22 52s-8 40-22 52-34 16-52 12-34-16-44-32-14-36-8-54 22-32 40-38 50-4 64 8Z"
@@ -60,9 +43,9 @@ export function Blob({ className = '', color = 'var(--tk-mint)' }) {
 }
 
 /** Four-point sparkle, scattered as punctuation. */
-export function Sparkle({ className = '', color = 'var(--tk-butter)' }) {
+export function Sparkle({ className = '', color = 'var(--tk-butter)', ...rest }) {
   return (
-    <svg className={`tk-sparkle ${className}`} viewBox="0 0 40 40" aria-hidden="true">
+    <svg className={`tk-sparkle ${className}`} viewBox="0 0 40 40" aria-hidden="true" {...rest}>
       <path
         d="M20 2c2 10 6 14 16 16-10 2-14 6-16 16-2-10-6-14-16-16 10-2 14-6 16-16Z"
         fill={color} stroke="var(--tk-navy)" strokeWidth="2.5" strokeLinejoin="round"
@@ -251,12 +234,96 @@ export function CircleScribble({ className = '', color = 'var(--tk-coral)' }) {
 }
 
 /* --------------------------------------------------------------------------
+   Scrolling word strip. The list is rendered twice and the track animates by
+   exactly -50%, so the loop is seamless with no JS driving it.
+   -------------------------------------------------------------------------- */
+
+export function MarqueeStrip({ words }) {
+  return (
+    <div className="tk-marquee" aria-hidden="true">
+      <div className="tk-marquee-track">
+        {[0, 1].map((copy) => (
+          <div className="tk-marquee-set" key={copy}>
+            {words.map((word) => (
+              <span key={`${copy}-${word}`}>
+                {word}
+                <i className="tk-marquee-dot" />
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* --------------------------------------------------------------------------
+   Scroll parallax.
+
+   Writes an offset into a custom property that CSS applies through the
+   `translate` property — kept separate from `transform`, which the idle drift
+   and twinkle animations already own, so the two never fight.
+
+   Reads are batched into one rAF frame per scroll event, and the whole thing
+   is skipped on phones and under reduced motion: a scroll handler doing
+   layout reads is exactly the kind of work that made this site feel heavy.
+   -------------------------------------------------------------------------- */
+
+export function useParallax(active) {
+  useEffect(() => {
+    if (!active || typeof window === 'undefined') return;
+    if (window.matchMedia('(max-width: 900px), (prefers-reduced-motion: reduce)').matches) return;
+
+    const nodes = Array.from(document.querySelectorAll('[data-parallax]'));
+    if (!nodes.length) return;
+
+    let frame = null;
+
+    const update = () => {
+      frame = null;
+      const mid = window.innerHeight / 2;
+      nodes.forEach((node) => {
+        const speed = parseFloat(node.dataset.parallax) || 0;
+        const rect = node.getBoundingClientRect();
+        // Distance of this element's centre from the viewport centre, so the
+        // offset is zero as it passes the middle rather than at the top.
+        const offset = (rect.top + rect.height / 2 - mid) * -speed;
+        node.style.setProperty('--tk-par', `${offset.toFixed(1)}px`);
+      });
+    };
+
+    const onScroll = () => {
+      if (frame === null) frame = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame !== null) window.cancelAnimationFrame(frame);
+    };
+  }, [active]);
+}
+
+/* --------------------------------------------------------------------------
    Section reveals.
 
    Applied by observing existing nodes and toggling a class, rather than
    wrapping sections in extra <div>s — several are grid or flex children, and
    an added wrapper would break their layout.
    -------------------------------------------------------------------------- */
+
+/* Headings wipe upward from a clip instead of fading, so they read as being
+   written onto the page rather than appearing. */
+const WIPE_TARGETS = [
+  '.c1-title',
+  '.heads-head h2',
+  '.tk-feature h2',
+  '.tk-band h2'
+];
 
 const REVEAL_TARGETS = [
   '.home-about-section',
@@ -275,10 +342,12 @@ export function useSectionReveals(active) {
     if (!active || typeof window === 'undefined') return;
 
     const nodes = document.querySelectorAll(REVEAL_TARGETS.join(','));
-    if (!nodes.length) return;
+    const wipes = document.querySelectorAll(WIPE_TARGETS.join(','));
+    if (!nodes.length && !wipes.length) return;
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       nodes.forEach((node) => node.classList.add('tk-reveal', 'is-in'));
+      wipes.forEach((node) => node.classList.add('tk-wipe', 'is-in'));
       return;
     }
 
@@ -299,19 +368,26 @@ export function useSectionReveals(active) {
       observer.observe(node);
     });
 
+    wipes.forEach((node) => {
+      node.classList.add('tk-wipe');
+      observer.observe(node);
+    });
+
     /* Failsafe: the reveal starts elements at opacity 0, so anything the
        observer fails to report would stay invisible permanently. Observers can
        miss elements under fast scrolling, and React can swap nodes out when the
        catalog loads. Content visibility never depends on the observer firing —
        only the animation does. */
     const sweep = () => {
-      document.querySelectorAll('.tk-reveal:not(.is-in)').forEach((node) => {
+      document.querySelectorAll('.tk-reveal:not(.is-in), .tk-wipe:not(.is-in)').forEach((node) => {
         if (node.getBoundingClientRect().top < window.innerHeight * 1.25) {
           node.classList.add('is-in');
           observer.unobserve(node);
         }
       });
-      if (!document.querySelector('.tk-reveal:not(.is-in)')) window.clearInterval(timer);
+      if (!document.querySelector('.tk-reveal:not(.is-in), .tk-wipe:not(.is-in)')) {
+        window.clearInterval(timer);
+      }
     };
 
     const timer = window.setInterval(sweep, 1200);
