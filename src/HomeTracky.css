@@ -1,0 +1,614 @@
+/* ===========================================================================
+   Home page — doodled planner on warm paper.
+
+   Ash canvas background, navy type and fills, one coral emphasis per headline,
+   mint and butter yellow as supporting accents. Radii are small and functional
+   (8px interactive, 16px cards, 24px feature cards), and shadows are warm
+   stone rather than black.
+
+   Scoped to [data-route='home'] so the Service Store, Portfolio, Launch Cloud
+   and Services pages keep the surfaces they already have.
+
+   GRIFTER is a commercial face, so the display font is Bagel Fat One — the
+   first substitute the spec names, and on Google Fonts.
+   ========================================================================= */
+
+.app-shell[data-route='home'] {
+  --tk-navy: #151b31;
+  --tk-coral: #ff5858;
+  --tk-mint: #86e0c1;
+  --tk-butter: #fedf89;
+  --tk-graphite: #333333;
+  --tk-slate: #6d6f75;
+  --tk-stone: #e8e7e5;
+  --tk-ash: #f2f2f2;
+  --tk-paper: #ffffff;
+
+  --tk-display: 'Bagel Fat One', 'GRIFTER', 'Bowlby One', ui-sans-serif, system-ui, sans-serif;
+  --tk-sans: 'Inter', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+  --tk-r-ui: 8px;
+  --tk-r-card: 16px;
+  --tk-r-feature: 24px;
+
+  /* Warm stone, never black — the signature elevation of this system. */
+  --tk-shadow-card: rgba(138, 133, 125, 0.2) 0 1px 4px;
+  --tk-shadow-btn: rgba(0, 0, 0, 0.1) 0 1px 3px, rgba(0, 0, 0, 0.06) 0 1px 2px;
+
+  background: var(--tk-ash);
+  color: var(--tk-navy);
+}
+
+/* The palette is fixed by the spec, so dark mode restates the same structure
+   in inverted neutrals rather than dropping the toggle on people who use it.
+   Coral, mint and butter are kept — they are the system's only accents. */
+html[data-theme='dark'] .app-shell[data-route='home'] {
+  --tk-navy: #f4f5f7;
+  --tk-graphite: #d7d9de;
+  --tk-slate: #9ea1aa;
+  --tk-stone: #2a2d38;
+  --tk-ash: #101320;
+  --tk-paper: #191d2c;
+
+  --tk-shadow-card: rgba(0, 0, 0, 0.45) 0 1px 4px;
+  --tk-shadow-btn: rgba(0, 0, 0, 0.5) 0 1px 3px;
+
+  background: var(--tk-ash);
+  color: var(--tk-navy);
+}
+
+/* This page previously ran on glass panels and gradient blobs — the opposite
+   of flat warm paper, so the home route drops them. */
+.app-shell[data-route='home'] .home-screen .premium-glass,
+.app-shell[data-route='home'] .home-about-shell,
+.app-shell[data-route='home'] .faq-warm-glass {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.app-shell[data-route='home'] .home-screen {
+  max-width: 1200px;
+  gap: 80px;
+}
+
+.app-shell[data-route='home'] .home-hero-copy {
+  max-width: none;
+  margin-inline: 0;
+}
+
+/* --- Reveal -------------------------------------------------------------- */
+
+.tk-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tk-reveal.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* --- Announcement banner ------------------------------------------------- */
+
+/* Full-bleed via margins, not transform — the reveal owns transform on
+   sections, and a translateY there would cancel a translateX bleed. */
+.tk-banner {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  padding: 10px 20px;
+  background: var(--tk-butter);
+  color: #151b31;           /* fixed: the banner stays yellow in both themes */
+  font-family: var(--tk-sans);
+  font-size: 15px;
+  text-align: center;
+}
+
+.tk-banner button {
+  margin-left: 8px;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--tk-coral);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* --- Hero ---------------------------------------------------------------- */
+
+.tk-hero {
+  position: relative;
+  padding: 48px 0 24px;
+  text-align: center;
+}
+
+.tk-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding: 8px 16px;
+  border-radius: var(--tk-r-ui);
+  background: var(--tk-mint);
+  color: #151b31;
+  font-family: var(--tk-sans);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* The display face is heavy by design; tracking is positive, not negative. */
+.tk-display {
+  position: relative;
+  margin: 0 auto 24px;
+  max-width: 16ch;
+  font-family: var(--tk-display);
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  color: var(--tk-navy);
+}
+
+/* Exactly one phrase per headline carries the coral emphasis. */
+.tk-display em {
+  position: relative;
+  font-style: normal;
+  color: var(--tk-coral);
+  white-space: nowrap;
+}
+
+.tk-squiggle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.22em;
+  width: 100%;
+  height: 0.18em;
+}
+
+.tk-lede {
+  margin: 0 auto 28px;
+  max-width: 34rem;
+  font-family: var(--tk-sans);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--tk-slate);
+}
+
+.tk-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.tk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 20px;
+  border-radius: var(--tk-r-ui);
+  border: 1px solid transparent;
+  font-family: var(--tk-sans);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: transform 0.16s ease, background 0.2s ease;
+}
+
+.tk-btn-primary {
+  background: var(--tk-navy);
+  color: var(--tk-ash);
+  box-shadow: var(--tk-shadow-btn);
+}
+
+.tk-btn-ghost {
+  padding: 12px 16px;
+  background: var(--tk-paper);
+  border-color: var(--tk-stone);
+  color: var(--tk-navy);
+  font-weight: 500;
+}
+
+.tk-btn:hover { transform: translateY(-1px); }
+
+/* Timer pill — the product motif, carrying a real studio commitment. */
+.tk-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 8px 8px;
+  border-radius: 999px;
+  background: var(--tk-paper);
+  box-shadow: var(--tk-shadow-card);
+  font-family: var(--tk-sans);
+}
+
+.tk-timer-play {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--tk-mint);
+  color: #151b31;
+}
+
+.tk-timer strong {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--tk-navy);
+}
+
+.tk-timer-label { font-size: 14px; color: var(--tk-slate); }
+
+/* --- Doodles ------------------------------------------------------------- */
+
+/* All decorative: they overlap content rather than occupying containers, and
+   never intercept clicks. */
+.tk-arrow, .tk-blob, .tk-sparkle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tk-blob { opacity: 0.42; filter: blur(0.5px); }
+
+.tk-hero-doodles { position: absolute; inset: 0; pointer-events: none; }
+.tk-hero-doodles .tk-blob-a { top: -6%; left: -4%; width: 220px; }
+.tk-hero-doodles .tk-blob-b { bottom: 4%; right: -6%; width: 260px; }
+.tk-hero-doodles .tk-sparkle-a { top: 12%; right: 12%; width: 30px; }
+.tk-hero-doodles .tk-sparkle-b { bottom: 26%; left: 8%; width: 22px; }
+.tk-hero-doodles .tk-arrow-a { bottom: 8%; right: 18%; width: 84px; transform: rotate(14deg); }
+
+@media (max-width: 900px) {
+  .tk-hero-doodles .tk-arrow-a,
+  .tk-hero-doodles .tk-sparkle-b { display: none; }
+  .tk-hero-doodles .tk-blob-a { width: 140px; }
+  .tk-hero-doodles .tk-blob-b { width: 150px; }
+}
+
+/* --- Section headings ---------------------------------------------------- */
+
+.app-shell[data-route='home'] .heads-head h2,
+.app-shell[data-route='home'] .c1-title,
+.app-shell[data-route='home'] .advantage-gallery-center h2 {
+  font-family: var(--tk-display) !important;
+  font-weight: 400 !important;
+  line-height: 1.16 !important;
+  letter-spacing: 0.03em !important;
+  color: var(--tk-navy) !important;
+  background: none !important;
+  -webkit-text-fill-color: var(--tk-navy) !important;
+  text-transform: none !important;
+}
+
+.app-shell[data-route='home'] .heads-head h2,
+.app-shell[data-route='home'] .c1-title {
+  font-size: clamp(1.75rem, 3.6vw, 3rem) !important;
+}
+
+/* The Advantage heading sits in a fixed-height stage over the image marquee,
+   so it takes the display treatment at a size that stage can hold. */
+.app-shell[data-route='home'] .advantage-gallery-center h2 {
+  font-size: clamp(1.25rem, 2.4vw, 2rem) !important;
+}
+
+.app-shell[data-route='home'] .c1-subtitle,
+.app-shell[data-route='home'] .heads-head p {
+  font-family: var(--tk-sans);
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--tk-slate) !important;
+}
+
+/* Category labels become mint/ash badges at the system's 8px radius. */
+.app-shell[data-route='home'] .c1-badge,
+.app-shell[data-route='home'] .advantage-pill,
+.app-shell[data-route='home'] .advantage-gallery-topline span {
+  padding: 8px 14px !important;
+  border-radius: var(--tk-r-ui) !important;
+  background: var(--tk-mint) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  font-family: var(--tk-sans);
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: #151b31 !important;
+  /* The old gradient-text treatment left -webkit-text-fill-color transparent,
+     which overrides `color` and painted this label invisible on its own pill. */
+  -webkit-text-fill-color: #151b31 !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+}
+
+/* --- Cards --------------------------------------------------------------- */
+
+.app-shell[data-route='home'] .c1-svc-card,
+.app-shell[data-route='home'] .heads-card,
+.app-shell[data-route='home'] .home-faq-item {
+  border-radius: var(--tk-r-card) !important;
+  background: var(--tk-paper) !important;
+  border: 0 !important;
+  box-shadow: var(--tk-shadow-card) !important;
+  color: var(--tk-navy) !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+.app-shell[data-route='home'] .c1-svc-card h3,
+.app-shell[data-route='home'] .heads-card h3 {
+  font-family: var(--tk-sans) !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--tk-navy) !important;
+}
+
+.app-shell[data-route='home'] .c1-svc-card p,
+.app-shell[data-route='home'] .heads-card p {
+  font-family: var(--tk-sans) !important;
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--tk-slate) !important;
+}
+
+.app-shell[data-route='home'] .c1-svc-icon {
+  border-radius: var(--tk-r-ui) !important;
+  background: var(--tk-ash) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--tk-navy) !important;
+}
+
+/* One accent per card, rotating so the grid stays lively without any card
+   carrying two chromatic accents. */
+.app-shell[data-route='home'] .c1-svc-card:nth-child(3n+1) .c1-svc-icon { background: var(--tk-mint) !important; }
+.app-shell[data-route='home'] .c1-svc-card:nth-child(3n+2) .c1-svc-icon { background: var(--tk-butter) !important; }
+
+.app-shell[data-route='home'] .c1-svc-cta {
+  margin-top: auto !important;
+  align-self: flex-start;
+  padding: 8px 16px !important;
+  border-radius: var(--tk-r-ui) !important;
+  background: var(--tk-navy) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--tk-paper) !important;
+  font-family: var(--tk-sans) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.app-shell[data-route='home'] .c1-btn {
+  border-radius: var(--tk-r-ui) !important;
+  background: var(--tk-navy) !important;
+  border: 1px solid var(--tk-navy) !important;
+  color: var(--tk-ash) !important;
+  box-shadow: var(--tk-shadow-btn) !important;
+  font-family: var(--tk-sans) !important;
+  font-weight: 600 !important;
+}
+
+.app-shell[data-route='home'] .c1-btn.is-ghost {
+  background: var(--tk-paper) !important;
+  border-color: var(--tk-stone) !important;
+  color: var(--tk-navy) !important;
+  font-weight: 500 !important;
+}
+
+/* --- Dark feature card --------------------------------------------------- */
+
+/* Navy card with a tilted white card overlapping its edge — the system's
+   signature inversion moment. */
+.tk-feature {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: 40px;
+  padding: 48px;
+  border-radius: var(--tk-r-feature);
+  background: #151b31;
+  color: #ffffff;
+  box-shadow: var(--tk-shadow-card);
+  overflow: hidden;
+}
+
+.tk-feature h2 {
+  margin: 0 0 16px;
+  font-family: var(--tk-display);
+  font-size: clamp(1.6rem, 3.2vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1.16;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+}
+
+.tk-feature h2 em { font-style: normal; color: var(--tk-coral); }
+
+.tk-feature p {
+  margin: 0 0 24px;
+  max-width: 40ch;
+  font-family: var(--tk-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Inverse button: white on the dark card. */
+.tk-btn-inverse {
+  background: #ffffff;
+  color: #151b31;
+  border-color: #ffffff;
+}
+
+.tk-feature-stack { position: relative; min-height: 220px; }
+
+.tk-overlap {
+  padding: 20px;
+  border-radius: var(--tk-r-card);
+  background: var(--tk-paper);
+  color: var(--tk-navy);
+  box-shadow: var(--tk-shadow-card);
+  font-family: var(--tk-sans);
+}
+
+/* The two cards overlap only at their edges. An earlier -28px pull with a
+   wider card put the second one across the first one's text. */
+.tk-overlap { width: 82%; }
+.tk-overlap-a { transform: rotate(-3deg); }
+.tk-overlap-b {
+  transform: rotate(3deg);
+  margin-top: -8px;
+  margin-left: auto;   /* offset right so it laps the first card's corner */
+}
+
+.tk-overlap strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Block, or the role and the tag run together on one line. */
+.tk-overlap span {
+  display: block;
+  font-size: 14px;
+  color: var(--tk-slate);
+}
+
+/* Qualified with the element so it outranks `.tk-overlap span` above, which
+   otherwise forces display:block and stretches the tag across the card. */
+.tk-overlap span.tk-overlap-tag {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 12px;
+  border-radius: var(--tk-r-ui);
+  background: var(--tk-mint);
+  color: #151b31;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+@media (max-width: 860px) {
+  .tk-feature { grid-template-columns: 1fr; gap: 28px; padding: 28px 20px; }
+  .tk-overlap { width: 90%; }
+}
+
+/* --- Closing band -------------------------------------------------------- */
+
+.tk-band {
+  position: relative;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  padding: 80px 24px;
+  background: var(--tk-paper);
+  text-align: center;
+}
+
+.tk-band h2 {
+  margin: 0 auto 16px;
+  max-width: 18ch;
+  font-family: var(--tk-display);
+  font-size: clamp(1.75rem, 3.6vw, 3rem);
+  font-weight: 400;
+  line-height: 1.16;
+  letter-spacing: 0.03em;
+  color: var(--tk-navy);
+}
+
+.tk-band h2 em { font-style: normal; color: var(--tk-coral); }
+
+.tk-band p {
+  margin: 0 auto 28px;
+  max-width: 36rem;
+  font-family: var(--tk-sans);
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--tk-slate);
+}
+
+/* --- Contact & carousel -------------------------------------------------- */
+
+.app-shell[data-route='home'] .access-color-form,
+.app-shell[data-route='home'] .home-contact-section form {
+  border-radius: var(--tk-r-feature);
+  background: var(--tk-paper);
+  border: 0;
+  box-shadow: var(--tk-shadow-card);
+}
+
+.app-shell[data-route='home'] .home-contact-section input,
+.app-shell[data-route='home'] .home-contact-section textarea {
+  border-radius: var(--tk-r-ui);
+  background: var(--tk-ash);
+  border: 1px solid var(--tk-stone);
+  color: var(--tk-navy);
+}
+
+.app-shell[data-route='home'] .home-promo-card {
+  max-width: 40rem;
+  margin-inline: auto;
+  border-radius: var(--tk-r-card) !important;
+  background: var(--tk-paper) !important;
+  border: 0;
+  box-shadow: var(--tk-shadow-card) !important;
+}
+
+/* --- Service icon ring --------------------------------------------------- */
+
+.app-shell[data-route='home'] .elastic-service-item {
+  background: var(--tk-paper) !important;
+  background-image: none !important;
+  border: 1px solid var(--tk-stone) !important;
+  box-shadow: var(--tk-shadow-card) !important;
+  color: var(--tk-navy) !important;
+}
+
+.app-shell[data-route='home'] .elastic-service-item svg { color: var(--tk-navy) !important; }
+
+.app-shell[data-route='home'] .elastic-service-item.is-hovered {
+  background: var(--tk-coral) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-route='home'] .elastic-service-item.is-hovered svg { color: #ffffff !important; }
+
+.app-shell[data-route='home'] .elastic-service-caption {
+  border-radius: var(--tk-r-ui) !important;
+  background: var(--tk-paper) !important;
+  border: 1px solid var(--tk-stone) !important;
+  box-shadow: none !important;
+  color: var(--tk-navy) !important;
+}
+
+/* --- Mobile -------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .app-shell[data-route='home'] .home-screen { gap: 56px; }
+  .tk-hero { padding: 24px 0 8px; }
+  .tk-band { padding: 56px 20px; }
+  .tk-actions .tk-btn { flex: 1 1 auto; justify-content: center; }
+  .tk-timer-label { display: none; }
+}

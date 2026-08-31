@@ -11,10 +11,10 @@ import './DarkMode.css';
 import './MobilePerf.css';
 // Home page editorial system — must follow MobilePerf so its flat paper
 // surfaces win over the shared glass treatments.
-import './HomeSteep.css';
+import './HomeTracky.css';
 import {
-  ProjectBoardCard, EnquiryTrendCard, BriefComposerCard, PresenceCard, useSectionReveals
-} from './SteepArtifacts';
+  Squiggle, CurvedArrow, Blob, Sparkle, TimerPill, useSectionReveals
+} from './TrackyBits';
 import Stepper, { Step } from './Stepper';
 import AccountPanel from './AccountPanel';
 import OwnerDashboard from './OwnerDashboard';
@@ -2534,6 +2534,12 @@ const App = () => {
       {/* Main Content - Home View */}
       {activeNav === 'home' && (
         <main className="home-screen max-w-6xl mx-auto px-4 sm:px-6 pt-0 sm:pt-4 pb-0 relative z-10 animate-fade-in flex flex-col gap-16 lg:gap-24">
+          {/* Full-width announcement strip — the system opens with one. */}
+          <div className="tk-banner" role="note">
+            🔥 Launch Cloud hosting is included with eligible website builds.
+            <button type="button" onClick={() => navigateTo('launch')}>See what's covered</button>
+          </div>
+
           
           {/* SECTION 1: Top Hero (Two Columns - Completely separated from About) */}
           <div className="home-hero-layout grid grid-cols-1 gap-8 items-center relative z-20">
@@ -2611,39 +2617,42 @@ const App = () => {
               </div>
 
               {/* Welcome Text */}
-              {/* Text-and-artifact collage: an oversized serif headline with
-                  product fragments floating around it, not illustration. */}
-              <div className="home-welcome-copy st-hero st-hero-stage">
-                <div className="st-hero-inner">
-                  <p className="st-eyebrow">Creative studio · Kerala, India</p>
-
-                  <h1 className="st-display">
-                    Design, build, and grow your <em>next digital product.</em>
-                  </h1>
-
-                  <p className="st-lede">
-                    UI/UX, websites, mobile apps, AI ads, branding, and motion — one focused
-                    creative team from idea to launch.
-                  </p>
-
-                  <div className="st-actions">
-                    <button type="button" className="st-btn st-btn-filled" onClick={() => navigateTo('workspace')}>
-                      Start a project
-                    </button>
-                    <button type="button" className="st-btn st-btn-ghost" onClick={() => navigateTo('portfolio')}>
-                      See our work
-                    </button>
-                  </div>
+              {/* Doodled hero: heavy display type with one coral phrase,
+                  hand-drawn annotation overlapping the text. */}
+              <div className="home-welcome-copy tk-hero">
+                <div className="tk-hero-doodles" aria-hidden="true">
+                  <Blob className="tk-blob-a" color="var(--tk-mint)" />
+                  <Blob className="tk-blob-b" color="#bcd7f5" />
+                  <Sparkle className="tk-sparkle-a" />
+                  <Sparkle className="tk-sparkle-b" color="var(--tk-coral)" />
+                  <CurvedArrow className="tk-arrow-a" />
                 </div>
 
-                <div className="st-hero-artifacts">
-                  <div className="st-float st-float-board"><ProjectBoardCard /></div>
-                  <div className="st-float st-float-trend"><EnquiryTrendCard /></div>
-                  <div className="st-float st-float-composer">
-                    <BriefComposerCard onSubmit={() => navigateTo('workspace')} />
-                  </div>
-                  <div className="st-float st-float-presence"><PresenceCard /></div>
+                <p className="tk-eyebrow">Creative studio · Kerala, India</p>
+
+                <h1 className="tk-display">
+                  Design, build, and grow your{' '}
+                  <em>
+                    next big thing
+                    <Squiggle />
+                  </em>
+                </h1>
+
+                <p className="tk-lede">
+                  UI/UX, websites, mobile apps, AI ads, branding, and motion — one focused
+                  creative team from idea to launch.
+                </p>
+
+                <div className="tk-actions">
+                  <button type="button" className="tk-btn tk-btn-primary" onClick={() => navigateTo('workspace')}>
+                    Get started
+                  </button>
+                  <button type="button" className="tk-btn tk-btn-ghost" onClick={() => navigateTo('portfolio')}>
+                    See our work
+                  </button>
                 </div>
+
+                <TimerPill />
               </div>
 
               {/* Elastic Service Stack */}
@@ -2660,15 +2669,33 @@ const App = () => {
 
           </div>
 
-          {/* The one peach accent on the page. Editorial emphasis, used once. */}
-          <section className="st-accent" aria-label="How Leaf Creationism works">
-            <h2>One team, from the first sketch to the day it goes live.</h2>
-            <p>
-              No account managers, no handoffs to a junior team. The people who design and
-              direct your project are the ones you talk to — through strategy, design,
-              build, and launch.
-            </p>
-            <p className="st-accent-by">Jibin Chacko &amp; June Mary · Studio heads</p>
+          {/* Dark feature card with tilted white cards overlapping its edge —
+              the inversion moment this system uses to break up the page. */}
+          <section className="tk-feature" aria-label="How Leaf Creationism works">
+            <div>
+              <h2>One team, from first sketch to <em>launch day</em></h2>
+              <p>
+                No account managers, no handoffs to a junior team. The people who design and
+                direct your project are the ones you talk to — through strategy, design,
+                build, and launch.
+              </p>
+              <button type="button" className="tk-btn tk-btn-inverse" onClick={() => navigateTo('workspace')}>
+                Start a project
+              </button>
+            </div>
+
+            <div className="tk-feature-stack">
+              <div className="tk-overlap tk-overlap-a">
+                <strong>Jibin Chacko</strong>
+                <span>Founder / Creative Head</span>
+                <span className="tk-overlap-tag">Product &amp; strategy</span>
+              </div>
+              <div className="tk-overlap tk-overlap-b">
+                <strong>June Mary</strong>
+                <span>Creative Head / Mentor</span>
+                <span className="tk-overlap-tag">Visual direction</span>
+              </div>
+            </div>
           </section>
 
           {/* SECTION 2: Separated "About" Section (No longer touching top components) */}
@@ -3138,18 +3165,18 @@ const App = () => {
               </div>
             </div>
           </section>
-          {/* Closing band on the fog surface — the quiet sign-off. */}
-          <section className="st-band" aria-label="Start a project with Leaf Creationism">
-            <h2>Let's make something worth looking at.</h2>
+          {/* Closing band on paper white. */}
+          <section className="tk-band" aria-label="Start a project with Leaf Creationism">
+            <h2>Let's make something <em>worth looking at</em></h2>
             <p>
               Tell us what you are building. We will come back with a written quote,
               a timeline, and the team who would actually do the work.
             </p>
-            <div className="st-actions">
-              <button type="button" className="st-btn st-btn-filled" onClick={() => navigateTo('workspace')}>
-                Start a project
+            <div className="tk-actions">
+              <button type="button" className="tk-btn tk-btn-primary" onClick={() => navigateTo('workspace')}>
+                Get started
               </button>
-              <button type="button" className="st-btn st-btn-ghost" onClick={() => navigateTo('launch')}>
+              <button type="button" className="tk-btn tk-btn-ghost" onClick={() => navigateTo('launch')}>
                 Explore Launch Cloud
               </button>
             </div>
