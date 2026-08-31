@@ -1,0 +1,130 @@
+/* Styles for the DriftWall component.
+
+   The component ships without its stylesheet, so this supplies the classes it
+   references and the custom properties it sets.
+
+   The plane takes one 3D rotation and its children are plain 2D translations —
+   there is deliberately no transform-style: preserve-3d, which is what mobile
+   Safari and Chrome fail to paint elsewhere in this app. */
+
+.drift-wall {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  perspective: var(--dw-perspective, 1200px);
+  touch-action: pan-y;   /* the wall must never swallow page scrolling */
+}
+
+/* Edges dissolve rather than cutting off, so the drift reads as endless. */
+.drift-wall::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to bottom,
+      var(--dw-overlay, #060010) 0%,
+      transparent var(--dw-edge, 40%),
+      transparent calc(100% - var(--dw-edge, 40%)),
+      var(--dw-overlay, #060010) 100%
+    );
+}
+
+.drift-wall__plane {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  gap: var(--dw-gap, 18px);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.drift-wall__col {
+  width: var(--dw-tile-w, 200px);
+  flex: 0 0 auto;
+}
+
+.drift-wall__track {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dw-gap, 18px);
+  will-change: transform;
+}
+
+.drift-wall__tile {
+  display: block;
+  width: var(--dw-tile-w, 200px);
+  height: var(--dw-tile-h, 132px);
+  flex: 0 0 auto;
+  border-radius: var(--dw-radius, 14px);
+  overflow: hidden;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drift-wall__inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.drift-wall__inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(var(--dw-gray, 0));
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.35s ease;
+}
+
+/* Dim at rest, clear on hover — that contrast is what makes the active tile
+   read as lifted out of the wall. */
+.drift-wall__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--dw-overlay, #060010);
+  opacity: var(--dw-dim, 0.55);
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.drift-wall__tile:hover .drift-wall__overlay,
+.drift-wall__tile.is-active .drift-wall__overlay,
+.drift-wall__tile:focus-visible .drift-wall__overlay {
+  opacity: 0;
+}
+
+.drift-wall__tile:hover .drift-wall__inner img,
+.drift-wall__tile.is-active .drift-wall__inner img {
+  transform: scale(1.06);
+  filter: grayscale(0);
+}
+
+/* The lift is a Z translation on a single element, not a 3D subtree. */
+.drift-wall__tile.is-active,
+.drift-wall__tile:focus-visible {
+  transform: translateZ(var(--dw-lift, 64px)) scale(1.04);
+  z-index: 2;
+}
+
+.drift-wall__tile:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85);
+}
+
+/* Reduced motion keeps the wall, drops the drift and the lift. */
+.drift-wall--reduced .drift-wall__tile,
+.drift-wall--reduced .drift-wall__inner img {
+  transition: none;
+}
+
+.drift-wall--reduced .drift-wall__tile.is-active,
+.drift-wall--reduced .drift-wall__tile:focus-visible {
+  transform: none;
+}

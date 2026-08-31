@@ -24,10 +24,11 @@
   --tk-ash: #f2f2f2;
   --tk-paper: #ffffff;
 
-  /* GRIFTER is a commercial face. Archivo Black is the closest free match for
-     its heavy geometric grotesque weight — Bagel Fat One, the spec's first
-     substitute, reads far rounder and more cartoonish than the reference. */
-  --tk-display: 'Archivo Black', 'GRIFTER', 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  /* Outfit at 700 — the same family the rest of the site already loads and
+     uses, so the home page stops being the odd one out. Carried at a heavy
+     weight to keep the display presence the reference system relies on. */
+  --tk-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --tk-display-weight: 700;
   --tk-sans: 'Inter', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
 
   --tk-r-ui: 8px;
@@ -126,9 +127,9 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   max-width: 16ch;
   font-family: var(--tk-display);
   font-size: clamp(2.25rem, 6vw, 3.75rem);
-  font-weight: 400;
+  font-weight: var(--tk-display-weight);
   line-height: 1.06;
-  letter-spacing: -0.02em;   /* Archivo Black is wide; positive tracking sprawls */
+  letter-spacing: -0.02em;   /* tightened at display size, as the reference does */
   color: var(--tk-navy);
 }
 
@@ -262,7 +263,7 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
 .app-shell[data-route='home'] .c1-title,
 .app-shell[data-route='home'] .advantage-gallery-center h2 {
   font-family: var(--tk-display) !important;
-  font-weight: 400 !important;
+  font-weight: var(--tk-display-weight) !important;
   line-height: 1.16 !important;
   letter-spacing: -0.02em !important;
   color: var(--tk-navy) !important;
@@ -413,7 +414,7 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   margin: 0 0 16px;
   font-family: var(--tk-display);
   font-size: clamp(1.6rem, 3.2vw, 2.5rem);
-  font-weight: 400;
+  font-weight: var(--tk-display-weight);
   line-height: 1.16;
   letter-spacing: -0.02em;
   color: #ffffff;
@@ -507,7 +508,7 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   max-width: 18ch;
   font-family: var(--tk-display);
   font-size: clamp(1.75rem, 3.6vw, 3rem);
-  font-weight: 400;
+  font-weight: var(--tk-display-weight);
   line-height: 1.16;
   letter-spacing: -0.02em;
   color: var(--tk-navy);

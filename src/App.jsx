@@ -23,7 +23,7 @@ import OwnerDashboard from './OwnerDashboard';
 import { AuthProvider, useAuth } from './lib/useAuth';
 import { useServerCart } from './lib/useServerCart';
 import { supabase } from './lib/supabase';
-import DomeGallery from './DomeGallery';
+import DriftWall from './DriftWall';
 import { 
   Mail, 
   Home, 
@@ -2363,6 +2363,11 @@ const App = () => {
   const domeGalleryImages = portfolioItems
     .filter((item) => item.type === 'image')
     .map((item) => ({ src: toThumb(item.src), alt: item.title }));
+  /* DriftWall expects { image, title }; the portfolio list is { src, alt }. */
+  const driftWallItems = domeGalleryImages.map((item) => ({
+    image: item.src,
+    title: item.alt
+  }));
   const featuredPortfolioItems = portfolioItems.slice(0, 3);
   const togglePortfolioLike = (key) => {
     setLikedPortfolioItems((items) => (
@@ -2809,7 +2814,7 @@ const App = () => {
               color="#151b31"
               ribbonWidth={86}
               fontSize={44}
-              fontWeight={400}
+              fontWeight={700}
               letterSpacing={1}
               speed={70}
             />
@@ -4707,14 +4712,20 @@ const App = () => {
                     mobile gets roughly half the geometry. */}
                 {/* fit drives tile scale: a larger value pushes the sphere
                     closer to the camera so each image reads bigger. */}
-                <DomeGallery
-                  images={domeGalleryImages}
-                  overlayBlurColor="#05070c"
-                  segments={isMobileViewport ? 13 : 17}
-                  minRadius={isMobileViewport ? 380 : 620}
-                  fit={isMobileViewport ? 0.62 : 0.58}
-                  padFactor={0.18}
-                  grayscale={false}
+                {/* Columns drifting at different speeds, replacing the dome.
+                    Fewer, narrower columns on a phone, or the tiles end up
+                    too small to make out. */}
+                <DriftWall
+                  items={driftWallItems}
+                  columns={isMobileViewport ? 3 : 5}
+                  tileWidth={isMobileViewport ? 130 : 210}
+                  tileHeight={isMobileViewport ? 92 : 140}
+                  gap={isMobileViewport ? 12 : 18}
+                  speed={isMobileViewport ? 30 : 42}
+                  parallax={isMobileViewport ? 0 : 0.6}
+                  overlayColor="#05070c"
+                  dim={0.42}
+                  radius={14}
                 />
               </section>
             </div>
