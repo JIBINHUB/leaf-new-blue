@@ -11,11 +11,10 @@ import './DarkMode.css';
 import './MobilePerf.css';
 // Home page editorial system — must follow MobilePerf so its flat paper
 // surfaces win over the shared glass treatments.
-import './HomeEditorial.css';
-import './HomeArt.css';
+import './HomeSteep.css';
 import {
-  PaperStudioScene, PaperIdeaScene, SpinBadge, MarqueeStrip, useSectionReveals
-} from './HomeArt';
+  ProjectBoardCard, EnquiryTrendCard, BriefComposerCard, PresenceCard, useSectionReveals
+} from './SteepArtifacts';
 import Stepper, { Step } from './Stepper';
 import AccountPanel from './AccountPanel';
 import OwnerDashboard from './OwnerDashboard';
@@ -2612,48 +2611,39 @@ const App = () => {
               </div>
 
               {/* Welcome Text */}
-              {/* Editorial display block. Type leads; the paper-cut scene
-                  sits alongside it rather than behind it. */}
-              <div className="home-welcome-copy edi-hero edi-hero-split">
-                <div className="edi-hero-text">
-                <p className="edi-eyebrow">
-                  <span className="edi-dot" aria-hidden="true" />
-                  Creative studio · Kerala, India
-                </p>
+              {/* Text-and-artifact collage: an oversized serif headline with
+                  product fragments floating around it, not illustration. */}
+              <div className="home-welcome-copy st-hero st-hero-stage">
+                <div className="st-hero-inner">
+                  <p className="st-eyebrow">Creative studio · Kerala, India</p>
 
-                <h1 className="edi-display">
-                  Design, build, and grow your <em>next digital product.</em>
-                </h1>
+                  <h1 className="st-display">
+                    Design, build, and grow your <em>next digital product.</em>
+                  </h1>
 
-                <p className="edi-lede">
-                  UI/UX, websites, mobile apps, AI ads, branding, and motion — one focused
-                  creative team from idea to launch.
-                </p>
+                  <p className="st-lede">
+                    UI/UX, websites, mobile apps, AI ads, branding, and motion — one focused
+                    creative team from idea to launch.
+                  </p>
 
-                <div className="edi-actions">
-                  <button type="button" onClick={() => navigateTo('portfolio')} className="edi-btn edi-btn-ink">
-                    See our work
-                    <span className="edi-btn-dot" aria-hidden="true" />
-                  </button>
-                  <button type="button" onClick={() => navigateTo('workspace')} className="edi-btn edi-btn-ghost">
-                    Book a call
-                    <span className="edi-btn-dot is-blue" aria-hidden="true" />
-                  </button>
+                  <div className="st-actions">
+                    <button type="button" className="st-btn st-btn-filled" onClick={() => navigateTo('workspace')}>
+                      Start a project
+                    </button>
+                    <button type="button" className="st-btn st-btn-ghost" onClick={() => navigateTo('portfolio')}>
+                      See our work
+                    </button>
+                  </div>
                 </div>
 
+                <div className="st-hero-artifacts">
+                  <div className="st-float st-float-board"><ProjectBoardCard /></div>
+                  <div className="st-float st-float-trend"><EnquiryTrendCard /></div>
+                  <div className="st-float st-float-composer">
+                    <BriefComposerCard onSubmit={() => navigateTo('workspace')} />
+                  </div>
+                  <div className="st-float st-float-presence"><PresenceCard /></div>
                 </div>
-
-                <div className="edi-hero-art">
-                  <PaperStudioScene />
-                  <SpinBadge />
-                </div>
-
-                {/* Spans both columns so the three figures stay on one row. */}
-                <dl className="edi-proof">
-                  <div><dt>8</dt><dd>services under one roof</dd></div>
-                  <div><dt>10</dt><dd>cities served across Kerala</dd></div>
-                  <div><dt>1</dt><dd>team, idea to launch</dd></div>
-                </dl>
               </div>
 
               {/* Elastic Service Stack */}
@@ -2670,14 +2660,16 @@ const App = () => {
 
           </div>
 
-          {/* Scrolling word strip — the services, said plainly and in motion. */}
-          <MarqueeStrip
-            tone="grass"
-            words={[
-              'UI/UX Design', 'Web Development', 'AI Ads', 'Branding',
-              'Mobile Apps', 'Advertising', 'No-Code Builds', 'Shopify Stores'
-            ]}
-          />
+          {/* The one peach accent on the page. Editorial emphasis, used once. */}
+          <section className="st-accent" aria-label="How Leaf Creationism works">
+            <h2>One team, from the first sketch to the day it goes live.</h2>
+            <p>
+              No account managers, no handoffs to a junior team. The people who design and
+              direct your project are the ones you talk to — through strategy, design,
+              build, and launch.
+            </p>
+            <p className="st-accent-by">Jibin Chacko &amp; June Mary · Studio heads</p>
+          </section>
 
           {/* SECTION 2: Separated "About" Section (No longer touching top components) */}
           <div className="home-about-section w-full relative group/about z-10">
@@ -3146,18 +3138,21 @@ const App = () => {
               </div>
             </div>
           </section>
-          {/* Closing accent band — the warm sign-off that ends the page. */}
-          <section className="edi-band" aria-label="Start a project with Leaf Creationism">
-            <div className="edi-band-art"><PaperIdeaScene /></div>
+          {/* Closing band on the fog surface — the quiet sign-off. */}
+          <section className="st-band" aria-label="Start a project with Leaf Creationism">
             <h2>Let's make something worth looking at.</h2>
             <p>
               Tell us what you are building. We will come back with a written quote,
               a timeline, and the team who would actually do the work.
             </p>
-            <button type="button" className="edi-btn" onClick={() => navigateTo('workspace')}>
-              Start a project
-              <span className="edi-btn-dot" aria-hidden="true" />
-            </button>
+            <div className="st-actions">
+              <button type="button" className="st-btn st-btn-filled" onClick={() => navigateTo('workspace')}>
+                Start a project
+              </button>
+              <button type="button" className="st-btn st-btn-ghost" onClick={() => navigateTo('launch')}>
+                Explore Launch Cloud
+              </button>
+            </div>
           </section>
         </main>
       )}
