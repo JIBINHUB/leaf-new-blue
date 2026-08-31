@@ -7,7 +7,6 @@ const {
   buildStudioNotification,
   toPlainText
 } = require('./email-templates');
-const store = require('./_supabase');
 
 const MAX_BODY_BYTES = 64 * 1024;
 const allowedOrigins = new Set([
@@ -154,47 +153,6 @@ module.exports = async function handler(request, response) {
 
     const requestId = crypto.randomUUID();
     const shortId = requestId.split('-')[0].toUpperCase();
-    /* Save the lead before attempting delivery. If Resend is down, the studio
-       still has the enquiry in the dashboard rather than losing it. */
-    const enquiryRows = await store.insert('enquiries', [{
-      form_type: payload.formType,
-      name: payload.name,
-      email: payload.email,
-      phone: payload.phone,
-      company: payload.company,
-      requested_service: payload.requestedService,
-      project_brief: payload.projectBrief,
-      selected_services: payload.selectedServices,
-      appointment_details: payload.appointmentDetails,
-      selected_references: payload.selectedReferences,
-      source: payload.source
-    }]);
-    const enquiryId = enquiryRows?.[0]?.id || null;
-
-    /* A matching order gives the customer something to track. Linked to their
-       account when the email matches one; otherwise it waits unattached and is
-       still visible to the studio. */
-    const userId = await store.findUserIdByEmail(payload.email);
-    const orderRows = await store.insert('orders', [{
-      reference: shortId,
-      user_id: userId,
-      contact_name: payload.name,
-      contact_email: payload.email,
-      contact_phone: payload.phone,
-      company: payload.company,
-      project_brief: payload.projectBrief,
-      status: 'received'
-    }]);
-    const orderId = orderRows?.[0]?.id || null;
-
-    if (orderId && Array.isArray(payload.selectedServices) && payload.selectedServices.length) {
-      await store.insert('order_items', payload.selectedServices.map((service) => ({
-        order_id: orderId,
-        product_id: typeof service === 'string' ? service : service?.id || null,
-        title: typeof service === 'string' ? service : service?.title || service?.name || 'Service'
-      })));
-    }
-
     const from = process.env.RESEND_FROM_EMAIL || 'Leaf Creationism <hello@leafcreationism.in>';
     const studioInbox = process.env.LEAF_INBOX_EMAIL || 'leafcreationism@gmail.com';
     const publicLogoUrl = process.env.LEAF_EMAIL_LOGO_URL || 'https://leafcreationism.in/assets/email/leaf-gradient-logo-email.png';
@@ -249,23 +207,9 @@ module.exports = async function handler(request, response) {
         requestId,
         studio: studioResult.error.message
       });
-      if (enquiryId) {
-        await store.update('enquiries', enquiryId, {
-          email_sent: false,
-          email_error: studioResult.error.message
-        });
-      }
-      // The lead is saved, so report success to the visitor rather than asking
-      // them to submit again. The dashboard flags it as an email failure.
-      if (enquiryId) {
-        sendJson(response, 200, { success: true, requestId: shortId, confirmationSent: false });
-      } else {
-        sendJson(response, 502, { success: false, message: 'Unable to deliver the enquiry right now' });
-      }
+      sendJson(response, 502, { success: false, message: 'Unable to deliver the enquiry right now' });
       return;
     }
-
-    if (enquiryId) await store.update('enquiries', enquiryId, { email_sent: true });
 
     let confirmationSent = false;
     const usingResendTestSender = /onboarding@resend\.dev/i.test(from);

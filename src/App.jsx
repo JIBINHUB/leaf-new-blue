@@ -18,17 +18,10 @@ import {
 } from './TrackyBits';
 import TextLoop from './TextLoop';
 import Stepper, { Step } from './Stepper';
-import AccountPanel from './AccountPanel';
-import OwnerDashboard from './OwnerDashboard';
-import { AuthProvider, useAuth } from './lib/useAuth';
-import { useServerCart } from './lib/useServerCart';
-import { supabase } from './lib/supabase';
 import DriftWall from './DriftWall';
 import { 
   Mail, 
   Home, 
-  UserRound,
-  LayoutDashboard,
   Calendar, 
   FolderOpen, 
   Briefcase,
@@ -509,7 +502,7 @@ CylinderCarousel.displayName = 'CylinderCarousel';
  * which is exactly what the browser computes for the 3D version. Same ring,
  * same motion, no 3D context.
  */
-const ProjectedCylinder = ({ images, ariaLabel, cardWidth = 104, gap = 6 }) => {
+const ProjectedCylinder = ({ images, ariaLabel, cardWidth = 124, gap = 8 }) => {
   const stageRef = useRef(null);
   const cardsRef = useRef([]);
 
@@ -606,7 +599,15 @@ const ProjectedCylinder = ({ images, ariaLabel, cardWidth = 104, gap = 6 }) => {
             loading="lazy"
             decoding="async"
             draggable="false"
-            style={{ width: `${cardWidth}px` }}
+            /* Height comes from the 7/10 aspect ratio, so the centring offset
+               is derived from the width rather than hardcoded in CSS — a fixed
+               margin there did not match the real height and pushed the whole
+               ring upward, leaving dead space below it. */
+            style={{
+              width: `${cardWidth}px`,
+              marginTop: `${-(cardWidth * (10 / 7)) / 2}px`,
+              marginLeft: `${-cardWidth / 2}px`
+            }}
           />
         ))}
       </div>
@@ -982,35 +983,6 @@ const App = () => {
     window.setTimeout(() => window.scrollTo(0, 0), 0);
   };
 
-  /* ---- Accounts, saved carts, and the owner dashboard ------------------ */
-
-  const { user, isOwner } = useAuth();
-  const [showAccount, setShowAccount] = useState(false);
-  const [showDashboard, setShowDashboard] = useState(false);
-  const [catalog, setCatalog] = useState([]);
-
-  // Live pricing from Supabase, so the store reflects dashboard edits without
-  // a redeploy. If the fetch fails the hardcoded servicePricing below still
-  // renders, so the store is never empty.
-  useEffect(() => {
-    let active = true;
-    supabase
-      .from('products')
-      .select('*')
-      .eq('is_active', true)
-      .order('sort_order')
-      .then(({ data }) => {
-        if (active && data) setCatalog(data);
-      });
-    return () => { active = false; };
-  }, []);
-
-  useServerCart({ user, selectedIds: completedSteps, setSelectedIds: setCompletedSteps, catalog });
-
-  // Entrance animations for the home page sections.
-  useSectionReveals(activeNav === 'home');
-  useParallax(activeNav === 'home');
-
   const solutionsList = [
     { id: 'uiux', title: 'UI/UX Design', desc: 'User-centric interfaces', icon: PenTool },
     { id: 'web', title: 'Websites & Apps', desc: 'Scalable digital platforms', icon: MonitorSmartphone },
@@ -1033,20 +1005,7 @@ const App = () => {
     { id: 'workspace', label: 'Service Store', icon: Store, hasNotification: true },
     { id: 'launch', label: 'Launch Cloud', icon: Server },
     { id: 'portfolio', label: 'Portfolio', icon: Briefcase },
-    // Panels, not routes — handleDockNavigate intercepts these two ids.
-    { id: 'account', label: user ? 'Account' : 'Sign in', icon: UserRound },
-    ...(isOwner ? [{ id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard }] : []),
   ];
-
-  /* The dock mixes real pages with two overlay actions. Intercepting here keeps
-     DockNavigation generic and stops 'account' being pushed into history as a
-     route that does not exist. */
-  const handleDockNavigate = (id) => {
-    if (id === 'account') { setShowAccount(true); return; }
-    if (id === 'dashboard') { setShowDashboard(true); return; }
-    navigateTo(id);
-  };
-  const activeNavIndex = Math.max(0, navItems.findIndex((item) => item.id === activeNav));
 
   const serviceCategories = [
     { 
@@ -1163,7 +1122,7 @@ const App = () => {
      Every card says "Starting from" and the checkout still ends in a
      written quote, but change these to your real numbers.
      ------------------------------------------------------------------ */
-  const servicePricingDefaults = {
+  const servicePricing = {
     uiux: {
       from: 25000, weeks: '2-3 weeks', group: 'Design',
       includes: ['User research & flows', 'Wireframes & prototypes', 'Full UI design system']
@@ -1197,21 +1156,6 @@ const App = () => {
       includes: ['Custom theme build', 'Checkout optimisation', 'Payment gateway setup']
     }
   };
-
-  /* Live catalog wins over the hardcoded defaults above, so editing a price in
-     the studio dashboard changes the store immediately. The defaults stay as a
-     fallback for the first paint and for any product row that fails to load. */
-  const servicePricing = catalog.reduce((merged, product) => {
-    merged[product.id] = {
-      ...(merged[product.id] || {}),
-      from: product.price_from ?? merged[product.id]?.from,
-      weeks: product.delivery_time || merged[product.id]?.weeks,
-      badge: product.badge || merged[product.id]?.badge,
-      group: merged[product.id]?.group || product.category,
-      includes: product.includes?.length ? product.includes : merged[product.id]?.includes
-    };
-    return merged;
-  }, { ...servicePricingDefaults });
 
   const formatInr = (value) =>
     typeof value === 'number' ? `₹${value.toLocaleString('en-IN')}` : 'On request';
@@ -5088,15 +5032,9 @@ const App = () => {
 
       {/* Floating Bottom Navigation */}
       <div className="leaf-dock-shell fixed bottom-3 sm:bottom-6 left-1/2 transform -translate-x-1/2 z-40 max-w-[calc(100vw-1.5rem)] pb-[env(safe-area-inset-bottom)]">
-        <DockNavigation items={navItems} activeId={activeNav} onNavigate={handleDockNavigate} />
+        <DockNavigation items={navItems} activeId={activeNav} onNavigate={navigateTo} />
       </div>
 
-      <AccountPanel
-        open={showAccount}
-        onClose={() => setShowAccount(false)}
-        onOpenDashboard={() => { setShowAccount(false); setShowDashboard(true); }}
-      />
-      <OwnerDashboard open={showDashboard} onClose={() => setShowDashboard(false)} />
 
       {/* Full Screen Service Details Modal - Liquid Glass UI */}
       {showServiceModal && (
@@ -5254,8 +5192,6 @@ const App = () => {
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <App />
   </React.StrictMode>
 );

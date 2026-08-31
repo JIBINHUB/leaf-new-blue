@@ -190,7 +190,7 @@
 
 .adv-ring {
   position: absolute;
-  inset: 15.4rem 0 5rem;
+  inset: 14.2rem 0 4.2rem;
   z-index: 16;
   display: flex;
   align-items: center;
@@ -214,8 +214,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-top: -7.4rem;
-  margin-left: -3.25rem;
+  /* margin-top / margin-left are set inline by the component, derived from the
+     card width, so the ring stays centred whatever size the cards are. */
   aspect-ratio: 7 / 10;
   object-fit: cover;
   border-radius: 0.85rem;
