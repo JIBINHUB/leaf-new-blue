@@ -12,6 +12,10 @@ import './MobilePerf.css';
 // Home page editorial system — must follow MobilePerf so its flat paper
 // surfaces win over the shared glass treatments.
 import './HomeEditorial.css';
+import './HomeArt.css';
+import {
+  PaperStudioScene, PaperIdeaScene, SpinBadge, MarqueeStrip, useSectionReveals
+} from './HomeArt';
 import Stepper, { Step } from './Stepper';
 import AccountPanel from './AccountPanel';
 import OwnerDashboard from './OwnerDashboard';
@@ -876,6 +880,9 @@ const App = () => {
   }, []);
 
   useServerCart({ user, selectedIds: completedSteps, setSelectedIds: setCompletedSteps, catalog });
+
+  // Entrance animations for the home page sections.
+  useSectionReveals(activeNav === 'home');
 
   const solutionsList = [
     { id: 'uiux', title: 'UI/UX Design', desc: 'User-centric interfaces', icon: PenTool },
@@ -2605,9 +2612,10 @@ const App = () => {
               </div>
 
               {/* Welcome Text */}
-              {/* Editorial display block. Type carries the whole hero — the
-                  headline is the image, in the MindMarket sense. */}
-              <div className="home-welcome-copy edi-hero">
+              {/* Editorial display block. Type leads; the paper-cut scene
+                  sits alongside it rather than behind it. */}
+              <div className="home-welcome-copy edi-hero edi-hero-split">
+                <div className="edi-hero-text">
                 <p className="edi-eyebrow">
                   <span className="edi-dot" aria-hidden="true" />
                   Creative studio · Kerala, India
@@ -2633,6 +2641,14 @@ const App = () => {
                   </button>
                 </div>
 
+                </div>
+
+                <div className="edi-hero-art">
+                  <PaperStudioScene />
+                  <SpinBadge />
+                </div>
+
+                {/* Spans both columns so the three figures stay on one row. */}
                 <dl className="edi-proof">
                   <div><dt>8</dt><dd>services under one roof</dd></div>
                   <div><dt>10</dt><dd>cities served across Kerala</dd></div>
@@ -2653,6 +2669,15 @@ const App = () => {
             </div>
 
           </div>
+
+          {/* Scrolling word strip — the services, said plainly and in motion. */}
+          <MarqueeStrip
+            tone="grass"
+            words={[
+              'UI/UX Design', 'Web Development', 'AI Ads', 'Branding',
+              'Mobile Apps', 'Advertising', 'No-Code Builds', 'Shopify Stores'
+            ]}
+          />
 
           {/* SECTION 2: Separated "About" Section (No longer touching top components) */}
           <div className="home-about-section w-full relative group/about z-10">
@@ -3123,6 +3148,7 @@ const App = () => {
           </section>
           {/* Closing accent band — the warm sign-off that ends the page. */}
           <section className="edi-band" aria-label="Start a project with Leaf Creationism">
+            <div className="edi-band-art"><PaperIdeaScene /></div>
             <h2>Let's make something worth looking at.</h2>
             <p>
               Tell us what you are building. We will come back with a written quote,
