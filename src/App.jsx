@@ -9,6 +9,9 @@ import './DarkMode.css';
 // Last import wins the cascade — this strips backdrop blur and ambient
 // animation on phones, where they are the main cause of scroll jank.
 import './MobilePerf.css';
+// Home page editorial system — must follow MobilePerf so its flat paper
+// surfaces win over the shared glass treatments.
+import './HomeEditorial.css';
 import Stepper, { Step } from './Stepper';
 import AccountPanel from './AccountPanel';
 import OwnerDashboard from './OwnerDashboard';
@@ -2445,7 +2448,12 @@ const App = () => {
     .slice(0, 10)
     .map((item) => ({ src: toThumb(item.src), alt: item.label }));
   return (
-    <div className="app-shell min-h-screen bg-[#FDFDFD] text-gray-800 font-sans relative overflow-hidden selection:bg-[#2050E3] selection:text-white">
+    <div
+      className="app-shell min-h-screen bg-[#FDFDFD] text-gray-800 font-sans relative overflow-hidden selection:bg-[#2050E3] selection:text-white"
+      /* Drives the editorial cream canvas, scoped so only the home page
+         adopts it and every other route keeps its existing surface. */
+      data-route={activeNav}
+    >
       {showLoader && (
         <div className={`leaf-loader-screen leaf-orb-loader-screen ${isLoaderExiting ? 'is-exiting' : ''}`} data-loader-version="leaf-gradient-orb-v1" role="status" aria-live="polite" aria-label="Leaf Creationism loading">
           <div className="leaf-orb-loader-wrapper">
@@ -2597,31 +2605,39 @@ const App = () => {
               </div>
 
               {/* Welcome Text */}
-              <div className="home-welcome-copy">
-                <h1 className="font-sans text-gray-900 text-[38px] sm:text-4xl md:text-5xl lg:text-[54px] leading-[1.05] font-light tracking-tight mb-3 sm:mb-4">
-                  Design, build, and grow your <span className="font-medium">next digital product.</span>
-                </h1>
-                <p className="font-sans text-slate-600 font-light text-base sm:text-lg leading-relaxed mb-5 sm:mb-6">
-                  UI/UX, websites, mobile apps, AI ads, branding, and motion — one focused creative team from idea to launch.
+              {/* Editorial display block. Type carries the whole hero — the
+                  headline is the image, in the MindMarket sense. */}
+              <div className="home-welcome-copy edi-hero">
+                <p className="edi-eyebrow">
+                  <span className="edi-dot" aria-hidden="true" />
+                  Creative studio · Kerala, India
                 </p>
-                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('portfolio')}
-                    className="group font-sans inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-gray-900 text-white rounded-full px-7 py-3 text-sm font-medium transition-colors duration-200 hover:bg-[#2050E3]"
-                  >
+
+                <h1 className="edi-display">
+                  Design, build, and grow your <em>next digital product.</em>
+                </h1>
+
+                <p className="edi-lede">
+                  UI/UX, websites, mobile apps, AI ads, branding, and motion — one focused
+                  creative team from idea to launch.
+                </p>
+
+                <div className="edi-actions">
+                  <button type="button" onClick={() => navigateTo('portfolio')} className="edi-btn edi-btn-ink">
                     See our work
-                    <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+                    <span className="edi-btn-dot" aria-hidden="true" />
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => navigateTo('workspace')}
-                    className="group font-sans inline-flex items-center justify-center gap-2 w-full sm:w-auto border border-gray-900/25 text-gray-900 rounded-full px-7 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-900/[0.06] hover:border-gray-900/40"
-                  >
+                  <button type="button" onClick={() => navigateTo('workspace')} className="edi-btn edi-btn-ghost">
                     Book a call
-                    <ArrowUpRight size={15} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <span className="edi-btn-dot is-blue" aria-hidden="true" />
                   </button>
                 </div>
+
+                <dl className="edi-proof">
+                  <div><dt>8</dt><dd>services under one roof</dd></div>
+                  <div><dt>10</dt><dd>cities served across Kerala</dd></div>
+                  <div><dt>1</dt><dd>team, idea to launch</dd></div>
+                </dl>
               </div>
 
               {/* Elastic Service Stack */}
@@ -3104,6 +3120,18 @@ const App = () => {
                 <span>{indiaTimeLabel} IST</span>
               </div>
             </div>
+          </section>
+          {/* Closing accent band — the warm sign-off that ends the page. */}
+          <section className="edi-band" aria-label="Start a project with Leaf Creationism">
+            <h2>Let's make something worth looking at.</h2>
+            <p>
+              Tell us what you are building. We will come back with a written quote,
+              a timeline, and the team who would actually do the work.
+            </p>
+            <button type="button" className="edi-btn" onClick={() => navigateTo('workspace')}>
+              Start a project
+              <span className="edi-btn-dot" aria-hidden="true" />
+            </button>
           </section>
         </main>
       )}
