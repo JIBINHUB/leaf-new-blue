@@ -71,126 +71,215 @@ export function Reveal({ children, delay = 0, className = '' }) {
 }
 
 /* --------------------------------------------------------------------------
+   Figure construction.
+
+   Limbs are filled capsules (rounded rects, rotated about the shoulder or
+   hip) rather than bare strokes — that one change is what separates a
+   stick figure from a paper-cut character. Every figure gets hands, shoes
+   and a hair shape, and the same outline weight as everything else.
+   -------------------------------------------------------------------------- */
+
+/** A rounded limb, rotated about its top end. */
+function Limb({ x, y, w = 34, h = 104, angle = 0, fill }) {
+  return (
+    <rect
+      x={x} y={y} width={w} height={h} rx={w / 2}
+      fill={fill}
+      transform={`rotate(${angle} ${x + w / 2} ${y + w / 2})`}
+      {...line}
+    />
+  );
+}
+
+/** Rotate a point about a pivot — used to place a hand at a limb's far end. */
+function endOf({ x, y, w = 34, h = 104, angle = 0 }) {
+  const px = x + w / 2;
+  const py = y + w / 2;
+  const dy = h - w;
+  const rad = (angle * Math.PI) / 180;
+  return {
+    cx: px - dy * Math.sin(rad),
+    cy: py + dy * Math.cos(rad)
+  };
+}
+
+function Figure({
+  cx, top, shirt, trousers = INK, shoes = 'var(--sandstone,#e0dbce)',
+  hair = INK, leftArm, rightArm, children
+}) {
+  const headR = 52;
+  const headY = top + headR;
+  const bodyY = top + headR * 2 - 12;
+  const bodyH = 146;
+  const legY = bodyY + bodyH - 6;
+  const legH = 92;
+
+  const ARM_W = 38;
+  // Arms overlap the torso edge by ~16px so they read as attached rather than
+  // as floating sticks beside the body.
+  const la = { x: cx - 84, y: bodyY + 14, w: ARM_W, h: 104, angle: 12, ...leftArm };
+  const ra = { x: cx + 46, y: bodyY + 14, w: ARM_W, h: 104, angle: -12, ...rightArm };
+  const lh = endOf(la);
+  const rh = endOf(ra);
+
+  return (
+    <g>
+      {/* legs, clearly separated */}
+      <rect x={cx - 44} y={legY} width={36} height={legH} rx={18} fill={trousers} {...line} />
+      <rect x={cx + 8} y={legY} width={36} height={legH} rx={18} fill={trousers} {...line} />
+
+      {/* shoes: a lighter fill and a gap between them, or the two legs and
+          both shoes merge into one dark block */}
+      <rect x={cx - 50} y={legY + legH - 6} width={46} height={26} rx={13} fill={shoes} {...line} />
+      <rect x={cx + 4} y={legY + legH - 6} width={46} height={26} rx={13} fill={shoes} {...line} />
+
+      {/* arms behind the torso */}
+      <Limb {...la} fill={shirt} />
+      <Limb {...ra} fill={shirt} />
+
+      {/* torso */}
+      <rect x={cx - 62} y={bodyY} width={124} height={bodyH} rx={46} fill={shirt} {...line} />
+
+      {/* hands, sized to the limb so they read as a fist, not a balloon */}
+      <circle cx={lh.cx} cy={lh.cy} r={17} fill="var(--paper,#fff)" {...line} />
+      <circle cx={rh.cx} cy={rh.cy} r={17} fill="var(--paper,#fff)" {...line} />
+
+      {/* head */}
+      <circle cx={cx} cy={headY} r={headR} fill="var(--paper,#fff)" {...line} />
+      <path d={`M${cx - 19} ${headY - 8}h2M${cx + 17} ${headY - 8}h2`} {...line} strokeWidth={S + 4} />
+      <path d={`M${cx - 18} ${headY + 18}c10 11 26 11 36 0`} fill="none" {...line} />
+      <path
+        d={`M${cx - 52} ${headY - 10}c0-34 23-56 52-56s52 22 52 56c-15-15-32-22-52-22s-37 7-52 22Z`}
+        fill={hair}
+        {...line}
+      />
+
+      {/* props are given the right hand's position so they sit in the grip */}
+      {typeof children === 'function' ? children(rh) : children}
+    </g>
+  );
+}
+
+/* --------------------------------------------------------------------------
    Hero scene — the studio at work.
-   Two characters, a screen, a plant, and loose confetti shapes that drift.
    -------------------------------------------------------------------------- */
 
 export function PaperStudioScene() {
   return (
     <svg
       className="art-scene art-scene-hero"
-      viewBox="0 0 960 520"
+      viewBox="0 0 960 560"
       role="img"
       aria-label="Illustration of the Leaf Creationism team designing and building together"
       xmlns="http://www.w3.org/2000/svg"
     >
       {/* loose confetti */}
       <g className="art-float-slow">
-        <circle cx="86" cy="92" r="21" fill="var(--sun,#f5e211)" {...line} />
-        <path d="M846 74c14-18 34-18 48 0" fill="none" {...line} />
+        <circle cx="74" cy="96" r="20" fill="var(--sun,#f5e211)" {...line} />
+        <path d="M846 84c14-18 34-18 48 0" fill="none" {...line} />
       </g>
       <g className="art-float-fast">
-        <rect x="884" y="176" width="38" height="38" rx="10" fill="var(--coral,#ff705d)" {...line} />
-        <circle cx="150" cy="392" r="13" fill="var(--sky,#2ba0ff)" {...line} />
+        <rect x="884" y="184" width="36" height="36" rx="10" fill="var(--coral,#ff705d)" {...line} />
+        <circle cx="898" cy="404" r="13" fill="var(--sky,#2ba0ff)" {...line} />
       </g>
 
-      {/* plant, left */}
+      {/* plant */}
       <g>
-        <path d="M108 470V352" fill="none" {...line} />
-        <path d="M108 386c-38-6-56-34-52-66 32-4 56 20 52 66Z" fill="var(--grass,#8ed462)" {...line} />
-        <path d="M108 410c36-10 52-40 44-70-32 0-52 26-44 70Z" fill="var(--grass,#8ed462)" {...line} />
-        <path d="M76 470h64l-8 44H84Z" fill="var(--sandstone,#e0dbce)" {...line} />
+        <path d="M96 500V392" fill="none" {...line} />
+        <path d="M96 418c-36-6-53-32-49-62 30-4 53 19 49 62Z" fill="var(--grass,#8ed462)" {...line} />
+        <path d="M96 440c34-9 49-38 41-66-30 0-49 24-41 66Z" fill="var(--grass,#8ed462)" {...line} />
+        <path d="M66 500h60l-8 40H74Z" fill="var(--sandstone,#e0dbce)" {...line} />
       </g>
 
-      {/* screen the team is working on */}
+      {/* the screen they are working on */}
       <g className="art-float-slow">
-        <rect x="352" y="126" width="272" height="188" rx="26" fill="var(--paper,#fff)" {...line} />
-        <rect x="384" y="162" width="118" height="18" rx="9" fill="var(--sky,#2ba0ff)" {...line} />
-        <rect x="384" y="200" width="180" height="14" rx="7" fill="var(--sandstone,#e0dbce)" {...line} />
-        <rect x="384" y="232" width="140" height="14" rx="7" fill="var(--sandstone,#e0dbce)" {...line} />
-        <rect x="384" y="266" width="76" height="24" rx="12" fill="var(--coral,#ff705d)" {...line} />
-        <path d="M488 314v34" fill="none" {...line} />
-        <path d="M436 348h104" fill="none" {...line} />
+        <rect x="388" y="146" width="232" height="172" rx="26" fill="var(--paper,#fff)" {...line} />
+        <rect x="416" y="180" width="104" height="18" rx="9" fill="var(--sky,#2ba0ff)" {...line} />
+        <rect x="416" y="216" width="160" height="14" rx="7" fill="var(--sandstone,#e0dbce)" {...line} />
+        <rect x="416" y="246" width="122" height="14" rx="7" fill="var(--sandstone,#e0dbce)" {...line} />
+        <rect x="416" y="276" width="72" height="22" rx="11" fill="var(--coral,#ff705d)" {...line} />
+        <path d="M504 318v36" fill="none" {...line} />
+        <path d="M456 354h96" fill="none" {...line} />
       </g>
 
-      {/* character A — seated left, gesturing at the screen */}
-      <g>
-        <path d="M232 514V424" fill="none" {...line} />
-        <path d="M286 514V424" fill="none" {...line} />
-        <path d="M212 424h94a22 22 0 0 0 22-22v-74a68 68 0 0 0-136 0v74a22 22 0 0 0 22 22Z"
-              fill="var(--coral,#ff705d)" {...line} />
-        {/* arm reaching toward the screen */}
-        <path d="M318 348l54-38" fill="none" {...line} />
-        <circle cx="259" cy="212" r="52" fill="var(--paper,#fff)" {...line} />
-        <path d="M241 206h2M277 206h2" {...line} strokeWidth={S + 3} />
-        <path d="M243 232c10 10 24 10 34 0" fill="none" {...line} />
-        {/* hair */}
-        <path d="M207 200c0-36 24-58 52-58s52 22 52 58c-16-14-34-20-52-20s-36 6-52 20Z"
-              fill={INK} {...line} />
-      </g>
+      {/* left figure, gesturing at the screen */}
+      <Figure
+        cx={250}
+        top={116}
+        shirt="var(--coral,#ff705d)"
+        rightArm={{ angle: -128, h: 108 }}
+      />
 
-      {/* character B — standing right, holding an oversized pencil */}
-      <g>
-        <path d="M700 514v-86" fill="none" {...line} />
-        <path d="M752 514v-86" fill="none" {...line} />
-        <path d="M682 428h88a20 20 0 0 0 20-20v-88a64 64 0 0 0-128 0v88a20 20 0 0 0 20 20Z"
-              fill="var(--sky,#2ba0ff)" {...line} />
-        <circle cx="726" cy="206" r="50" fill="var(--paper,#fff)" {...line} />
-        <path d="M709 200h2M743 200h2" {...line} strokeWidth={S + 3} />
-        <path d="M711 226c9 9 22 9 31 0" fill="none" {...line} />
-        <path d="M676 196c4-34 26-52 50-52s46 18 50 52c0-4-22-16-50-16s-50 12-50 16Z"
-              fill={INK} {...line} />
-        {/* pencil */}
-        <g className="art-float-fast">
-          <path d="M646 356l-62 62" fill="none" {...line} strokeWidth={S + 12} stroke="var(--sun,#f5e211)" />
-          <path d="M646 356l-62 62" fill="none" {...line} />
-          <path d="M584 418l-26 12 12-26Z" fill={INK} {...line} />
-        </g>
-        <path d="M664 344l-18 12" fill="none" {...line} />
-      </g>
+      {/* right figure, holding an oversized pencil */}
+      <Figure
+        cx={718}
+        top={124}
+        shirt="var(--sky,#2ba0ff)"
+        hair="#5a3a22"
+        rightArm={{ angle: -34, h: 100 }}
+      >
+        {(hand) => (
+          /* Drawn upright from the hand, then rotated as one group, so the
+             pencil and its tip always stay in the grip. */
+          <g transform={`rotate(-34 ${hand.cx} ${hand.cy + 13})`}>
+            <rect x={hand.cx - 13} y={hand.cy} width="26" height="104" rx="7"
+                  fill="var(--sun,#f5e211)" {...line} />
+            <path d={`M${hand.cx - 13} ${hand.cy + 104}L${hand.cx} ${hand.cy + 140}L${hand.cx + 13} ${hand.cy + 104}Z`}
+                  fill={INK} {...line} />
+          </g>
+        )}
+      </Figure>
 
       {/* ground */}
-      <path d="M40 514h880" fill="none" {...line} />
+      <path d="M40 546h880" fill="none" {...line} />
     </svg>
   );
 }
 
 /* --------------------------------------------------------------------------
-   Spot scene — a single character with an idea, used beside body copy.
+   Spot scene — a bust with an idea, used to close the page.
+   A bust rather than a full Figure, so no legs poke out of the disc.
    -------------------------------------------------------------------------- */
 
 export function PaperIdeaScene() {
+  const cx = 210;
+  const headY = 262;
+
   return (
     <svg
       className="art-scene art-scene-idea"
-      viewBox="0 0 420 460"
+      viewBox="0 0 420 470"
       role="img"
       aria-label="Illustration of a person with a bright idea"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Lightbulb sits above the disc, so it never crowds the face. */}
+      {/* lightbulb, clear of the head */}
       <g className="art-float-slow">
-        <path d="M210 26v-18M148 48l-12-13M272 48l12-13" fill="none" {...line} />
-        <circle cx="210" cy="88" r="40" fill="var(--sun,#f5e211)" {...line} />
-        <path d="M192 130h36" fill="none" {...line} />
-        <path d="M198 146h24" fill="none" {...line} />
+        <path d="M210 30v-20M146 52l-13-14M274 52l13-14" fill="none" {...line} />
+        <circle cx="210" cy="92" r="40" fill="var(--sun,#f5e211)" {...line} />
+        <path d="M192 134h36M198 150h24" fill="none" {...line} />
       </g>
 
-      {/* Disc backdrop. The figure is drawn to sit inside it rather than
-          being clipped by it — a cropped body read as a tongue before. */}
-      <circle cx="210" cy="290" r="140" fill="var(--grass,#8ed462)" {...line} />
+      {/* disc backdrop */}
+      <circle cx="210" cy="278" r="142" fill="var(--grass,#8ed462)" {...line} />
 
-      {/* Shoulders: a wide rounded cap that stops well inside the disc. */}
-      <path d="M124 412a86 86 0 0 1 172 0Z" fill="var(--coral,#ff705d)" {...line} />
+      {/* shoulders, stopping well inside the disc */}
+      <path d="M118 420a92 92 0 0 1 184 0Z" fill="var(--coral,#ff705d)" {...line} />
 
-      {/* Head */}
-      <circle cx="210" cy="268" r="62" fill="var(--paper,#fff)" {...line} />
-      <path d="M190 260h2M228 260h2" {...line} strokeWidth={S + 4} />
-      <path d="M192 292c11 12 25 12 36 0" fill="none" {...line} />
+      {/* raised hand, mid-idea */}
+      <rect x="296" y="316" width="30" height="92" rx="15"
+            fill="var(--coral,#ff705d)" transform="rotate(-38 311 331)" {...line} />
+      <circle cx="352" cy="264" r="19" fill="var(--paper,#fff)" {...line} />
 
-      {/* Hair cap */}
-      <path d="M152 258c0-40 26-64 58-64s58 24 58 64c-17-16-36-24-58-24s-41 8-58 24Z"
-            fill={INK} {...line} />
+      {/* head */}
+      <circle cx={cx} cy={headY} r="60" fill="var(--paper,#fff)" {...line} />
+      <path d={`M${cx - 21} ${headY - 8}h2M${cx + 19} ${headY - 8}h2`} {...line} strokeWidth={S + 4} />
+      <path d={`M${cx - 19} ${headY + 20}c11 12 27 12 38 0`} fill="none" {...line} />
+      <path
+        d={`M${cx - 60} ${headY - 10}c0-38 26-62 60-62s60 24 60 62c-17-17-37-25-60-25s-43 8-60 25Z`}
+        fill={INK}
+        {...line}
+      />
     </svg>
   );
 }
