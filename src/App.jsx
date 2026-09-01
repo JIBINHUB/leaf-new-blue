@@ -1734,6 +1734,41 @@ const App = () => {
      --------------------------------------------------------------------- */
   const websiteProjects = [
     {
+      name: 'Mallugrapher UK',
+      url: 'https://mallugrapheruk.com',
+      services: ['Web design', 'Development'],
+      note: 'Portfolio site for a Plymouth-based photographer.',
+      image: ''
+    },
+    {
+      name: 'NAINU Boutique',
+      url: 'https://nainuboutique.shop',
+      services: ['Web design', 'Development', 'E-commerce'],
+      note: 'Online store for an Indian clothing boutique.',
+      image: ''
+    },
+    {
+      name: 'UNIQ Floors',
+      url: 'https://jibinchacko.online',
+      services: ['Web design', 'Development'],
+      note: 'Site for a wood, LVT and laminate flooring supplier.',
+      image: ''
+    },
+    {
+      name: 'COVEO',
+      url: 'https://coveomusic.com',
+      services: ['Web design', 'Development'],
+      note: 'Site for an audio and visual project.',
+      image: ''
+    },
+    {
+      name: 'Vero Studio',
+      url: 'https://www.verostudio.com',
+      services: ['Web design', 'Development'],
+      note: 'Studio website.',
+      image: ''
+    },
+    {
       name: 'Leaf Creationism',
       url: 'https://leafcreationism.in',
       services: ['Web design', 'Development', 'SEO'],
