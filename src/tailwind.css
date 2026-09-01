@@ -1,0 +1,6 @@
+/* Tailwind's generated layers. Imported first in App.jsx so the project's own
+   stylesheets keep winning the cascade exactly as they did when Tailwind came
+   from the CDN. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

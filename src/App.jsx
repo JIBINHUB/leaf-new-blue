@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
+import './tailwind.css';
 import './styles.css';
 import './ServiceSuite.css';
 import './CoreFeatures.css';
@@ -1720,6 +1721,27 @@ const App = () => {
       icon: Activity
     }
   ];
+  /* ---------------------------------------------------------------------
+     Website work.
+
+     ADD YOUR SITES HERE. Each entry needs a name and a url; everything else
+     is optional. Drop a screenshot into /assets/portfolio/websites/ and set
+     `image` to its path — without one the card falls back to a typographic
+     panel showing the domain, so an entry never looks broken while you wait
+     for a screenshot.
+
+     Only real, live, permitted client sites belong in this list.
+     --------------------------------------------------------------------- */
+  const websiteProjects = [
+    {
+      name: 'Leaf Creationism',
+      url: 'https://leafcreationism.in',
+      services: ['Web design', 'Development', 'SEO'],
+      note: 'Our own studio site — design system, build, and search setup.',
+      image: ''
+    }
+  ];
+
   const portfolioItems = [
     {
       title: 'Nutrixa Performance Campaign',
@@ -4639,6 +4661,52 @@ const App = () => {
                 </div>
                 <p>Scroll through the archive. Every public piece is shown with client permission; private launches and internal systems stay confidential.</p>
               </section>
+
+              {websiteProjects.length > 0 && (
+                <section className="pf-web" aria-label="Website projects by Leaf Creationism">
+                  <div className="pf-web-head">
+                    <span>Websites</span>
+                    <h2>Sites we designed, built and launched.</h2>
+                  </div>
+
+                  <ul className="pf-web-grid">
+                    {websiteProjects.map((site) => {
+                      const domain = site.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+                      return (
+                        <li className="pf-web-card" key={site.url}>
+                          <a href={site.url} target="_blank" rel="noreferrer noopener">
+                            {/* Browser chrome, so the card reads as a website
+                                even before a screenshot exists. */}
+                            <span className="pf-web-chrome" aria-hidden="true">
+                              <i /><i /><i />
+                              <em>{domain}</em>
+                            </span>
+
+                            <span className="pf-web-shot">
+                              {site.image ? (
+                                <img src={site.image} alt={`${site.name} website`} loading="lazy" decoding="async" />
+                              ) : (
+                                <span className="pf-web-fallback">{domain}</span>
+                              )}
+                            </span>
+
+                            <span className="pf-web-body">
+                              <strong>{site.name}</strong>
+                              {site.note && <span className="pf-web-note">{site.note}</span>}
+                              {site.services?.length > 0 && (
+                                <span className="pf-web-tags">
+                                  {site.services.map((tag) => <em key={tag}>{tag}</em>)}
+                                </span>
+                              )}
+                              <span className="pf-web-visit">Visit site</span>
+                            </span>
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </section>
+              )}
 
               <section className="portfolio-dome-shell">
                 {/* Each segment renders 5 tiles, so 20 segments = 100 images in
