@@ -14,6 +14,7 @@ import './MobilePerf.css';
 import './HomeIgnite.css';
 import { useSectionReveals } from './HomeReveals';
 import SplitFlapText from './SplitFlapText';
+import ProfileCard from './ProfileCard';
 import Stepper, { Step } from './Stepper';
 import DriftWall from './DriftWall';
 import { 
@@ -2678,9 +2679,21 @@ const App = () => {
                 </div>
 
                 <dl className="ig-facts">
-                  <div><dt>8</dt><dd>services under one roof</dd></div>
-                  <div><dt>10</dt><dd>cities served across Kerala</dd></div>
-                  <div><dt>1</dt><dd>team, idea to launch</dd></div>
+                  <div className="ig-fact">
+                    <span className="ig-fact-index" aria-hidden="true">01</span>
+                    <dt>8</dt>
+                    <dd>services under<br />one roof</dd>
+                  </div>
+                  <div className="ig-fact">
+                    <span className="ig-fact-index" aria-hidden="true">02</span>
+                    <dt>10</dt>
+                    <dd>cities served<br />across Kerala</dd>
+                  </div>
+                  <div className="ig-fact">
+                    <span className="ig-fact-index" aria-hidden="true">03</span>
+                    <dt>1</dt>
+                    <dd>team, idea<br />to launch</dd>
+                  </div>
                 </dl>
               </div>
 
@@ -2717,6 +2730,64 @@ const App = () => {
             </div>
           </section>
 
+          {/* Process — what actually happens after an enquiry. The page went
+              from a one-line "how we work" straight to the service grid, so a
+              visitor never learned what they would be buying. Deliverables are
+              described rather than durations, since timings vary per project
+              and an invented number would be a claim we cannot stand behind. */}
+          <section className="ig-process" aria-label="How a Leaf Creationism project runs">
+            <div className="ig-process-head">
+              <span className="ig-eyebrow">How a project runs</span>
+              <h2>Five stages, and you see the work at every one.</h2>
+              <p>
+                No black box and no month of silence. Each stage ends with something
+                you can look at, comment on, and sign off before the next begins.
+              </p>
+            </div>
+
+            <ol className="ig-steps">
+              {[
+                {
+                  n: '01',
+                  title: 'Discovery',
+                  body: 'We dig into the brief, the audience, the competition and what success actually looks like for you.',
+                  out: 'Scope, goals, written quote'
+                },
+                {
+                  n: '02',
+                  title: 'Direction',
+                  body: 'Structure before decoration — sitemap, user flows and wireframes, plus the visual direction.',
+                  out: 'Wireframes, moodboard'
+                },
+                {
+                  n: '03',
+                  title: 'Design',
+                  body: 'The interface, brand system and every screen or asset, designed to a system rather than page by page.',
+                  out: 'Full design files'
+                },
+                {
+                  n: '04',
+                  title: 'Build',
+                  body: 'Development, CMS setup, integrations and the performance and SEO work that makes it rank and load.',
+                  out: 'Staging site to review'
+                },
+                {
+                  n: '05',
+                  title: 'Launch',
+                  body: 'Testing across devices, deployment, analytics, and a handover so your team can run it without us.',
+                  out: 'Live site, training'
+                }
+              ].map((step) => (
+                <li className="ig-step" key={step.n}>
+                  <span className="ig-step-n" aria-hidden="true">{step.n}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.body}</p>
+                  <span className="ig-step-out">{step.out}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+
           {/* SECTION 2: Separated "About" Section (No longer touching top components) */}
           <div className="home-about-section w-full relative group/about z-10">
             {/* Clean standalone glass container for the About Section */}
@@ -2743,17 +2814,19 @@ const App = () => {
                   </p>
                 </div>
 
-                {isMobileViewport ? (
-                  <ProjectedCylinder
-                    images={advantageCylinderImages}
-                    ariaLabel="Selected Leaf Creationism work"
-                  />
-                ) : (
-                  <CylinderCarousel
-                    images={advantageCylinderImages}
-                    aria-label="Selected Leaf Creationism work"
-                  />
-                )}
+                {/* The real 3D cylinder on every viewport, as requested.
+                    Phones get a narrower card so the ring fits the screen.
+
+                    Note: this is the transform-style: preserve-3d version that
+                    previously rendered as blank white cards on iOS. If that
+                    returns, swapping CylinderCarousel for ProjectedCylinder
+                    here restores the 2D projection, which paints everywhere. */}
+                <CylinderCarousel
+                  images={advantageCylinderImages}
+                  cardWidth={isMobileViewport ? 132 : 250}
+                  animationDuration={isMobileViewport ? 38 : 32}
+                  aria-label="Selected Leaf Creationism work"
+                />
 
                 <div className="advantage-stat-grid">
                   {[
@@ -2796,32 +2869,22 @@ const App = () => {
             </header>
 
             <div className="heads-grid">
-              {studioHeads.map((person, index) => (
-                <article className="heads-card" key={person.name} data-accent={index}>
-                  <span className="heads-index" aria-hidden="true">0{index + 1}</span>
-                  <div className="heads-photo">
-                    <img
-                      src={person.image}
-                      alt={person.alt}
-                      loading="lazy"
-                      decoding="async"
-                      draggable="false"
-                    />
-                  </div>
-                  <div className="heads-info">
-                    <h3>{person.name}</h3>
-                    <span className="heads-role">{person.role}</span>
-                    <p>{person.description}</p>
-                    <ul className="heads-tags">
-                      {(index === 0
-                        ? ['Creative systems', 'Product direction', 'Launch execution']
-                        : ['Visual direction', 'Storytelling', 'Brand experience']
-                      ).map((tag) => (
-                        <li key={tag}>{tag}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </article>
+              {studioHeads.map((person) => (
+                <ProfileCard
+                  key={person.name}
+                  className="heads-profile"
+                  avatarUrl={person.image}
+                  name={person.name}
+                  title={person.role}
+                  handle={person.name.toLowerCase().replace(/[^a-z]/g, '')}
+                  status="Leaf Creationism"
+                  contactText="Work with us"
+                  behindGlowColor="rgba(32, 80, 227, 0.5)"
+                  innerGradient="linear-gradient(145deg, #1c2740 0%, #2050e3 100%)"
+                  grainUrl=""
+                  iconUrl=""
+                  onContactClick={() => navigateTo('workspace')}
+                />
               ))}
             </div>
 
@@ -2887,6 +2950,28 @@ const App = () => {
                   Explore all services
                 </button>
               </div>
+            </div>
+          </section>
+
+          {/* Tools — a capability signal that costs nothing to verify, unlike a
+              client logo wall, which needs permission we do not have yet.
+              Named as text rather than logos: these are third-party marks, and
+              a plain wordmark list suits a type-led page anyway. */}
+          <section className="ig-tools" aria-label="Tools and platforms Leaf Creationism builds with">
+            <span className="ig-eyebrow">What we build with</span>
+            <div className="ig-tool-groups">
+              {[
+                { label: 'Design', items: ['Figma', 'Adobe Creative Cloud', 'Blender', 'After Effects'] },
+                { label: 'Build', items: ['React', 'Next.js', 'Webflow', 'Framer', 'WordPress', 'Shopify'] },
+                { label: 'Launch', items: ['Vercel', 'Netlify', 'AWS', 'Cloudflare', 'Google Cloud'] }
+              ].map((group) => (
+                <div className="ig-tool-group" key={group.label}>
+                  <h3>{group.label}</h3>
+                  <ul>
+                    {group.items.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                </div>
+              ))}
             </div>
           </section>
 

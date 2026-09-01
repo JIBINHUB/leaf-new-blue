@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 const REVEAL_TARGETS = [
   '.home-about-section',
   '.c1-svc-card',
-  '.heads-card',
+  '.pc-card-wrapper',
   '.home-faq-item',
   '.home-contact-section',
   '.ig-statement',

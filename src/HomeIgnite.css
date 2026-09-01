@@ -155,28 +155,69 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
 .ig-btn-line { background: transparent; color: var(--ig-ink); border-color: var(--ig-line); }
 .ig-btn-line:hover { border-color: var(--ig-ink); }
 
-/* Facts row under the hero, separated by a hairline rather than a card. */
+/* Facts row: numbered cells divided by hairlines, with the figure set at
+   display scale so the row reads as a statement rather than as three labels.
+   The top rule fills with the accent on hover, one cell at a time. */
 .ig-facts {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-  padding-top: 32px;
-  border-top: 1px solid var(--ig-line);
   margin: 0;
+  border-top: 1px solid var(--ig-line);
+}
+
+.ig-fact {
+  position: relative;
+  padding: 28px 24px 8px 0;
+}
+
+/* Vertical rules between cells, not around them. */
+.ig-fact + .ig-fact {
+  padding-left: 24px;
+  border-left: 1px solid var(--ig-line);
+}
+
+/* The accent rule that grows across the top on hover. */
+.ig-fact::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--ig-accent);
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ig-fact + .ig-fact::before { left: 24px; }
+
+@media (hover: hover) {
+  .ig-fact:hover::before { width: 44px; }
+}
+
+.ig-fact-index {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--ig-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--ig-soft);
 }
 
 .ig-facts dt {
   font-family: var(--ig-sans);
-  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
   color: var(--ig-ink);
 }
 
 .ig-facts dd {
-  margin: 6px 0 0;
+  margin: 12px 0 0;
+  font-family: var(--ig-sans);
   font-size: 14px;
+  font-weight: 300;
   line-height: 1.5;
   color: var(--ig-muted);
 }
@@ -332,75 +373,19 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   gap: 24px;
 }
 
-.app-shell[data-route='home'] .heads-card {
-  transform: none !important;
-  padding: 24px !important;
-  border-radius: var(--ig-r-card) !important;
-  background: var(--ig-alt) !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  color: var(--ig-ink) !important;
-  overflow: visible !important;
-}
 
-.app-shell[data-route='home'] .heads-card h3 {
-  font-family: var(--ig-sans) !important;
-  font-size: 18px !important;
-  font-weight: 500 !important;
-  letter-spacing: -0.01em !important;
-  text-transform: none !important;
-  color: var(--ig-ink) !important;
-}
 
-.app-shell[data-route='home'] .heads-card p {
-  font-family: var(--ig-sans) !important;
-  font-size: 14px !important;
-  font-weight: 300 !important;
-  line-height: 1.6 !important;
-  color: var(--ig-muted) !important;
-}
 
-.app-shell[data-route='home'] .heads-index {
-  position: static !important;
-  padding: 0 !important;
-  background: none !important;
-  transform: none !important;
-  font-family: var(--ig-sans) !important;
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.16em !important;
-  color: var(--ig-soft) !important;
-  -webkit-text-fill-color: var(--ig-soft) !important;
-}
 
-.app-shell[data-route='home'] .heads-photo {
-  border-radius: 12px !important;
-  border: 0 !important;
-  overflow: hidden;
-}
 
-.app-shell[data-route='home'] .heads-role {
-  font-family: var(--ig-sans) !important;
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  letter-spacing: 0 !important;
-  text-transform: none !important;
-  color: var(--ig-accent) !important;
-  -webkit-text-fill-color: var(--ig-accent) !important;
-}
 
-.app-shell[data-route='home'] .heads-tags li {
-  padding: 5px 11px !important;
-  border-radius: 999px !important;
-  background: var(--ig-paper) !important;
-  border: 1px solid var(--ig-line) !important;
-  box-shadow: none !important;
-  font-family: var(--ig-sans);
-  font-size: 12px !important;
-  font-weight: 400 !important;
-  color: var(--ig-muted) !important;
-  -webkit-text-fill-color: var(--ig-muted) !important;
-}
+
+
+
+
+
+
+
 
 .app-shell[data-route='home'] .heads-foot button {
   border-radius: var(--ig-r-btn) !important;
@@ -532,8 +517,13 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   .app-shell[data-route='home'] .home-screen { gap: 72px; }
   .ig-band { padding: 64px 20px; }
   .ig-actions .ig-btn { flex: 1 1 auto; justify-content: center; }
-  .ig-facts { gap: 16px; padding-top: 24px; }
-  .ig-facts dd { font-size: 12.5px; }
+  /* Three columns stay, but the padding and figure size come down so the
+     numerals do not crowd their dividers on a narrow screen. */
+  .ig-fact { padding: 20px 10px 4px 0; }
+  .ig-fact + .ig-fact { padding-left: 12px; }
+  .ig-fact + .ig-fact::before { left: 12px; }
+  .ig-fact-index { font-size: 10px; margin-bottom: 6px; }
+  .ig-facts dd { margin-top: 8px; font-size: 12px; }
   .app-shell[data-route='home'] .access-color-form { padding: 24px 20px !important; }
 
   .app-shell[data-route='home'] .c1-svc-grid {
@@ -602,4 +592,197 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
 
 html[data-theme='dark'] .ig-board .split-flap-text {
   --split-flap-tile-color: #2a2d34;
+}
+
+/* --- Studio head cards --------------------------------------------------- */
+
+/* Two tilt cards side by side. The grid caps each column so the cards keep
+   their portrait proportion instead of stretching on a wide screen. */
+.app-shell[data-route='home'] .heads-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 340px));
+  justify-content: center;
+  gap: 32px;
+}
+
+.app-shell[data-route='home'] .heads-swipe-hint { display: none; }
+
+@media (max-width: 760px) {
+  .app-shell[data-route='home'] .heads-grid {
+    grid-template-columns: minmax(0, 320px);
+    gap: 24px;
+  }
+}
+
+/* --- Process ------------------------------------------------------------- */
+
+.ig-process-head { max-width: 46rem; margin-bottom: 48px; }
+
+.ig-process-head h2 {
+  margin: 0 0 16px;
+  font-family: var(--ig-sans);
+  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: var(--ig-ink);
+}
+
+.ig-process-head p {
+  margin: 0;
+  max-width: 44ch;
+  font-family: var(--ig-sans);
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--ig-muted);
+}
+
+/* Five columns divided by hairlines, so the stages read as a sequence rather
+   than as five separate cards. */
+.ig-steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--ig-line);
+}
+
+.ig-step {
+  position: relative;
+  padding: 28px 20px 0 0;
+}
+
+.ig-step + .ig-step {
+  padding-left: 20px;
+  border-left: 1px solid var(--ig-line);
+}
+
+/* Accent rule grows across the top on hover, matching the facts row. */
+.ig-step::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--ig-accent);
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ig-step + .ig-step::before { left: 20px; }
+
+@media (hover: hover) {
+  .ig-step:hover::before { width: 40px; }
+}
+
+.ig-step-n {
+  display: block;
+  margin-bottom: 14px;
+  font-family: var(--ig-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--ig-soft);
+}
+
+.ig-step h3 {
+  margin: 0 0 10px;
+  font-family: var(--ig-sans);
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ig-ink);
+}
+
+.ig-step p {
+  margin: 0 0 16px;
+  font-family: var(--ig-sans);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--ig-muted);
+}
+
+/* The deliverable is the reassuring part, so it is set apart from the prose. */
+.ig-step-out {
+  display: inline-block;
+  padding-top: 12px;
+  border-top: 1px solid var(--ig-line);
+  font-family: var(--ig-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ig-ink);
+}
+
+/* --- Tools --------------------------------------------------------------- */
+
+.ig-tools {
+  padding-top: 48px;
+  border-top: 1px solid var(--ig-line);
+}
+
+.ig-tool-groups {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+  margin-top: 28px;
+}
+
+.ig-tool-group h3 {
+  margin: 0 0 14px;
+  font-family: var(--ig-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ig-ink);
+}
+
+.ig-tool-group ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ig-tool-group li {
+  padding: 7px 14px;
+  border: 1px solid var(--ig-line);
+  border-radius: 999px;
+  font-family: var(--ig-sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ig-muted);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+@media (hover: hover) {
+  .ig-tool-group li:hover { border-color: var(--ig-ink); color: var(--ig-ink); }
+}
+
+/* --- Mobile -------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  /* Five columns on a phone leaves each step about 60px wide. Two up, with
+     the hairlines rebuilt so rows divide as well as columns. */
+  .ig-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .ig-step { padding: 20px 14px 20px 0; }
+  .ig-step + .ig-step { padding-left: 0; border-left: 0; }
+  .ig-step:nth-child(even) { padding-left: 18px; border-left: 1px solid var(--ig-line); }
+  .ig-step:nth-child(n+3) { border-top: 1px solid var(--ig-line); }
+  .ig-step::before { display: none; }
+
+  .ig-tool-groups { grid-template-columns: 1fr; gap: 28px; }
+  .ig-process-head { margin-bottom: 32px; }
+}
+
+@media (max-width: 480px) {
+  .ig-steps { grid-template-columns: 1fr; }
+  .ig-step:nth-child(even) { padding-left: 0; border-left: 0; }
+  .ig-step + .ig-step { border-top: 1px solid var(--ig-line); }
 }
