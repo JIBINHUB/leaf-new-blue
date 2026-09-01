@@ -586,3 +586,20 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   .ig-statement { grid-template-columns: 1fr; gap: 24px; padding-top: 32px; }
   .ig-statement h2 { max-width: none; }
 }
+
+/* --- Services board ------------------------------------------------------ */
+
+.ig-board { margin: 0 0 36px; }
+
+.ig-board .ig-eyebrow { margin-bottom: 12px; }
+
+/* The component takes fontSize as a prop, but a single number cannot be
+   responsive — overriding the custom property lets the board grow on wider
+   screens without the tiles wrapping on a phone. */
+@media (min-width: 768px) {
+  .ig-board .split-flap-text { --split-flap-font-size: 34px; }
+}
+
+html[data-theme='dark'] .ig-board .split-flap-text {
+  --split-flap-tile-color: #2a2d34;
+}

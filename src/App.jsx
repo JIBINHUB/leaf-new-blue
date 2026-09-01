@@ -13,6 +13,7 @@ import './MobilePerf.css';
 // surfaces win over the shared glass treatments.
 import './HomeIgnite.css';
 import { useSectionReveals } from './HomeReveals';
+import SplitFlapText from './SplitFlapText';
 import Stepper, { Step } from './Stepper';
 import DriftWall from './DriftWall';
 import { 
@@ -2647,6 +2648,25 @@ const App = () => {
                   UI/UX, web and mobile development, branding, AI advertising and motion —
                   delivered by one focused team, from first sketch to launch day.
                 </p>
+
+                {/* Services on a departure board: the page's one moving
+                    element, and it puts the studio's range above the fold
+                    instead of leaving it to the grid further down. */}
+                <div className="ig-board">
+                  <span className="ig-eyebrow">What we do</span>
+                  <SplitFlapText
+                    words={['UI/UX', 'WEBSITES', 'MOBILE APPS', 'AI ADS', 'BRANDING', 'MOTION']}
+                    padTo={11}
+                    charset="alpha"
+                    tileColor="#14161a"
+                    textColor="#ffffff"
+                    tileRadius={6}
+                    gap={4}
+                    fontSize={26}
+                    flipsPerChar={6}
+                    cycleDelay={2200}
+                  />
+                </div>
 
                 <div className="ig-actions">
                   <button type="button" className="ig-btn ig-btn-solid" onClick={() => navigateTo('workspace')}>

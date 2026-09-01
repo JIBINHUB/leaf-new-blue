@@ -1,0 +1,125 @@
+/* Styles for the SplitFlapText component.
+
+   The component ships without its stylesheet, so this supplies the classes it
+   references and the custom properties it sets.
+
+   How the flip is built: each tile is split into a fixed top and bottom half,
+   both clipping the same full-height glyph at different offsets. During a flip
+   two extra "flap" elements are rendered — the front falls away from the top
+   half on its bottom edge, and the back rises into the bottom half on its top
+   edge, half a beat later. Each flap is a single rotateX; there is no
+   transform-style: preserve-3d stack, so this paints reliably on iOS. */
+
+.split-flap-text {
+  --split-flap-tile-w: 0.84em;
+  --split-flap-tile-h: 1.32em;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--split-flap-gap, 6px);
+  font-size: var(--split-flap-font-size, 52px);
+  font-family: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1;
+  user-select: none;
+}
+
+.split-flap-text__tile {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: var(--split-flap-tile-w);
+  height: var(--split-flap-tile-h);
+  border-radius: var(--split-flap-radius, 8px);
+  background: var(--split-flap-tile-color, #111827);
+  color: var(--split-flap-text-color, #f8fafc);
+  overflow: hidden;
+  /* Gives the flaps somewhere to rotate into. */
+  perspective: 240px;
+}
+
+/* The hairline where the two halves meet — without it the tile reads as a
+   plain box rather than a split flap. */
+.split-flap-text__tile::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.34);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.split-flap-text__half,
+.split-flap-text__flap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  background: var(--split-flap-tile-color, #111827);
+  backface-visibility: hidden;
+}
+
+.split-flap-text__half--top    { top: 0; }
+.split-flap-text__half--bottom { bottom: 0; }
+
+/* Both halves hold a full-height glyph; the bottom one is pulled up by half a
+   tile so its lower portion shows through the clip. */
+.split-flap-text__char {
+  display: block;
+  height: var(--split-flap-tile-h);
+  line-height: var(--split-flap-tile-h);
+  text-align: center;
+  white-space: pre;
+}
+
+.split-flap-text__half--bottom .split-flap-text__char,
+.split-flap-text__flap--back .split-flap-text__char {
+  margin-top: calc(var(--split-flap-tile-h) / -2);
+}
+
+/* --- The moving flaps ---------------------------------------------------- */
+
+.split-flap-text__flap {
+  z-index: 3;
+  animation-duration: var(--split-flap-flip-duration, 0.12s);
+  animation-timing-function: ease-in;
+  animation-fill-mode: both;
+}
+
+/* Falls forward off the top half. */
+.split-flap-text__flap--front {
+  top: 0;
+  transform-origin: center bottom;
+  animation-name: split-flap-fall;
+}
+
+/* Rises into the bottom half, once the front has cleared. */
+.split-flap-text__flap--back {
+  bottom: 0;
+  transform-origin: center top;
+  animation-name: split-flap-rise;
+  animation-timing-function: ease-out;
+  animation-delay: var(--split-flap-flip-duration, 0.12s);
+}
+
+@keyframes split-flap-fall {
+  from { transform: rotateX(0deg); }
+  to   { transform: rotateX(-90deg); }
+}
+
+@keyframes split-flap-rise {
+  from { transform: rotateX(90deg); }
+  to   { transform: rotateX(0deg); }
+}
+
+/* The component already settles instantly under reduced motion; this makes
+   sure no flap that is mid-render keeps animating. */
+@media (prefers-reduced-motion: reduce) {
+  .split-flap-text__flap { animation: none; }
+}
