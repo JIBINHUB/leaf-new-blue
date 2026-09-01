@@ -3,6 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      /* Runs before <body> parses, so the static SEO layer is hidden before it
+         can ever paint. A visitor with JS sees the React page and nothing else;
+         a crawler or browser without JS still gets the full static content,
+         which is the same content React renders. Nothing is served to one
+         audience and withheld from the other — only the render path differs. */
+      document.documentElement.className += ' js';
+    </script>
     <!--@SEO_HEAD-->
     <link rel="preconnect" href="https://ik.imagekit.io" crossorigin />
     <link rel="dns-prefetch" href="https://ik.imagekit.io" />
@@ -16,7 +24,12 @@
       html, body, #root { min-height: 100%; background: #050505; }
       body { margin: 0; }
       /* Static SEO layer: real content for crawlers and no-JS visitors.
-         React replaces it on mount, so it must stay lightweight and legible. */
+         React replaces it on mount, so it must stay lightweight and legible.
+
+         With JS on it is hidden immediately — it used to flash as a wall of
+         raw SEO copy before React mounted. */
+      html.js .seo-static { display: none; }
+
       .seo-static {
         max-width: 60rem;
         margin: 0 auto;

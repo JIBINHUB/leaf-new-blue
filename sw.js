@@ -15,7 +15,10 @@
  * images come from Vercel or from Firebase Cloud Storage.
  */
 
-const VERSION = 'leaf-v1';
+/* Bumped so the previous shell — which still contained the intro loader and
+   the Tailwind CDN — is evicted rather than served from cache to returning
+   visitors. */
+const VERSION = 'leaf-v2';
 const SHELL_CACHE = `${VERSION}-shell`;
 const ASSET_CACHE = `${VERSION}-assets`;
 
