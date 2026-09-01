@@ -4752,13 +4752,21 @@ const App = () => {
                 {/* Columns drifting at different speeds, replacing the dome.
                     Fewer, narrower columns on a phone, or the tiles end up
                     too small to make out. */}
+                {/* Tile count is what makes this heavy, not the animation
+                    itself. The component fills its container by repeating each
+                    column, so the total is roughly
+                    columns x (containerHeight / tileHeight + itemsPerColumn).
+                    On a phone that produced 94 animating images inside a 3D
+                    plane. Two columns and a short slice of the archive brings
+                    it to a fraction of that; the wall still reads as endless
+                    because every column repeats. */}
                 <DriftWall
-                  items={driftWallItems}
-                  columns={isMobileViewport ? 3 : 5}
-                  tileWidth={isMobileViewport ? 130 : 210}
-                  tileHeight={isMobileViewport ? 92 : 140}
+                  items={isMobileViewport ? driftWallItems.slice(0, 8) : driftWallItems}
+                  columns={isMobileViewport ? 2 : 5}
+                  tileWidth={isMobileViewport ? 132 : 210}
+                  tileHeight={isMobileViewport ? 112 : 140}
                   gap={isMobileViewport ? 12 : 18}
-                  speed={isMobileViewport ? 30 : 42}
+                  speed={isMobileViewport ? 26 : 42}
                   parallax={isMobileViewport ? 0 : 0.6}
                   overlayColor="#05070c"
                   dim={0.42}

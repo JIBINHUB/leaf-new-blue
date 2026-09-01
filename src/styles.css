@@ -29128,3 +29128,28 @@
   font-weight: 600;
   color: #8db4ff;
 }
+
+/* The wall repeats its columns to fill whatever height it is given, so a tall
+   container directly multiplies the number of animating tiles. Capping the
+   height on phones is the cheapest way to cut that count. */
+@media (max-width: 767px) {
+  .portfolio-dome-shell { height: 26rem; min-height: 0; }
+
+  /* Two up rather than one. 17rem needs 272px, so only a single column fitted
+     a 375px screen — which is why the sites listed one by one. */
+  .pf-web-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  .pf-web-body { padding: 0.65rem 0.6rem 0.75rem; }
+  .pf-web-body strong { font-size: 0.82rem; }
+  .pf-web-note { font-size: 0.68rem; margin-bottom: 0.45rem; }
+  .pf-web-tags { gap: 0.22rem; margin-bottom: 0.5rem; }
+  .pf-web-tags em { padding: 0.18rem 0.42rem; font-size: 0.58rem; }
+  .pf-web-visit { font-size: 0.68rem; }
+  .pf-web-chrome { padding: 0.35rem 0.5rem; }
+  .pf-web-chrome em { font-size: 0.55rem; margin-left: 0.3rem; }
+  .pf-web-chrome i { width: 0.32rem; height: 0.32rem; }
+  .pf-web-fallback { font-size: 0.72rem; padding: 0 0.5rem; }
+}
