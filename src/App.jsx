@@ -2843,6 +2843,8 @@ const App = () => {
                 </li>
               ))}
             </ol>
+
+            <p className="ig-swipe-hint" aria-hidden="true"><i />Swipe through the stages</p>
           </section>
 
           {/* SECTION 2: Separated "About" Section (No longer touching top components) */}
