@@ -11,12 +11,8 @@ import './DarkMode.css';
 import './MobilePerf.css';
 // Home page editorial system — must follow MobilePerf so its flat paper
 // surfaces win over the shared glass treatments.
-import './HomeTracky.css';
-import {
-  Squiggle, Blob, Sparkle, TimerPill, TangleMark, AnnotatedArrow,
-  ConnectorLine, CircleScribble, useSectionReveals, useParallax
-} from './TrackyBits';
-import TextLoop from './TextLoop';
+import './HomeIgnite.css';
+import { useSectionReveals } from './HomeReveals';
 import Stepper, { Step } from './Stepper';
 import DriftWall from './DriftWall';
 import { 
@@ -669,10 +665,6 @@ const App = () => {
   const [referencePortfolioItems, setReferencePortfolioItems] = useState([]);
   const [referenceCartPulse, setReferenceCartPulse] = useState(false);
   const [floatingActionMode, setFloatingActionMode] = useState('whatsapp');
-  const [showLoader, setShowLoader] = useState(true);
-  const [isLoaderExiting, setIsLoaderExiting] = useState(false);
-  const [isLoaderPageReady, setIsLoaderPageReady] = useState(false);
-  const [isLoaderAnimationFinished, setIsLoaderAnimationFinished] = useState(false);
   const [referenceForm, setReferenceForm] = useState({
     name: '',
     email: '',
@@ -936,35 +928,6 @@ const App = () => {
     return () => observer.disconnect();
   }, [activeNav, activeFaq, isMobileViewport]);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const markPageReady = () => setIsLoaderPageReady(true);
-
-    if (document.readyState === 'complete') {
-      markPageReady();
-    } else {
-      window.addEventListener('load', markPageReady, { once: true });
-    }
-
-    const animationTimer = window.setTimeout(() => {
-      setIsLoaderAnimationFinished(true);
-      setIsLoaderPageReady(true);
-    }, 2900);
-
-    return () => {
-      window.clearTimeout(animationTimer);
-      window.removeEventListener('load', markPageReady);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isLoaderPageReady || !isLoaderAnimationFinished || !showLoader) return;
-
-    setIsLoaderExiting(true);
-    const hideTimer = window.setTimeout(() => setShowLoader(false), 760);
-    return () => window.clearTimeout(hideTimer);
-  }, [isLoaderPageReady, isLoaderAnimationFinished, showLoader]);
 
   const toggleStep = (id) => {
     setCompletedSteps(prev => 
@@ -982,6 +945,11 @@ const App = () => {
     }
     window.setTimeout(() => window.scrollTo(0, 0), 0);
   };
+
+  // Entrance animations for the home page sections. This call previously sat
+  // inside the account block and was removed with it, leaving the hook
+  // imported but never invoked — so nothing ever received .ig-reveal.
+  useSectionReveals(activeNav === 'home');
 
   const solutionsList = [
     { id: 'uiux', title: 'UI/UX Design', desc: 'User-centric interfaces', icon: PenTool },
@@ -2537,29 +2505,6 @@ const App = () => {
          adopts it and every other route keeps its existing surface. */
       data-route={activeNav}
     >
-      {showLoader && (
-        <div className={`leaf-loader-screen leaf-orb-loader-screen ${isLoaderExiting ? 'is-exiting' : ''}`} data-loader-version="leaf-gradient-orb-v1" role="status" aria-live="polite" aria-label="Leaf Creationism loading">
-          <div className="leaf-orb-loader-wrapper">
-            <div className="leaf-orb-loader" aria-hidden="true"></div>
-            <div className="leaf-orb-loader-copy" aria-hidden="true">
-              {['LEAF', 'CREATIONISM', 'LOADING'].map((word, wordIndex) => (
-                <span className="leaf-orb-loader-word" key={word}>
-                  {word.split('').map((letter, letterIndex) => (
-                    <span
-                      className="leaf-orb-loader-letter"
-                      key={`${word}-${letterIndex}`}
-                      style={{ animationDelay: `${(wordIndex * 0.34) + (letterIndex * 0.065)}s` }}
-                    >
-                      {letter}
-                    </span>
-                  ))}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Soft Background Gradients */}
       <div className="absolute top-[-10%] right-[-5%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-b from-[#FAE696]/20 to-transparent blur-3xl -z-10 pointer-events-none"></div>
       <div className="absolute bottom-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-tr from-[#D0F5E5]/30 to-transparent blur-3xl -z-10 pointer-events-none"></div>
@@ -2688,47 +2633,35 @@ const App = () => {
               </div>
 
               {/* Welcome Text */}
-              {/* Doodled hero: heavy display type with one coral phrase,
-                  hand-drawn annotation overlapping the text. */}
-              <div className="home-welcome-copy tk-hero">
-                <div className="tk-hero-doodles" aria-hidden="true">
-                  <Blob className="tk-blob-a" color="var(--tk-mint)" data-parallax="0.18" />
-                  <Blob className="tk-blob-b" color="#bcd7f5" data-parallax="-0.12" />
-                  <Sparkle className="tk-sparkle-a" data-parallax="0.26" />
-                  <Sparkle className="tk-sparkle-b" color="var(--tk-coral)" data-parallax="-0.2" />
-                </div>
+              {/* Type-led hero: eyebrow, a plain statement of what the studio
+                  does and who for, then two actions. No ornament. */}
+              <div className="home-welcome-copy ig-hero">
+                <span className="ig-eyebrow">Creative studio · Kerala, India</span>
 
-                <p className="tk-eyebrow">Creative studio · Kerala, India</p>
-
-                <h1 className="tk-display">
-                  Design, build, and grow your{' '}
-                  <em>
-                    next big thing
-                    <Squiggle />
-                  </em>
+                <h1 className="ig-display">
+                  Leaf Creationism builds websites, apps, brand systems and
+                  <em> campaigns that perform.</em>
                 </h1>
 
-                <p className="tk-lede">
-                  UI/UX, websites, mobile apps, AI ads, branding, and motion — one focused
-                  creative team from idea to launch.
+                <p className="ig-lede">
+                  UI/UX, web and mobile development, branding, AI advertising and motion —
+                  delivered by one focused team, from first sketch to launch day.
                 </p>
 
-                <div className="tk-actions">
-                  <button type="button" className="tk-btn tk-btn-primary" onClick={() => navigateTo('workspace')}>
-                    Get started
+                <div className="ig-actions">
+                  <button type="button" className="ig-btn ig-btn-solid" onClick={() => navigateTo('workspace')}>
+                    Start a project
                   </button>
-                  <button type="button" className="tk-btn tk-btn-ghost" onClick={() => navigateTo('portfolio')}>
+                  <button type="button" className="ig-btn ig-btn-line" onClick={() => navigateTo('portfolio')}>
                     See our work
                   </button>
                 </div>
 
-                <TimerPill />
-
-                {/* Hand-drawn annotations pointing at what they describe. */}
-                <AnnotatedArrow label="start here" className="tk-annot-start" />
-                <AnnotatedArrow label="we reply fast" className="tk-annot-timer" flip />
-
-                <TangleMark className="tk-hero-mascot" />
+                <dl className="ig-facts">
+                  <div><dt>8</dt><dd>services under one roof</dd></div>
+                  <div><dt>10</dt><dd>cities served across Kerala</dd></div>
+                  <div><dt>1</dt><dd>team, idea to launch</dd></div>
+                </dl>
               </div>
 
               {/* Elastic Service Stack */}
@@ -2745,61 +2678,22 @@ const App = () => {
 
           </div>
 
-          {/* Text running along a wave, in the studio palette. Curviness is
-              dialled down from the default so the band crops to a sensible
-              height without the wave's peaks being cut off. */}
-          <div className="tk-textloop">
-            <TextLoop
-              text="Design · Build · Grow"
-              separator="✦"
-              shape="wave"
-              curviness={40}
-              ribbonColor="#86e0c1"
-              color="#151b31"
-              ribbonWidth={86}
-              fontSize={44}
-              fontWeight={700}
-              letterSpacing={1}
-              speed={70}
-            />
-          </div>
 
-          <ConnectorLine variant="a" className="tk-connector-left" />
-
-          {/* Dark feature card with tilted white cards overlapping its edge —
-              the inversion moment this system uses to break up the page. */}
-          <section className="tk-feature" aria-label="How Leaf Creationism works">
+          {/* Positioning statement — two columns, hairline rule, no card. */}
+          <section className="ig-statement" aria-label="How Leaf Creationism works">
             <div>
-              <h2>
-                One team, from first sketch to{' '}
-                <em>
-                  launch day
-                  <CircleScribble />
-                </em>
-              </h2>
+              <span className="ig-eyebrow">How we work</span>
+              <h2>One team, from first sketch to launch day.</h2>
+            </div>
+            <div>
               <p>
-                No account managers, no handoffs to a junior team. The people who design and
-                direct your project are the ones you talk to — through strategy, design,
-                build, and launch.
+                No account managers and no handoffs to a junior team. The people who design
+                and direct your project are the ones you talk to — through strategy, design,
+                build and launch.
               </p>
-              <button type="button" className="tk-btn tk-btn-inverse" onClick={() => navigateTo('workspace')}>
+              <button type="button" className="ig-btn ig-btn-line" onClick={() => navigateTo('workspace')}>
                 Start a project
               </button>
-            </div>
-
-            <AnnotatedArrow label="that's us" className="tk-annot-team" flip />
-
-            <div className="tk-feature-stack">
-              <div className="tk-overlap tk-overlap-a">
-                <strong>Jibin Chacko</strong>
-                <span>Founder / Creative Head</span>
-                <span className="tk-overlap-tag">Product &amp; strategy</span>
-              </div>
-              <div className="tk-overlap tk-overlap-b">
-                <strong>June Mary</strong>
-                <span>Creative Head / Mentor</span>
-                <span className="tk-overlap-tag">Visual direction</span>
-              </div>
             </div>
           </section>
 
@@ -2927,7 +2821,6 @@ const App = () => {
             </footer>
           </section>
 
-          <ConnectorLine variant="b" className="tk-connector-right" />
 
           {/* SECTION 3.1: Service Suite — gradient card design, real services */}
           <section className="c1-section" aria-label="Leaf Creationism services">
@@ -3272,28 +3165,20 @@ const App = () => {
               </div>
             </div>
           </section>
-          <ConnectorLine variant="c" />
 
-          {/* Closing band on paper white. */}
-          <section className="tk-band" aria-label="Start a project with Leaf Creationism">
-            <h2>
-              Let's make something{' '}
-              <em>
-                worth looking at
-                <Squiggle />
-              </em>
-            </h2>
+          {/* Closing band on the alternate surface. */}
+          <section className="ig-band" aria-label="Start a project with Leaf Creationism">
+            <span className="ig-eyebrow">Next step</span>
+            <h2>Planning a new website or campaign? Let's talk.</h2>
             <p>
-              Tell us what you are building. We will come back with a written quote,
-              a timeline, and the team who would actually do the work.
+              Tell us what you are building. We come back with a written quote, a timeline,
+              and the team who would actually do the work.
             </p>
-            <AnnotatedArrow label="one click" className="tk-annot-band" />
-
-            <div className="tk-actions">
-              <button type="button" className="tk-btn tk-btn-primary" onClick={() => navigateTo('workspace')}>
-                Get started
+            <div className="ig-actions">
+              <button type="button" className="ig-btn ig-btn-solid" onClick={() => navigateTo('workspace')}>
+                Start a project
               </button>
-              <button type="button" className="tk-btn tk-btn-ghost" onClick={() => navigateTo('launch')}>
+              <button type="button" className="ig-btn ig-btn-line" onClick={() => navigateTo('launch')}>
                 Explore Launch Cloud
               </button>
             </div>
