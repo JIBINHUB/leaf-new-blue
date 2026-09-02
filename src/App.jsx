@@ -17,7 +17,8 @@ import { useSectionReveals } from './HomeReveals';
 import SplitFlapText from './SplitFlapText';
 import ProfileCard from './ProfileCard';
 import Stepper, { Step } from './Stepper';
-import DriftWall from './DriftWall';
+import Masonry from './Masonry';
+import OptionWheel from './OptionWheel';
 import { 
   Mail, 
   Home, 
@@ -667,6 +668,7 @@ const App = () => {
   const [portfolioMediaRatios, setPortfolioMediaRatios] = useState({});
   const [referencePortfolioItems, setReferencePortfolioItems] = useState([]);
   const [referenceCartPulse, setReferenceCartPulse] = useState(false);
+  const [activeStageIndex, setActiveStageIndex] = useState(0);
   const [floatingActionMode, setFloatingActionMode] = useState('whatsapp');
   const [referenceForm, setReferenceForm] = useState({
     name: '',
@@ -953,6 +955,43 @@ const App = () => {
   // inside the account block and was removed with it, leaving the hook
   // imported but never invoked — so nothing ever received .ig-reveal.
   useSectionReveals(activeNav === 'home');
+
+  /* The five delivery stages. Shared by the wheel, which selects one, and the
+     panel, which shows it in full — the wheel fades and blurs everything it is
+     not pointing at, so it can never be the only place this content lives. */
+  const projectStages = [
+    {
+      n: '01',
+      title: 'Discovery',
+      body: 'We dig into the brief, the audience, the competition and what success actually looks like for you.',
+      out: 'Scope, goals, written quote'
+    },
+    {
+      n: '02',
+      title: 'Direction',
+      body: 'Structure before decoration — sitemap, user flows and wireframes, plus the visual direction.',
+      out: 'Wireframes, moodboard'
+    },
+    {
+      n: '03',
+      title: 'Design',
+      body: 'The interface, brand system and every screen or asset, designed to a system rather than page by page.',
+      out: 'Full design files'
+    },
+    {
+      n: '04',
+      title: 'Build',
+      body: 'Development, CMS setup, integrations and the performance and SEO work that makes it rank and load.',
+      out: 'Staging site to review'
+    },
+    {
+      n: '05',
+      title: 'Launch',
+      body: 'Testing across devices, deployment, analytics, and a handover so your team can run it without us.',
+      out: 'Live site, training'
+    }
+  ];
+  const activeStage = projectStages[activeStageIndex] || projectStages[0];
 
   const solutionsList = [
     { id: 'uiux', title: 'UI/UX Design', desc: 'User-centric interfaces', icon: PenTool },
@@ -2334,11 +2373,18 @@ const App = () => {
   const domeGalleryImages = portfolioItems
     .filter((item) => item.type === 'image')
     .map((item) => ({ src: toThumb(item.src), alt: item.title }));
-  /* DriftWall expects { image, title }; the portfolio list is { src, alt }. */
-  const driftWallItems = domeGalleryImages.map((item) => ({
-    image: item.src,
-    title: item.alt
-  }));
+  /* Masonry expects { id, img, height }. Height drives the stagger: taking it
+     from each piece's own span keeps the columns uneven, which is the point of
+     a masonry layout, and keeps a given piece the same size on every visit. */
+  const masonryItems = portfolioItems
+    .filter((item) => item.type === 'image')
+    .map((item) => ({
+      id: item.src,
+      img: toThumb(item.src),
+      title: item.title,
+      category: item.category,
+      height: item.span === 'tall' ? 760 : item.span === 'wide' ? 460 : 600
+    }));
   const featuredPortfolioItems = portfolioItems.slice(0, 3);
   const togglePortfolioLike = (key) => {
     setLikedPortfolioItems((items) => (
@@ -2759,9 +2805,9 @@ const App = () => {
                 <ElasticServiceStack
                   items={serviceCategories}
                   onSelect={openServiceModal}
-                  itemSize={66}
-                  overlap={28}
-                  pushForce={12}
+                  itemSize={isMobileViewport ? 78 : 100}
+                  overlap={isMobileViewport ? 30 : 38}
+                  pushForce={isMobileViewport ? 12 : 16}
                 />
               </div>
             </div>
@@ -2802,49 +2848,34 @@ const App = () => {
               </p>
             </div>
 
-            <ol className="ig-steps">
-              {[
-                {
-                  n: '01',
-                  title: 'Discovery',
-                  body: 'We dig into the brief, the audience, the competition and what success actually looks like for you.',
-                  out: 'Scope, goals, written quote'
-                },
-                {
-                  n: '02',
-                  title: 'Direction',
-                  body: 'Structure before decoration — sitemap, user flows and wireframes, plus the visual direction.',
-                  out: 'Wireframes, moodboard'
-                },
-                {
-                  n: '03',
-                  title: 'Design',
-                  body: 'The interface, brand system and every screen or asset, designed to a system rather than page by page.',
-                  out: 'Full design files'
-                },
-                {
-                  n: '04',
-                  title: 'Build',
-                  body: 'Development, CMS setup, integrations and the performance and SEO work that makes it rank and load.',
-                  out: 'Staging site to review'
-                },
-                {
-                  n: '05',
-                  title: 'Launch',
-                  body: 'Testing across devices, deployment, analytics, and a handover so your team can run it without us.',
-                  out: 'Live site, training'
-                }
-              ].map((step) => (
-                <li className="ig-step" key={step.n}>
-                  <span className="ig-step-n" aria-hidden="true">{step.n}</span>
-                  <h3>{step.title}</h3>
-                  <p>{step.body}</p>
-                  <span className="ig-step-out">{step.out}</span>
-                </li>
-              ))}
-            </ol>
+            <div className="ig-stage-picker">
+              <OptionWheel
+                className="ig-stage-wheel"
+                items={projectStages.map((stage) => stage.title)}
+                defaultSelected={0}
+                onChange={(index) => setActiveStageIndex(index)}
+                fontSize={isMobileViewport ? 1.7 : 2.8}
+                spacing={1.5}
+                tilt={7}
+                blur={1.4}
+                fade={0.3}
+                minOpacity={0.12}
+                inset={isMobileViewport ? 12 : 24}
+                textColor="var(--ig-soft)"
+                activeColor="var(--ig-ink)"
+              />
 
-            <p className="ig-swipe-hint" aria-hidden="true"><i />Swipe through the stages</p>
+              {/* The selected stage, in full. Announced politely so the change
+                  reaches a screen reader without interrupting. */}
+              <div className="ig-stage-detail" aria-live="polite">
+                <span className="ig-stage-n">{activeStage.n}</span>
+                <h3>{activeStage.title}</h3>
+                <p>{activeStage.body}</p>
+                <span className="ig-stage-out">{activeStage.out}</span>
+              </div>
+            </div>
+
+            <p className="ig-stage-hint" aria-hidden="true">Drag or scroll the list</p>
           </section>
 
           {/* SECTION 2: Separated "About" Section (No longer touching top components) */}
@@ -4751,28 +4782,21 @@ const App = () => {
                     mobile gets roughly half the geometry. */}
                 {/* fit drives tile scale: a larger value pushes the sphere
                     closer to the camera so each image reads bigger. */}
-                {/* Columns drifting at different speeds, replacing the dome.
-                    Fewer, narrower columns on a phone, or the tiles end up
-                    too small to make out. */}
-                {/* Tile count is what makes this heavy, not the animation
-                    itself. The component fills its container by repeating each
-                    column, so the total is roughly
-                    columns x (containerHeight / tileHeight + itemsPerColumn).
-                    On a phone that produced 94 animating images inside a 3D
-                    plane. Two columns and a short slice of the archive brings
-                    it to a fraction of that; the wall still reads as endless
-                    because every column repeats. */}
-                <DriftWall
-                  items={isMobileViewport ? driftWallItems.slice(0, 8) : driftWallItems}
-                  columns={isMobileViewport ? 2 : 5}
-                  tileWidth={isMobileViewport ? 132 : 210}
-                  tileHeight={isMobileViewport ? 112 : 140}
-                  gap={isMobileViewport ? 12 : 18}
-                  speed={isMobileViewport ? 26 : 42}
-                  parallax={isMobileViewport ? 0 : 0.6}
-                  overlayColor="#05070c"
-                  dim={0.42}
-                  radius={14}
+{/* Masonry grid of the archive. Clicking a piece adds it to the
+                    reference cart the enquiry form already reads, so a visitor
+                    can say "build me something like these" without describing
+                    them. Thumbnails are used, not originals. */}
+                <Masonry
+                  items={masonryItems}
+                  selectedIds={referencePortfolioItems}
+                  onItemClick={(item) => {
+                    const match = portfolioItems.find((entry) => entry.src === item.id);
+                    if (match) togglePortfolioReference(match);
+                  }}
+                  animateFrom="bottom"
+                  scaleOnHover
+                  hoverScale={0.97}
+                  blurToFocus
                 />
               </section>
             </div>

@@ -1,0 +1,74 @@
+/* Styles for the OptionWheel component.
+
+   The component ships without its stylesheet, so this supplies the classes it
+   references and consumes the properties it sets: --ow-text-color,
+   --ow-active-color, --ow-font-size, --ow-inset, and the per-item --ow-p,
+   which runs 0..1 with distance from the selected row.
+
+   Nothing here may set transform, opacity or filter on an item — the rAF loop
+   writes all three inline every frame. */
+
+.option-wheel {
+  position: relative;
+  height: var(--ow-height, 20rem);
+  overflow: hidden;
+  outline: none;
+  touch-action: pan-x;   /* vertical drag belongs to the wheel */
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  /* The gradient hides the top and bottom ends of the list rather than
+     cutting them off square. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent);
+}
+
+.option-wheel--dragging { cursor: grabbing; }
+
+.option-wheel:focus-visible {
+  outline: 2px solid var(--ow-active-color, #ffffff);
+  outline-offset: 6px;
+  border-radius: 12px;
+}
+
+.option-wheel__item {
+  position: absolute;
+  top: 50%;
+  left: var(--ow-inset, 80px);
+  white-space: nowrap;
+  transform-origin: left center;
+  cursor: pointer;
+
+  font-family: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--ow-font-size, 3rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+
+  /* --ow-p is 1 on the selected row and falls to 0 with distance, so weight
+     and colour resolve toward the active values as a row comes into focus. */
+  font-weight: calc(400 + var(--ow-p, 0) * 200);
+  color: color-mix(
+    in srgb,
+    var(--ow-active-color, #ffffff) calc(var(--ow-p, 0) * 100%),
+    var(--ow-text-color, #a6a6a6)
+  );
+}
+
+/* color-mix is widely supported but not universal; the selected row must be
+   legible regardless. */
+@supports not (color: color-mix(in srgb, red 50%, blue)) {
+  .option-wheel__item { color: var(--ow-text-color, #a6a6a6); }
+  .option-wheel__item--selected { color: var(--ow-active-color, #ffffff); }
+}
+
+.option-wheel--right .option-wheel__item {
+  left: auto;
+  right: var(--ow-inset, 80px);
+  transform-origin: right center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The loop still runs, but blur is the part that reads as motion sickness
+     while dragging, so it is neutralised. */
+  .option-wheel__item { filter: none !important; }
+}

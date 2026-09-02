@@ -764,71 +764,131 @@ html[data-theme='dark'] .ig-board .split-flap-text {
   .ig-tool-group li:hover { border-color: var(--ig-ink); color: var(--ig-ink); }
 }
 
-/* --- Mobile -------------------------------------------------------------- */
+
+/* --- Service icon stack --------------------------------------------------- */
+
+/* Centred at every width and given room to breathe. The stack is the hero's
+   only interactive graphic, so it earns the space. */
+.app-shell[data-route='home'] .service-icon-shell,
+.app-shell[data-route='home'] .elastic-service-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.app-shell[data-route='home'] .elastic-service-stack {
+  display: flex;
+  justify-content: center;
+  margin-inline: auto;
+}
+
+.app-shell[data-route='home'] .service-icon-shell { margin: 8px auto 0; }
+
+.app-shell[data-route='home'] .elastic-service-caption {
+  margin-inline: auto;
+}
+
+/* --- Stage picker --------------------------------------------------------- */
+
+/* Wheel selects, panel reads. The wheel fades and blurs every row it is not
+   pointing at, so the panel is what actually carries the content — the two are
+   always shown together. */
+.ig-stage-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: center;
+  padding-top: 40px;
+  border-top: 1px solid var(--ig-line);
+}
+
+.ig-stage-wheel { --ow-height: 21rem; }
+
+.ig-stage-detail {
+  position: relative;
+  padding-left: 32px;
+  border-left: 2px solid var(--ig-accent);
+}
+
+.ig-stage-n {
+  display: block;
+  margin-bottom: 12px;
+  font-family: var(--ig-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--ig-soft);
+}
+
+.ig-stage-detail h3 {
+  margin: 0 0 14px;
+  font-family: var(--ig-sans);
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ig-ink);
+}
+
+.ig-stage-detail p {
+  margin: 0 0 22px;
+  max-width: 42ch;
+  font-family: var(--ig-sans);
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--ig-muted);
+}
+
+.ig-stage-out {
+  display: inline-block;
+  padding: 8px 14px;
+  border: 1px solid var(--ig-line);
+  border-radius: 999px;
+  font-family: var(--ig-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ig-ink);
+}
+
+.ig-stage-hint {
+  margin: 20px 0 0;
+  font-family: var(--ig-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ig-soft);
+}
+
+/* Same arrangement on a phone, stacked: the wheel sits above its panel so
+   both stay on screen together, which is the whole point of the pairing. */
+@media (max-width: 860px) {
+  .ig-stage-picker {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-top: 28px;
+  }
+
+  .ig-stage-wheel { --ow-height: 12rem; }
+
+  .ig-stage-detail { padding-left: 20px; }
+  .ig-stage-detail p { font-size: 15px; }
+}
+
+.ig-tool-groups { margin-top: 28px; }
 
 @media (max-width: 900px) {
-  /* Five columns leaves each stage about 60px wide on a phone, and stacking
-     them buries the last three. A snap carousel keeps every stage at a
-     readable width and keeps all five equally reachable — a wheel-style
-     picker would blur four of them, which is the opposite of the point. */
-  .ig-steps {
-    display: flex;
-    grid-template-columns: none;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    /* overflow-x:auto forces overflow-y:auto, so anything sitting above the
-       box would be clipped. Padded and pulled back to leave headroom. */
-    padding-top: 4px;
-    margin-top: -4px;
-  }
-
-  .ig-steps::-webkit-scrollbar { display: none; }
-
-  .ig-step {
-    flex: 0 0 76%;
-    scroll-snap-align: start;
-    padding: 24px 18px 20px 0;
-  }
-
-  .ig-step:last-child { padding-right: 4px; }
-
-  /* Dividers become the rule between cards rather than between grid columns. */
-  .ig-step + .ig-step { padding-left: 18px; border-left: 1px solid var(--ig-line); }
-  .ig-step::before { display: none; }
-
-  .ig-swipe-hint {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-    font-family: var(--ig-sans);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ig-soft);
-  }
-
-  .ig-swipe-hint i {
-    display: block;
-    width: 28px;
-    height: 1px;
-    background: var(--ig-line);
-  }
-
   .ig-tool-groups { grid-template-columns: 1fr; gap: 28px; }
   .ig-process-head { margin-bottom: 32px; }
 }
 
-@media (max-width: 480px) {
-  .ig-step { flex-basis: 84%; }
-}
-
-/* Desktop keeps the five-column grid and never shows the hint. Scoped to a
-   min-width query rather than left unscoped: as a bare rule after the mobile
-   block it won on source order and hid the hint everywhere. */
-@media (min-width: 901px) {
-  .ig-swipe-hint { display: none; }
+/* styles.css pins --elastic-size to 60px !important on phones, which beat the
+   inline size the component sets. Raised here, scoped to the home route so the
+   other pages keep their original sizing. */
+@media (max-width: 767px) {
+  .app-shell[data-route='home'] .elastic-service-item {
+    --elastic-size: 74px !important;
+  }
 }

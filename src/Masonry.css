@@ -1,0 +1,142 @@
+/* Styles for the Masonry component.
+
+   The component ships without its stylesheet, so this supplies the classes it
+   references. Tiles are absolutely positioned and GSAP writes x/y/width/height
+   on them each layout pass, so nothing here may set those properties — the
+   container's height is the only thing CSS is responsible for. */
+
+.list {
+  position: relative;
+  width: 100%;
+  /* Tiles are out of flow, so the container has no natural height. Set here
+     rather than measured, and comfortably taller than the tallest column. */
+  min-height: 62rem;
+}
+
+.item-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.45rem;
+  cursor: pointer;
+  will-change: transform, width, height;
+  /* GSAP animates transform; a CSS transition here would fight it. */
+}
+
+.item-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: border-color 0.25s ease;
+}
+
+/* Scrim so the action label stays legible over any artwork. */
+.item-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(5, 7, 12, 0.72), rgba(5, 7, 12, 0) 46%);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
+}
+
+.item-wrapper:hover .item-img::after,
+.item-wrapper:focus-visible .item-img::after,
+.item-wrapper.is-selected .item-img::after { opacity: 1; }
+
+.item-wrapper:focus-visible { outline: none; }
+
+.item-wrapper:focus-visible .item-img,
+.item-wrapper:hover .item-img { border-color: rgba(255, 255, 255, 0.4); }
+
+.item-wrapper.is-selected .item-img { border-color: #2050e3; }
+
+/* --- Add to references --------------------------------------------------- */
+
+.item-action {
+  position: absolute;
+  left: 0.6rem;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  z-index: 2;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: #ffffff;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+.item-wrapper:hover .item-action,
+.item-wrapper:focus-visible .item-action { opacity: 1; transform: none; }
+
+.item-wrapper.is-selected .item-action {
+  opacity: 1;
+  transform: none;
+  background: #2050e3;
+  border-color: #2050e3;
+}
+
+/* Persistent tick, so a chosen piece stays obvious after the pointer leaves —
+   on touch there is no hover to fall back on. */
+.item-check {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: #2050e3;
+  color: #ffffff;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+}
+
+.item-wrapper.is-selected .item-check { opacity: 1; transform: none; }
+
+/* --- Touch and reduced motion -------------------------------------------- */
+
+/* Without hover the label would never appear, so it stays visible. */
+@media (hover: none) {
+  .item-action {
+    opacity: 1;
+    transform: none;
+    font-size: 0.62rem;
+    padding: 0.3rem 0.4rem;
+  }
+
+  .item-img::after { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .list { min-height: 46rem; }
+  .item-wrapper { padding: 0.3rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item-action,
+  .item-check,
+  .item-img,
+  .item-img::after { transition: none; }
+}
