@@ -892,3 +892,116 @@ html[data-theme='dark'] .ig-board .split-flap-text {
     --elastic-size: 74px !important;
   }
 }
+
+/* --- How we work ---------------------------------------------------------- */
+
+/* Given a tinted surface and its own colour so it reads as a statement rather
+   than another run of body copy on white. */
+.ig-statement {
+  padding: 48px;
+  border-top: 0;
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(32, 80, 227, 0.09), transparent 58%),
+    var(--ig-alt);
+}
+
+.ig-statement h2 em {
+  font-style: normal;
+  color: var(--ig-accent);
+}
+
+.ig-promises {
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.ig-promises li {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font-family: var(--ig-sans);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--ig-ink);
+}
+
+/* The index is the colour accent; the text stays ink so it remains readable. */
+.ig-promises span {
+  flex-shrink: 0;
+  min-width: 26px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--ig-accent);
+}
+
+@media (max-width: 860px) {
+  .ig-statement { padding: 28px 22px; border-radius: 16px; }
+}
+
+/* --- Tool chips: drop and settle ------------------------------------------ */
+
+/* The falling-text idea without a physics engine. Each chip drops, overshoots
+   slightly and settles at its own small angle — the overshoot in the easing
+   curve is what sells the weight. Transform and opacity only, so nothing here
+   triggers layout. */
+@keyframes ig-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(-42px) rotate(calc(var(--fall-rot, 0deg) * -2.4));
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(4px) rotate(calc(var(--fall-rot, 0deg) * 1.3));
+  }
+  80% {
+    transform: translateY(-2px) rotate(calc(var(--fall-rot, 0deg) * 0.85));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--fall-rot, 0deg));
+  }
+}
+
+.ig-tools .ig-tool-group li {
+  /* Held until the section scrolls in, or they would all have landed before
+     anyone saw them. */
+  opacity: 0;
+  transform: translateY(-42px);
+  transform-origin: center bottom;
+}
+
+.ig-tools.is-in .ig-tool-group li {
+  animation: ig-fall 0.72s cubic-bezier(0.34, 1.4, 0.5, 1) both;
+  animation-delay: var(--fall-delay, 0ms);
+}
+
+/* Straighten and lift on hover, so the pile feels touchable. */
+@media (hover: hover) {
+  .ig-tools .ig-tool-group li {
+    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .ig-tools.is-in .ig-tool-group li:hover {
+    animation: none;
+    transform: translateY(-3px) rotate(0deg);
+    border-color: var(--ig-accent);
+    color: var(--ig-accent);
+  }
+}
+
+/* Nothing falls; the chips are simply there. */
+@media (prefers-reduced-motion: reduce) {
+  .ig-tools .ig-tool-group li,
+  .ig-tools.is-in .ig-tool-group li {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

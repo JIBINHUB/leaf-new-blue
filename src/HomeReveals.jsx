@@ -15,6 +15,7 @@ const REVEAL_TARGETS = [
   '.home-faq-item',
   '.home-contact-section',
   '.ig-statement',
+  '.ig-tools',
   '.ig-band'
 ];
 

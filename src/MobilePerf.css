@@ -226,6 +226,19 @@
      mid-frame, or worse, win before the first paint. */
 }
 
+/* The ring now runs on every screen, so it also has to sit where the 3D
+   carousel used to on desktop — higher in the stage, since there is no phone
+   headline above it to clear. */
+@media (min-width: 640px) {
+  .adv-ring {
+    inset: 3.2rem 0 4.7rem;
+  }
+
+  .adv-ring-stage img {
+    border-radius: 1.1rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .adv-ring-stage img { will-change: auto; }
 }

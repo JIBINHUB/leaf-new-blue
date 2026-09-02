@@ -61,22 +61,45 @@ const useMeasure = () => {
   return [ref, size];
 };
 
-/* Waits for the images, but never holds the grid back for long: on a slow
-   connection the original blocked first paint until every image had settled,
-   which on this archive is dozens of requests. */
-const preloadImages = async (urls, timeoutMs = 1200) => {
-  const loaded = Promise.all(
-    urls.map(
-      src =>
+/* Measures each item's real aspect ratio, so a tile can be sized to its media
+   rather than to an invented height. That is what stops artwork being cropped:
+   when the box matches the picture, there is nothing left to cut off.
+
+   Never blocks first paint for long — on a slow connection the original waited
+   for every request to settle, which on this archive is dozens of them. */
+const measureItems = async (items, timeoutMs = 1500) => {
+  const ratios = new Map();
+
+  const measured = Promise.all(
+    items.map(
+      item =>
         new Promise(resolve => {
+          const done = (ratio) => {
+            if (ratio && isFinite(ratio) && ratio > 0) ratios.set(item.id, ratio);
+            resolve();
+          };
+
+          if (item.type === 'video') {
+            const video = document.createElement('video');
+            video.preload = 'metadata';
+            video.muted = true;
+            video.onloadedmetadata = () => done(video.videoHeight / video.videoWidth);
+            video.onerror = () => resolve();
+            video.src = item.src;
+            return;
+          }
+
           const img = new Image();
-          img.src = src;
-          img.onload = img.onerror = () => resolve();
+          img.onload = () => done(img.naturalHeight / img.naturalWidth);
+          img.onerror = () => resolve();
+          img.src = item.img;
         })
     )
   );
+
   const cap = new Promise(resolve => setTimeout(resolve, timeoutMs));
-  await Promise.race([loaded, cap]);
+  await Promise.race([measured, cap]);
+  return ratios;
 };
 
 const Masonry = ({
@@ -100,6 +123,7 @@ const Masonry = ({
 
   const [containerRef, { width }] = useMeasure();
   const [imagesReady, setImagesReady] = useState(false);
+  const [ratios, setRatios] = useState(() => new Map());
 
   const getInitialPosition = item => {
     const containerRect = containerRef.current?.getBoundingClientRect();
@@ -132,7 +156,13 @@ const Masonry = ({
   };
 
   useEffect(() => {
-    preloadImages(items.map(i => i.img)).then(() => setImagesReady(true));
+    let active = true;
+    measureItems(items).then(measured => {
+      if (!active) return;
+      setRatios(measured);
+      setImagesReady(true);
+    });
+    return () => { active = false; };
   }, [items]);
 
   const grid = useMemo(() => {
@@ -144,14 +174,26 @@ const Masonry = ({
     return items.map(child => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = columnWidth * col;
-      const height = child.height / 2;
+      /* Height follows the media's own proportions. Falls back to a portrait
+         ratio only while a measurement is still outstanding. */
+      const ratio = ratios.get(child.id) ?? 1.25;
+      const height = columnWidth * ratio;
       const y = colHeights[col];
 
       colHeights[col] += height;
 
       return { ...child, x, y, w: columnWidth, h: height };
     });
-  }, [columns, items, width]);
+  }, [columns, items, width, ratios]);
+
+  /* Tiles are absolutely positioned, so the container has no natural height.
+     It was set to a fixed value in CSS, which cut the grid off part-way down
+     — the portfolio stopped showing everything once the columns grew past it.
+     Measuring the tallest column makes it fit whatever is in the archive. */
+  const containerHeight = useMemo(
+    () => grid.reduce((tallest, item) => Math.max(tallest, item.y + item.h), 0),
+    [grid]
+  );
 
   const hasMounted = useRef(false);
 
@@ -160,12 +202,15 @@ const Masonry = ({
 
     grid.forEach((item, index) => {
       const selector = `[data-key="${item.id}"]`;
-      const animationProps = {
-        x: item.x,
-        y: item.y,
-        width: item.w,
-        height: item.h
-      };
+
+      /* width and height are set, never tweened. Animating them drives a full
+         layout recalculation every frame, and with 47 tiles moving at once
+         that was the jank — the grid never felt smooth. Size lands instantly;
+         only transforms and opacity animate, which the compositor handles
+         without touching layout. */
+      gsap.set(selector, { width: item.w, height: item.h });
+
+      const animationProps = { x: item.x, y: item.y };
 
       if (!hasMounted.current) {
         const initialPos = getInitialPosition(item, index);
@@ -173,8 +218,6 @@ const Masonry = ({
           opacity: 0,
           x: initialPos.x,
           y: initialPos.y,
-          width: item.w,
-          height: item.h,
           ...(blurToFocus && { filter: 'blur(10px)' })
         };
 
@@ -184,7 +227,9 @@ const Masonry = ({
           ...(blurToFocus && { filter: 'blur(0px)' }),
           duration: 0.8,
           ease: 'power3.out',
-          delay: index * stagger
+          /* Capped so the last tile is not still arriving seconds after the
+             first — 47 items at the raw stagger ran well over two seconds. */
+          delay: Math.min(index * stagger, 0.9)
         });
       } else {
         gsap.to(selector, {
@@ -247,7 +292,7 @@ const Masonry = ({
   };
 
   return (
-    <div ref={containerRef} className="list">
+    <div ref={containerRef} className="list" style={{ height: containerHeight || undefined }}>
       {grid.map(item => {
         const isSelected = selectedIds.includes(item.id);
 
@@ -256,37 +301,70 @@ const Masonry = ({
             key={item.id}
             data-key={item.id}
             className={`item-wrapper${isSelected ? ' is-selected' : ''}`}
-            role="button"
-            tabIndex={0}
-            aria-pressed={isSelected}
-            aria-label={
-              isSelected
-                ? `Remove ${item.title || 'this piece'} from your references`
-                : `Add ${item.title || 'this piece'} to your references`
-            }
             /* Was window.open(item.url). These are portfolio pieces rather than
-               outbound links, so a click hands the item back to the page, which
-               adds it to the reference cart the enquiry form already reads. */
+               outbound links, so a click anywhere on the tile hands the item
+               back to the page, which adds it to the reference cart the enquiry
+               form already reads. The cart button below does the same thing and
+               is what keyboard and screen reader users get. */
             onClick={() => onItemClick?.(item)}
-            onKeyDown={e => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onItemClick?.(item);
-              }
-            }}
             onMouseEnter={e => handleMouseEnter(e, item)}
             onMouseLeave={e => handleMouseLeave(e, item)}
           >
-            <div className="item-img" style={{ backgroundImage: `url(${item.img})` }}>
-              <span className="item-action" aria-hidden="true">
-                {isSelected ? 'Added to references' : 'Add to references'}
+            <div className="item-img">
+              {/* A real media element rather than a background image: the tile
+                  is already sized to this item's proportions, so the picture
+                  fills it exactly and nothing is cropped. Videos show their
+                  first frame and only play on hover — fourteen of them playing
+                  at once would be the heaviest thing on the site. */}
+              {item.type === 'video' ? (
+                <video
+                  className="item-media"
+                  src={item.src}
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  onMouseEnter={e => e.currentTarget.play().catch(() => {})}
+                  onMouseLeave={e => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
+                />
+              ) : (
+                <img className="item-media" src={item.img} alt={item.title || ''} loading="lazy" decoding="async" draggable={false} />
+              )}
+              {/* Every piece carries its own name, so the archive reads as a
+                  list of work rather than a wall of unlabelled pictures. */}
+              <span className="item-caption">
+                <em>{item.title || 'Untitled piece'}</em>
+                {item.category && <i>{item.category}</i>}
               </span>
 
-              <span className="item-check" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 6 9 17l-5-5" />
-                </svg>
-              </span>
+              {/* The cart control. Stops the click bubbling so the tile's own
+                  handler does not toggle it straight back. */}
+              <button
+                type="button"
+                className="item-cart"
+                aria-pressed={isSelected}
+                aria-label={
+                  isSelected
+                    ? `Remove ${item.title || 'this piece'} from your references`
+                    : `Add ${item.title || 'this piece'} to your references`
+                }
+                onClick={e => {
+                  e.stopPropagation();
+                  onItemClick?.(item);
+                }}
+              >
+                {isSelected ? (
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                    <path d="M3 6h18" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                  </svg>
+                )}
+              </button>
 
               {colorShiftOnHover && (
                 <div

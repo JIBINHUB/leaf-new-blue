@@ -19,6 +19,8 @@ import ProfileCard from './ProfileCard';
 import Stepper, { Step } from './Stepper';
 import Masonry from './Masonry';
 import OptionWheel from './OptionWheel';
+import SiteShowcase from './SiteShowcase';
+import './PortfolioEditorial.css';
 import { 
   Mail, 
   Home, 
@@ -413,85 +415,19 @@ const pageSeo = {
   }
 };
 
-const CylinderCarousel = React.forwardRef(({
-  images,
-  className = '',
-  containerClassName = '',
-  cardClassName = '',
-  animationDuration = 32,
-  cardWidth = 250,
-  ...props
-}, ref) => {
-  const cardCount = images.length;
-  const customStyle = {
-    '--n': cardCount,
-    '--w': `${cardWidth}px`,
-    '--ba': 'calc(1turn / var(--n))',
-    '--anim-dur': `${animationDuration}s`
-  };
-
-  return (
-    <div
-      ref={ref}
-      className={`advantage-cylinder-carousel ${className}`.trim()}
-      style={{
-        perspective: '35em',
-        maskImage: 'linear-gradient(90deg, transparent, #000 20% 80%, transparent)',
-        WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 20% 80%, transparent)'
-      }}
-      {...props}
-    >
-      <div
-        className={`advantage-cylinder-track ${containerClassName}`.trim()}
-        style={{
-          ...customStyle,
-          transformStyle: 'preserve-3d',
-          animation: 'ry var(--anim-dur) linear infinite'
-        }}
-      >
-        <style>
-          {`
-            @keyframes ry {
-              to { transform: rotateY(1turn); }
-            }
-          `}
-        </style>
-
-        {images.map((image, index) => (
-          <img
-            key={`${image.src}-${index}`}
-            src={image.src}
-            alt={image.alt || `Leaf Creationism project ${index + 1}`}
-            className={`advantage-cylinder-card ${cardClassName}`.trim()}
-            style={{
-              width: 'var(--w)',
-              aspectRatio: '7 / 10',
-              '--i': index,
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              transform: 'rotateY(calc(var(--i) * var(--ba))) translateZ(calc(-1 * (0.5 * var(--w) + 0.5em) / tan(0.5 * var(--ba))))'
-            }}
-            loading="lazy"
-            decoding="async"
-          />
-        ))}
-      </div>
-    </div>
-  );
-});
-
-CylinderCarousel.displayName = 'CylinderCarousel';
 
 /**
- * ProjectedCylinder — the desktop carousel's look, on phones.
+ * ProjectedCylinder — the rotating ring of work, on every screen.
  *
- * CylinderCarousel builds a real 3D ring: `perspective` on the container,
+ * It replaced a real 3D ring: `perspective` on the container,
  * `transform-style: preserve-3d` on the track, and each card pushed back with
- * translateZ. Mobile Safari and Chrome both fail to paint that stack of ten
- * layered images — the blank white cards reported from a real iPhone.
+ * a translateZ computed through the CSS tan() function. Where either is
+ * unsupported the ring collapses onto its own axis and the cards paint as
+ * blank slivers — reported first from a real iPhone, then reproduced on the
+ * desktop build.
  *
- * So rather than hand phones a different animation, this does the perspective
- * projection itself and emits only 2D transforms, which every browser paints.
+ * So this does the perspective projection itself and emits only 2D
+ * transforms, which every browser paints.
  * For a card at angle t on a ring of radius R, with the camera f in front of
  * the ring's near edge:
  *
@@ -616,7 +552,7 @@ const ProjectedCylinder = ({ images, ariaLabel, cardWidth = 124, gap = 8 }) => {
 };
 
 /**
- * Flat 2D marquee used instead of CylinderCarousel on phones.
+ * Flat 2D marquee used instead of the ring on phones.
  *
  * The 3D version relies on transform-style: preserve-3d with ten stacked,
  * rotated image layers. Mobile Safari and Chrome both fail to paint those
@@ -1808,6 +1744,24 @@ const App = () => {
       image: ''
     },
     {
+      name: 'Friends Tax Point',
+      url: 'https://friendstaxpoint.com',
+      services: ['Web design', 'Development'],
+      note: 'Site for a tax, GST and compliance consultancy.',
+      image: ''
+    },
+    {
+      /* cleartax.in sends x-frame-options: SAMEORIGIN, so it cannot be shown
+         live in a frame the way the others are — the card falls back to the
+         domain panel and the link still opens the real site. */
+      name: 'ClearTax',
+      url: 'https://cleartax.in',
+      services: ['Design'],
+      note: '',
+      image: '',
+      preview: false
+    },
+    {
       name: 'Leaf Creationism',
       url: 'https://leafcreationism.in',
       services: ['Web design', 'Development', 'SEO'],
@@ -2376,15 +2330,18 @@ const App = () => {
   /* Masonry expects { id, img, height }. Height drives the stagger: taking it
      from each piece's own span keeps the columns uneven, which is the point of
      a masonry layout, and keeps a given piece the same size on every visit. */
-  const masonryItems = portfolioItems
-    .filter((item) => item.type === 'image')
-    .map((item) => ({
-      id: item.src,
-      img: toThumb(item.src),
-      title: item.title,
-      category: item.category,
-      height: item.span === 'tall' ? 760 : item.span === 'wide' ? 460 : 600
-    }));
+  /* Every public piece, images and video alike. The grid previously filtered
+     to images only, so fourteen video works never appeared at all. Heights are
+     no longer guessed here — the grid measures each item and sizes its tile to
+     the real proportions, which is what stops artwork being cropped. */
+  const masonryItems = portfolioItems.map((item) => ({
+    id: item.src,
+    img: toThumb(item.src),
+    src: item.src,
+    type: item.type,
+    title: item.title,
+    category: item.category
+  }));
   const featuredPortfolioItems = portfolioItems.slice(0, 3);
   const togglePortfolioLike = (key) => {
     setLikedPortfolioItems((items) => (
@@ -2603,6 +2560,68 @@ const App = () => {
   const advantageCylinderImages = leafAdvantageMedia
     .slice(0, 10)
     .map((item) => ({ src: toThumb(item.src), alt: item.label }));
+
+  /* The studio sign-off. Defined once and rendered at the end of more than one
+     route, so the pages visitors actually land on all close the same way
+     instead of stopping dead after their last section. */
+  const studioFooter = (
+    <section className="home-status-marquee-section relative left-1/2 w-screen -translate-x-1/2 z-10" aria-label="Leaf Creationism live project status">
+      <div className="status-footer-shell">
+        <div className="status-footer-glow status-footer-glow-one" aria-hidden="true" />
+        <div className="status-footer-glow status-footer-glow-two" aria-hidden="true" />
+
+        <div className="status-footer-topline">
+          <span>Leaf Creationism / studio signal</span>
+          <span className={`status-footer-live ${isStudioOnline ? 'is-live' : 'is-offline'}`}>
+            <i aria-hidden="true" />
+            {isStudioOnline ? 'Available for new projects' : 'Brief queue open'}
+          </span>
+        </div>
+
+        <div className="status-footer-hero">
+          <div>
+            <p>One focused creative team.</p>
+            <h2>Ideas in.<br /><span>Impact out.</span></h2>
+          </div>
+          <a className="status-footer-cta" href="mailto:leafcreationism@gmail.com">
+            <span>Start a project</span>
+            <b><ArrowUpRight size={21} /></b>
+          </a>
+        </div>
+
+        <div className="status-footer-metrics" aria-label="Studio performance">
+          <article>
+            <span>01 / Launches</span>
+            <strong>124</strong>
+            <p>Products launched</p>
+          </article>
+          <article>
+            <span>02 / Network</span>
+            <strong>86</strong>
+            <p>Global partners</p>
+          </article>
+          <article>
+            <span>03 / Trust</span>
+            <strong>98%</strong>
+            <p>Client retention</p>
+          </article>
+          <article>
+            <span>04 / Experience</span>
+            <strong>{studioActiveYears}Y</strong>
+            <p>{studioActiveExtraDays} days beyond</p>
+          </article>
+        </div>
+
+        <div className="status-footer-contact-rail">
+          <span>© {currentTime.getFullYear()} Leaf Creationism</span>
+          <a href="mailto:leafcreationism@gmail.com">leafcreationism@gmail.com</a>
+          <a href="tel:+918589038479">+91 85890 38479</a>
+          <span>{indiaTimeLabel} IST</span>
+        </div>
+      </div>
+    </section>
+  );
+
   return (
     <div
       className="app-shell min-h-screen bg-[#FDFDFD] text-gray-800 font-sans relative overflow-hidden selection:bg-[#2050E3] selection:text-white"
@@ -2819,7 +2838,7 @@ const App = () => {
           <section className="ig-statement" aria-label="How Leaf Creationism works">
             <div>
               <span className="ig-eyebrow">How we work</span>
-              <h2>One team, from first sketch to launch day.</h2>
+              <h2>One team, from first sketch to <em>launch day</em>.</h2>
             </div>
             <div>
               <p>
@@ -2827,7 +2846,16 @@ const App = () => {
                 and direct your project are the ones you talk to — through strategy, design,
                 build and launch.
               </p>
-              <button type="button" className="ig-btn ig-btn-line" onClick={() => navigateTo('workspace')}>
+
+              {/* The three promises, each on its own accent marker, so the
+                  claim reads as specific rather than as a paragraph. */}
+              <ul className="ig-promises">
+                <li><span>01</span>You talk to the people doing the work</li>
+                <li><span>02</span>One team across design, build and launch</li>
+                <li><span>03</span>A written quote before anything starts</li>
+              </ul>
+
+              <button type="button" className="ig-btn ig-btn-solid" onClick={() => navigateTo('workspace')}>
                 Start a project
               </button>
             </div>
@@ -2904,18 +2932,19 @@ const App = () => {
                   </p>
                 </div>
 
-                {/* The real 3D cylinder on every viewport, as requested.
-                    Phones get a narrower card so the ring fits the screen.
-
-                    Note: this is the transform-style: preserve-3d version that
-                    previously rendered as blank white cards on iOS. If that
-                    returns, swapping CylinderCarousel for ProjectedCylinder
-                    here restores the 2D projection, which paints everywhere. */}
-                <CylinderCarousel
+                {/* The 2D projection of the ring, on every screen now.
+                    The 3D version needed transform-style: preserve-3d plus a
+                    translateZ built with the CSS tan() function; where either
+                    is unsupported the cards collapse onto the ring's axis and
+                    paint as blank slivers — reported first from a real iPhone,
+                    then reproduced on the desktop build. This computes the
+                    same projection in JS and emits only 2D transforms, so the
+                    geometry and motion are identical and every browser paints
+                    it. */}
+                <ProjectedCylinder
                   images={advantageCylinderImages}
-                  cardWidth={isMobileViewport ? 132 : 250}
-                  animationDuration={isMobileViewport ? 38 : 32}
-                  aria-label="Selected Leaf Creationism work"
+                  ariaLabel="Selected Leaf Creationism work"
+                  cardWidth={isMobileViewport ? 124 : 230}
                 />
 
                 <div className="advantage-stat-grid">
@@ -3054,11 +3083,24 @@ const App = () => {
                 { label: 'Design', items: ['Figma', 'Adobe Creative Cloud', 'Blender', 'After Effects'] },
                 { label: 'Build', items: ['React', 'Next.js', 'Webflow', 'Framer', 'WordPress', 'Shopify'] },
                 { label: 'Launch', items: ['Vercel', 'Netlify', 'AWS', 'Cloudflare', 'Google Cloud'] }
-              ].map((group) => (
+              ].map((group, groupIndex) => (
                 <div className="ig-tool-group" key={group.label}>
                   <h3>{group.label}</h3>
                   <ul>
-                    {group.items.map((item) => <li key={item}>{item}</li>)}
+                    {group.items.map((item, itemIndex) => (
+                      <li
+                        key={item}
+                        /* Deterministic rather than random: the same chip lands
+                           at the same angle on every visit, and on a re-render
+                           nothing jumps. */
+                        style={{
+                          '--fall-delay': `${(groupIndex * 4 + itemIndex) * 55}ms`,
+                          '--fall-rot': `${(((groupIndex * 7 + itemIndex * 37) % 11) - 5)}deg`
+                        }}
+                      >
+                        {item}
+                      </li>
+                    ))}
                   </ul>
                 </div>
               ))}
@@ -3305,61 +3347,7 @@ const App = () => {
              </div>
           </div>
           
-          <section className="home-status-marquee-section relative left-1/2 w-screen -translate-x-1/2 z-10" aria-label="Leaf Creationism live project status">
-            <div className="status-footer-shell">
-              <div className="status-footer-glow status-footer-glow-one" aria-hidden="true" />
-              <div className="status-footer-glow status-footer-glow-two" aria-hidden="true" />
-
-              <div className="status-footer-topline">
-                <span>Leaf Creationism / studio signal</span>
-                <span className={`status-footer-live ${isStudioOnline ? 'is-live' : 'is-offline'}`}>
-                  <i aria-hidden="true" />
-                  {isStudioOnline ? 'Available for new projects' : 'Brief queue open'}
-                </span>
-              </div>
-
-              <div className="status-footer-hero">
-                <div>
-                  <p>One focused creative team.</p>
-                  <h2>Ideas in.<br /><span>Impact out.</span></h2>
-                </div>
-                <a className="status-footer-cta" href="mailto:leafcreationism@gmail.com">
-                  <span>Start a project</span>
-                  <b><ArrowUpRight size={21} /></b>
-                </a>
-              </div>
-
-              <div className="status-footer-metrics" aria-label="Studio performance">
-                <article>
-                  <span>01 / Launches</span>
-                  <strong>124</strong>
-                  <p>Products launched</p>
-                </article>
-                <article>
-                  <span>02 / Network</span>
-                  <strong>86</strong>
-                  <p>Global partners</p>
-                </article>
-                <article>
-                  <span>03 / Trust</span>
-                  <strong>98%</strong>
-                  <p>Client retention</p>
-                </article>
-                <article>
-                  <span>04 / Experience</span>
-                  <strong>{studioActiveYears}Y</strong>
-                  <p>{studioActiveExtraDays} days beyond</p>
-                </article>
-              </div>
-
-              <div className="status-footer-contact-rail">
-                <span>© {currentTime.getFullYear()} Leaf Creationism</span>
-                <a href="mailto:leafcreationism@gmail.com">leafcreationism@gmail.com</a>
-                <a href="tel:+918589038479">+91 85890 38479</a>
-                <span>{indiaTimeLabel} IST</span>
-              </div>
-            </div>
-          </section>
+          {studioFooter}
 
           {/* Closing band on the alternate surface. */}
           <section className="ig-band" aria-label="Start a project with Leaf Creationism">
@@ -4684,123 +4672,107 @@ const App = () => {
 
       {/* Portfolio View */}
       {activeNav === 'portfolio' && (
-        <main className="portfolio-page portfolio-collage-page portfolio-bento-page max-w-6xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 pb-36 relative z-10 animate-fade-in">
-          <section className="portfolio-hero portfolio-feed-header">
-            <div className="portfolio-hero-copy">
-              <div className="portfolio-feed-intro">
-                <span className="portfolio-kicker"><LeafIcon size={15} /> Leaf Creationism / Portfolio</span>
-                <h1>
-                  Bring bold ideas together. Right here.
-                </h1>
+        /* Editorial layout: black on white, type-led, one section per idea.
+           The old bento frame boxed the work into a narrow right-hand column,
+           which is what made the media look cropped and the sites unreadable.
+           Here every section runs the full width of the page, in order:
+           title, overview, note, websites, archive, facts, footer. */
+        <main className="portfolio-editorial-page relative z-10 animate-fade-in">
+          <section className="pe-title">
+            <span className="pe-label">( Leaf Creationism / Portfolio )</span>
+            <h1>Selected work</h1>
+          </section>
+
+          <section className="pe-para">
+            <span className="pe-label">( Overview )</span>
+            <p className="pe-statement">
+              One studio for motion, 3D worlds, AI ads, graphic systems, and the
+              websites they run on — built to move brands forward.
+            </p>
+          </section>
+
+          <section className="pe-note">
+            <span className="pe-label">( Notes )</span>
+            <p className="pe-statement">
+              Many projects stay private. Everything on this page is shown with
+              client permission.
+            </p>
+          </section>
+
+          {websiteProjects.length > 0 && (
+            <section className="pe-section" aria-label="Website projects by Leaf Creationism">
+              <div className="pe-head">
+                <div>
+                  <span className="pe-num">01</span>
+                  <span className="pe-label">( Websites )</span>
+                </div>
                 <p>
-                  One studio for motion, 3D worlds, AI ads, graphic systems, and interfaces built to move brands forward.
+                  Sites we designed, built and launched. Each one loads live below,
+                  so what you are looking at is the real page as it runs today.
                 </p>
-                <div className="portfolio-feed-tags">
-                  <span><Zap size={14} /> Live selections</span>
-                  <span><ShoppingBag size={14} /> Add references</span>
-                  <span><Shield size={14} /> Permission first</span>
-                </div>
               </div>
-              <div className="portfolio-consent-note">
-                <div className="portfolio-consent-symbol">
-                  <Shield size={21} />
-                </div>
-                <div>
-                  <span>Confidentiality notice</span>
-                  <p>
-                    Many projects we create cannot be published here or on social media because our clients prefer their products, campaigns, and internal systems to remain private. We respect that confidentiality without exception. Every item shown in this portfolio is shared only with client permission.
-                  </p>
-                </div>
+
+              {/* One site at a time, big enough to read. The old stack showed six
+                  360px cards at once — none of them legible — and it needed
+                  preserve-3d, which mobile Safari and Chrome fail to paint here. */}
+              <SiteShowcase sites={websiteProjects} />
+            </section>
+          )}
+
+          <section className="pe-section" aria-label="Portfolio archive">
+            <div className="pe-head pe-head-right">
+              <div>
+                <span className="pe-num">02</span>
+                <span className="pe-label">( Archive )</span>
               </div>
-              <div className="portfolio-metrics">
-                <div><Briefcase size={18} /><strong>{portfolioItems.length}</strong><span>Public works</span></div>
-                <div><Film size={18} /><strong>{portfolioItems.filter((item) => item.type === 'video').length}</strong><span>Video pieces</span></div>
-                <div><Shield size={18} /><strong>Private</strong><span>Client-first archive</span></div>
-              </div>
+              <p>
+                {portfolioItems.length} public pieces, stills and films together.
+                Keep scrolling for the whole archive; tap any piece to add it to
+                your references.
+              </p>
+            </div>
+
+            {/* Every tile is sized to its own media, so nothing is cropped, and
+                clicking one adds it to the reference cart the enquiry form
+                already reads. */}
+            <Masonry
+              items={masonryItems}
+              selectedIds={referencePortfolioItems}
+              onItemClick={(item) => {
+                const match = portfolioItems.find((entry) => entry.src === item.id);
+                if (match) togglePortfolioReference(match);
+              }}
+              animateFrom="bottom"
+              scaleOnHover
+              hoverScale={0.97}
+              blurToFocus
+            />
+          </section>
+
+          <section className="pe-facts" aria-label="Portfolio at a glance">
+            <div>
+              <span>( 01 )</span>
+              <strong>{portfolioItems.length}</strong>
+              <p>Public works in this archive</p>
+            </div>
+            <div>
+              <span>( 02 )</span>
+              <strong>{portfolioItems.filter((item) => item.type === 'video').length}</strong>
+              <p>Video pieces, playing on hover</p>
+            </div>
+            <div>
+              <span>( 03 )</span>
+              <strong>{websiteProjects.length}</strong>
+              <p>Websites designed, built and launched</p>
+            </div>
+            <div>
+              <span>( 04 )</span>
+              <strong>Private</strong>
+              <p>Client-first archive — permission before publication</p>
             </div>
           </section>
 
-          <section className="portfolio-feed-shell">
-            <div className="portfolio-feed-main">
-              <section className="portfolio-showcase-note">
-                <div>
-                  <span>Permission-based showcase</span>
-                  <h2>Selected work, built to move brands.</h2>
-                </div>
-                <p>Scroll through the archive. Every public piece is shown with client permission; private launches and internal systems stay confidential.</p>
-              </section>
-
-              {websiteProjects.length > 0 && (
-                <section className="pf-web" aria-label="Website projects by Leaf Creationism">
-                  <div className="pf-web-head">
-                    <span>Websites</span>
-                    <h2>Sites we designed, built and launched.</h2>
-                  </div>
-
-                  <ul className="pf-web-grid">
-                    {websiteProjects.map((site) => {
-                      const domain = site.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
-                      return (
-                        <li className="pf-web-card" key={site.url}>
-                          <a href={site.url} target="_blank" rel="noreferrer noopener">
-                            {/* Browser chrome, so the card reads as a website
-                                even before a screenshot exists. */}
-                            <span className="pf-web-chrome" aria-hidden="true">
-                              <i /><i /><i />
-                              <em>{domain}</em>
-                            </span>
-
-                            <span className="pf-web-shot">
-                              {site.image ? (
-                                <img src={site.image} alt={`${site.name} website`} loading="lazy" decoding="async" />
-                              ) : (
-                                <span className="pf-web-fallback">{domain}</span>
-                              )}
-                            </span>
-
-                            <span className="pf-web-body">
-                              <strong>{site.name}</strong>
-                              {site.note && <span className="pf-web-note">{site.note}</span>}
-                              {site.services?.length > 0 && (
-                                <span className="pf-web-tags">
-                                  {site.services.map((tag) => <em key={tag}>{tag}</em>)}
-                                </span>
-                              )}
-                              <span className="pf-web-visit">Visit site</span>
-                            </span>
-                          </a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </section>
-              )}
-
-              <section className="portfolio-dome-shell">
-                {/* Each segment renders 5 tiles, so 20 segments = 100 images in
-                    3D space. That is far too much for a phone to composite, so
-                    mobile gets roughly half the geometry. */}
-                {/* fit drives tile scale: a larger value pushes the sphere
-                    closer to the camera so each image reads bigger. */}
-{/* Masonry grid of the archive. Clicking a piece adds it to the
-                    reference cart the enquiry form already reads, so a visitor
-                    can say "build me something like these" without describing
-                    them. Thumbnails are used, not originals. */}
-                <Masonry
-                  items={masonryItems}
-                  selectedIds={referencePortfolioItems}
-                  onItemClick={(item) => {
-                    const match = portfolioItems.find((entry) => entry.src === item.id);
-                    if (match) togglePortfolioReference(match);
-                  }}
-                  animateFrom="bottom"
-                  scaleOnHover
-                  hoverScale={0.97}
-                  blurToFocus
-                />
-              </section>
-            </div>
-          </section>
+          {studioFooter}
         </main>
       )}
 

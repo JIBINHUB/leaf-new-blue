@@ -1,0 +1,370 @@
+/* Portfolio page — editorial layout.
+
+   Black on white, no cards, no shadows, no rounded corners: the work supplies
+   all of the colour on this page and the page itself gets out of its way.
+   Type does the structuring — an oversized title, small parenthetical labels,
+   numbered sections, and statements set large enough to read as design rather
+   than as body copy.
+
+   Everything is scoped to .portfolio-editorial-page so none of it reaches the
+   rest of the site, and so the old portfolio rules in styles.css (which target
+   .portfolio-collage-page / .portfolio-bento-page) no longer apply here at all.
+
+   Inter is already loaded for the site; at 400/500 with tight tracking it is
+   the closest thing we have to the neutral grotesk this layout wants, so no
+   extra font is requested. */
+
+.portfolio-editorial-page {
+  --pe-ink: #0b0b0c;
+  --pe-mute: rgba(11, 11, 12, 0.46);
+  --pe-line: rgba(11, 11, 12, 0.13);
+  --pe-pad: clamp(1.15rem, 4vw, 4.25rem);
+
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 0 clamp(3rem, 6vw, 5rem);
+  background: #ffffff;
+  color: var(--pe-ink);
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  overflow: clip;
+}
+
+/* --- Shared pieces -------------------------------------------------------- */
+
+/* Headings and paragraphs across the site are given Outfit by name, and a
+   direct rule always beats an inherited one — so the grotesk has to be stated
+   on the elements themselves, not just on the page. The studio footer is left
+   out on purpose: it is shared with the home page and keeps its own type. */
+.portfolio-editorial-page .pe-title h1,
+.portfolio-editorial-page .pe-label,
+.portfolio-editorial-page .pe-num,
+.portfolio-editorial-page .pe-statement,
+.portfolio-editorial-page .pe-head p,
+.portfolio-editorial-page .pe-facts span,
+.portfolio-editorial-page .pe-facts strong,
+.portfolio-editorial-page .pe-facts p,
+.portfolio-editorial-page .pf-swap-chrome em,
+.portfolio-editorial-page .pf-swap-chrome a,
+.portfolio-editorial-page .pf-swap-open,
+.portfolio-editorial-page .pf-swap-caption strong,
+.portfolio-editorial-page .pf-swap-caption span,
+.portfolio-editorial-page .pf-stage-num,
+.portfolio-editorial-page .pf-stage-count,
+.portfolio-editorial-page .pf-stage-name strong,
+.portfolio-editorial-page .pf-web-index span,
+.portfolio-editorial-page .pf-web-index strong,
+.portfolio-editorial-page .pf-web-index em,
+.portfolio-editorial-page .item-caption em {
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+.portfolio-editorial-page .pe-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--pe-mute);
+}
+
+.portfolio-editorial-page .pe-num {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--pe-ink);
+}
+
+/* Statement type: the size the reference layout runs its sentences at. */
+.portfolio-editorial-page .pe-statement {
+  margin: 0;
+  font-size: clamp(1.55rem, 3.5vw, 3.35rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.032em;
+}
+
+/* --- Title ---------------------------------------------------------------- */
+
+.portfolio-editorial-page .pe-title {
+  padding: clamp(3.5rem, 11vw, 9rem) var(--pe-pad) clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.portfolio-editorial-page .pe-title .pe-label {
+  margin-bottom: clamp(3rem, 12vw, 11rem);
+}
+
+.portfolio-editorial-page .pe-title h1 {
+  margin: 0;
+  /* Set to the width of the page rather than to a point size: the word is the
+     layout here, so it should reach the margins on any screen. */
+  font-size: clamp(3.4rem, 18.4vw, 17rem);
+  font-weight: 400;
+  line-height: 0.8;
+  letter-spacing: -0.045em;
+  color: var(--pe-ink);
+}
+
+/* --- Paragraph blocks ----------------------------------------------------- */
+
+.portfolio-editorial-page .pe-para {
+  display: grid;
+  grid-template-columns: minmax(0, 10rem) minmax(0, 1fr);
+  gap: 0 clamp(1rem, 3vw, 3rem);
+  padding: clamp(2.5rem, 6vw, 5.5rem) var(--pe-pad);
+  border-top: 1px solid var(--pe-line);
+}
+
+.portfolio-editorial-page .pe-para .pe-label {
+  padding-top: 0.5rem;
+}
+
+.portfolio-editorial-page .pe-para .pe-statement {
+  max-width: 30ch;
+}
+
+/* The mirrored variant, so the page alternates edge to edge as it scrolls. */
+.portfolio-editorial-page .pe-para-right {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 10rem);
+  text-align: right;
+  justify-items: end;
+}
+
+.portfolio-editorial-page .pe-para-right .pe-label { order: 2; }
+
+/* Notes: one sentence, centred, with air around it. */
+.portfolio-editorial-page .pe-note {
+  padding: clamp(4rem, 11vw, 9rem) var(--pe-pad);
+  text-align: center;
+  border-top: 1px solid var(--pe-line);
+}
+
+.portfolio-editorial-page .pe-note .pe-label {
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+}
+
+.portfolio-editorial-page .pe-note .pe-statement {
+  max-width: 18ch;
+  margin-inline: auto;
+  text-align: left;
+}
+
+/* --- Numbered sections ---------------------------------------------------- */
+
+.portfolio-editorial-page .pe-section {
+  padding: clamp(2.5rem, 6vw, 5rem) var(--pe-pad) clamp(3rem, 7vw, 6rem);
+  border-top: 1px solid var(--pe-line);
+}
+
+.portfolio-editorial-page .pe-head {
+  display: grid;
+  grid-template-columns: minmax(0, 10rem) minmax(0, 1fr);
+  gap: 0 clamp(1rem, 3vw, 3rem);
+  margin-bottom: clamp(1.75rem, 4vw, 3.25rem);
+}
+
+.portfolio-editorial-page .pe-head > p {
+  max-width: 34ch;
+  margin: 0;
+  font-size: clamp(1.05rem, 2.1vw, 1.85rem);
+  font-weight: 400;
+  line-height: 1.16;
+  letter-spacing: -0.026em;
+}
+
+.portfolio-editorial-page .pe-head-right {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 10rem);
+  justify-items: end;
+  text-align: right;
+}
+
+.portfolio-editorial-page .pe-head-right > div { order: 2; }
+
+/* --- Website cards -------------------------------------------------------- */
+
+/* The card design already sits on paper white, so this page only has to hand
+   it the page's own hairline and square-ish edges. */
+.portfolio-editorial-page .pf-swap-card {
+  border-color: var(--pe-line);
+}
+
+.portfolio-editorial-page .pf-swap-chrome {
+  border-bottom-color: var(--pe-line);
+}
+
+.portfolio-editorial-page .pf-swap-chrome i { background: rgba(11, 11, 12, 0.2); }
+.portfolio-editorial-page .pf-swap-chrome em { color: var(--pe-mute); }
+
+.portfolio-editorial-page .pf-swap-chrome a,
+.portfolio-editorial-page .pf-swap-open {
+  background: var(--pe-ink);
+  color: #ffffff;
+}
+
+.portfolio-editorial-page .pf-swap-caption {
+  border-top-color: var(--pe-line);
+}
+
+.portfolio-editorial-page .pf-swap-caption strong { color: var(--pe-ink); }
+.portfolio-editorial-page .pf-swap-caption span { color: var(--pe-mute); }
+
+.portfolio-editorial-page .pf-stage-list button {
+  border-color: var(--pe-line);
+}
+
+.portfolio-editorial-page .pf-stage-list button.is-active {
+  background: var(--pe-ink);
+  border-color: var(--pe-ink);
+}
+
+.portfolio-editorial-page .pf-web-fallback { color: var(--pe-mute); }
+
+.portfolio-editorial-page .pf-web-index,
+.portfolio-editorial-page .pf-web-index a {
+  border-color: var(--pe-line);
+}
+
+.portfolio-editorial-page .pf-web-index span,
+.portfolio-editorial-page .pf-web-index em,
+.portfolio-editorial-page .pf-stage-count { color: var(--pe-mute); }
+
+.portfolio-editorial-page .pf-web-index strong { color: var(--pe-ink); }
+
+/* --- Archive grid --------------------------------------------------------- */
+
+/* Square corners and a hairline instead of the dark-surface tile treatment. */
+.portfolio-editorial-page .item-img {
+  border-radius: 0;
+  border-color: var(--pe-line);
+  background: #f4f4f2;
+}
+
+.portfolio-editorial-page .item-wrapper:hover .item-img,
+.portfolio-editorial-page .item-wrapper:focus-visible .item-img {
+  border-color: rgba(11, 11, 12, 0.4);
+}
+
+.portfolio-editorial-page .item-wrapper.is-selected .item-img { border-color: #2050e3; }
+
+.portfolio-editorial-page .item-cart {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(11, 11, 12, 0.14);
+  color: #0b0b0c;
+}
+
+/* --- Facts ---------------------------------------------------------------- */
+
+.portfolio-editorial-page .pe-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  padding: clamp(2.5rem, 6vw, 4.5rem) var(--pe-pad);
+  border-top: 1px solid var(--pe-line);
+}
+
+.portfolio-editorial-page .pe-facts div span {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-size: 0.72rem;
+  color: var(--pe-mute);
+}
+
+.portfolio-editorial-page .pe-facts div strong {
+  display: block;
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.portfolio-editorial-page .pe-facts div p {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--pe-mute);
+}
+
+/* --- Footer --------------------------------------------------------------- */
+
+.portfolio-editorial-page .home-status-marquee-section {
+  left: auto;
+  width: 100%;
+  margin: 0;
+  padding: clamp(2rem, 5vw, 4rem) var(--pe-pad) 0;
+  transform: none;
+}
+
+/* --- Narrow screens ------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .portfolio-editorial-page .pe-para,
+  .portfolio-editorial-page .pe-para-right,
+  .portfolio-editorial-page .pe-head,
+  .portfolio-editorial-page .pe-head-right {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+    text-align: left;
+  }
+
+  .portfolio-editorial-page .pe-para-right .pe-label,
+  .portfolio-editorial-page .pe-head-right > div {
+    order: 0;
+  }
+
+  .portfolio-editorial-page .pe-para .pe-label,
+  .portfolio-editorial-page .pe-head .pe-label,
+  .portfolio-editorial-page .pe-head > div {
+    margin-bottom: 0.9rem;
+    padding-top: 0;
+  }
+
+  .portfolio-editorial-page .pe-note .pe-statement {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-editorial-page * { scroll-behavior: auto; }
+}
+
+/* --- Dark mode ------------------------------------------------------------ */
+
+/* The layout is built on paper white, so dark mode swaps the two inks rather
+   than tinting anything: without this the page would stay blinding white for
+   anyone who has chosen the dark theme. */
+html[data-theme='dark'] .portfolio-editorial-page {
+  --pe-ink: #f4f4f2;
+  --pe-mute: rgba(244, 244, 242, 0.5);
+  --pe-line: rgba(244, 244, 242, 0.16);
+  background: #0b0b0c;
+}
+
+html[data-theme='dark'] .portfolio-editorial-page .pf-swap-card { background: #131315; }
+html[data-theme='dark'] .portfolio-editorial-page .pf-swap-chrome { background: #1a1a1d; }
+html[data-theme='dark'] .portfolio-editorial-page .pf-swap-chrome i { background: rgba(244, 244, 242, 0.24); }
+html[data-theme='dark'] .portfolio-editorial-page .pf-swap-caption { background: #131315; }
+html[data-theme='dark'] .portfolio-editorial-page .pf-stage-list button { background: #131315; }
+
+html[data-theme='dark'] .portfolio-editorial-page .pf-swap-chrome a,
+html[data-theme='dark'] .portfolio-editorial-page .pf-swap-open,
+html[data-theme='dark'] .portfolio-editorial-page .pf-stage-list button.is-active {
+  background: var(--pe-ink);
+  border-color: var(--pe-ink);
+  color: #0b0b0c;
+}
+
+html[data-theme='dark'] .portfolio-editorial-page .pf-stage-list button.is-active .pf-stage-name strong,
+html[data-theme='dark'] .portfolio-editorial-page .pf-stage-list button.is-active .pf-stage-num {
+  color: #0b0b0c;
+}
+
+html[data-theme='dark'] .portfolio-editorial-page .pf-web-index a:hover strong { color: #8db4ff; }
+
+html[data-theme='dark'] .portfolio-editorial-page .item-img { background: #17171a; }
+
+html[data-theme='dark'] .portfolio-editorial-page .item-cart {
+  background: rgba(11, 11, 12, 0.86);
+  border-color: rgba(244, 244, 242, 0.2);
+  color: #f4f4f2;
+}

@@ -28972,109 +28972,16 @@
 }
 
 /* ===========================================================================
-   Portfolio — website projects.
+   Portfolio — live website previews.
 
-   Cards read as websites even with no screenshot: browser chrome plus a
-   typographic fallback showing the domain, so a new entry never looks broken
-   while its image is still being captured.
+   Used by SitePreview, which renders a real site in a frame at desktop width
+   and scales it down. The typographic fallback shows the domain while the
+   frame is still off screen, or if a host turns out to block framing, so a
+   card never sits there as an empty white box.
    ========================================================================= */
 
-.pf-web { margin: 2.5rem 0 2rem; }
-
-.pf-web-head {
-  margin-bottom: 1.25rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-.pf-web-head span {
-  display: inline-block;
-  margin-bottom: 0.4rem;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-}
-
-.pf-web-head h2 {
-  margin: 0;
-  font-size: clamp(1.35rem, 2.6vw, 2.2rem);
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.04em;
-  color: #f5f5f5;
-}
-
-.pf-web-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
-  gap: 1.1rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.pf-web-card a {
-  display: block;
-  overflow: hidden;
-  border-radius: 0.9rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.25s ease, transform 0.25s ease;
-}
-
-@media (hover: hover) {
-  .pf-web-card a:hover {
-    border-color: rgba(255, 255, 255, 0.34);
-    transform: translateY(-3px);
-  }
-}
-
-.pf-web-chrome {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.5rem 0.75rem;
-  background: rgba(255, 255, 255, 0.07);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.pf-web-chrome i {
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.28);
-}
-
-.pf-web-chrome em {
-  margin-left: 0.5rem;
-  overflow: hidden;
-  font-style: normal;
-  font-size: 0.66rem;
-  color: rgba(255, 255, 255, 0.5);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.pf-web-shot {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  background: linear-gradient(140deg, rgba(32, 80, 227, 0.22), rgba(255, 255, 255, 0.04));
-}
-
-.pf-web-shot img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-}
-
-/* Shown until a screenshot is added. */
+/* Stands in for the page: shown before the frame mounts, and instead of it if
+   the site refuses to be framed. */
 .pf-web-fallback {
   padding: 0 1rem;
   font-size: 0.95rem;
@@ -29085,71 +28992,31 @@
   word-break: break-word;
 }
 
-.pf-web-body {
+/* Live site preview inside a website card. The frame is rendered at desktop
+   width and scaled down, so it reads as the real page rather than a squashed
+   mobile layout. */
+.pf-web-frame {
+  position: relative;
   display: block;
-  padding: 0.85rem 0.9rem 1rem;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0b1020;
 }
 
-.pf-web-body strong {
-  display: block;
-  margin-bottom: 0.3rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #f5f5f5;
+.pf-web-frame iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  /* Clicks belong to the card, which opens the site in a new tab. */
+  pointer-events: none;
 }
 
-.pf-web-note {
-  display: block;
-  margin-bottom: 0.6rem;
-  font-size: 0.78rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.5);
+.pf-web-frame .pf-web-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
 }
 
-.pf-web-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  margin-bottom: 0.75rem;
-}
-
-.pf-web-tags em {
-  padding: 0.25rem 0.55rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  font-style: normal;
-  font-size: 0.66rem;
-  color: rgba(255, 255, 255, 0.65);
-}
-
-.pf-web-visit {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #8db4ff;
-}
-
-/* The wall repeats its columns to fill whatever height it is given, so a tall
-   container directly multiplies the number of animating tiles. Capping the
-   height on phones is the cheapest way to cut that count. */
-@media (max-width: 767px) {
-  .portfolio-dome-shell { height: 26rem; min-height: 0; }
-
-  /* Two up rather than one. 17rem needs 272px, so only a single column fitted
-     a 375px screen — which is why the sites listed one by one. */
-  .pf-web-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.7rem;
-  }
-
-  .pf-web-body { padding: 0.65rem 0.6rem 0.75rem; }
-  .pf-web-body strong { font-size: 0.82rem; }
-  .pf-web-note { font-size: 0.68rem; margin-bottom: 0.45rem; }
-  .pf-web-tags { gap: 0.22rem; margin-bottom: 0.5rem; }
-  .pf-web-tags em { padding: 0.18rem 0.42rem; font-size: 0.58rem; }
-  .pf-web-visit { font-size: 0.68rem; }
-  .pf-web-chrome { padding: 0.35rem 0.5rem; }
-  .pf-web-chrome em { font-size: 0.55rem; margin-left: 0.3rem; }
-  .pf-web-chrome i { width: 0.32rem; height: 0.32rem; }
-  .pf-web-fallback { font-size: 0.72rem; padding: 0 0.5rem; }
-}
