@@ -441,6 +441,19 @@ const pageSeo = {
 const ProjectedCylinder = ({ images, ariaLabel, cardWidth = 124, gap = 8 }) => {
   const stageRef = useRef(null);
   const cardsRef = useRef([]);
+  const [stageWidth, setStageWidth] = useState(0);
+
+  /* The ring is sized to the space it is given, not just to the cards. Driving
+     the width from the card size alone left every card inside a 440px huddle
+     in the middle of a 1090px stage — mostly hidden behind the headline card,
+     which is what made it look broken. */
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return undefined;
+    const observer = new ResizeObserver(([entry]) => setStageWidth(entry.contentRect.width));
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -450,10 +463,21 @@ const ProjectedCylinder = ({ images, ariaLabel, cardWidth = 124, gap = 8 }) => {
     if (!n) return undefined;
 
     const step = (Math.PI * 2) / n;
-    const radius = (cardWidth / 2 + gap) / Math.tan(step / 2);
-    // Matches the 35em perspective the desktop version uses, as a ratio of
-    // its own radius, so the two read at the same depth.
-    const focal = radius * 1.37;
+    // Depth radius: how far the back of the ring sits from the front, which is
+    // what drives the size and fade of a card as it goes round.
+    const depthRadius = (cardWidth / 2 + gap) / Math.tan(step / 2);
+    // Matches the 35em perspective the 3D version used, as a ratio of its own
+    // radius, so cards recede by the same amount.
+    const focal = depthRadius * 1.37;
+    /* Width radius. A card is furthest out at a quarter turn, where the
+       projection has already shrunk it by this much — so dividing by that
+       factor is what makes the widest cards actually reach the edges of the
+       stage instead of stopping short in a huddle around the middle. */
+    const quarterTurnScale = focal / (focal + depthRadius);
+    const wideRadius = Math.max(
+      depthRadius,
+      (stageWidth - cardWidth) / 2 / quarterTurnScale
+    );
 
     const paint = (angle) => {
       for (let i = 0; i < n; i += 1) {
@@ -462,8 +486,8 @@ const ProjectedCylinder = ({ images, ariaLabel, cardWidth = 124, gap = 8 }) => {
 
         const t = i * step + angle;
         const cos = Math.cos(t);
-        const scale = focal / (focal + radius - radius * cos);
-        const x = radius * Math.sin(t) * scale;
+        const scale = focal / (focal + depthRadius - depthRadius * cos);
+        const x = wideRadius * Math.sin(t) * scale;
 
         card.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0) scale(${scale.toFixed(3)})`;
         card.style.zIndex = String(Math.round(cos * 100) + 100);
@@ -520,7 +544,7 @@ const ProjectedCylinder = ({ images, ariaLabel, cardWidth = 124, gap = 8 }) => {
       document.removeEventListener('visibilitychange', onVisibility);
       stop();
     };
-  }, [images, cardWidth, gap]);
+  }, [images, cardWidth, gap, stageWidth]);
 
   return (
     <div className="adv-ring" ref={stageRef} aria-label={ariaLabel}>
@@ -2944,7 +2968,7 @@ const App = () => {
                 <ProjectedCylinder
                   images={advantageCylinderImages}
                   ariaLabel="Selected Leaf Creationism work"
-                  cardWidth={isMobileViewport ? 124 : 230}
+                  cardWidth={isMobileViewport ? 124 : 250}
                 />
 
                 <div className="advantage-stat-grid">

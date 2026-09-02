@@ -65,41 +65,52 @@ const useMeasure = () => {
    rather than to an invented height. That is what stops artwork being cropped:
    when the box matches the picture, there is nothing left to cut off.
 
-   Never blocks first paint for long — on a slow connection the original waited
-   for every request to settle, which on this archive is dozens of them. */
-const measureItems = async (items, timeoutMs = 1500) => {
+   Nothing here blocks the grid. An earlier version waited for every request to
+   settle — dozens of them on this archive — and laid out nothing until they
+   were in, so the whole page sat empty for up to a second and a half and then
+   appeared all at once. That wait was the "images not loading". Now the grid
+   is laid out immediately from a default ratio and refined as measurements
+   arrive, batched so it settles in a couple of passes rather than sixty-one. */
+const measureItems = (items, onProgress) => {
   const ratios = new Map();
+  let flush = null;
+  let done = 0;
 
-  const measured = Promise.all(
-    items.map(
-      item =>
-        new Promise(resolve => {
-          const done = (ratio) => {
-            if (ratio && isFinite(ratio) && ratio > 0) ratios.set(item.id, ratio);
-            resolve();
-          };
+  const publish = () => {
+    flush = null;
+    onProgress(new Map(ratios));
+  };
 
-          if (item.type === 'video') {
-            const video = document.createElement('video');
-            video.preload = 'metadata';
-            video.muted = true;
-            video.onloadedmetadata = () => done(video.videoHeight / video.videoWidth);
-            video.onerror = () => resolve();
-            video.src = item.src;
-            return;
-          }
+  const record = (id, ratio) => {
+    done += 1;
+    if (ratio && isFinite(ratio) && ratio > 0) ratios.set(id, ratio);
+    // Batch: one update per frame-ish, plus a final one when everything is in.
+    if (done === items.length) {
+      clearTimeout(flush);
+      publish();
+    } else if (flush === null) {
+      flush = setTimeout(publish, 150);
+    }
+  };
 
-          const img = new Image();
-          img.onload = () => done(img.naturalHeight / img.naturalWidth);
-          img.onerror = () => resolve();
-          img.src = item.img;
-        })
-    )
-  );
+  items.forEach((item) => {
+    if (item.type === 'video') {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.muted = true;
+      video.onloadedmetadata = () => record(item.id, video.videoHeight / video.videoWidth);
+      video.onerror = () => record(item.id, null);
+      video.src = item.src;
+      return;
+    }
 
-  const cap = new Promise(resolve => setTimeout(resolve, timeoutMs));
-  await Promise.race([measured, cap]);
-  return ratios;
+    const img = new Image();
+    img.onload = () => record(item.id, img.naturalHeight / img.naturalWidth);
+    img.onerror = () => record(item.id, null);
+    img.src = item.img;
+  });
+
+  return () => clearTimeout(flush);
 };
 
 const Masonry = ({
@@ -115,14 +126,16 @@ const Masonry = ({
   onItemClick,
   selectedIds = []
 }) => {
+  /* Phones get three columns, not one. At one per row this archive was a
+     23,000px scroll of sixty-one full-width pictures, which is what "showing
+     one by one" meant — you could never see the work as a body of work. */
   const columns = useMedia(
-    ['(min-width:1500px)', '(min-width:1000px)', '(min-width:600px)', '(min-width:400px)'],
-    [5, 4, 3, 2],
-    1
+    ['(min-width:1500px)', '(min-width:1000px)', '(min-width:600px)', '(min-width:340px)'],
+    [5, 4, 4, 3],
+    2
   );
 
   const [containerRef, { width }] = useMeasure();
-  const [imagesReady, setImagesReady] = useState(false);
   const [ratios, setRatios] = useState(() => new Map());
 
   const getInitialPosition = item => {
@@ -157,12 +170,13 @@ const Masonry = ({
 
   useEffect(() => {
     let active = true;
-    measureItems(items).then(measured => {
-      if (!active) return;
-      setRatios(measured);
-      setImagesReady(true);
+    const cancel = measureItems(items, (measured) => {
+      if (active) setRatios(measured);
     });
-    return () => { active = false; };
+    return () => {
+      active = false;
+      cancel();
+    };
   }, [items]);
 
   const grid = useMemo(() => {
@@ -198,8 +212,6 @@ const Masonry = ({
   const hasMounted = useRef(false);
 
   useLayoutEffect(() => {
-    if (!imagesReady) return;
-
     grid.forEach((item, index) => {
       const selector = `[data-key="${item.id}"]`;
 
@@ -243,7 +255,7 @@ const Masonry = ({
 
     hasMounted.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [grid, imagesReady, stagger, animateFrom, blurToFocus, duration, ease]);
+  }, [grid, stagger, animateFrom, blurToFocus, duration, ease]);
 
   const handleMouseEnter = (e, item) => {
     const element = e.currentTarget;

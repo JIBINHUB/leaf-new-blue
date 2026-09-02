@@ -134,8 +134,37 @@
   .item-img::after { opacity: 1; }
 }
 
-@media (max-width: 600px) {
-  .item-wrapper { padding: 0.3rem; }
+/* Below 1000px the grid runs three or four narrow columns — a tile is 115px on
+   a phone and around 160px on a small tablet — so the label has to shrink with
+   it: two lines at most, and the category dropped rather than allowed to
+   squeeze the name out of the tile. */
+@media (max-width: 999px) {
+  .item-wrapper { padding: 0.22rem; }
+
+  .item-caption {
+    left: 0.4rem;
+    right: 1.9rem;
+    bottom: 0.35rem;
+  }
+
+  .item-caption em {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size: 0.62rem;
+    line-height: 1.2;
+  }
+
+  .item-caption i { display: none; }
+
+  .item-cart {
+    right: 0.35rem;
+    bottom: 0.35rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .item-cart svg { width: 11px; height: 11px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
