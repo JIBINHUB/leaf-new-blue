@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import './tailwind.css';
 import './styles.css';
@@ -2166,14 +2166,22 @@ const App = () => {
      to images only, so fourteen video works never appeared at all. Heights are
      no longer guessed here — the grid measures each item and sizes its tile to
      the real proportions, which is what stops artwork being cropped. */
-  const masonryItems = portfolioItems.map((item) => ({
+  /* Memoised, and this matters more than it looks. Two intervals in this
+     component — the ad carousel and the floating action button — re-render the
+     whole app every few seconds. Rebuilt fresh each time, this array arrived at
+     the grid as a new identity, so the grid re-measured all sixty pieces,
+     recomputed its layout and re-ran GSAP across every tile, several times a
+     minute, forever. The contents never change, so the identity should not
+     either. */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const masonryItems = useMemo(() => portfolioItems.map((item) => ({
     id: item.src,
     img: toThumb(item.src),
     src: item.src,
     type: item.type,
     title: item.title,
     category: item.category
-  }));
+  })), []);
   const featuredPortfolioItems = portfolioItems.slice(0, 3);
   const togglePortfolioLike = (key) => {
     setLikedPortfolioItems((items) => (
@@ -2389,9 +2397,13 @@ const App = () => {
   /* Both the advantage cylinder and the portfolio dome render these images at
      roughly 250px wide, so they load the 640px thumbnails instead of the
      multi-megabyte originals. */
-  const advantageSpiralImages = leafAdvantageMedia
-    .slice(0, 10)
-    .map((item) => ({ src: toThumb(item.src), alt: item.label }));
+  /* Same reason as masonryItems: a new array each render restarted the
+     spiral's observers and animation loop every few seconds. */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const advantageSpiralImages = useMemo(
+    () => leafAdvantageMedia.slice(0, 10).map((item) => ({ src: toThumb(item.src), alt: item.label })),
+    []
+  );
 
   /* The studio sign-off. Defined once and rendered at the end of more than one
      route, so the pages visitors actually land on all close the same way
@@ -2792,7 +2804,9 @@ const App = () => {
                   cardRadius={isMobileViewport ? 12 : 16}
                   centerScale={1.14}
                   edgeFade={0.34}
-                  edgeBlur={4}
+                  /* Per-frame blur on up to ten cards is a real cost on weak
+                     GPUs. The edge fade alone reads the same on a phone. */
+                  edgeBlur={isMobileViewport ? 0 : 4}
                 />
 
                 <div className="advantage-stat-grid">
@@ -4605,7 +4619,11 @@ const App = () => {
               animateFrom="bottom"
               scaleOnHover
               hoverScale={0.97}
-              blurToFocus
+              /* The intro blurs each tile from 10px to 0. Sixty animated blurs
+                 is the single most expensive thing on this page for a low-end
+                 phone, and it buys a moment of polish nobody asked for — the
+                 tiles still fade and rise there. */
+              blurToFocus={!isMobileViewport}
             />
           </section>
 

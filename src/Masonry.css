@@ -19,8 +19,13 @@
   left: 0;
   padding: 0.45rem;
   cursor: pointer;
-  will-change: transform, width, height;
-  /* GSAP animates transform; a CSS transition here would fight it. */
+  /* GSAP animates transform; a CSS transition here would fight it.
+
+     No will-change. It was listing transform, width and height on every tile,
+     which on a sixty-piece archive is sixty permanently promoted compositor
+     layers — enough GPU memory to make a low-end phone thrash while scrolling.
+     GSAP sets will-change itself for the length of a tween, which is the only
+     time it earns its cost. */
 }
 
 .item-img {

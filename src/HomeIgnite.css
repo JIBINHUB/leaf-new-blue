@@ -482,12 +482,23 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
 
 .app-shell[data-route='home'] .access-color-form { padding: 40px !important; }
 
+/* The promo card. max-width:100% is what the home rebuild left it with, and
+   because .home-hero-copy has no measure on this route that resolved to the
+   full 1132px column — a 5.8:1 letterbox rather than a card. Capped so it
+   keeps the proportions it was drawn at; below 1024px the column is already
+   narrower than the cap, so nothing changes there. */
 .app-shell[data-route='home'] .home-promo-card {
   max-width: 100%;
   border-radius: var(--ig-r-card) !important;
   background: var(--ig-alt) !important;
   border: 0;
   box-shadow: none !important;
+}
+
+@media (min-width: 1024px) {
+  .app-shell[data-route='home'] .home-promo-card {
+    max-width: 40rem;
+  }
 }
 
 /* --- Service icon ring --------------------------------------------------- */
