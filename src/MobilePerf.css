@@ -110,135 +110,31 @@
 }
 
 /* ==========================================================================
-   FLAT MARQUEE — mobile replacement for the 3D advantage cylinder
-   Rendered only under 640px (see FlatMarquee in App.jsx). Deliberately plain:
-   one flex row and a single translateX animation, so there is no preserve-3d
-   layer stack for mobile Safari/Chrome to drop.
+   ADVANTAGE SPIRAL
+   The slot inside .advantage-media-stage that the ring, and the 3D cylinder
+   before it, occupied: behind the centred headline card and above the stat
+   pill. The spiral turns vertically, so it is masked top and bottom rather
+   than left and right — cards arrive and leave through the fade instead of
+   popping at a hard edge.
    ========================================================================== */
-/* Occupies the same slot the 3D cylinder used inside .advantage-media-stage:
-   pinned below the centred headline card and above the stat pill. */
-.advantage-flat-marquee {
+
+/* Two classes deliberately: .infinite-spiral sets height:100%, which on an
+   absolutely positioned box wins over `bottom` and collapsed this to zero
+   height. Matching both names outranks it whatever order the stylesheets load
+   in. */
+.infinite-spiral.adv-spiral {
   position: absolute;
-  inset: 15.4rem 0 5rem;
+  inset: 1.6rem 0 4.2rem;
+  height: auto;
   z-index: 16;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
 }
 
-.advantage-flat-track {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  width: max-content;
-  animation: advantage-flat-scroll 38s linear infinite;
-  will-change: transform;
-}
-
-.advantage-flat-track img {
-  width: 8.4rem;
-  aspect-ratio: 7 / 10;
-  object-fit: cover;
-  border-radius: 0.85rem;
-  flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
-}
-
-/* Half the distance, because the image list is rendered twice. */
-@keyframes advantage-flat-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .advantage-flat-track {
-    animation: none;
+/* On a phone the headline card sits over the top of the stage, so the spiral
+   starts below it. */
+@media (max-width: 639px) {
+  .infinite-spiral.adv-spiral {
+    inset: 12.8rem 0 3.6rem;
   }
-
-  .advantage-flat-marquee {
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-}
-
-/* ==========================================================================
-   Users who ask the OS for less motion get none of the ambient animation,
-   on any screen size.
-   ========================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* ==========================================================================
-   ProjectedCylinder — the desktop ring, projected to 2D for phones.
-
-   Occupies the same slot inside .advantage-media-stage that the 3D carousel
-   uses on desktop. Cards are absolutely positioned on a single centre point;
-   the component writes translate/scale per frame, so nothing here sets a
-   transform that would fight it.
-   ========================================================================== */
-
-.adv-ring {
-  position: absolute;
-  inset: 14.2rem 0 4.2rem;
-  z-index: 16;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
-}
-
-.adv-ring-stage {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Every card shares one origin; the projection does the rest. */
-.adv-ring-stage img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  /* margin-top / margin-left are set inline by the component, derived from the
-     card width, so the ring stays centred whatever size the cards are. */
-  aspect-ratio: 7 / 10;
-  object-fit: cover;
-  border-radius: 0.85rem;
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
-  will-change: transform, opacity;
-  /* No transform here: the component owns it and a value would be overwritten
-     mid-frame, or worse, win before the first paint. */
-}
-
-/* The ring now runs on every screen, so it also has to sit where the 3D
-   carousel used to on desktop — higher in the stage, since there is no phone
-   headline above it to clear. */
-@media (min-width: 640px) {
-  .adv-ring {
-    inset: 3.2rem 0 4.7rem;
-  }
-
-  .adv-ring-stage img {
-    border-radius: 1.1rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .adv-ring-stage img { will-change: auto; }
 }

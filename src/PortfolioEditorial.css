@@ -45,7 +45,6 @@
 .portfolio-editorial-page .pe-facts strong,
 .portfolio-editorial-page .pe-facts p,
 .portfolio-editorial-page .pf-swap-chrome em,
-.portfolio-editorial-page .pf-swap-chrome a,
 .portfolio-editorial-page .pf-swap-open,
 .portfolio-editorial-page .pf-swap-caption strong,
 .portfolio-editorial-page .pf-swap-caption span,
@@ -196,7 +195,6 @@
 .portfolio-editorial-page .pf-swap-chrome i { background: rgba(11, 11, 12, 0.2); }
 .portfolio-editorial-page .pf-swap-chrome em { color: var(--pe-mute); }
 
-.portfolio-editorial-page .pf-swap-chrome a,
 .portfolio-editorial-page .pf-swap-open {
   background: var(--pe-ink);
   color: #ffffff;
@@ -346,7 +344,6 @@ html[data-theme='dark'] .portfolio-editorial-page .pf-swap-chrome i { background
 html[data-theme='dark'] .portfolio-editorial-page .pf-swap-caption { background: #131315; }
 html[data-theme='dark'] .portfolio-editorial-page .pf-stage-list button { background: #131315; }
 
-html[data-theme='dark'] .portfolio-editorial-page .pf-swap-chrome a,
 html[data-theme='dark'] .portfolio-editorial-page .pf-swap-open,
 html[data-theme='dark'] .portfolio-editorial-page .pf-stage-list button.is-active {
   background: var(--pe-ink);

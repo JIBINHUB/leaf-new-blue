@@ -17,6 +17,7 @@ import { useSectionReveals } from './HomeReveals';
 import SplitFlapText from './SplitFlapText';
 import ProfileCard from './ProfileCard';
 import Stepper, { Step } from './Stepper';
+import InfiniteSpiral from './InfiniteSpiral';
 import Masonry from './Masonry';
 import OptionWheel from './OptionWheel';
 import SiteShowcase from './SiteShowcase';
@@ -415,192 +416,6 @@ const pageSeo = {
   }
 };
 
-
-/**
- * ProjectedCylinder — the rotating ring of work, on every screen.
- *
- * It replaced a real 3D ring: `perspective` on the container,
- * `transform-style: preserve-3d` on the track, and each card pushed back with
- * a translateZ computed through the CSS tan() function. Where either is
- * unsupported the ring collapses onto its own axis and the cards paint as
- * blank slivers — reported first from a real iPhone, then reproduced on the
- * desktop build.
- *
- * So this does the perspective projection itself and emits only 2D
- * transforms, which every browser paints.
- * For a card at angle t on a ring of radius R, with the camera f in front of
- * the ring's near edge:
- *
- *     depth = R - R*cos(t)        // 0 at the front, 2R at the back
- *     scale = f / (f + depth)
- *     x     = R*sin(t) * scale
- *
- * which is exactly what the browser computes for the 3D version. Same ring,
- * same motion, no 3D context.
- */
-const ProjectedCylinder = ({ images, ariaLabel, cardWidth = 124, gap = 8 }) => {
-  const stageRef = useRef(null);
-  const cardsRef = useRef([]);
-  const [stageWidth, setStageWidth] = useState(0);
-
-  /* The ring is sized to the space it is given, not just to the cards. Driving
-     the width from the card size alone left every card inside a 440px huddle
-     in the middle of a 1090px stage — mostly hidden behind the headline card,
-     which is what made it look broken. */
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return undefined;
-    const observer = new ResizeObserver(([entry]) => setStageWidth(entry.contentRect.width));
-    observer.observe(stage);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return undefined;
-
-    const n = images.length;
-    if (!n) return undefined;
-
-    const step = (Math.PI * 2) / n;
-    // Depth radius: how far the back of the ring sits from the front, which is
-    // what drives the size and fade of a card as it goes round.
-    const depthRadius = (cardWidth / 2 + gap) / Math.tan(step / 2);
-    // Matches the 35em perspective the 3D version used, as a ratio of its own
-    // radius, so cards recede by the same amount.
-    const focal = depthRadius * 1.37;
-    /* Width radius. A card is furthest out at a quarter turn, where the
-       projection has already shrunk it by this much — so dividing by that
-       factor is what makes the widest cards actually reach the edges of the
-       stage instead of stopping short in a huddle around the middle. */
-    const quarterTurnScale = focal / (focal + depthRadius);
-    const wideRadius = Math.max(
-      depthRadius,
-      (stageWidth - cardWidth) / 2 / quarterTurnScale
-    );
-
-    const paint = (angle) => {
-      for (let i = 0; i < n; i += 1) {
-        const card = cardsRef.current[i];
-        if (!card) continue;
-
-        const t = i * step + angle;
-        const cos = Math.cos(t);
-        const scale = focal / (focal + depthRadius - depthRadius * cos);
-        const x = wideRadius * Math.sin(t) * scale;
-
-        card.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0) scale(${scale.toFixed(3)})`;
-        card.style.zIndex = String(Math.round(cos * 100) + 100);
-        // Back of the ring recedes rather than disappearing.
-        card.style.opacity = (0.45 + 0.55 * ((cos + 1) / 2)).toFixed(2);
-      }
-    };
-
-    paint(0);
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-
-    let angle = 0;
-    let last = 0;
-    let frame = null;
-    let running = false;
-
-    const tick = (now) => {
-      if (!running) return;
-      if (last) angle += ((now - last) / 1000) * 0.32;   // radians per second
-      last = now;
-      paint(angle);
-      frame = window.requestAnimationFrame(tick);
-    };
-
-    const start = () => {
-      if (running) return;
-      running = true;
-      last = 0;
-      frame = window.requestAnimationFrame(tick);
-    };
-
-    const stop = () => {
-      running = false;
-      if (frame !== null) window.cancelAnimationFrame(frame);
-      frame = null;
-    };
-
-    // Only animate while the section is actually on screen, and never while
-    // the tab is in the background — this runs on phones, where a permanently
-    // spinning rAF loop is exactly the wrong thing.
-    const observer = new IntersectionObserver(
-      ([entry]) => (entry.isIntersecting ? start() : stop()),
-      { threshold: 0.05 }
-    );
-    observer.observe(stage);
-
-    const onVisibility = () => (document.hidden ? stop() : undefined);
-    document.addEventListener('visibilitychange', onVisibility);
-
-    return () => {
-      observer.disconnect();
-      document.removeEventListener('visibilitychange', onVisibility);
-      document.removeEventListener('visibilitychange', onVisibility);
-      stop();
-    };
-  }, [images, cardWidth, gap, stageWidth]);
-
-  return (
-    <div className="adv-ring" ref={stageRef} aria-label={ariaLabel}>
-      <div className="adv-ring-stage">
-        {images.map((image, index) => (
-          <img
-            key={`${image.src}-${index}`}
-            ref={(node) => { cardsRef.current[index] = node; }}
-            src={image.src}
-            alt={index === 0 ? (image.alt || '') : ''}
-            aria-hidden={index !== 0}
-            loading="lazy"
-            decoding="async"
-            draggable="false"
-            /* Height comes from the 7/10 aspect ratio, so the centring offset
-               is derived from the width rather than hardcoded in CSS — a fixed
-               margin there did not match the real height and pushed the whole
-               ring upward, leaving dead space below it. */
-            style={{
-              width: `${cardWidth}px`,
-              marginTop: `${-(cardWidth * (10 / 7)) / 2}px`,
-              marginLeft: `${-cardWidth / 2}px`
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-/**
- * Flat 2D marquee used instead of the ring on phones.
- *
- * The 3D version relies on transform-style: preserve-3d with ten stacked,
- * rotated image layers. Mobile Safari and Chrome both fail to paint those
- * layers reliably — the strip renders as blank white cards — so small screens
- * get this instead: one row, plain translateX, no 3D and no backface tricks.
- * The list is duplicated so the loop has no visible seam.
- */
-const FlatMarquee = ({ images, ariaLabel }) => (
-  <div className="advantage-flat-marquee" aria-label={ariaLabel}>
-    <div className="advantage-flat-track">
-      {[...images, ...images].map((image, index) => (
-        <img
-          key={`${image.src}-${index}`}
-          src={image.src}
-          alt={index < images.length ? (image.alt || '') : ''}
-          aria-hidden={index >= images.length}
-          loading="lazy"
-          decoding="async"
-          draggable="false"
-        />
-      ))}
-    </div>
-  </div>
-);
 
 const App = () => {
   const [activeNav, setActiveNav] = useState(getNavFromPath);
@@ -1087,42 +902,45 @@ const App = () => {
   const activeCategoryData = serviceCategories.find(c => c.id === activeCategory);
 
   /* ------------------------------------------------------------------
-     STORE PRICING — REVIEW THESE BEFORE GOING LIVE.
-     These are placeholder starting prices, not quotes from the studio.
-     Every card says "Starting from" and the checkout still ends in a
-     written quote, but change these to your real numbers.
+     STORE PRICING — THESE ARE YOURS TO SET.
+     Starting prices only: every card says "Starting from" and the flow
+     still ends in a written quote, so none of this is a commitment. The
+     numbers were lowered to entry points a small business will actually
+     click on, keeping the same order between services, and set just under
+     a round figure because that is what reads as a price rather than an
+     estimate. Change any of them to your real floor.
      ------------------------------------------------------------------ */
   const servicePricing = {
     uiux: {
-      from: 25000, weeks: '2-3 weeks', group: 'Design',
+      from: 17999, weeks: '2-3 weeks', group: 'Design',
       includes: ['User research & flows', 'Wireframes & prototypes', 'Full UI design system']
     },
     web: {
-      from: 35000, weeks: '3-4 weeks', group: 'Development',
+      from: 24999, weeks: '3-4 weeks', group: 'Development',
       includes: ['Mobile-responsive build', 'Speed & Core Web Vitals', 'On-page SEO setup']
     },
     ai: {
-      from: 20000, weeks: '1-2 weeks', group: 'Marketing', badge: 'Fastest delivery',
+      from: 12999, weeks: '1-2 weeks', group: 'Marketing', badge: 'Fastest delivery',
       includes: ['AI-generated ad creatives', 'Meta & Google campaign setup', 'A/B testing framework']
     },
     adv: {
-      from: 30000, weeks: '2-4 weeks', group: 'Marketing',
+      from: 19999, weeks: '2-4 weeks', group: 'Marketing',
       includes: ['Campaign strategy', 'Creative direction & copy', 'Performance reporting']
     },
     brand: {
-      from: 40000, weeks: '3-5 weeks', group: 'Design',
+      from: 27999, weeks: '3-5 weeks', group: 'Design',
       includes: ['Logo & visual identity', 'Colour & type system', 'Brand guideline document']
     },
     apps: {
-      from: 75000, weeks: '6-10 weeks', group: 'Development',
+      from: 54999, weeks: '6-10 weeks', group: 'Development',
       includes: ['iOS & Android build', 'Backend, API & database', 'App Store submission']
     },
     nocode: {
-      from: 18000, weeks: '1-2 weeks', group: 'Development', badge: 'Best value',
+      from: 11999, weeks: '1-2 weeks', group: 'Development', badge: 'Best value',
       includes: ['Webflow / Framer build', 'CMS you can edit yourself', 'Training & handover']
     },
     shopify: {
-      from: 45000, weeks: '3-5 weeks', group: 'Development',
+      from: 32999, weeks: '3-5 weeks', group: 'Development',
       includes: ['Custom theme build', 'Checkout optimisation', 'Payment gateway setup']
     }
   };
@@ -1174,7 +992,7 @@ const App = () => {
       desc: 'We turn loose ideas into a clear product, brand, and growth direction before design or code begins.',
       tags: ['Research', 'Architecture', 'Positioning'],
       items: ['Research', 'Software Architecture', 'UI/UX Auditing', 'Product Strategy', 'Creative Strategy', 'Marketing and Competitive Analysis'],
-      image: '/assets/capabilities/strategy-cartoon.png'
+      image: '/assets/capabilities/strategy-cartoon.jpg'
     },
     {
       id: 'brand',
@@ -1182,7 +1000,7 @@ const App = () => {
       desc: 'We shape how the brand looks, moves, sounds, and shows up across campaigns, launches, and everyday content.',
       tags: ['Brand Systems', 'Motion', 'Campaigns'],
       items: ['Explainer Videos', '3D Motion Design', 'Illustration and Iconography', 'Branding Strategy and Positioning'],
-      image: '/assets/capabilities/brand-campaign-cartoon.png'
+      image: '/assets/capabilities/brand-campaign-cartoon.jpg'
     },
     {
       id: 'product',
@@ -1190,7 +1008,7 @@ const App = () => {
       desc: 'We design digital products with usable flows, polished interfaces, fast prototypes, and a personality people remember.',
       tags: ['UX/UI', 'Prototyping', 'Systems'],
       items: ['Motion Design System', 'Prototyping and Iterative Testing', 'Personality and Tonality Setup', 'UX/UI Design'],
-      image: '/assets/capabilities/product-cartoon.png'
+      image: '/assets/capabilities/product-cartoon.jpg'
     },
     {
       id: 'engineering',
@@ -1198,7 +1016,7 @@ const App = () => {
       desc: 'We build the product layer behind the brand: fast websites, apps, stores, AI workflows, and cloud-ready systems.',
       tags: ['Web', 'Apps', 'AI/ML'],
       items: ['DevOps and Cloud Management', 'Shopify Development', 'App Development', 'Web Development', 'AI/ML', 'Framer Development'],
-      image: '/assets/capabilities/engineering-cartoon.png'
+      image: '/assets/capabilities/engineering-cartoon.jpg'
     }
   ];
 
@@ -1236,7 +1054,6 @@ const App = () => {
       colorC: 'rgba(217,119,6,0.72)'
     }
   ];
-  const servicesFeatureVideo = localServicesHeroVideo;
 
   const serviceSpotlights = [
     {
@@ -1839,15 +1656,6 @@ const App = () => {
       tone: 'rose',
       span: 'tall',
       src: '/assets/portfolio/new-work/sip-and-smile-poster.jpg'
-    },
-    {
-      title: 'Creative Motion Reel',
-      category: 'Motion Graphics / Brand Film',
-      type: 'video',
-      format: 'Motion reel',
-      tone: 'violet',
-      span: 'tall',
-      src: '/assets/portfolio/new-work/creative-motion-reel.mp4'
     },
     {
       title: 'PodLight AI Podcast Experience',
@@ -2581,7 +2389,7 @@ const App = () => {
   /* Both the advantage cylinder and the portfolio dome render these images at
      roughly 250px wide, so they load the 640px thumbnails instead of the
      multi-megabyte originals. */
-  const advantageCylinderImages = leafAdvantageMedia
+  const advantageSpiralImages = leafAdvantageMedia
     .slice(0, 10)
     .map((item) => ({ src: toThumb(item.src), alt: item.label }));
 
@@ -2786,9 +2594,13 @@ const App = () => {
               <div className="home-welcome-copy ig-hero">
                 <span className="ig-eyebrow">Creative studio · Kerala, India</span>
 
-                <h1 className="ig-display">
-                  Leaf Creationism builds websites, apps, brand systems and
-                  <em> campaigns that perform.</em>
+                {/* Four words instead of a sentence. What the studio makes is
+                    named in the line underneath and again in the service grid,
+                    so the headline's job is to be worth stopping for rather
+                    than to list everything. */}
+                <h1 className="ig-display ig-display-short">
+                  We build the reason<br />
+                  people <em>choose you.</em>
                 </h1>
 
                 <p className="ig-lede">
@@ -2906,7 +2718,7 @@ const App = () => {
                 items={projectStages.map((stage) => stage.title)}
                 defaultSelected={0}
                 onChange={(index) => setActiveStageIndex(index)}
-                fontSize={isMobileViewport ? 1.7 : 2.8}
+                fontSize={isMobileViewport ? 2.2 : 3.6}
                 spacing={1.5}
                 tilt={7}
                 blur={1.4}
@@ -2956,19 +2768,31 @@ const App = () => {
                   </p>
                 </div>
 
-                {/* The 2D projection of the ring, on every screen now.
-                    The 3D version needed transform-style: preserve-3d plus a
-                    translateZ built with the CSS tan() function; where either
-                    is unsupported the cards collapse onto the ring's axis and
-                    paint as blank slivers — reported first from a real iPhone,
-                    then reproduced on the desktop build. This computes the
-                    same projection in JS and emits only 2D transforms, so the
-                    geometry and motion are identical and every browser paints
-                    it. */}
-                <ProjectedCylinder
-                  images={advantageCylinderImages}
-                  ariaLabel="Selected Leaf Creationism work"
-                  cardWidth={isMobileViewport ? 124 : 250}
+                {/* A helix of the work, turning past the viewer. Supplied by
+                    the owner and safe where the ring was not: it computes its
+                    own depth and emits translate3d/scale only, with no
+                    transform-style: preserve-3d anywhere — which is the thing
+                    mobile Safari and Chrome fail to paint on this site. Drag
+                    or scroll moves it too, so it is not only decoration. */}
+                <InfiniteSpiral
+                  className="adv-spiral"
+                  items={advantageSpiralImages}
+                  animationMode="all"
+                  speed={0.42}
+                  cardsPerTurn={7}
+                  /* The component scales everything down by how much of the
+                     card height its box can hold, so a shorter card keeps the
+                     spiral at full size instead of shrinking it into a huddle
+                     in the middle. Radius is what spreads it across the
+                     stage. */
+                  cardWidth={isMobileViewport ? 96 : 134}
+                  cardHeight={isMobileViewport ? 136 : 190}
+                  radius={isMobileViewport ? 132 : 330}
+                  verticalSpacing={isMobileViewport ? 46 : 68}
+                  cardRadius={isMobileViewport ? 12 : 16}
+                  centerScale={1.14}
+                  edgeFade={0.34}
+                  edgeBlur={4}
                 />
 
                 <div className="advantage-stat-grid">
@@ -3403,7 +3227,7 @@ const App = () => {
                 <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-emerald-600">Services</span>
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-7xl font-light tracking-tight text-gray-900 leading-[1.02]">
-                Design-led services for brands that need to <span className="font-medium">move faster.</span>
+                Idea to launch, <span className="font-medium">nothing outsourced.</span>
               </h1>
               <p className="text-gray-500 max-w-xl mt-4 text-base sm:text-lg font-light">
                 Strategy, brand campaigns, product design, and engineering working as one connected system from idea to launch.
@@ -3427,20 +3251,32 @@ const App = () => {
             </div>
           </div>
 
+          {/* The band shows whichever discipline is selected above. It used to
+              be a stock 3D render of a computer mouse — nothing to do with the
+              studio, the page, or the filters, which made the buttons above it
+              look like they did nothing. */}
           <section className="services-showcase-shell relative overflow-visible text-white mb-12 sm:mb-16">
             <div className="relative z-10">
               <div className="services-showcase-track services-showcase-single-track">
                 <div className="services-showcase-card services-single-showcase-card group/story">
                   <div className="services-showcase-video">
-                    <video
-                      src={servicesFeatureVideo}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      preload="metadata"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover/story:scale-105"
-                    />
+                    {capabilities.map((cap, idx) => (
+                      <img
+                        key={`showcase-${cap.id}`}
+                        src={cap.image}
+                        alt={activeCapability === idx ? `${cap.title} at Leaf Creationism` : ''}
+                        aria-hidden={activeCapability !== idx}
+                        loading={idx === 0 ? 'eager' : 'lazy'}
+                        decoding="async"
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+                          activeCapability === idx ? 'opacity-100' : 'opacity-0'
+                        }`}
+                      />
+                    ))}
+                    <span className="services-showcase-caption">
+                      <em>{String(activeCapability + 1).padStart(2, '0')}</em>
+                      {capabilities[activeCapability]?.title}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -3605,7 +3441,7 @@ const App = () => {
               <span className="store-eyebrow">
                 <Store size={13} /> Leaf Creationism / Service Store
               </span>
-              <h1>Build your project,<br />one service at a time.</h1>
+              <h1>Know the price<br />before you enquire.</h1>
               <p>
                 Eight services, clear starting prices, real delivery windows. Add what you
                 need to the cart and send a single enquiry — we reply with a written quote

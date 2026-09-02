@@ -117,6 +117,16 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   color: var(--ig-accent);
 }
 
+/* The short headline. Four words at the long line's size would run to a
+   billboard, so it is set tighter and a little smaller — the impact comes from
+   the words, not the point size. */
+.ig-display-short {
+  max-width: 14ch;
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.038em;
+}
+
 .ig-lede {
   max-width: 44ch;
   margin: 0 0 36px;
@@ -509,9 +519,8 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
 
 /* --- Mobile -------------------------------------------------------------- */
 
-@media (max-width: 860px) {
-  .app-shell[data-route='home'] .heads-grid { grid-template-columns: 1fr; }
-}
+/* The pair stays a pair at every width — see the compact card rules further
+   down. One per row meant scrolling past one person to meet the other. */
 
 @media (max-width: 640px) {
   .app-shell[data-route='home'] .home-screen { gap: 72px; }
@@ -607,21 +616,62 @@ html[data-theme='dark'] .ig-board .split-flap-text {
 
 .app-shell[data-route='home'] .heads-swipe-hint { display: none; }
 
+/* Both heads side by side on a phone too. A card is around 165px there, so
+   everything inside it comes down a size and the parts that cannot survive
+   the width — the mini avatar and the studio line — are dropped rather than
+   squeezed. */
 @media (max-width: 760px) {
   .app-shell[data-route='home'] .heads-grid {
-    grid-template-columns: minmax(0, 320px);
-    gap: 24px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .app-shell[data-route='home'] .heads-profile.pc-card-wrapper {
+    max-width: none;
+  }
+
+  .app-shell[data-route='home'] .heads-profile .pc-details {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+  }
+
+  .app-shell[data-route='home'] .heads-profile .pc-details h3 { font-size: 13px; }
+  .app-shell[data-route='home'] .heads-profile .pc-details p { font-size: 10px; }
+
+  .app-shell[data-route='home'] .heads-profile .pc-user-info {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    gap: 6px;
+    padding: 7px;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .app-shell[data-route='home'] .heads-profile .pc-mini-avatar,
+  .app-shell[data-route='home'] .heads-profile .pc-status { display: none; }
+
+  .app-shell[data-route='home'] .heads-profile .pc-handle { font-size: 10px; }
+
+  .app-shell[data-route='home'] .heads-profile .pc-contact-btn {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 10px;
   }
 }
 
 /* --- Process ------------------------------------------------------------- */
 
-.ig-process-head { max-width: 46rem; margin-bottom: 48px; }
+/* The process is the section that answers "what am I actually buying", so it
+   is set larger than the sections around it rather than the same size. */
+.ig-process-head { max-width: 52rem; margin-bottom: 56px; }
 
 .ig-process-head h2 {
-  margin: 0 0 16px;
+  margin: 0 0 18px;
   font-family: var(--ig-sans);
-  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  font-size: clamp(2.1rem, 4.2vw, 3.5rem);
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: -0.025em;
@@ -630,9 +680,9 @@ html[data-theme='dark'] .ig-board .split-flap-text {
 
 .ig-process-head p {
   margin: 0;
-  max-width: 44ch;
+  max-width: 46ch;
   font-family: var(--ig-sans);
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 300;
   line-height: 1.65;
   color: var(--ig-muted);
@@ -796,18 +846,18 @@ html[data-theme='dark'] .ig-board .split-flap-text {
    always shown together. */
 .ig-stage-picker {
   display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: 48px;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 64px;
   align-items: center;
-  padding-top: 40px;
+  padding-top: 56px;
   border-top: 1px solid var(--ig-line);
 }
 
-.ig-stage-wheel { --ow-height: 21rem; }
+.ig-stage-wheel { --ow-height: 27rem; }
 
 .ig-stage-detail {
   position: relative;
-  padding-left: 32px;
+  padding-left: 38px;
   border-left: 2px solid var(--ig-accent);
 }
 
@@ -824,7 +874,7 @@ html[data-theme='dark'] .ig-board .split-flap-text {
 .ig-stage-detail h3 {
   margin: 0 0 14px;
   font-family: var(--ig-sans);
-  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
   font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -832,10 +882,10 @@ html[data-theme='dark'] .ig-board .split-flap-text {
 }
 
 .ig-stage-detail p {
-  margin: 0 0 22px;
-  max-width: 42ch;
+  margin: 0 0 26px;
+  max-width: 44ch;
   font-family: var(--ig-sans);
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 300;
   line-height: 1.65;
   color: var(--ig-muted);
@@ -843,11 +893,11 @@ html[data-theme='dark'] .ig-board .split-flap-text {
 
 .ig-stage-out {
   display: inline-block;
-  padding: 8px 14px;
+  padding: 10px 18px;
   border: 1px solid var(--ig-line);
   border-radius: 999px;
   font-family: var(--ig-sans);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--ig-ink);
 }
@@ -867,14 +917,14 @@ html[data-theme='dark'] .ig-board .split-flap-text {
 @media (max-width: 860px) {
   .ig-stage-picker {
     grid-template-columns: 1fr;
-    gap: 28px;
-    padding-top: 28px;
+    gap: 32px;
+    padding-top: 34px;
   }
 
-  .ig-stage-wheel { --ow-height: 12rem; }
+  .ig-stage-wheel { --ow-height: 16.5rem; }
 
-  .ig-stage-detail { padding-left: 20px; }
-  .ig-stage-detail p { font-size: 15px; }
+  .ig-stage-detail { padding-left: 22px; }
+  .ig-stage-detail p { font-size: 17px; }
 }
 
 .ig-tool-groups { margin-top: 28px; }

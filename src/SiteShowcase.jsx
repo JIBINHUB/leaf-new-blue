@@ -58,7 +58,9 @@ const SiteCard = ({ site, domain, live = true }) => (
     <span className="pf-swap-chrome">
       <i /><i /><i />
       <em>{domain}</em>
+      {/* The only way out of this page. Nothing else on the card navigates. */}
       <a
+        className="pf-swap-open"
         href={site.url}
         target="_blank"
         rel="noreferrer noopener"
@@ -154,10 +156,9 @@ function StackShowcase({ sites }) {
           pauseOnHover
           skewAmount={4}
           easing="power"
-          onCardClick={(index) => {
-            const site = sites[index];
-            if (site) window.open(site.url, '_blank', 'noopener,noreferrer');
-          }}
+          /* Deliberately no onCardClick. The card is a live view of someone
+             else's site, and a stray click on it used to navigate away — the
+             Open button is the only thing that leaves this page. */
         >
           {sites.map((site) => (
             <Card key={site.url} customClass="pf-swap-card">
@@ -273,14 +274,13 @@ function NarrowStack({ sites, rotateMs }) {
           const live = index === frontIndex || index === nextIndex;
 
           return (
-            <a
+            /* A div, not a link. The whole card used to be one, so a tap
+               anywhere — including a tap meant to stop the stack — opened the
+               site. Only the Open button in the chrome does that now. */
+            <div
               key={site.url}
               className={`pf-swap-card pf-stack-card${isDropping ? ' is-dropping' : ''}`}
-              href={site.url}
-              target="_blank"
-              rel="noreferrer noopener"
               aria-hidden={depth !== 0}
-              tabIndex={depth === 0 ? 0 : -1}
               style={{
                 width: cardW,
                 height: cardH,
@@ -292,7 +292,7 @@ function NarrowStack({ sites, rotateMs }) {
               }}
             >
               <SiteCard site={site} domain={toDomain(site.url)} live={live} />
-            </a>
+            </div>
           );
         })}
       </div>

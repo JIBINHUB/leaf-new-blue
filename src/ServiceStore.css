@@ -183,10 +183,12 @@
 }
 
 /* ---------- Product grid ---------- */
+/* Two across, not four. At four the cards were narrow enough that the price,
+   the delivery window and both buttons had to fight for the same line. */
 .store-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.9rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem;
 }
 
 .store-card {

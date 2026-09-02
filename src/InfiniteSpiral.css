@@ -1,0 +1,48 @@
+/* Styles for the InfiniteSpiral component.
+
+   The component ships without its stylesheet, so this supplies the classes it
+   references and the custom properties it sets on the root:
+   --infinite-spiral-card-width / -height / -radius.
+
+   Deliberately thin. The component writes transform, opacity, filter, z-index
+   and pointer-events on every card each frame, so nothing here may set any of
+   those — a value would either be overwritten mid-frame or, worse, win before
+   the first frame runs and leave the spiral stacked on one spot. */
+
+.infinite-spiral {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.infinite-spiral__stage {
+  position: absolute;
+  inset: 0;
+}
+
+/* Every card shares one origin at the centre; the component moves it from
+   there. top/left rather than a transform, because the transform belongs to
+   the component. */
+.infinite-spiral__item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.22);
+  will-change: transform, opacity, filter;
+  /* No transition: the loop already eases every value, and a transition here
+     would fight it a frame at a time. */
+}
+
+.infinite-spiral__image {
+  display: block;
+  border-radius: inherit;
+  /* Width, height and object-fit are set inline from the component's props. */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .infinite-spiral__item { will-change: auto; }
+}
