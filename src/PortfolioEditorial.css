@@ -10,9 +10,9 @@
    rest of the site, and so the old portfolio rules in styles.css (which target
    .portfolio-collage-page / .portfolio-bento-page) no longer apply here at all.
 
-   Inter is already loaded for the site; at 400/500 with tight tracking it is
-   the closest thing we have to the neutral grotesk this layout wants, so no
-   extra font is requested. */
+   Set in Outfit, the face every other page on this site uses. It was Inter,
+   which made the portfolio read as though it had been lifted from somewhere
+   else — the layout is what should feel different here, not the lettering. */
 
 .portfolio-editorial-page {
   --pe-ink: #0b0b0c;
@@ -26,16 +26,16 @@
   padding: 0 0 clamp(3rem, 6vw, 5rem);
   background: #ffffff;
   color: var(--pe-ink);
-  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif;
   overflow: clip;
 }
 
 /* --- Shared pieces -------------------------------------------------------- */
 
-/* Headings and paragraphs across the site are given Outfit by name, and a
-   direct rule always beats an inherited one — so the grotesk has to be stated
-   on the elements themselves, not just on the page. The studio footer is left
-   out on purpose: it is shared with the home page and keeps its own type. */
+/* Every element below inherits Outfit from the page now, so the only reason
+   this list survives is the elements the component library gives its own
+   family to. Stated by name because a direct rule always beats an inherited
+   one. */
 .portfolio-editorial-page .pe-title h1,
 .portfolio-editorial-page .pe-label,
 .portfolio-editorial-page .pe-num,
@@ -48,14 +48,11 @@
 .portfolio-editorial-page .pf-swap-open,
 .portfolio-editorial-page .pf-swap-caption strong,
 .portfolio-editorial-page .pf-swap-caption span,
-.portfolio-editorial-page .pf-stage-num,
-.portfolio-editorial-page .pf-stage-count,
-.portfolio-editorial-page .pf-stage-name strong,
 .portfolio-editorial-page .pf-web-index span,
 .portfolio-editorial-page .pf-web-index strong,
 .portfolio-editorial-page .pf-web-index em,
 .portfolio-editorial-page .item-caption em {
-  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 .portfolio-editorial-page .pe-label {
@@ -207,25 +204,23 @@
 .portfolio-editorial-page .pf-swap-caption strong { color: var(--pe-ink); }
 .portfolio-editorial-page .pf-swap-caption span { color: var(--pe-mute); }
 
-.portfolio-editorial-page .pf-stage-list button {
-  border-color: var(--pe-line);
-}
-
-.portfolio-editorial-page .pf-stage-list button.is-active {
-  background: var(--pe-ink);
-  border-color: var(--pe-ink);
-}
-
 .portfolio-editorial-page .pf-web-fallback { color: var(--pe-mute); }
 
 .portfolio-editorial-page .pf-web-index,
-.portfolio-editorial-page .pf-web-index a {
+.portfolio-editorial-page .pf-web-index button {
   border-color: var(--pe-line);
 }
 
 .portfolio-editorial-page .pf-web-index span,
-.portfolio-editorial-page .pf-web-index em,
-.portfolio-editorial-page .pf-stage-count { color: var(--pe-mute); }
+.portfolio-editorial-page .pf-web-index em { color: var(--pe-mute); }
+
+.portfolio-editorial-page .pf-web-index button.is-active {
+  box-shadow: inset 2px 0 0 0 var(--pe-ink);
+}
+
+.portfolio-editorial-page .pf-web-deck > i {
+  border-color: var(--pe-line);
+}
 
 .portfolio-editorial-page .pf-web-index strong { color: var(--pe-ink); }
 
@@ -342,21 +337,37 @@ html[data-theme='dark'] .portfolio-editorial-page .pf-swap-card { background: #1
 html[data-theme='dark'] .portfolio-editorial-page .pf-swap-chrome { background: #1a1a1d; }
 html[data-theme='dark'] .portfolio-editorial-page .pf-swap-chrome i { background: rgba(244, 244, 242, 0.24); }
 html[data-theme='dark'] .portfolio-editorial-page .pf-swap-caption { background: #131315; }
-html[data-theme='dark'] .portfolio-editorial-page .pf-stage-list button { background: #131315; }
+html[data-theme='dark'] .portfolio-editorial-page .pf-web-deck > i { background: #131315; }
+html[data-theme='dark'] .portfolio-editorial-page .pf-web-progress { background: rgba(244, 244, 242, 0.16); }
+html[data-theme='dark'] .portfolio-editorial-page .pf-web-progress i { background: var(--pe-ink); }
 
-html[data-theme='dark'] .portfolio-editorial-page .pf-swap-open,
-html[data-theme='dark'] .portfolio-editorial-page .pf-stage-list button.is-active {
+html[data-theme='dark'] .portfolio-editorial-page .pf-swap-open {
   background: var(--pe-ink);
   border-color: var(--pe-ink);
   color: #0b0b0c;
 }
 
-html[data-theme='dark'] .portfolio-editorial-page .pf-stage-list button.is-active .pf-stage-name strong,
-html[data-theme='dark'] .portfolio-editorial-page .pf-stage-list button.is-active .pf-stage-num {
-  color: #0b0b0c;
-}
+html[data-theme='dark'] .portfolio-editorial-page .pf-web-index button:hover strong { color: #8db4ff; }
+html[data-theme='dark'] .portfolio-editorial-page .pf-web-index button.is-active span { color: #8db4ff; }
 
-html[data-theme='dark'] .portfolio-editorial-page .pf-web-index a:hover strong { color: #8db4ff; }
+/* On a phone the index is a row of chips; the active one fills. */
+@media (max-width: 1180px) {
+  html[data-theme='dark'] .portfolio-editorial-page .pf-web-index button { background: #131315; }
+
+  html[data-theme='dark'] .portfolio-editorial-page .pf-web-index button.is-active {
+    background: var(--pe-ink);
+    border-color: var(--pe-ink);
+  }
+
+  /* !important because DarkMode.css paints every <strong> on the site white
+     with one — which is right on a dark page and wrong on this chip, whose
+     ground is near-white in dark mode. Without it the active site's name was
+     white on white and simply gone. */
+  html[data-theme='dark'] .portfolio-editorial-page .pf-web-index button.is-active span,
+  html[data-theme='dark'] .portfolio-editorial-page .pf-web-index button.is-active strong {
+    color: #0b0b0c !important;
+  }
+}
 
 html[data-theme='dark'] .portfolio-editorial-page .item-img { background: #17171a; }
 

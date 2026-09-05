@@ -10325,7 +10325,11 @@
 
         .faq-video-circle {
           border-radius: 1.45rem !important;
-          clip-path: none;
+          /* overflow: hidden alone does not reliably clip a <video>: the
+             browser hands the frame to the compositor, which paints it past a
+             rounded corner. clip-path applies to the composited layer too, so
+             the corners actually come off. */
+          clip-path: inset(0 round 1.45rem);
           overflow: hidden !important;
           border: 1px solid rgba(255,255,255,0.72);
           background: rgba(255,255,255,0.18);
@@ -29180,4 +29184,11 @@
    frame around them. */
 .services-single-showcase-card .services-showcase-video {
   background: #ffffff;
+}
+
+/* The video and its overlay take the panel's own corners, so nothing square is
+   left sitting inside a rounded frame. */
+.faq-video-circle > video,
+.faq-video-circle > div {
+  border-radius: inherit;
 }

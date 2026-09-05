@@ -1,21 +1,21 @@
-/* SiteShowcase — live website cards.
+/* SiteShowcase — one live browser window beside an index of the work.
 
-   Two layouts share one card design: the swapping stack on desktop and the
-   single window on phones. The screen keeps the 1280 x 900 proportions the
-   preview frame renders at, so what is visible is the whole page the frame
-   loads rather than a crop of its top corner.
+   Nothing here transforms the live frame. The window holds its position and
+   the card inside it is replaced when the site changes, so the browser is
+   never asked to re-composite a scaled iframe mid-animation — which is what
+   made the previous stack heavy and left the cards behind the front one
+   painting as dark slabs.
 
-   CardSwap.css paints .card for a dark surface; these rules come after it and
-   redraw the card for this page. */
-
-/* --- Desktop: index beside the stack -------------------------------------- */
+   The depth behind the window is three empty bordered divs. */
 
 .pf-web-stage {
   display: grid;
-  grid-template-columns: minmax(12rem, 0.3fr) minmax(0, 1fr);
+  grid-template-columns: minmax(13rem, 0.32fr) minmax(0, 1fr);
   gap: clamp(1.5rem, 4vw, 3.5rem);
-  align-items: center;
+  align-items: start;
 }
+
+/* --- The index ------------------------------------------------------------ */
 
 .pf-web-index {
   margin: 0;
@@ -24,17 +24,29 @@
   border-top: 1px solid rgba(11, 11, 12, 0.13);
 }
 
-.pf-web-index a {
+.pf-web-index button {
+  width: 100%;
   display: grid;
   grid-template-columns: 1.6rem minmax(0, 1fr);
   align-items: baseline;
   gap: 0 0.6rem;
-  padding: 0.7rem 0.1rem;
+  padding: 0.7rem 0.2rem 0.7rem 0.1rem;
+  text-align: left;
+  background: none;
+  border: 0;
   border-bottom: 1px solid rgba(11, 11, 12, 0.13);
-  transition: padding-left 0.25s ease, color 0.25s ease;
+  cursor: pointer;
+  transition: padding-left 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s ease;
 }
 
-.pf-web-index a:hover { padding-left: 0.5rem; }
+.pf-web-index button:hover { padding-left: 0.5rem; }
+
+.pf-web-index button.is-active {
+  padding-left: 0.65rem;
+  /* A rule the width of the number column, so the active row is marked
+     without a fill that would fight the page's hairlines. */
+  box-shadow: inset 2px 0 0 0 #0b0b0c;
+}
 
 .pf-web-index span {
   font-size: 0.66rem;
@@ -59,32 +71,50 @@
   white-space: nowrap;
 }
 
-.pf-web-index a:hover strong { color: #2050e3; }
+.pf-web-index button.is-active span { color: #2050e3; }
 
-/* --- Desktop: the stack --------------------------------------------------- */
+/* --- The window ----------------------------------------------------------- */
 
-.pf-swap-wrap {
+.pf-web-window { min-width: 0; }
+
+/* The deck reserves the space the edges lean into, so nothing shifts as the
+   card is replaced. */
+.pf-web-deck {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  perspective: 1200px;
-  overflow: visible;
+  padding: 0 calc(var(--pf-edge, 10px) * 3) calc(var(--pf-edge, 10px) * 3) 0;
+}
+
+/* An empty edge. Border and background only — no content, no compositing
+   cost, and it cannot be mistaken for a broken screenshot. */
+.pf-web-deck > i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform: translate(calc(var(--pf-edge, 10px) * var(--i)), calc(var(--pf-edge, 10px) * var(--i)));
+  border-radius: 0.5rem;
+  border: 1px solid rgba(11, 11, 12, 0.14);
+  background: #ffffff;
+  opacity: calc(1 - var(--i) * 0.22);
 }
 
 .pf-swap-card {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border-radius: 0.5rem;
   border: 1px solid rgba(11, 11, 12, 0.14);
   background: #ffffff;
-  box-shadow: 0 1.8rem 3.6rem rgba(11, 11, 12, 0.18);
+  box-shadow: 0 1.4rem 3rem rgba(11, 11, 12, 0.14);
+  /* Transform and opacity only: the compositor can run this without touching
+     the frame's contents. */
+  animation: pf-card-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.pf-swap-card:hover {
-  border-color: rgba(11, 11, 12, 0.32);
-  box-shadow: 0 2.2rem 4.2rem rgba(11, 11, 12, 0.24);
+@keyframes pf-card-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.99); }
+  to { opacity: 1; transform: none; }
 }
 
 /* --- The card ------------------------------------------------------------- */
@@ -99,7 +129,7 @@
   border-bottom: 1px solid rgba(11, 11, 12, 0.12);
 }
 
-.pf-swap-chrome i {
+.pf-swap-chrome > i {
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 999px;
@@ -136,7 +166,8 @@
 .pf-swap-screen {
   position: relative;
   display: block;
-  flex: 1;
+  /* Exactly the proportions the frame renders at, so the whole page shows. */
+  aspect-ratio: 1280 / 900;
   overflow: hidden;
   background: #ffffff;
 }
@@ -178,102 +209,86 @@
   white-space: nowrap;
 }
 
-/* --- Phones: the same stack, in 2D ---------------------------------------- */
+/* --- Progress ------------------------------------------------------------- */
 
-.pf-stack { display: block; }
-
-.pf-stack-deck {
-  position: relative;
-}
-
-/* Cards share one origin and are moved by transform alone, so the browser can
-   keep them on the compositor. No preserve-3d anywhere in here. */
-.pf-stack-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform-origin: 50% 100%;
-  transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
-}
-
-/* The front card on its way out. */
-.pf-stack-card.is-dropping {
-  opacity: 0;
-  transition: transform 0.5s cubic-bezier(0.55, 0, 0.85, 0.35), opacity 0.42s ease-in;
-}
-
-/* Where you are in the set, in the same numbering as the desktop index. */
-.pf-stage-count {
+.pf-web-progress {
   display: block;
-  margin: 0.85rem 0 0.15rem;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: rgba(11, 11, 12, 0.4);
+  height: 2px;
+  margin-top: 0.85rem;
+  overflow: hidden;
+  background: rgba(11, 11, 12, 0.1);
 }
 
-.pf-stage-list {
-  display: flex;
-  gap: 0.4rem;
-  margin: 0.35rem 0 0;
-  padding: 0 0 0.2rem;
-  overflow-x: auto;
-  list-style: none;
-  scrollbar-width: none;
-}
-
-.pf-stage-list::-webkit-scrollbar { display: none; }
-
-.pf-stage-list li { flex: 0 0 auto; }
-
-.pf-stage-list button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 0.7rem;
-  border: 1px solid rgba(11, 11, 12, 0.14);
-  background: #ffffff;
-  cursor: pointer;
-}
-
-.pf-stage-list button.is-active {
+.pf-web-progress i {
+  display: block;
+  height: 100%;
   background: #0b0b0c;
-  border-color: #0b0b0c;
+  transform-origin: left center;
+  animation: pf-progress linear both;
 }
 
-.pf-stage-num {
-  font-size: 0.66rem;
-  font-weight: 600;
-  color: rgba(11, 11, 12, 0.4);
+@keyframes pf-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
-.pf-stage-name strong {
-  font-size: 0.8rem;
-  font-weight: 600;
-  white-space: nowrap;
-  color: #0b0b0c;
-}
+/* --- Narrow screens ------------------------------------------------------- */
 
-.pf-stage-list button.is-active .pf-stage-num,
-.pf-stage-list button.is-active .pf-stage-name strong {
-  color: #ffffff;
-}
-
-/* One column once the index would be squeezed, with the stack above it. */
 @media (max-width: 1180px) {
   .pf-web-stage {
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
+    gap: 1.1rem;
   }
 
-  .pf-web-stage .pf-swap-wrap { order: -1; }
+  /* Window first, then the index as a swipe row beneath it. */
+  .pf-web-window { order: -1; }
+
+  .pf-web-index {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    border-top: 0;
+    padding-bottom: 0.2rem;
+    scrollbar-width: none;
+  }
+
+  .pf-web-index::-webkit-scrollbar { display: none; }
+
+  .pf-web-index li { flex: 0 0 auto; }
+
+  .pf-web-index button {
+    width: auto;
+    grid-template-columns: auto auto;
+    align-items: center;
+    gap: 0 0.45rem;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid rgba(11, 11, 12, 0.14);
+  }
+
+  .pf-web-index button.is-active {
+    padding-left: 0.7rem;
+    background: #0b0b0c;
+    border-color: #0b0b0c;
+    box-shadow: none;
+  }
+
+  .pf-web-index button.is-active span,
+  .pf-web-index button.is-active strong { color: #ffffff; }
+
+  /* The domain is the first thing to go when the row gets tight. */
+  .pf-web-index em { display: none; }
+
+  .pf-web-index strong { font-size: 0.8rem; white-space: nowrap; }
+}
+
+@media (max-width: 600px) {
+  .pf-web-deck { --pf-edge: 7px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .pf-swap-card,
-  .pf-web-index a,
-  .pf-swap-open { transition: none; }
+  .pf-web-progress i { animation: none; }
 
-  /* The stack still reorders; it just stops sliding. */
-  .pf-stack-card { transition: none; }
+  .pf-web-index button,
+  .pf-swap-open { transition: none; }
 }

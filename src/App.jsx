@@ -19,7 +19,6 @@ import ProfileCard from './ProfileCard';
 import Stepper, { Step } from './Stepper';
 import InfiniteSpiral from './InfiniteSpiral';
 import Masonry from './Masonry';
-import OptionWheel from './OptionWheel';
 import SiteShowcase from './SiteShowcase';
 import './PortfolioEditorial.css';
 import { 
@@ -1608,6 +1607,17 @@ const App = () => {
       services: ['Web design', 'Development', 'SEO'],
       note: 'Our own studio site — design system, build, and search setup.',
       image: ''
+    },
+    {
+      /* Added at the owner's request. Worth knowing: this domain is an alias
+         of the same Vercel deployment as leafcreationism.in, so it serves the
+         identical site — the list shows the studio twice. Delete either entry
+         to show it once. */
+      name: 'Leaf Creationism (.online)',
+      url: 'https://leafcreationism.online',
+      services: ['Web design', 'Development', 'SEO'],
+      note: 'The studio site on its second domain.',
+      image: ''
     }
   ];
 
@@ -2724,34 +2734,47 @@ const App = () => {
               </p>
             </div>
 
-            <div className="ig-stage-picker">
-              <OptionWheel
-                className="ig-stage-wheel"
-                items={projectStages.map((stage) => stage.title)}
-                defaultSelected={0}
-                onChange={(index) => setActiveStageIndex(index)}
-                fontSize={isMobileViewport ? 2.2 : 3.6}
-                spacing={1.5}
-                tilt={7}
-                blur={1.4}
-                fade={0.3}
-                minOpacity={0.12}
-                inset={isMobileViewport ? 12 : 24}
-                textColor="var(--ig-soft)"
-                activeColor="var(--ig-ink)"
-              />
+            {/* A numbered track, not a wheel.
 
-              {/* The selected stage, in full. Announced politely so the change
-                  reaches a screen reader without interrupting. */}
-              <div className="ig-stage-detail" aria-live="polite">
-                <span className="ig-stage-n">{activeStage.n}</span>
-                <h3>{activeStage.title}</h3>
-                <p>{activeStage.body}</p>
-                <span className="ig-stage-out">{activeStage.out}</span>
-              </div>
+                The wheel that was here had to swallow the page's own scroll to
+                turn — a non-passive wheel handler calling preventDefault, and
+                touch-action: pan-x, which tells a phone that a vertical swipe
+                over it is not a scroll. Once it was made larger it covered
+                enough of the screen that the home page simply stopped
+                scrolling on touch. A row of stages costs none of that, and all
+                five are readable at once instead of one at a time. */}
+            <div className="ig-stage-track" role="tablist" aria-label="Project stages">
+              {projectStages.map((stage, index) => (
+                <button
+                  key={stage.n}
+                  type="button"
+                  role="tab"
+                  id={`stage-tab-${stage.n}`}
+                  aria-selected={index === activeStageIndex}
+                  aria-controls="stage-detail"
+                  className={`ig-stage-step${index === activeStageIndex ? ' is-active' : ''}`}
+                  onClick={() => setActiveStageIndex(index)}
+                >
+                  <span className="ig-stage-step-n">{stage.n}</span>
+                  <span className="ig-stage-step-t">{stage.title}</span>
+                </button>
+              ))}
             </div>
 
-            <p className="ig-stage-hint" aria-hidden="true">Drag or scroll the list</p>
+            {/* The selected stage, in full. Announced politely so the change
+                reaches a screen reader without interrupting. */}
+            <div
+              className="ig-stage-detail"
+              id="stage-detail"
+              role="tabpanel"
+              aria-live="polite"
+              key={activeStage.n}
+            >
+              <span className="ig-stage-n">{activeStage.n} of 05</span>
+              <h3>{activeStage.title}</h3>
+              <p>{activeStage.body}</p>
+              <span className="ig-stage-out">{activeStage.out}</span>
+            </div>
           </section>
 
           {/* SECTION 2: Separated "About" Section (No longer touching top components) */}
@@ -2789,7 +2812,11 @@ const App = () => {
                 <InfiniteSpiral
                   className="adv-spiral"
                   items={advantageSpiralImages}
-                  animationMode="all"
+                  /* "auto", not "all". The drag mode sets touch-action:
+                     pan-x on the root, which on a phone means a vertical
+                     swipe over the spiral is not treated as a page scroll —
+                     the second place the home page could be caught. */
+                  animationMode="auto"
                   speed={0.42}
                   cardsPerTurn={7}
                   /* The component scales everything down by how much of the

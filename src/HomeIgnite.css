@@ -850,26 +850,80 @@ html[data-theme='dark'] .ig-board .split-flap-text {
   margin-inline: auto;
 }
 
-/* --- Stage picker --------------------------------------------------------- */
+/* --- Stage track ---------------------------------------------------------- */
 
-/* Wheel selects, panel reads. The wheel fades and blurs every row it is not
-   pointing at, so the panel is what actually carries the content — the two are
-   always shown together. */
-.ig-stage-picker {
+/* Five numbered steps in a row, then the selected one in full underneath.
+   Everything here is a plain button and a plain grid: no wheel, no drag, and
+   nothing that takes the page's scroll away from the visitor. */
+
+.ig-stage-track {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 64px;
-  align-items: center;
-  padding-top: 56px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 40px;
+  padding-top: 40px;
   border-top: 1px solid var(--ig-line);
 }
 
-.ig-stage-wheel { --ow-height: 27rem; }
+.ig-stage-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 20px 18px 22px 0;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  /* The rule along the top of the row is the process line; the active step
+     draws over it in ink. */
+  box-shadow: inset 0 2px 0 0 var(--ig-line);
+  transition: box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ig-stage-step.is-active { box-shadow: inset 0 2px 0 0 var(--ig-ink); }
+
+.ig-stage-step-n {
+  font-family: var(--ig-sans);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  color: var(--ig-line);
+  transition: color 0.3s ease;
+}
+
+.ig-stage-step-t {
+  font-family: var(--ig-sans);
+  font-size: clamp(0.95rem, 1.5vw, 1.25rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--ig-soft);
+  transition: color 0.3s ease;
+}
+
+.ig-stage-step:hover .ig-stage-step-n { color: var(--ig-soft); }
+.ig-stage-step:hover .ig-stage-step-t { color: var(--ig-ink); }
+
+.ig-stage-step.is-active .ig-stage-step-n { color: var(--ig-accent); }
+.ig-stage-step.is-active .ig-stage-step-t { color: var(--ig-ink); }
+
+/* --- The stage, in full --------------------------------------------------- */
 
 .ig-stage-detail {
   position: relative;
+  margin-top: 44px;
   padding-left: 38px;
   border-left: 2px solid var(--ig-accent);
+  /* Transform and opacity only, and only when the stage changes. */
+  animation: ig-stage-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes ig-stage-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
 }
 
 .ig-stage-n {
@@ -879,26 +933,27 @@ html[data-theme='dark'] .ig-board .split-flap-text {
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--ig-soft);
 }
 
 .ig-stage-detail h3 {
   margin: 0 0 14px;
   font-family: var(--ig-sans);
-  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
   font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
   color: var(--ig-ink);
 }
 
 .ig-stage-detail p {
   margin: 0 0 26px;
-  max-width: 44ch;
+  max-width: 46ch;
   font-family: var(--ig-sans);
   font-size: 19px;
   font-weight: 300;
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--ig-muted);
 }
 
@@ -913,29 +968,44 @@ html[data-theme='dark'] .ig-board .split-flap-text {
   color: var(--ig-ink);
 }
 
-.ig-stage-hint {
-  margin: 20px 0 0;
-  font-family: var(--ig-sans);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ig-soft);
-}
+/* --- Narrow screens ------------------------------------------------------- */
 
-/* Same arrangement on a phone, stacked: the wheel sits above its panel so
-   both stay on screen together, which is the whole point of the pairing. */
 @media (max-width: 860px) {
-  .ig-stage-picker {
-    grid-template-columns: 1fr;
-    gap: 32px;
-    padding-top: 34px;
+  /* A swipe row. Horizontal overflow only — a vertical swipe still scrolls the
+     page, which is the whole point of replacing the wheel. */
+  .ig-stage-track {
+    display: flex;
+    gap: 0;
+    margin-top: 28px;
+    padding-top: 0;
+    overflow-x: auto;
+    border-top: 0;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
   }
 
-  .ig-stage-wheel { --ow-height: 16.5rem; }
+  .ig-stage-track::-webkit-scrollbar { display: none; }
 
-  .ig-stage-detail { padding-left: 22px; }
+  .ig-stage-step {
+    flex: 0 0 auto;
+    min-width: 9.5rem;
+    padding: 18px 16px 20px 0;
+    scroll-snap-align: start;
+  }
+
+  .ig-stage-detail {
+    margin-top: 30px;
+    padding-left: 22px;
+  }
+
   .ig-stage-detail p { font-size: 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ig-stage-detail { animation: none; }
+  .ig-stage-step,
+  .ig-stage-step-n,
+  .ig-stage-step-t { transition: none; }
 }
 
 .ig-tool-groups { margin-top: 28px; }
