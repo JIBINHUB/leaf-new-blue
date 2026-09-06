@@ -619,3 +619,72 @@ html[data-theme='dark'] .store-callout {
     justify-content: center;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Project cart — required boxes and the ticket panel.
+
+   The submit used to sit disabled until every box was filled, which tells a
+   visitor nothing about why. It is always pressable now, and says what is
+   missing instead.
+   --------------------------------------------------------------------------- */
+
+.reference-enquiry-form input.is-missing,
+.reference-enquiry-form textarea.is-missing {
+  border-color: #f87171 !important;
+  background: rgba(248, 113, 113, 0.06) !important;
+}
+
+.reference-enquiry-form .field-error {
+  display: block;
+  margin-top: 0.35rem;
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fca5a5;
+}
+
+.reference-form-alert {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  background: rgba(248, 113, 113, 0.08);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fecaca;
+}
+
+/* Replaces the plain confirmation panel: the same message, with the ticket
+   the client keeps. */
+.reference-ticket-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1.6rem 1.1rem 1.9rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  text-align: center;
+}
+
+.reference-ticket-panel strong {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.reference-ticket-panel > p {
+  max-width: 34rem;
+  margin: 0 0 1.1rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: rgba(226, 232, 240, 0.75);
+}
+
+.reference-ticket-panel > p b {
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  color: #93b4ff;
+}

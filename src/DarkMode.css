@@ -328,14 +328,17 @@ html[data-theme='dark'] .access-color-stub {
 }
 
 /* The form half kept a white glass wash (rgba(255,255,255,0.38)) in dark mode,
-   which put near-white narrative copy on a light slab. */
+   which put near-white narrative copy on a light slab. It was then given a
+   dark slab of its own — but the pass around it is already a card, so that
+   slab read as a box drawn around the sentence. Transparent: the narrative
+   sits on the card, and the inner glass frame goes with it. */
 html[data-theme='dark'] .access-color-form {
-  background: #090d16 !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: transparent !important;
+  border-color: transparent !important;
 }
 
 html[data-theme='dark'] .access-color-form::before {
-  opacity: 0.25 !important;
+  display: none !important;
 }
 
 html[data-theme='dark'] .access-color-badge {
@@ -858,4 +861,48 @@ html[data-theme='dark'] .mobile-tabbar-item:not(.is-active) {
 
 html[data-theme='dark'] .mobile-tabbar-item.is-active {
   color: #38bdf8 !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Project cart — the empty-state cards.
+
+   These are white panels with dark text, which is right on the light theme and
+   wrong on the dark cart page: the card stayed white while the heading turned
+   white with it, because the blanket `html[data-theme='dark'] strong` rule at
+   the top of this file paints every <strong> on the site white. The heading
+   was there the whole time, invisible on its own background.
+
+   Fixed by giving the card the dark surface it should have had, and stating
+   the heading colour with !important so it outranks that blanket rule.
+   --------------------------------------------------------------------------- */
+
+html[data-theme='dark'] .reference-empty-card,
+html[data-theme='dark'] .reference-service-chip,
+html[data-theme='dark'] .reference-appointment-card {
+  background: #101623 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .reference-empty-card strong,
+html[data-theme='dark'] .reference-service-chip strong,
+html[data-theme='dark'] .reference-appointment-card strong {
+  color: #f8fafc !important;
+}
+
+html[data-theme='dark'] .reference-empty-card p,
+html[data-theme='dark'] .reference-service-chip small,
+html[data-theme='dark'] .reference-appointment-card p {
+  color: rgba(226, 232, 240, 0.68) !important;
+}
+
+html[data-theme='dark'] .reference-empty-card button {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .reference-empty-card button:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
 }

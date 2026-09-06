@@ -189,3 +189,22 @@
   height: 100%;
   object-fit: cover;
 }
+
+/* Until the observer hands it a source. The tile keeps its measured size, so
+   nothing moves when the picture arrives. */
+.item-media:not([src]) {
+  opacity: 0;
+}
+
+.item-media[src] {
+  animation: item-media-in 0.35s ease both;
+}
+
+@keyframes item-media-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item-media[src] { animation: none; }
+}

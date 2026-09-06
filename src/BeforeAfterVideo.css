@@ -1,0 +1,194 @@
+/* BeforeAfterVideo.
+
+   The rough take is clipped rather than resized, so both clips stay the same
+   size and the same frame lines up across the split. clip-path is used instead
+   of width, because width would reflow the video and scale the picture with
+   it — the point is that only the reveal moves. */
+
+.ba-shell {
+  position: relative;
+  width: 100%;
+  /* The clips are 720 x 900. */
+  aspect-ratio: 720 / 900;
+  max-width: 30rem;
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: 1.1rem;
+  background: #0b0b0c;
+  cursor: ew-resize;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.ba-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Everything left of the handle. */
+.ba-before-layer {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 calc(100% - var(--ba-pos)) 0 0);
+}
+
+/* --- Labels --------------------------------------------------------------- */
+
+.ba-tag {
+  position: absolute;
+  top: 0.75rem;
+  z-index: 3;
+  padding: 0.32rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(11, 11, 12, 0.72);
+  font-family: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  pointer-events: none;
+}
+
+.ba-tag-before { left: 0.75rem; }
+.ba-tag-after { right: 0.75rem; }
+
+/* --- Handle --------------------------------------------------------------- */
+
+.ba-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--ba-pos);
+  z-index: 4;
+  width: 2px;
+  margin-left: -1px;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(11, 11, 12, 0.18);
+  cursor: ew-resize;
+}
+
+.ba-handle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #2050e3;
+}
+
+.ba-grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0b0b0c;
+  box-shadow: 0 6px 18px rgba(11, 11, 12, 0.28);
+}
+
+/* --- Section frame -------------------------------------------------------- */
+
+/* Minimal on purpose. The video is already a bordered, shadowed rectangle, so
+   there is no panel behind it — a box inside a box is just a frame around a
+   frame. A hairline, two small labels, and the page's own paper. */
+.ba-section {
+  display: block;
+}
+
+.ba-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 14px;
+  margin-bottom: clamp(1.5rem, 4vw, 2.75rem);
+  border-bottom: 1px solid var(--ig-line, rgba(11, 11, 12, 0.13));
+}
+
+.ba-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--ig-sans, 'Outfit', sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ig-soft, rgba(11, 11, 12, 0.5));
+}
+
+/* The one piece of colour in the section. */
+.ba-kicker i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ig-accent, #2050e3);
+}
+
+.ba-index {
+  font-family: var(--ig-sans, 'Outfit', sans-serif);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--ig-soft, rgba(11, 11, 12, 0.5));
+}
+
+/* The video, given the room. */
+.ba-stage {
+  display: flex;
+  justify-content: center;
+}
+
+.ba-stage .ba-shell {
+  max-width: min(38rem, 100%);
+}
+
+/* The words, deliberately a caption. */
+.ba-caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem 1.1rem;
+  margin-top: clamp(1.1rem, 2.5vw, 1.6rem);
+}
+
+.ba-caption h2 {
+  margin: 0;
+  font-family: var(--ig-sans, 'Outfit', sans-serif);
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--ig-ink, #0b0b0c);
+}
+
+.ba-caption h2 em {
+  font-style: normal;
+  color: var(--ig-accent, #2050e3);
+}
+
+.ba-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 7px 13px;
+  border: 1px solid var(--ig-line, rgba(11, 11, 12, 0.14));
+  border-radius: 999px;
+  font-family: var(--ig-sans, 'Outfit', sans-serif);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ig-soft, rgba(11, 11, 12, 0.5));
+}
+
+@media (max-width: 860px) {
+  .ba-stage .ba-shell { max-width: 100%; }
+  .ba-caption { flex-direction: column; }
+  .ba-caption h2 { font-size: 1rem; text-align: center; }
+}

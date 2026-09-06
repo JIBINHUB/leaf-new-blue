@@ -7,6 +7,11 @@ export default function Stepper({
   initialStep = 1,
   onStepChange = () => {},
   onFinalStepCompleted = () => {},
+  /* Added: lets the page refuse the final step. Without it the stepper marked
+     the flow complete the moment the button was pressed and only then ran
+     onFinalStepCompleted — so an empty form showed "done" while the enquiry
+     was never sent. Returning false here keeps the visitor on the last step. */
+  onBeforeFinalStep = () => true,
   stepCircleContainerClassName = '',
   stepContainerClassName = '',
   contentClassName = '',
@@ -51,6 +56,7 @@ export default function Stepper({
   };
 
   const handleComplete = () => {
+    if (onBeforeFinalStep() === false) return;
     setDirection(1);
     updateStep(totalSteps + 1);
   };
@@ -104,7 +110,10 @@ export default function Stepper({
           direction={direction}
           className={`step-content-default ${contentClassName}`}
         >
-          {stepsArray[currentStep - 1]}
+          {/* Falls back to the last step rather than nothing: the completed
+              state renders no children, which leaves an empty card if anything
+              ever advances past the end. */}
+          {stepsArray[currentStep - 1] || stepsArray[totalSteps - 1]}
         </StepContentWrapper>
 
         {/* Footer Navigation Bar */}

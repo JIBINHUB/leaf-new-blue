@@ -117,21 +117,22 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   color: var(--ig-accent);
 }
 
-/* The short headline. Four words at the long line's size would run to a
-   billboard, so it is set tighter and a little smaller — the impact comes from
-   the words, not the point size. */
+/* The headline carries the hero, so it is sized to the column rather than to a
+   point size — the row was half empty with the line hugging the left. The
+   lower bound is held where it was so a phone still breaks cleanly across two
+   lines instead of one word per line. */
 .ig-display-short {
-  max-width: 14ch;
-  font-size: clamp(2.5rem, 6vw, 4.25rem);
-  line-height: 0.98;
-  letter-spacing: -0.038em;
+  max-width: 19ch;
+  font-size: clamp(2.4rem, 7.4vw, 6rem);
+  line-height: 0.94;
+  letter-spacing: -0.042em;
 }
 
 .ig-lede {
-  max-width: 44ch;
-  margin: 0 0 36px;
+  max-width: 52ch;
+  margin: 0 0 40px;
   font-family: var(--ig-sans);
-  font-size: clamp(1rem, 1.5vw, 1.1875rem);
+  font-size: clamp(1.02rem, 1.9vw, 1.4rem);
   font-weight: 300;
   line-height: 1.65;
   color: var(--ig-muted);
@@ -445,42 +446,81 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
 
 /* --- Contact & carousel -------------------------------------------------- */
 
+/* No panel behind the sentence. This sits inside .access-color-pass, which is
+   already a bordered, rounded card — a second filled box within it framed the
+   paragraph twice and was what made the text look boxed in. The sentence now
+   sits directly on the card, and the padding below is all that holds it off
+   the border. */
 .app-shell[data-route='home'] .access-color-form,
 .app-shell[data-route='home'] .home-contact-section form {
-  border-radius: var(--ig-r-card);
-  background: var(--ig-alt);
+  border-radius: 0;
+  background: transparent;
   border: 0;
   box-shadow: none;
 }
 
 .app-shell[data-route='home'] .access-narrative-copy {
   font-family: var(--ig-sans) !important;
-  font-size: clamp(15px, 2vw, 19px) !important;
+  font-size: clamp(15px, 1.7vw, 19px) !important;
   font-weight: 300 !important;
   line-height: 2.3 !important;
   color: var(--ig-ink) !important;
+  /* The sentence is set ragged-right with a little room in hand, so a long
+     last word ends short of the padding rather than sitting on it. */
+  padding-right: 0.35em;
+  text-wrap: pretty;
 }
 
 .app-shell[data-route='home'] .narrative-input,
 .app-shell[data-route='home'] .narrative-select {
+  /* Stated rather than assumed: these were computing to block, which put every
+     field on a line of its own and pushed the full stop after it onto the next
+     line. The design is a sentence with fields set into it. */
+  display: inline-block !important;
+  vertical-align: middle;
   height: 38px !important;
   padding: 0 12px !important;
   margin: 0 4px !important;
   border-radius: var(--ig-r-btn) !important;
   background: var(--ig-paper) !important;
   border: 1px solid var(--ig-line) !important;
+  box-shadow: none !important;
   font-family: var(--ig-sans) !important;
   font-size: 15px !important;
   color: var(--ig-ink) !important;
   max-width: 100%;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
-.app-shell[data-route='home'] .access-input-name    { width: 130px !important; }
-.app-shell[data-route='home'] .access-input-company { width: 165px !important; }
-.app-shell[data-route='home'] .access-input-email   { width: 185px !important; }
-.app-shell[data-route='home'] .access-input-service { width: 175px !important; }
+.app-shell[data-route='home'] .narrative-input::placeholder {
+  color: var(--ig-muted) !important;
+  font-weight: 400;
+  opacity: 1;
+}
 
-.app-shell[data-route='home'] .access-color-form { padding: 40px !important; }
+.app-shell[data-route='home'] .narrative-input:focus,
+.app-shell[data-route='home'] .narrative-select:focus {
+  outline: none !important;
+  border-color: var(--ig-accent) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.app-shell[data-route='home'] .narrative-select { cursor: pointer; }
+
+.app-shell[data-route='home'] .access-input-name    { width: 116px !important; }
+.app-shell[data-route='home'] .access-input-company { width: 148px !important; }
+.app-shell[data-route='home'] .access-input-email   { width: 158px !important; }
+.app-shell[data-route='home'] .access-input-service { width: 152px !important; }
+
+/* The pass this sits in has a 40px corner radius. A fixed 40px inset put the
+   text against that curve at the top and bottom corners and left the last word
+   of a line all but touching the edge in between; a continuous scale keeps a
+   comfortable margin at every width instead of only at the two that were
+   checked. */
+.app-shell[data-route='home'] .access-color-form {
+  padding: clamp(28px, 5.4vw, 52px) !important;
+}
 
 /* The promo card. max-width:100% is what the home rebuild left it with, and
    because .home-hero-copy has no measure on this route that resolved to the
@@ -544,7 +584,24 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
   .ig-fact + .ig-fact::before { left: 12px; }
   .ig-fact-index { font-size: 10px; margin-bottom: 6px; }
   .ig-facts dd { margin-top: 8px; font-size: 12px; }
-  .app-shell[data-route='home'] .access-color-form { padding: 24px 20px !important; }
+  /* Only the fields change on a narrow screen — the inset and the type size
+     come from the clamps above. Narrower fields let a line carry a field and a
+     word or two beside it instead of a field on its own. */
+  .app-shell[data-route='home'] .access-narrative-copy {
+    line-height: 2.05 !important;
+  }
+
+  .app-shell[data-route='home'] .access-narrative-copy .narrative-input,
+  .app-shell[data-route='home'] .access-narrative-copy .narrative-select {
+    height: 34px !important;
+    padding: 0 10px !important;
+    font-size: 14px !important;
+  }
+
+  .app-shell[data-route='home'] .access-input-name { width: 106px !important; }
+  .app-shell[data-route='home'] .access-input-company { width: 132px !important; }
+  .app-shell[data-route='home'] .access-input-service { width: 138px !important; }
+  .app-shell[data-route='home'] .access-input-email { width: 142px !important; }
 
   .app-shell[data-route='home'] .c1-svc-grid {
     display: grid !important;
@@ -603,11 +660,32 @@ html[data-theme='dark'] .app-shell[data-route='home'] {
 
 .ig-board .ig-eyebrow { margin-bottom: 12px; }
 
-/* The component takes fontSize as a prop, but a single number cannot be
-   responsive — overriding the custom property lets the board grow on wider
-   screens without the tiles wrapping on a phone. */
+/* The component takes fontSize as a prop and writes it to the element as an
+   inline custom property — which beats a stylesheet rule, so the override that
+   used to sit here never actually applied and the board stayed at its phone
+   size on every screen. !important is what it takes to reach it.
+
+   Sized to fill the hero column: eleven tiles at this width run most of the
+   way across, instead of a small strip with an empty half-row beside it. */
 @media (min-width: 768px) {
-  .ig-board .split-flap-text { --split-flap-font-size: 34px; }
+  .ig-board .split-flap-text {
+    --split-flap-font-size: 46px !important;
+    --split-flap-gap: 5px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ig-board .split-flap-text {
+    --split-flap-font-size: 68px !important;
+    --split-flap-gap: 6px !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .ig-board .split-flap-text {
+    --split-flap-font-size: 92px !important;
+    --split-flap-gap: 7px !important;
+  }
 }
 
 html[data-theme='dark'] .ig-board .split-flap-text {
@@ -792,13 +870,79 @@ html[data-theme='dark'] .ig-board .split-flap-text {
   margin-top: 28px;
 }
 
+/* Each group carries its own colour, so the three columns read apart at a
+   glance instead of being one grey field. Plain rgba rather than color-mix():
+   a newer colour function takes its whole declaration down where it is not
+   supported, which is how the advantage ring was lost to tan() earlier. */
+.ig-tool-group {
+  --tool-c: #2050e3;
+  --tool-soft: rgba(32, 80, 227, 0.08);
+  --tool-line: rgba(32, 80, 227, 0.3);
+  --tool-glow: rgba(32, 80, 227, 0.34);
+  --tool-shadow: rgba(32, 80, 227, 0.26);
+}
+
+.ig-tool-group:nth-child(2) {
+  --tool-c: #0d8f61;
+  --tool-soft: rgba(13, 143, 97, 0.09);
+  --tool-line: rgba(13, 143, 97, 0.32);
+  --tool-glow: rgba(13, 143, 97, 0.34);
+  --tool-shadow: rgba(13, 143, 97, 0.26);
+}
+
+.ig-tool-group:nth-child(3) {
+  --tool-c: #bf5a09;
+  --tool-soft: rgba(191, 90, 9, 0.09);
+  --tool-line: rgba(191, 90, 9, 0.32);
+  --tool-glow: rgba(191, 90, 9, 0.34);
+  --tool-shadow: rgba(191, 90, 9, 0.26);
+}
+
+/* Brighter inks on the dark ground — the light-mode values are chosen for
+   contrast on paper and go muddy on #0e0f12. */
+html[data-theme='dark'] .ig-tool-group {
+  --tool-c: #7d97ff;
+  --tool-soft: rgba(125, 151, 255, 0.12);
+  --tool-line: rgba(125, 151, 255, 0.34);
+  --tool-glow: rgba(125, 151, 255, 0.4);
+}
+
+html[data-theme='dark'] .ig-tool-group:nth-child(2) {
+  --tool-c: #35d6a0;
+  --tool-soft: rgba(53, 214, 160, 0.12);
+  --tool-line: rgba(53, 214, 160, 0.34);
+  --tool-glow: rgba(53, 214, 160, 0.4);
+}
+
+html[data-theme='dark'] .ig-tool-group:nth-child(3) {
+  --tool-c: #f7ab48;
+  --tool-soft: rgba(247, 171, 72, 0.12);
+  --tool-line: rgba(247, 171, 72, 0.34);
+  --tool-glow: rgba(247, 171, 72, 0.4);
+}
+
 .ig-tool-group h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--tool-line);
   font-family: var(--ig-sans);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.02em;
   color: var(--ig-ink);
+}
+
+/* The group's colour, stated once at the top of the column. */
+.ig-tool-group h3::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--tool-c);
 }
 
 .ig-tool-group ul {
@@ -812,17 +956,18 @@ html[data-theme='dark'] .ig-board .split-flap-text {
 
 .ig-tool-group li {
   padding: 7px 14px;
-  border: 1px solid var(--ig-line);
+  border: 1px solid var(--tool-line);
   border-radius: 999px;
+  background: var(--tool-soft);
   font-family: var(--ig-sans);
   font-size: 13px;
-  font-weight: 400;
-  color: var(--ig-muted);
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-
-@media (hover: hover) {
-  .ig-tool-group li:hover { border-color: var(--ig-ink); color: var(--ig-ink); }
+  font-weight: 500;
+  /* !important only to outrank the dark theme's blanket li colour, which would
+     otherwise grey every chip back out. */
+  color: var(--tool-c) !important;
+  cursor: default;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+              box-shadow 0.24s ease;
 }
 
 
@@ -1107,24 +1252,68 @@ html[data-theme='dark'] .ig-board .split-flap-text {
   transform-origin: center bottom;
 }
 
+/* The landed state is declared, and the animations fill BACKWARDS rather than
+   both. That matters: filling forwards meant the chip's final look belonged to
+   the animation, so the hover rule had to switch the animation off to move the
+   chip — and the moment it did, the element fell back to the base opacity: 0
+   above and the capsule vanished under the cursor. Declaring the rest state
+   here lets hover override it plainly, with nothing to switch off. */
 .ig-tools.is-in .ig-tool-group li {
-  animation: ig-fall 0.72s cubic-bezier(0.34, 1.4, 0.5, 1) both;
+  opacity: 1;
+  transform: rotate(var(--fall-rot, 0deg));
+  animation: ig-fall 0.72s cubic-bezier(0.34, 1.4, 0.5, 1) backwards,
+             ig-tool-light 0.9s ease backwards;
   animation-delay: var(--fall-delay, 0ms);
 }
 
-/* Straighten and lift on hover, so the pile feels touchable. */
-@media (hover: hover) {
-  .ig-tools .ig-tool-group li {
-    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-                border-color 0.2s ease, color 0.2s ease;
+/* Each chip powers on in its group's colour as it lands — one pass, staggered
+   by the same delay as the fall, then it settles to its resting tint. A single
+   run rather than a loop: a permanent animation on fifteen elements is exactly
+   the kind of idle cost the cheap phones here cannot absorb. */
+@keyframes ig-tool-light {
+  0% {
+    background: transparent;
+    border-color: var(--ig-line);
   }
+  58% {
+    background: var(--tool-glow);
+    border-color: var(--tool-c);
+  }
+  100% {
+    background: var(--tool-soft);
+    border-color: var(--tool-line);
+  }
+}
 
+/* Straighten, lift and fill on hover, so the pile feels touchable. */
+.ig-tools .ig-tool-group li {
+  /* Two classes deep on purpose. The dark theme carries a blanket
+     `html[data-theme='dark'] li { color: … !important }`, and !important on
+     both sides is settled by specificity — (0,1,2) beat the single-class rule
+     above, so the chips stayed grey. (0,2,1) takes it back. */
+  color: var(--tool-c) !important;
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+              box-shadow 0.24s ease;
+}
+
+@media (hover: hover) {
   .ig-tools.is-in .ig-tool-group li:hover {
-    animation: none;
     transform: translateY(-3px) rotate(0deg);
-    border-color: var(--ig-accent);
-    color: var(--ig-accent);
+    background: var(--tool-c);
+    border-color: var(--tool-c);
+    color: #0b0e17 !important;
+    box-shadow: 0 8px 18px var(--tool-shadow);
   }
+}
+
+/* A tap gets the same answer as a hover — on a phone there is no hover to
+   give it, and pressing a chip that does nothing reads as broken. */
+.ig-tools.is-in .ig-tool-group li:active {
+  transform: translateY(-1px) rotate(0deg);
+  background: var(--tool-c);
+  border-color: var(--tool-c);
+  color: #0b0e17 !important;
 }
 
 /* Nothing falls; the chips are simply there. */
@@ -1135,4 +1324,12 @@ html[data-theme='dark'] .ig-board .split-flap-text {
     transform: none;
     animation: none;
   }
+}
+
+/* A field and the punctuation that belongs to it, kept on one line. Without
+   this the browser is free to break between the two — an inline-block is an
+   atomic inline, and text after it is a break opportunity — which left stray
+   full stops opening the next line of the narrative form. */
+.narrative-unit {
+  white-space: nowrap;
 }

@@ -210,6 +210,43 @@ const Masonry = ({
   );
 
   const hasMounted = useRef(false);
+  const containerNode = containerRef;
+
+  /* Loading is driven from here rather than by loading="lazy".
+
+     Native lazy loading decides from where an element sits in layout, and
+     these tiles do not sit anywhere: they are absolutely positioned at the
+     origin and moved by a transform GSAP writes after mount, starting from
+     below the fold. The browser reads that as "far away" and holds the
+     request, so scrolling at any speed showed empty tiles catching up.
+
+     One observer, 900px of headroom, and each piece starts loading well
+     before it is needed — then stops being watched. */
+  useEffect(() => {
+    const root = containerNode.current;
+    if (!root) return undefined;
+
+    const load = (node) => {
+      const src = node.dataset.src;
+      if (!src || node.getAttribute('src') === src) return;
+      node.setAttribute('src', src);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.querySelectorAll('[data-src]').forEach(load);
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: '900px 0px' }
+    );
+
+    root.querySelectorAll('.item-wrapper').forEach((tile) => observer.observe(tile));
+    return () => observer.disconnect();
+    // Re-observes when the set of tiles changes.
+  }, [grid.length, containerNode]);
 
   useLayoutEffect(() => {
     grid.forEach((item, index) => {
@@ -331,7 +368,7 @@ const Masonry = ({
               {item.type === 'video' ? (
                 <video
                   className="item-media"
-                  src={item.src}
+                  data-src={item.src}
                   muted
                   loop
                   playsInline
@@ -340,7 +377,7 @@ const Masonry = ({
                   onMouseLeave={e => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
                 />
               ) : (
-                <img className="item-media" src={item.img} alt={item.title || ''} loading="lazy" decoding="async" draggable={false} />
+                <img className="item-media" data-src={item.img} alt={item.title || ''} decoding="async" draggable={false} />
               )}
               {/* Every piece carries its own name, so the archive reads as a
                   list of work rather than a wall of unlabelled pictures. */}

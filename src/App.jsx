@@ -17,6 +17,10 @@ import { useSectionReveals } from './HomeReveals';
 import SplitFlapText from './SplitFlapText';
 import ProfileCard from './ProfileCard';
 import Stepper, { Step } from './Stepper';
+import BeforeAfterVideo from './BeforeAfterVideo';
+import LeafMark from './LeafMark';
+import LoadingScreen from './LoadingScreen';
+import EnquiryTicket from './EnquiryTicket';
 import InfiniteSpiral from './InfiniteSpiral';
 import Masonry from './Masonry';
 import SiteShowcase from './SiteShowcase';
@@ -66,24 +70,9 @@ import {
 } from 'lucide-react';
 
 // Custom Icon Component using the company logo
-const LeafIcon = ({ size = 24, className = "" }) => (
-  <div 
-    className={className} 
-    style={{ 
-      width: size, 
-      height: size, 
-      backgroundColor: 'currentColor', // Inherits text color classes for seamless hover effects
-      WebkitMaskImage: 'url(/assets/brand/leaf-creationism-logo-white.png)',
-      WebkitMaskSize: 'contain',
-      WebkitMaskRepeat: 'no-repeat',
-      WebkitMaskPosition: 'center',
-      maskImage: 'url(/assets/brand/leaf-creationism-logo-white.png)',
-      maskSize: 'contain',
-      maskRepeat: 'no-repeat',
-      maskPosition: 'center',
-    }} 
-  />
-);
+/* The mark now lives in LeafMark so the before/after handle can use the same
+   one; this alias keeps every existing call site working. */
+const LeafIcon = LeafMark;
 
 // Standardized WhatsApp Vector Icon
 const WhatsAppIcon = ({ size = 24, className = "" }) => (
@@ -426,6 +415,15 @@ const App = () => {
   });
   const [activeAd, setActiveAd] = useState(0);
   const [completedSteps, setCompletedSteps] = useState([]);
+  /* Which boxes were left empty on the last submit, and the ticket the enquiry
+     came back with. */
+  /* The loading veil. `phase` is 'in' while it covers the page and 'out' for
+     the length of its fade, so the element survives long enough to animate
+     away instead of vanishing. */
+  const [loaderPhase, setLoaderPhase] = useState('in');
+  const loaderTimers = useRef({ hold: null, fade: null });
+  const [referenceErrors, setReferenceErrors] = useState({});
+  const [enquiryTicket, setEnquiryTicket] = useState(null);
   const [activeCategory, setActiveCategory] = useState('uiux'); 
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [activeFaq, setActiveFaq] = useState(0);
@@ -714,7 +712,35 @@ const App = () => {
     );
   };
 
+  /* Shows the veil for `hold`, then fades it. Every call clears the previous
+     timers, so rapid navigation cannot leave two schedules racing — and there
+     is no branch that sets the veil without also scheduling its removal. */
+  const runLoader = (hold) => {
+    window.clearTimeout(loaderTimers.current.hold);
+    window.clearTimeout(loaderTimers.current.fade);
+    setLoaderPhase('in');
+    loaderTimers.current.hold = window.setTimeout(() => {
+      setLoaderPhase('out');
+      loaderTimers.current.fade = window.setTimeout(() => setLoaderPhase('done'), 450);
+    }, hold);
+  };
+
+  /* First arrival: long enough to see the candle blow the other one out, which
+     lands between 1.2s and 2.1s of its three-second cycle. */
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    runLoader(reduced ? 400 : 2200);
+    return () => {
+      window.clearTimeout(loaderTimers.current.hold);
+      window.clearTimeout(loaderTimers.current.fade);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const navigateTo = (id, options = {}) => {
+    /* Between pages it is a curtain, not a performance — short enough not to
+       make the site feel slower than it is. */
+    if (id !== activeNav) runLoader(750);
     setActiveNav(id);
     if (typeof window !== 'undefined') {
       const nextPath = navPathMap[id] || '/';
@@ -2300,12 +2326,6 @@ const App = () => {
     : 'No services selected yet';
   const selectedAppointmentSummary = `${selectedSchedule.title} / ${selectedAppointment.full} / ${selectedSlot.time} IST / ${selectedSlot.note}`;
   const hasEnquiryCartIntent = selectedReferenceItems.length > 0 || selectedServiceItems.length > 0;
-  const canSubmitReferenceEnquiry = Boolean(
-    referenceForm.name.trim() &&
-    referenceForm.email.trim() &&
-    referenceForm.phone.trim() &&
-    referenceForm.project.trim()
-  );
   const submitResendForm = async (payload, successMessage) => {
     setFormStatus('sending');
     try {
@@ -2319,19 +2339,46 @@ const App = () => {
         throw new Error(result.message || 'Unable to submit form');
       }
       setFormStatus(successMessage);
-      return true;
+      return result;
     } catch (error) {
       setFormStatus('error');
-      return false;
+      return null;
     }
   };
+
+  /* Every box is required, so the submit says which ones are missing rather
+     than sitting there disabled with no explanation. */
+  const validateReferenceForm = () => {
+    const errors = {};
+    if (!referenceForm.name.trim()) errors.name = 'Please add your name';
+    if (!referenceForm.email.trim()) errors.email = 'Please add an email we can reply to';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(referenceForm.email.trim())) {
+      errors.email = 'That email address does not look right';
+    }
+    if (!referenceForm.phone.trim()) errors.phone = 'Please add a number we can reach you on';
+    if (!referenceForm.project.trim()) errors.project = 'Tell us what you want to build';
+    return errors;
+  };
+  /* The gate both submit paths go through: the form's own button and the
+     stepper's final one. Returns false when anything is missing, after marking
+     the boxes and putting the cursor in the first of them — a long form on a
+     phone should not leave the visitor hunting for the problem. */
+  const guardReferenceForm = () => {
+    const errors = validateReferenceForm();
+    setReferenceErrors(errors);
+    if (!Object.keys(errors).length) return true;
+
+    setFormStatus('incomplete');
+    const first = ['name', 'email', 'phone', 'project'].find((field) => errors[field]);
+    document.querySelector(`[data-field="${first}"]`)?.focus();
+    return false;
+  };
+
   const submitReferenceEnquiry = async (event) => {
     event.preventDefault();
-    if (!canSubmitReferenceEnquiry) {
-      setFormStatus('error');
-      return;
-    }
-    const success = await submitResendForm({
+    if (!guardReferenceForm()) return;
+
+    const result = await submitResendForm({
       form_type: 'project-enquiry',
       name: referenceForm.name || 'Not added',
       email: referenceForm.email || 'Not added',
@@ -2345,7 +2392,17 @@ const App = () => {
       source: 'Reference cart / appointment enquiry'
     }, 'reference-sent');
 
-    if (success) {
+    if (result?.success) {
+      /* The id is the studio's own reference for this enquiry — the same one
+         printed in both emails — so the client's ticket and our inbox agree. */
+      setEnquiryTicket({
+        id: result.requestId || 'LEAF-REQUEST',
+        name: referenceForm.name.trim(),
+        date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
+        services: selectedServiceItems.length ? `${selectedServiceItems.length} selected` : 'To discuss',
+        references: selectedReferenceItems.length ? `${selectedReferenceItems.length} saved` : 'None yet'
+      });
+      setReferenceErrors({});
       setReferenceForm({ name: '', email: '', phone: '', project: '' });
     }
   };
@@ -2483,6 +2540,7 @@ const App = () => {
          adopts it and every other route keeps its existing surface. */
       data-route={activeNav}
     >
+      {loaderPhase !== 'done' && <LoadingScreen leaving={loaderPhase === 'out'} />}
       {/* Soft Background Gradients */}
       <div className="absolute top-[-10%] right-[-5%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-b from-[#FAE696]/20 to-transparent blur-3xl -z-10 pointer-events-none"></div>
       <div className="absolute bottom-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-tr from-[#D0F5E5]/30 to-transparent blur-3xl -z-10 pointer-events-none"></div>
@@ -2691,6 +2749,36 @@ const App = () => {
 
           </div>
 
+
+          {/* Before and after, on one frame. The same shot in two states, split
+              by a handle the visitor drags — which shows what the studio adds
+              far faster than a paragraph claiming it. Both clips are our own
+              work, so nothing here needs a licence or a client's permission. */}
+          <section className="ba-section" aria-label="Before and after a Leaf Creationism edit">
+            {/* No panel behind the video. It is already a rectangle with a
+                border and a shadow, and putting it inside a second one just
+                framed a frame. What is left is a hairline, two small labels
+                and the footage — the page's own paper carries it. */}
+            <div className="ba-head">
+              <span className="ba-kicker"><i aria-hidden="true" />Before / after</span>
+              <span className="ba-index">01 / 02</span>
+            </div>
+
+            <div className="ba-stage">
+              <BeforeAfterVideo
+                beforeSrc="/assets/media/work-before.mp4"
+                afterSrc="/assets/media/work-after.mp4"
+                beforeLabel="Before"
+                afterLabel="After"
+                start={48}
+              />
+            </div>
+
+            <div className="ba-caption">
+              <h2>Drag the line. That gap is <em>the work</em>.</h2>
+              <span className="ba-hint">Drag the handle, or use the arrow keys</span>
+            </div>
+          </section>
 
           {/* Positioning statement — two columns, hairline rule, no card. */}
           <section className="ig-statement" aria-label="How Leaf Creationism works">
@@ -3166,17 +3254,23 @@ const App = () => {
                               onChange={(event) => updateAccessField('name', event.target.value)}
                             />
                             and I am representing 
-                            <input
-                              type="text"
-                              name="company"
-                              required
-                              placeholder="Company Name"
-                              className="narrative-input access-input-company w-[180px] sm:w-[220px]"
-                              value={accessForm.company}
-                              onChange={(event) => updateAccessField('company', event.target.value)}
-                            />.
+                            {/* Field and full stop share a nowrap span: a line can break
+                                between an inline-block and the text after it, which was
+                                dropping each "." onto the start of the next line. */}
+                            <span className="narrative-unit">
+                              <input
+                                type="text"
+                                name="company"
+                                required
+                                placeholder="Company Name"
+                                className="narrative-input access-input-company w-[180px] sm:w-[220px]"
+                                value={accessForm.company}
+                                onChange={(event) => updateAccessField('company', event.target.value)}
+                              />.
+                            </span>{' '}
                             <br className="hidden lg:block"/>
                             I am looking for an elite agency to help me with 
+                            <span className="narrative-unit">
                             <div className="inline-block relative">
                                <select
                                  name="service"
@@ -3192,6 +3286,7 @@ const App = () => {
                                   <option value="ai">AI Marketing Ads</option>
                                </select>
                             </div>.
+                            </span>{' '}
                             <br className="hidden lg:block"/>
                             You can reach me at 
                             <input
@@ -3800,7 +3895,7 @@ const App = () => {
 
             <div className="schedule-panel schedule-contact-card p-5 sm:p-6">
               <div className="schedule-contact-orb">
-                <LeafIcon size={40} />
+                <LeafIcon size={42} />
               </div>
               <h2 className="text-2xl font-semibold tracking-tight text-gray-950 mt-5">Need a faster slot?</h2>
               <p className="text-gray-500 font-light mt-2 leading-relaxed">
@@ -3893,7 +3988,7 @@ const App = () => {
 
             <section className="projects-delivery-signal" aria-label="Live delivery signal">
               <div className="projects-delivery-orbit" aria-hidden="true">
-                <LeafIcon size={31} />
+                <LeafIcon size={33} />
                 <i><Activity size={15} /></i>
                 <i><Zap size={15} /></i>
                 <i><Cloud size={15} /></i>
@@ -3924,7 +4019,7 @@ const App = () => {
             <div className="projects-dashboard-top">
               <div className="projects-dashboard-identity">
                 <div className="projects-dashboard-logo">
-                  <LeafIcon size={34} />
+                  <LeafIcon size={36} />
                 </div>
                 <div>
                   <span>Active project room</span>
@@ -4708,9 +4803,20 @@ const App = () => {
           <Stepper
             initialStep={1}
             stepLabels={['Services', 'Strategy Call', 'References', 'Contact']}
-            onFinalStepCompleted={() => {
-              const submitBtn = document.getElementById('reference-cart-submit-btn');
-              if (submitBtn) submitBtn.click();
+            /* Two faults here, both fixed by never letting the stepper
+               "complete".
+
+               It used to mark the flow finished the instant this button was
+               pressed and only then trigger the submit, so an empty form
+               showed a completed stepper and sent nothing. And its completed
+               state renders no content at all — which would have thrown away
+               the ticket, since the ticket appears inside this last step.
+
+               So the button submits and the stepper stays where it is: an
+               invalid form shows its errors, a valid one shows the ticket. */
+            onBeforeFinalStep={() => {
+              submitReferenceEnquiry({ preventDefault: () => {} });
+              return false;
             }}
           >
             {/* STEP 1: Core Services */}
@@ -4906,38 +5012,61 @@ const App = () => {
                 className="reference-enquiry-form"
                 onSubmit={submitReferenceEnquiry}
               >
-                {formStatus === 'reference-sent' && (
-                  <div className="reference-success-hero" role="status">
+                {formStatus === 'reference-sent' && enquiryTicket && (
+                  <div className="reference-ticket-panel">
                     <div className="reference-success-orbit">
                       <Check size={22} />
                     </div>
                     <strong>Request received</strong>
-                    <p>We will reach you within 24 hours. Your data is safe with us.</p>
+                    <p>
+                      Your ticket is below and a copy is on its way to your inbox.
+                      Quote <b>{enquiryTicket.id}</b> if you write to us.
+                    </p>
+                    <EnquiryTicket ticket={enquiryTicket} />
                   </div>
                 )}
-                
+
+                {formStatus === 'incomplete' && (
+                  <p className="reference-form-alert" role="alert">
+                    Please fill every box before sending — we need all of it to write you a
+                    proper quote.
+                  </p>
+                )}
+
+                {/* The boxes come down once the request is in. Leaving an empty
+                    form under the ticket read as though the ticket had been
+                    issued before anything was filled in — and invited a second,
+                    blank submission. */}
+                {!enquiryTicket && (
+                <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <label>
                     Name
                     <input
                       name="Name"
+                      data-field="name"
                       type="text"
-                      required
+                      aria-invalid={Boolean(referenceErrors.name)}
+                      className={referenceErrors.name ? 'is-missing' : undefined}
                       value={referenceForm.name}
                       onChange={(event) => updateReferenceField('name', event.target.value)}
                       placeholder="Your full name"
                     />
+                    {referenceErrors.name && <em className="field-error">{referenceErrors.name}</em>}
                   </label>
                   <label>
                     Gmail / Email
                     <input
                       name="Email"
+                      data-field="email"
                       type="email"
-                      required
+                      aria-invalid={Boolean(referenceErrors.email)}
+                      className={referenceErrors.email ? 'is-missing' : undefined}
                       value={referenceForm.email}
                       onChange={(event) => updateReferenceField('email', event.target.value)}
                       placeholder="you@gmail.com"
                     />
+                    {referenceErrors.email && <em className="field-error">{referenceErrors.email}</em>}
                   </label>
                 </div>
 
@@ -4945,24 +5074,30 @@ const App = () => {
                   WhatsApp Phone Number
                   <input
                     name="Phone"
+                    data-field="phone"
                     type="tel"
-                    required
+                    aria-invalid={Boolean(referenceErrors.phone)}
+                    className={referenceErrors.phone ? 'is-missing' : undefined}
                     value={referenceForm.phone}
                     onChange={(event) => updateReferenceField('phone', event.target.value)}
                     placeholder="+91 ..."
                   />
+                  {referenceErrors.phone && <em className="field-error">{referenceErrors.phone}</em>}
                 </label>
 
                 <label>
                   What do you want to create?
                   <textarea
                     name="Project brief"
-                    required
+                    data-field="project"
+                    aria-invalid={Boolean(referenceErrors.project)}
+                    className={referenceErrors.project ? 'is-missing' : undefined}
                     value={referenceForm.project}
                     onChange={(event) => updateReferenceField('project', event.target.value)}
                     placeholder="Tell us about your brand, product, or campaign vision."
                     rows="3"
                   />
+                  {referenceErrors.project && <em className="field-error">{referenceErrors.project}</em>}
                 </label>
 
                 <div className="reference-privacy-note">
@@ -4976,8 +5111,10 @@ const App = () => {
                   <button
                     id="reference-cart-submit-btn"
                     type="submit"
-                    className={`reference-submit-button ${!canSubmitReferenceEnquiry ? 'is-disabled' : ''} ${formStatus === 'sending' ? 'is-sending' : ''} ${formStatus === 'reference-sent' ? 'is-sent' : ''}`}
-                    disabled={!canSubmitReferenceEnquiry || formStatus === 'sending' || formStatus === 'reference-sent'}
+                    /* Never disabled for an empty form: pressing it is how a
+                       visitor finds out what is missing. */
+                    className={`reference-submit-button ${formStatus === 'sending' ? 'is-sending' : ''} ${formStatus === 'reference-sent' ? 'is-sent' : ''}`}
+                    disabled={formStatus === 'sending' || formStatus === 'reference-sent'}
                   >
                     {formStatus === 'reference-sent' ? <Check size={18} /> : <Mail size={18} />}
                     {formStatus === 'sending' ? 'Preparing request...' : formStatus === 'reference-sent' ? 'Sent - 24h reply' : 'Submit Project Request'}
@@ -4991,9 +5128,11 @@ const App = () => {
                     WhatsApp <ArrowUpRight size={16} />
                   </a>
                 </div>
+                </>
+                )}
 
                 {formStatus === 'reference-sent' && (
-                  <p className="reference-form-success">Enquiry sent. We received your services, appointment, references, and contact details.</p>
+                  <p className="reference-form-success">Enquiry sent. We have your services, appointment, references and contact details — a copy of this ticket is on its way to your inbox.</p>
                 )}
                 {formStatus === 'error' && (
                   <p className="reference-form-error">Could not send right now. Please try again or use WhatsApp.</p>

@@ -108,6 +108,56 @@ function projectGallery(images) {
     </table>`;
 }
 
+/* The project ticket, in email-safe HTML.
+
+   Tables and inline styles only — the version on the site uses grid, radial
+   gradients and a dashed pseudo-element, none of which survive Outlook. The
+   reference is the same id the site prints on the client's downloadable
+   ticket, so the two match when they quote it back to us. */
+function ticketBlock({ shortId, name, dateLabel, servicesLabel, referencesLabel }) {
+  const cell = (label, value) => `
+    <td width="50%" valign="top" style="padding-top:0;padding-right:8px;padding-bottom:14px;padding-left:0;">
+      <p style="margin:0 0 4px;color:#94a3b8;font-family:${FONT};font-size:9px;line-height:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">${escapeHtml(label)}</p>
+      <p style="margin:0;color:#f8fafc;font-family:${FONT};font-size:13px;line-height:19px;font-weight:600;">${escapeHtml(value)}</p>
+    </td>`;
+
+  return `
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;margin-bottom:4px;">
+    <tr>
+      <td bgcolor="#0b0e17" style="padding:22px 22px 18px;background-color:#0b0e17;border-radius:14px 14px 0 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td valign="middle" style="color:#ffffff;font-family:${FONT};font-size:12px;line-height:18px;font-weight:700;letter-spacing:0.4px;">LEAF CREATIONISM</td>
+            <td align="right" valign="middle" style="color:#4d7dff;font-family:${FONT};font-size:9px;line-height:14px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;">Project ticket</td>
+          </tr>
+        </table>
+        <p style="margin:18px 0 2px;color:#ffffff;font-family:${FONT};font-size:26px;line-height:32px;font-weight:700;letter-spacing:-0.8px;">Project Request</p>
+        <p style="margin:0 0 22px;color:#94a3b8;font-family:${FONT};font-size:11px;line-height:17px;font-weight:400;">Kerala, India / leafcreationism.in</p>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>${cell('Name', name)}${cell('Raised', dateLabel)}</tr>
+          <tr>${cell('Services', servicesLabel)}${cell('References', referencesLabel)}</tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td bgcolor="#131a2b" style="padding:18px 22px 20px;background-color:#131a2b;border-top:1px dashed rgba(255,255,255,0.25);border-radius:0 0 14px 14px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td valign="middle">
+              <p style="margin:0 0 3px;color:#94a3b8;font-family:${FONT};font-size:9px;line-height:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Ticket number</p>
+              <p style="margin:0;color:#f8fafc;font-family:'Courier New',Courier,monospace;font-size:16px;line-height:22px;font-weight:700;letter-spacing:2px;">${escapeHtml(shortId)}</p>
+            </td>
+            <td align="right" valign="middle">
+              <p style="margin:0 0 2px;color:#94a3b8;font-family:${FONT};font-size:9px;line-height:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Reply within</p>
+              <p style="margin:0;color:#4d7dff;font-family:${FONT};font-size:22px;line-height:26px;font-weight:800;">24h</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>`;
+}
+
 function layout({ preview, logoUrl, heroImageUrl, shortId, body, footerNote }) {
   return `<!DOCTYPE html>
   <html lang="en">
@@ -193,6 +243,13 @@ function buildStudioNotification({ payload, shortId, logoUrl, heroImageUrl }) {
     <h1 style="margin-top:15px;margin-right:0;margin-bottom:0;margin-left:0;color:${COLOR.ink};font-family:${FONT};font-size:30px;line-height:38px;font-weight:600;letter-spacing:-1px;">A new brief just landed.</h1>
     <p style="margin-top:13px;margin-right:0;margin-bottom:24px;margin-left:0;color:${COLOR.muted};font-family:${FONT};font-size:13px;line-height:22px;font-weight:400;">The complete submission is below. Reply directly to this email to continue the conversation.</p>
     ${button(replyHref, `Reply to ${payload.name}`)}
+    ${ticketBlock({
+      shortId,
+      name: payload.name,
+      dateLabel: payload.raisedOn,
+      servicesLabel: payload.servicesLabel,
+      referencesLabel: payload.referencesLabel
+    })}
     <p style="margin-top:32px;margin-right:0;margin-bottom:10px;margin-left:0;color:${COLOR.ink};font-family:${FONT};font-size:12px;line-height:18px;font-weight:600;">Request details</p>
     ${infoTable([
       ['Name', payload.name],
@@ -225,6 +282,13 @@ function buildCustomerConfirmation({ payload, shortId, logoUrl, heroImageUrl, wo
     <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="${COLOR.greenSoft}" style="padding-top:7px;padding-right:11px;padding-bottom:7px;padding-left:11px;background-color:${COLOR.greenSoft};border-radius:999px;color:${COLOR.green};font-family:${FONT};font-size:9px;line-height:13px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;">Request received</td></tr></table>
     <h1 style="margin-top:15px;margin-right:0;margin-bottom:0;margin-left:0;color:${COLOR.ink};font-family:${FONT};font-size:32px;line-height:40px;font-weight:600;letter-spacing:-1.1px;">Your idea is in good hands.</h1>
     <p style="margin-top:13px;margin-right:0;margin-bottom:25px;margin-left:0;color:${COLOR.muted};font-family:${FONT};font-size:13px;line-height:22px;font-weight:400;">Your project request is with our studio. We’ll review it carefully and reply with a clear next step within 24 hours.</p>
+    ${ticketBlock({
+      shortId,
+      name: payload.name,
+      dateLabel: payload.raisedOn,
+      servicesLabel: payload.servicesLabel,
+      referencesLabel: payload.referencesLabel
+    })}
     ${infoTable([
       ['Your request', requestSummary],
       ['Service', payload.requestedService],

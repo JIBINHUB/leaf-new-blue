@@ -1,0 +1,60 @@
+/* The loading veil.
+
+   Fixed and above everything, on the studio's dark ground so the candles read
+   the way they were drawn — they are white with a purple outline, which needs
+   a dark surface behind it. */
+
+.leaf-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  background: #0b0e17;
+  animation: leaf-loading-in 0.25s ease both;
+}
+
+/* Removed rather than hidden, but the fade needs a frame to run in. */
+.leaf-loading.is-leaving {
+  animation: leaf-loading-out 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  pointer-events: none;
+}
+
+@keyframes leaf-loading-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes leaf-loading-out {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The animation is drawn at a fixed size, so a phone scales it rather than
+   reflowing it. */
+@media (max-width: 480px) {
+  .leaf-loading .studio-loader { transform: scale(0.85); }
+}
+
+/* Someone who has asked for less motion gets the veil without the performance:
+   the animation holds still and the screen simply passes. */
+@media (prefers-reduced-motion: reduce) {
+  .leaf-loading .studio-loader * {
+    animation: none !important;
+  }
+}

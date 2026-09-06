@@ -73,8 +73,25 @@ function clean(value, fallback = '') {
   return value.trim().slice(0, 12000);
 }
 
+/* Counts for the ticket. The site prints the same three lines on the ticket a
+   client downloads, so they are derived here once and used by both emails
+   rather than trusted from the browser. */
+function countLines(value, emptyMarkers) {
+  if (!value) return 0;
+  if (emptyMarkers.some((marker) => value.toLowerCase().startsWith(marker))) return 0;
+  return value.split('\n').filter((line) => line.trim()).length;
+}
+
 function normalizePayload(payload) {
+  const selectedServices = clean(payload.selected_services, 'No services selected');
+  const selectedReferences = clean(payload.selected_references, 'No references selected');
+  const serviceCount = countLines(selectedServices, ['no services']);
+  const referenceCount = countLines(selectedReferences, ['no portfolio references', 'no references']);
+
   return {
+    raisedOn: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
+    servicesLabel: serviceCount ? `${serviceCount} selected` : 'To discuss',
+    referencesLabel: referenceCount ? `${referenceCount} saved` : 'None yet',
     formType: clean(payload.form_type, 'project-enquiry'),
     name: clean(payload.name, 'Not added'),
     email: clean(payload.email).toLowerCase(),
@@ -82,9 +99,9 @@ function normalizePayload(payload) {
     company: clean(payload.company, 'Not added'),
     requestedService: clean(payload.requested_service, 'Not selected'),
     projectBrief: clean(payload.project_brief, 'Not added'),
-    selectedServices: clean(payload.selected_services, 'No services selected'),
+    selectedServices,
     appointmentDetails: clean(payload.appointment_details, 'No appointment selected'),
-    selectedReferences: clean(payload.selected_references, 'No references selected'),
+    selectedReferences,
     source: clean(payload.source, 'Leaf Creationism website')
   };
 }

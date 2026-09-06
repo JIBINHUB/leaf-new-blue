@@ -27731,11 +27731,21 @@
             inset 0 1px 0 rgba(255, 255, 255, 0.68);
         }
 
-        .elastic-service-item svg {
+        /* The leaf mark is a masked span rather than an svg, so it has to be
+           named here too — otherwise it kept its own pixel size and sat
+           noticeably smaller than the icons either side of it. !important
+           because the component writes width and height inline. */
+        .elastic-service-item svg,
+        .elastic-service-item .leaf-mark {
           width: 40%;
           height: 40%;
           pointer-events: none;
           filter: drop-shadow(0 2px 4px rgba(6, 78, 59, 0.18));
+        }
+
+        .elastic-service-item .leaf-mark {
+          width: 42% !important;
+          height: 42% !important;
         }
 
         .elastic-service-caption {
