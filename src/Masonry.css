@@ -74,6 +74,28 @@
   pointer-events: none;
 }
 
+/* A scrim under the caption, not just a text-shadow on it. Plenty of this
+   archive is light artwork — a white product on white, a screen recording of a
+   pale interface — and white type with a soft shadow disappeared into it
+   completely. The gradient is on the tile so it covers the full width behind
+   the caption and the cart button both, and it fades to nothing by the middle
+   of the tile so it never dims the work itself. */
+.item-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 55%;
+  z-index: 1;
+  border-radius: inherit;
+  background: linear-gradient(
+    to top,
+    rgba(8, 9, 12, 0.82) 0%,
+    rgba(8, 9, 12, 0.52) 38%,
+    rgba(8, 9, 12, 0) 100%
+  );
+  pointer-events: none;
+}
+
 .item-caption em {
   display: block;
   overflow: hidden;

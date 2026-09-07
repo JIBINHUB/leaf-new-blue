@@ -906,3 +906,60 @@ html[data-theme='dark'] .reference-empty-card button:hover {
   background: rgba(255, 255, 255, 0.14) !important;
   color: #ffffff !important;
 }
+
+/* ---------------------------------------------------------------------------
+   The eight service pages.
+
+   These shipped with a hard-coded light shell (bg-[#f8f9fc], a white veil over
+   the colour blobs, white glass panels) and no dark treatment at all. In dark
+   mode the site's blanket rules turn the type light while that shell stays
+   pale, which is why the headings read as white-on-white and the pages looked
+   broken. The shell itself has to change, not the text.
+   ------------------------------------------------------------------------ */
+
+html[data-theme='dark'] .service-detail-modal {
+  background: #0b0e17 !important;
+}
+
+/* multiply darkens toward black, which on a dark ground just erases the blob.
+   screen is its opposite number and is what makes a light bloom read there. */
+html[data-theme='dark'] .service-modal-blob {
+  mix-blend-mode: screen !important;
+  opacity: 0.5;
+}
+
+/* The veil is what put a sheet of white over everything. */
+html[data-theme='dark'] .service-modal-veil {
+  background: rgba(11, 14, 23, 0.55) !important;
+}
+
+/* The glass panels and cards, which were all built on white. */
+html[data-theme='dark'] .service-detail-modal .premium-glass,
+html[data-theme='dark'] .service-detail-modal .bg-white,
+html[data-theme='dark'] .service-detail-modal .bg-white\/60,
+html[data-theme='dark'] .service-detail-modal .bg-white\/70,
+html[data-theme='dark'] .service-detail-modal .bg-white\/80 {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* Headings and body copy on the dark shell. The site's blanket dark rules
+   already lighten most text; these are the ones pinned to a grey that only
+   worked on paper. */
+html[data-theme='dark'] .service-detail-modal .text-gray-900,
+html[data-theme='dark'] .service-detail-modal h1,
+html[data-theme='dark'] .service-detail-modal h2,
+html[data-theme='dark'] .service-detail-modal h3 {
+  color: #f4f6fb !important;
+}
+
+html[data-theme='dark'] .service-detail-modal .text-gray-600,
+html[data-theme='dark'] .service-detail-modal .text-gray-500,
+html[data-theme='dark'] .service-detail-modal p {
+  color: #aab2c4 !important;
+}
+
+/* The close button and the small round icon buttons in the sticky bar. */
+html[data-theme='dark'] .service-detail-modal .text-gray-700 {
+  color: #e6e9f2 !important;
+}

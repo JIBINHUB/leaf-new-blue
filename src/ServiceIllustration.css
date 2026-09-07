@@ -1,0 +1,69 @@
+/* ServiceIllustration.
+
+   One ground and three marks: ink (a white chalk outline), blue (the studio's
+   fill), and paper (the light shape that stands in for a screen or a leaf).
+   The ground stays dark in both themes on purpose — the media box on the
+   service pages is already a dark rounded frame, and a single treatment keeps
+   the eight pages looking like a set rather than eight stock pictures. */
+
+.si-wrap {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  /* Tight: the media frame is tall and the scenes are wide, so a big pad left
+     the artwork looking lost inside its own box. */
+  padding: 3%;
+  background: #0d1017;
+  border-radius: inherit;
+}
+
+.si-wrap svg {
+  width: 100%;
+  height: 100%;
+  /* The scene is drawn to a 320 x 250 box and fits whatever the media frame
+     is, rather than being cropped by it. */
+  display: block;
+  overflow: visible;
+}
+
+.si-ink {
+  fill: none;
+  stroke: #f6f7fb;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.si-blue {
+  fill: #2f6bff;
+  stroke: none;
+}
+
+.si-blue-stroke {
+  fill: none;
+  stroke: #2f6bff;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Screens, cards and the leaf — the light shapes inside a blue mass. */
+.si-paper {
+  fill: #f6f7fb;
+  stroke: none;
+}
+
+/* The scene arrives rather than appearing, once, when the page opens. */
+.si-wrap svg > g {
+  animation: si-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes si-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .si-wrap svg > g { animation: none; }
+}

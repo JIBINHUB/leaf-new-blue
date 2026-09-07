@@ -1,242 +1,72 @@
-/* Styles for StudioLoader.
+/* StudioLoader — the mark drawing itself.
 
-   The same CSS the component shipped with, scoped under .studio-loader so its
-   very generic class names — .loader, .record, .icon — cannot reach anything
-   else on the site.
+   Both shapes carry pathLength="100", so their dash patterns are in percent of
+   their own length whatever that length actually is. The cycle:
 
-   Two values changed from the reference: --c is white rather than its orange,
-   and --bg is named so the pieces that "cut out" of the icon match the loading
-   screen behind them instead of being hardcoded to black. The mark, the name,
-   the laptop and the tick all inherit --c, so the whole animation is that one
-   colour. */
+     0   - 30%   the ring draws
+     12  - 45%   the leaf draws inside it
+     45  - 66%   the finished mark holds
+     66  - 100%  it rubs itself out, and the cycle repeats
 
-/* Everything inside is sized in em, so this one value scales the animation.
-   The reference ran at the page's own font size; 14px lands it at a size that
-   reads on a phone without crowding the wordmark under it. */
+   The loader is lifted at 1.9s of the 3s cycle — inside the hold — so the mark
+   is whole and still on screen as the veil goes. */
+
 .studio-loader {
-  position: relative;
-  width: 16em;
-  height: 12em;
-  font-size: 22px;
+  --sl-t: 3s;
+  --sl-c: #ffffff;
+  display: grid;
+  place-items: center;
 }
 
-.studio-loader .loader {
-  --c: #ffffff;
-  --bg: #0b0e17;
-  position: absolute;
-  inset: 0;
+/* A route change is short, so the same drawing runs faster rather than being
+   cut off half-drawn. */
+.studio-loader.is-quick { --sl-t: 2s; }
+
+.sl-mark {
+  width: 190px;
+  height: 190px;
+  color: var(--sl-c);
 }
 
-/* The window the row is revealed through. Written against the row's own box —
-   the reference's ±8em coordinates assumed a zero-width origin, which is what
-   it had while its children were absolutely positioned; with the mark and the
-   name in flow the row has real width and those numbers cut the last letters
-   off. */
-.studio-loader .ph1 {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  animation: sl-ph1 3s ease infinite;
-  clip-path: polygon(-2em -2.4em, calc(100% + 2em) -2.4em, calc(100% + 2em) 2.4em, -2em 2.4em);
+.sl-ring,
+.sl-leaf {
+  stroke: currentColor;
+  /* User units, not a screen width: non-scaling-stroke cannot be used here.
+     It makes dash lengths resolve in screen pixels while pathLength normalises
+     them in user units, and the two disagreed — the ring came out as a row of
+     dashes instead of one continuous line being drawn. */
+  stroke-width: 1.1;
+  /* Dashed to exactly its own (normalised) length, so the offset below is what
+     draws and undraws it. */
+  stroke-dasharray: 100 100;
 }
 
-/* The mark itself rather than a plain dot, laid out by the row instead of
-   being pinned — so the pair centres itself whatever the name's length. */
-.studio-loader .record {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--c);
-  animation: sl-blink 1s step-end infinite;
+.sl-ring {
+  animation: sl-draw var(--sl-t) ease-in-out infinite;
 }
 
-/* The name, on two lines so it stays inside the window the clip-path opens
-   as the phase slides away. */
-.studio-loader .record-text {
-  font-family: 'Outfit', ui-sans-serif, system-ui, sans-serif;
-  font-size: 1.05em;
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: 0.01em;
-  text-align: left;
-  text-transform: uppercase;
-  color: var(--c);
+.sl-leaf {
+  /* Starts once the ring is well under way, so the mark builds outside-in
+     rather than both lines racing each other. */
+  animation: sl-draw var(--sl-t) ease-in-out infinite;
+  animation-delay: calc(var(--sl-t) * 0.12);
 }
 
-@keyframes sl-blink {
-  50% { opacity: 0; }
-  75% { opacity: 1; }
+@keyframes sl-draw {
+  from { stroke-dashoffset: 100; }
+  30%, 66% { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -100; }
 }
 
-@keyframes sl-ph1 {
-  25.5% {
-    translate: 0 0;
-    clip-path: polygon(-2em -2.4em, calc(100% + 2em) -2.4em, calc(100% + 2em) 2.4em, -2em 2.4em);
+@media (max-width: 480px) {
+  .sl-mark { width: 148px; height: 148px; }
+}
+
+/* Someone who has asked for less motion gets the mark drawn and still. */
+@media (prefers-reduced-motion: reduce) {
+  .sl-ring,
+  .sl-leaf {
+    animation: none !important;
+    stroke-dashoffset: 0;
   }
-  30%, to {
-    opacity: 1;
-    translate: 0 3em;
-    clip-path: polygon(-2em 2.4em, calc(100% + 2em) 2.4em, calc(100% + 2em) 2.4em, -2em 2.4em);
-  }
-  30.1% { opacity: 0; translate: 0 3em; }
-  92.4%, to {
-    translate: 0 0;
-    opacity: 0;
-    clip-path: polygon(-2em -2.4em, calc(100% + 2em) -2.4em, calc(100% + 2em) 2.4em, -2em 2.4em);
-  }
-  92.5% {
-    opacity: 1;
-    clip-path: polygon(-2em -2.4em, 2.4em -2.4em, 2.4em 2.4em, -2em 2.4em);
-  }
-  to {
-    opacity: 1;
-    clip-path: polygon(-2em -2.4em, calc(100% + 2em) -2.4em, calc(100% + 2em) 2.4em, -2em 2.4em);
-  }
-}
-
-.studio-loader .ph2 {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -4em);
-  width: 11em;
-  height: 7em;
-  perspective: 150px;
-  perspective-origin: 50% 0%;
-  transform-style: preserve-3d;
-  animation: sl-ph2 3s ease-in-out infinite;
-}
-
-@keyframes sl-ph2 {
-  0%, 15% { translate: 0 4em; }
-  0%, 29% { opacity: 0; }
-  30% { opacity: 1; }
-  40% { translate: 0 0; }
-  50% { translate: 0 0.5em; opacity: 1; }
-  50.1%, to { opacity: 0; }
-}
-
-.studio-loader .laptop-b {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 0.5em;
-  background: var(--c);
-  border-bottom-left-radius: 2em;
-  border-bottom-right-radius: 2em;
-  animation: sl-ph2b 3s ease infinite;
-}
-
-.studio-loader .laptop-t {
-  margin: 0 1.25em;
-  color: var(--c);
-  transform-origin: 50% 100%;
-  animation: sl-ph2t 3s ease infinite;
-}
-
-@keyframes sl-ph2t {
-  0%, 29% { transform: rotateX(-10deg); }
-  0%, 41.9% { stroke-dasharray: unset; }
-  42% { transform: rotateX(4deg); stroke-dasharray: 0 0 100; }
-  50% { transform: rotateX(-20deg); stroke-dasharray: 0 50 0 100; }
-}
-
-@keyframes sl-ph2b {
-  42% { scale: 1 1; }
-  50% { scale: 0 1; }
-}
-
-.studio-loader .icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 4em;
-  height: 4em;
-  background: var(--c);
-  border-radius: 999px;
-  transform: translate(-50%, -50%);
-  transform-origin: center;
-  animation: sl-icon 3s ease-in-out infinite;
-  isolation: isolate;
-  border-color: var(--c);
-  border-style: solid;
-  z-index: -1;
-}
-
-@keyframes sl-icon {
-  0%, 15% { translate: 0 4.5em; width: 0; height: 0; }
-  0%, 29% { opacity: 0; }
-  30% { opacity: 1; }
-  40% { translate: 0 -0.75em; width: 4em; height: 4em; }
-  50% { translate: 0 0em; opacity: 1; background: var(--c); }
-  50.1% { border-width: 2em; background: var(--bg); }
-  65% {
-    width: 4em;
-    height: 4em;
-    transform: translate(-50%, -50%);
-    border-width: 4px;
-  }
-  80%, to {
-    width: 2em;
-    height: 2em;
-    translate: 0 0;
-    transform: translate(-3.5em, -50%);
-    border-width: 1em;
-    background: var(--bg);
-  }
-  80.1%, to { background: var(--c); }
-  84.9% { opacity: 1; }
-  85%, to { opacity: 0; }
-}
-
-/* The tick. Two borders of a square, rotated. */
-.studio-loader .icon::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  box-sizing: border-box;
-  border: 0.8em solid var(--bg);
-  border-left-color: transparent !important;
-  border-bottom-color: transparent !important;
-  transform: translate(-50%, 2.5em) rotate(-45deg);
-  transform-origin: center;
-  animation: sl-iconb 3s ease-in-out infinite;
-  z-index: -1;
-}
-
-@keyframes sl-iconb {
-  20% { transform: translate(-50%, 2.5em) rotate(-45deg); }
-  50% { transform: translate(-50%, -25%) rotate(-45deg); border-color: var(--bg); }
-  65%, to {
-    transform: translateY(0) scale(1) scaleX(1.5) translate(-60%, -50%) rotate(45deg);
-    border-color: var(--c);
-  }
-  85%, to {
-    transform: translate(-40%, -50%) scale(0) scaleX(1.5) translate(-75%, -50%) rotate(45deg);
-  }
-}
-
-.studio-loader .icon::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 1em;
-  height: 2em;
-  box-sizing: border-box;
-  background: var(--bg);
-  animation: sl-icona 3s ease-in-out infinite;
-}
-
-@keyframes sl-icona {
-  20% { transform: translate(-50%, 2.5em); }
-  50% { transform: translate(-50%, 0.4em); }
-  65%, to { transform: translate(-50%, 2.5em); }
 }

@@ -19,6 +19,7 @@ import ProfileCard from './ProfileCard';
 import Stepper, { Step } from './Stepper';
 import BeforeAfterVideo from './BeforeAfterVideo';
 import LeafMark from './LeafMark';
+import ServiceIllustration from './ServiceIllustration';
 import LoadingScreen from './LoadingScreen';
 import EnquiryTicket from './EnquiryTicket';
 import InfiniteSpiral from './InfiniteSpiral';
@@ -421,6 +422,7 @@ const App = () => {
      the length of its fade, so the element survives long enough to animate
      away instead of vanishing. */
   const [loaderPhase, setLoaderPhase] = useState('in');
+  const [loaderQuick, setLoaderQuick] = useState(false);
   const loaderTimers = useRef({ hold: null, fade: null });
   const [referenceErrors, setReferenceErrors] = useState({});
   const [enquiryTicket, setEnquiryTicket] = useState(null);
@@ -715,9 +717,10 @@ const App = () => {
   /* Shows the veil for `hold`, then fades it. Every call clears the previous
      timers, so rapid navigation cannot leave two schedules racing — and there
      is no branch that sets the veil without also scheduling its removal. */
-  const runLoader = (hold) => {
+  const runLoader = (hold, quick = false) => {
     window.clearTimeout(loaderTimers.current.hold);
     window.clearTimeout(loaderTimers.current.fade);
+    setLoaderQuick(quick);
     setLoaderPhase('in');
     loaderTimers.current.hold = window.setTimeout(() => {
       setLoaderPhase('out');
@@ -725,12 +728,50 @@ const App = () => {
     }, hold);
   };
 
-  /* First arrival: long enough to see the candle blow the other one out, which
-     lands between 1.2s and 2.1s of its three-second cycle. */
+  /* First arrival waits for the device rather than for a number picked in
+     advance: the veil lifts once the page has actually finished loading, which
+     is what the counter in the corner is reporting.
+     
+     Two bounds around that. FLOOR keeps it up long enough for the mark to
+     finish drawing (1.9s lands inside the drawing's hold phase, 0.45 to 0.66
+     of its 3s cycle) so a warm cache does not flash the veil half-drawn. CEIL
+     is the safety net: one stalled image must never trap a visitor behind a
+     loading screen, so past six seconds it lifts regardless. */
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    runLoader(reduced ? 400 : 2200);
+    if (reduced) {
+      runLoader(400);
+      return () => {
+        window.clearTimeout(loaderTimers.current.hold);
+        window.clearTimeout(loaderTimers.current.fade);
+      };
+    }
+
+    const FLOOR = 1900;
+    const CEIL = 6000;
+    const startedAt = Date.now();
+    let settled = false;
+
+    setLoaderQuick(false);
+    setLoaderPhase('in');
+
+    const lift = () => {
+      if (settled) return;
+      settled = true;
+      const remaining = Math.max(0, FLOOR - (Date.now() - startedAt));
+      loaderTimers.current.hold = window.setTimeout(() => {
+        setLoaderPhase('out');
+        loaderTimers.current.fade = window.setTimeout(() => setLoaderPhase('done'), 450);
+      }, remaining);
+    };
+
+    if (document.readyState === 'complete') lift();
+    else window.addEventListener('load', lift, { once: true });
+    const ceiling = window.setTimeout(lift, CEIL);
+
     return () => {
+      window.removeEventListener('load', lift);
+      window.clearTimeout(ceiling);
       window.clearTimeout(loaderTimers.current.hold);
       window.clearTimeout(loaderTimers.current.fade);
     };
@@ -738,9 +779,10 @@ const App = () => {
   }, []);
 
   const navigateTo = (id, options = {}) => {
-    /* Between pages it is a curtain, not a performance — short enough not to
-       make the site feel slower than it is. */
-    if (id !== activeNav) runLoader(750);
+    /* Between pages it is a curtain, not a performance. The loader runs its
+       quick variant, which fits the whole sequence into the shorter hold
+       instead of stopping part-way through it. */
+    if (id !== activeNav) runLoader(1250, true);
     setActiveNav(id);
     if (typeof window !== 'undefined') {
       const nextPath = navPathMap[id] || '/';
@@ -2540,7 +2582,7 @@ const App = () => {
          adopts it and every other route keeps its existing surface. */
       data-route={activeNav}
     >
-      {loaderPhase !== 'done' && <LoadingScreen leaving={loaderPhase === 'out'} />}
+      {loaderPhase !== 'done' && <LoadingScreen leaving={loaderPhase === 'out'} quick={loaderQuick} />}
       {/* Soft Background Gradients */}
       <div className="absolute top-[-10%] right-[-5%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-b from-[#FAE696]/20 to-transparent blur-3xl -z-10 pointer-events-none"></div>
       <div className="absolute bottom-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-tr from-[#D0F5E5]/30 to-transparent blur-3xl -z-10 pointer-events-none"></div>
@@ -5183,11 +5225,14 @@ const App = () => {
       {showServiceModal && (
         <div className="service-detail-modal fixed inset-0 z-[100] overflow-y-auto animate-slide-up font-sans hide-scrollbar bg-[#f8f9fc]">
           
-          <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-            <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#2050E3]/20 rounded-full mix-blend-multiply filter blur-[80px] animate-blob"></div>
-            <div className="absolute top-[20%] right-[-10%] w-[40vw] h-[40vw] bg-[#8b5cf6]/20 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-2000"></div>
-            <div className="absolute bottom-[-20%] left-[20%] w-[60vw] h-[60vw] bg-[#0ea5e9]/20 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-4000"></div>
-            <div className="absolute inset-0 bg-white/40 backdrop-blur-[60px]"></div>
+          {/* Named rather than left as bare Tailwind utilities so the dark
+              theme has something to hold on to — the blobs blend and the veil
+              is white, both of which have to change on a dark ground. */}
+          <div className="service-modal-aura fixed inset-0 pointer-events-none overflow-hidden z-0">
+            <div className="service-modal-blob absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#2050E3]/20 rounded-full mix-blend-multiply filter blur-[80px] animate-blob"></div>
+            <div className="service-modal-blob absolute top-[20%] right-[-10%] w-[40vw] h-[40vw] bg-[#8b5cf6]/20 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-2000"></div>
+            <div className="service-modal-blob absolute bottom-[-20%] left-[20%] w-[60vw] h-[60vw] bg-[#0ea5e9]/20 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-4000"></div>
+            <div className="service-modal-veil absolute inset-0 bg-white/40 backdrop-blur-[60px]"></div>
           </div>
 
           <div className="sticky top-4 sm:top-6 z-50 flex justify-center w-full px-4 sm:px-6 pointer-events-none">
@@ -5240,7 +5285,10 @@ const App = () => {
 
               <div className="w-full lg:w-1/2 relative h-[260px] sm:h-[450px] lg:h-[550px] animate-fade-in mt-4 lg:mt-0" style={{ animationDelay: '0.2s' }}>
                  <div className="service-editorial-media absolute inset-0 overflow-hidden">
-                   <img src={activeCategoryData?.img} alt={`${activeCategoryData?.name} editorial illustration`} loading="eager" decoding="async" fetchpriority="high" className="w-full h-full" />
+                   {/* Drawn here rather than fetched: the eight stock renders
+                       were the same AI-looking lilac blob and said nothing
+                       about the service under them. */}
+                   <ServiceIllustration id={activeCategoryData?.id} label={activeCategoryData?.name} />
                  </div>
                  <div className="absolute -bottom-4 -left-2 sm:-bottom-10 sm:-left-10 premium-glass px-4 sm:px-6 py-2.5 sm:py-4 rounded-full flex items-center gap-3 sm:gap-4 animate-float-rotate-1 max-w-[90%] border border-white/40">
                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/80 flex items-center justify-center text-[#2050E3] shadow-sm shrink-0">
