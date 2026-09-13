@@ -1161,12 +1161,9 @@
   color: var(--sl-white) !important;
 }
 
-:root .app-shell[data-route='home'] .unified-floating-action {
-  border: 1px solid var(--sl-black) !important;
-  background: var(--sl-black) !important;
-  box-shadow: none !important;
-  color: var(--sl-white) !important;
-}
+/* The floating WhatsApp / cart button keeps its own colours — green for
+   WhatsApp, the studio blue for the cart — so its two states stay tellable
+   apart. Painting it black made both states look the same. */
 
 /* --- Narrow screens ----------------------------------------------------------------- */
 
@@ -1649,8 +1646,8 @@
 }
 
 :root .app-shell[data-route='home'] .logo-3d-box {
-  width: 60px !important;
-  height: 60px !important;
+  width: 48px !important;
+  height: 48px !important;
   overflow: hidden !important;
   /* White, not black: the inverted logo is a black disc with the leaf cut out
      as a transparent hole, so this colour is what shows as the leaf. Black here
@@ -1672,7 +1669,21 @@
 
 @media (max-width: 639px) {
   :root .app-shell[data-route='home'] .logo-3d-box {
-    width: 50px !important;
-    height: 50px !important;
+    width: 42px !important;
+    height: 42px !important;
+  }
+}
+
+/* Phones show the speech bubble in the coin's place — beside the studio tag,
+   above the headline — and the coin steps out. */
+@media (max-width: 760px) {
+  :root .app-shell[data-route='home'] .hs-coin { display: none; }
+
+  :root .app-shell[data-route='home'] .hs-bubble {
+    display: block;
+    top: 232px;
+    right: 14px;
+    width: 58px;
+    transform: rotate(6deg);
   }
 }
