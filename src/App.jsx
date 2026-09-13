@@ -23,8 +23,7 @@ import Stepper, { Step } from './Stepper';
 import BeforeAfterVideo from './BeforeAfterVideo';
 import LeafMark from './LeafMark';
 import ServiceIllustration from './ServiceIllustration';
-import HeroStickers from './HeroStickers';
-import HomeMarquee from './HomeMarquee';
+import HeroStickers, { HeroRibbon } from './HeroStickers';
 import LoadingScreen from './LoadingScreen';
 import EnquiryTicket from './EnquiryTicket';
 import InfiniteSpiral from './InfiniteSpiral';
@@ -2600,9 +2599,6 @@ const App = () => {
       <div className="absolute bottom-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-tr from-[#D0F5E5]/30 to-transparent blur-3xl -z-10 pointer-events-none"></div>
       <div className="absolute top-[20%] left-[-5%] w-[40vw] h-[40vw] rounded-full bg-gradient-to-br from-[#DFE4F4]/40 to-transparent blur-3xl -z-10 pointer-events-none"></div>
 
-      {/* The black announcement strip — home only. */}
-      {activeNav === 'home' && <HomeMarquee />}
-
       {/* Top Navigation */}
       <nav className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-8 flex justify-between items-center sticky top-0 sm:relative z-50 sm:z-10 bg-[#FDFDFD]/82 sm:bg-transparent backdrop-blur-2xl sm:backdrop-blur-none border-b border-white/70 sm:border-b-0">
         <div className="flex items-center gap-3 group cursor-pointer z-20">
@@ -2750,6 +2746,7 @@ const App = () => {
                     element, and it puts the studio's range above the fold
                     instead of leaving it to the grid further down. */}
                 <div className="ig-board">
+                  <HeroRibbon />
                   <span className="ig-eyebrow">What we do</span>
                   <SplitFlapText
                     words={['UI/UX', 'WEBSITES', 'MOBILE APPS', 'AI ADS', 'BRANDING', 'MOTION']}

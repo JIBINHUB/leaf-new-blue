@@ -21,14 +21,23 @@ import { LEAF } from './StudioLoader';
 
 const RIBBON = 'M-80 360 C 150 80, 430 540, 680 280 S 1080 30, 1330 230';
 
+/* The ribbon lives behind the "What we do" board rather than behind the
+   headline. Everything in that band — the tag, the flap tiles, the buttons —
+   sits on its own solid surface, so the ribbon can cross it without ever
+   running behind a letter. Behind the headline it cut through the words. */
+export function HeroRibbon() {
+  return (
+    <svg className="hs-ribbon" viewBox="0 0 1240 520" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path className="hs-ribbon-edge" d={RIBBON} />
+      <path className="hs-ribbon-body" d={RIBBON} />
+      <path className="hs-ribbon-shine" d={RIBBON} />
+    </svg>
+  );
+}
+
 export default function HeroStickers() {
   return (
     <div className="hero-stickers" aria-hidden="true">
-      <svg className="hs-ribbon" viewBox="0 0 1240 520" preserveAspectRatio="none" focusable="false">
-        <path className="hs-ribbon-edge" d={RIBBON} />
-        <path className="hs-ribbon-body" d={RIBBON} />
-        <path className="hs-ribbon-shine" d={RIBBON} />
-      </svg>
 
       {/* Coin: Sunburst, with a star. */}
       <svg className="hs-sticker hs-coin" viewBox="0 0 100 100" focusable="false">

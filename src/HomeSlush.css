@@ -51,7 +51,7 @@
   --ig-r-card: 20px;
   --ig-r-btn: 1600px;
 
-  /* Sky Wash under everything, so the marquee, nav and hero read as one band. */
+  /* Sky Wash under everything, so the nav and hero read as one band. */
   background: var(--sl-sky) !important;
   color: var(--sl-black) !important;
   font-family: var(--sl-font);
@@ -126,48 +126,6 @@
   padding-block: clamp(56px, 8vw, 128px) !important;
   padding-inline: 20px !important;
   background: var(--sl-gray) !important;
-}
-
-/* --- Marquee ---------------------------------------------------------------- */
-
-:root .app-shell[data-route='home'] .home-marquee {
-  position: relative;
-  z-index: 60;
-  overflow: hidden;
-  background: var(--sl-black);
-  color: var(--sl-white);
-  border-block: 1px solid var(--sl-black);
-}
-
-:root .app-shell[data-route='home'] .home-marquee-track {
-  display: flex;
-  width: max-content;
-  animation: sl-marquee 38s linear infinite;
-}
-
-:root .app-shell[data-route='home'] .home-marquee-group { display: flex; }
-
-:root .app-shell[data-route='home'] .home-marquee-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 18px;
-  padding: 9px 18px 9px 0;
-  font-family: var(--sl-font);
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0.032em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--sl-white) !important;
-}
-
-:root .app-shell[data-route='home'] .home-marquee-item i {
-  font-style: normal;
-  color: var(--sl-sun) !important;
-}
-
-@keyframes sl-marquee {
-  to { transform: translateX(-50%); }
 }
 
 /* --- Tags ------------------------------------------------------------------- */
@@ -1252,9 +1210,6 @@
   :root .app-shell[data-route='home'] .ig-btn { padding: 14px 20px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root .app-shell[data-route='home'] .home-marquee-track { animation: none; }
-}
 
 /* --- Studio Heads: redesigned for both formats -------------------------------
 
@@ -1590,4 +1545,134 @@
   border: 1.5px solid var(--sl-black);
   border-radius: 20px;
   background: var(--sl-white);
+}
+
+/* --- Hero: ribbon behind the board, stickers clear of the words ----------------
+
+   The ribbon used to be pinned to the hero band and crossed the headline,
+   which cost the words their legibility. It now sits inside the board and
+   spans the viewport from there. The board's own children and the buttons
+   under it are lifted above it, so every label it passes is on a solid tile. */
+:root .app-shell[data-route='home'] .ig-board {
+  position: relative;
+  isolation: isolate;
+}
+
+:root .app-shell[data-route='home'] .ig-board > :not(.hs-ribbon),
+:root .app-shell[data-route='home'] .ig-actions {
+  position: relative;
+  z-index: 1;
+}
+
+:root .app-shell[data-route='home'] .ig-board .hs-ribbon,
+:root .app-shell[data-route='home'] .hs-ribbon {
+  position: absolute;
+  z-index: 0;
+  top: -70px;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  height: calc(100% + 150px);
+  pointer-events: none;
+}
+
+/* Stickers: beside the promo card, the board and the ring — never behind the
+   headline or the intro card. Percentages of the hero band's height. */
+:root .app-shell[data-route='home'] .hs-bubble { top: 3%; }
+:root .app-shell[data-route='home'] .hs-coin { top: 13%; }
+:root .app-shell[data-route='home'] .hs-badge { top: 60%; right: calc(var(--band-pad-x) - 8px); }
+:root .app-shell[data-route='home'] .hs-check { top: 69%; right: calc(var(--band-pad-x) + 130px); }
+:root .app-shell[data-route='home'] .hs-cursor { top: 88%; }
+
+@media (max-width: 760px) {
+  :root .app-shell[data-route='home'] .ig-board .hs-ribbon,
+  :root .app-shell[data-route='home'] .hs-ribbon {
+    top: -40px;
+    height: calc(100% + 110px);
+  }
+
+  /* On a phone there is no room beside the words, so only the coin stays —
+     next to the studio tag, above the headline. */
+  :root .app-shell[data-route='home'] .hs-coin { top: 236px; right: 14px; }
+  :root .app-shell[data-route='home'] .hs-badge { display: none; }
+}
+
+/* --- Studio Heads: the photos, not the labels ------------------------------------
+
+   The name, role and contact stickers together covered the lower half of each
+   picture. The per-person contact pill goes — the "Work with the studio"
+   button under the cards does that job — and the name and role become one
+   compact label in the bottom corner. */
+:root .app-shell[data-route='home'] .heads-profile .pc-user-info { display: none !important; }
+
+:root .app-shell[data-route='home'] .heads-profile .pc-details {
+  top: auto;
+  right: auto;
+  bottom: 14px;
+  left: 14px;
+  gap: 5px;
+}
+
+:root .app-shell[data-route='home'] .heads-profile .pc-details h3 { font-size: clamp(13px, 1.2vw, 16px); padding: 5px 10px; }
+:root .app-shell[data-route='home'] .heads-profile .pc-details p { font-size: 11px; padding: 3px 9px; }
+
+@media (max-width: 760px) {
+  :root .app-shell[data-route='home'] .heads-profile .pc-details { bottom: 8px; left: 8px; gap: 3px; }
+  :root .app-shell[data-route='home'] .heads-profile .pc-details h3 { font-size: 11px; padding: 3px 7px; }
+  :root .app-shell[data-route='home'] .heads-profile .pc-details p { font-size: 9px; padding: 2px 6px; }
+}
+
+/* --- The Leaf Advantage: room around the card --------------------------------
+
+   The white card was inset from its band by the band padding less 24px. On a
+   phone that came out at -4px — wider than the screen — with only 32px of gray
+   above and below, so the section ran straight into its neighbours. The band
+   gets its own, larger vertical padding, and the card keeps at least 12px from
+   the screen edge. */
+:root .app-shell[data-route='home'] .home-screen > .home-about-section {
+  --band-pad-y: clamp(96px, 11vw, 168px);
+}
+
+:root .app-shell[data-route='home'] .home-about-section .home-about-shell {
+  inset: calc(var(--band-pad-y) - 36px) max(12px, calc(var(--band-pad-x) - 24px)) !important;
+}
+
+/* --- Logo: bigger, and the mark fills its circle ---------------------------------
+
+   The logo file carries a transparent margin around its disc, so at its old
+   size the mark sat small inside the outlined circle. The image is scaled past
+   that margin and clipped to the circle, so the black disc and white leaf fill
+   it edge to edge. Sizes stated with !important because the markup fixes them
+   with utility classes. */
+:root .app-shell[data-route='home'] .perspective-wrapper {
+  width: auto !important;
+  height: auto !important;
+}
+
+:root .app-shell[data-route='home'] .logo-3d-box {
+  width: 60px !important;
+  height: 60px !important;
+  overflow: hidden !important;
+  /* White, not black: the inverted logo is a black disc with the leaf cut out
+     as a transparent hole, so this colour is what shows as the leaf. Black here
+     turned the whole mark into a plain black circle. */
+  background: var(--sl-white) !important;
+}
+
+:root .app-shell[data-route='home'] .logo-3d-box .logo-3d-img {
+  position: absolute;
+  /* 512px file, 400px disc: 128% puts the disc at the full width of the box.
+     The disc sits about 2% above the file's centre, hence the nudge down. */
+  width: 128% !important;
+  height: 128% !important;
+  max-width: none !important;
+  left: -14%;
+  top: -12%;
+  object-fit: contain;
+}
+
+@media (max-width: 639px) {
+  :root .app-shell[data-route='home'] .logo-3d-box {
+    width: 50px !important;
+    height: 50px !important;
+  }
 }
