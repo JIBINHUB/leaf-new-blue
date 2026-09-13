@@ -1,0 +1,1593 @@
+/* ===========================================================================
+   Home page — the Slush system.
+
+   A sticker book on pastel paper. Full-bleed colour bands instead of cards on
+   a canvas, 1px black outlines on everything you can touch (the hand-cut
+   edge), pills for every control, 20-40px on cards, and a shared six-colour
+   sticker palette used generously — several colours per screen, none of them
+   "the" accent. No shadows and no gradients anywhere: depth comes from colour
+   bands and outlines.
+
+   Home page only. Every rule is scoped under
+   `:root .app-shell[data-route='home']`, which keeps every other route on its
+   own surfaces and, at (0,3,0), outranks the site's blanket dark-mode rules —
+   (0,1,1) for text and (0,2,1) for surfaces, both !important — which have
+   turned text white-on-white on this site before.
+
+   The page is light in BOTH themes. The reference is a light system; the
+   theme toggle keeps working on every other page.
+
+   Type is set the way the rest of the site sets it: Outfit, headings at 500
+   in sentence case with tight tracking, body at 400. The reference's 800-
+   weight uppercase poster type was tried and made the home page read as a
+   different font from every other page, so it was taken back out.
+   ========================================================================= */
+
+:root .app-shell[data-route='home'] {
+  --sl-black: #000000;
+  --sl-white: #ffffff;
+  --sl-sky: #dceeff;
+  --sl-gray: #cccccc;
+  --sl-mist: #e9e9e9;
+  --sl-blue: #4da2ff;
+  --sl-mint: #55db9c;
+  --sl-lavender: #e9ccff;
+  --sl-ember: #fb4903;
+  --sl-sun: #ffd731;
+  --sl-violet: #5c4ade;
+  --sl-font: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --sl-line: 1.5px solid #000000;
+
+  /* The existing home stylesheet is written against --ig-* tokens; remapping
+     them moves everything it styles onto this palette in one place. */
+  --ig-paper: var(--sl-white);
+  --ig-alt: var(--sl-mist);
+  --ig-ink: var(--sl-black);
+  --ig-muted: rgba(0, 0, 0, 0.72);
+  --ig-soft: rgba(0, 0, 0, 0.62);
+  --ig-line: var(--sl-black);
+  --ig-accent: var(--sl-violet);
+  --ig-sans: var(--sl-font);
+  --ig-r-card: 20px;
+  --ig-r-btn: 1600px;
+
+  /* Sky Wash under everything, so the marquee, nav and hero read as one band. */
+  background: var(--sl-sky) !important;
+  color: var(--sl-black) !important;
+  font-family: var(--sl-font);
+}
+
+:root .app-shell[data-route='home'] > .blur-3xl { display: none !important; }
+
+:root .app-shell[data-route='home'] :where(h1, h2, h3, h4, p, a, button, li, dt, dd, input, select, label, strong) {
+  font-family: var(--sl-font);
+}
+
+/* --- Bands -----------------------------------------------------------------
+
+   The main column stops being a column: every section runs edge to edge and
+   paints its own band, with the content held to a 1280px measure by padding.
+   Sections sit flush — the change of colour is the divider. */
+
+:root .app-shell[data-route='home'] .home-screen {
+  max-width: none !important;
+  padding: 0 !important;
+  gap: 0 !important;
+}
+
+:root .app-shell[data-route='home'] .home-screen > .home-hero-layout,
+:root .app-shell[data-route='home'] .home-screen > .ba-section,
+:root .app-shell[data-route='home'] .home-screen > .ig-statement,
+:root .app-shell[data-route='home'] .home-screen > .ig-process,
+:root .app-shell[data-route='home'] .home-screen > .home-about-section,
+:root .app-shell[data-route='home'] .home-screen > .heads,
+:root .app-shell[data-route='home'] .home-screen > .c1-section,
+:root .app-shell[data-route='home'] .home-screen > .ig-tools,
+:root .app-shell[data-route='home'] .home-screen > .home-faq-section,
+:root .app-shell[data-route='home'] .home-screen > .home-contact-section,
+:root .app-shell[data-route='home'] .home-screen > .ig-band {
+  /* From the band's own width (100% of the column), not 100vw. 100vw counts
+     the scrollbar and assumes the page is as wide as the window; whenever it
+     was not, this padding came out hundreds of pixels too wide and crushed the
+     content into a narrow strip. */
+  --band-pad-x: max(20px, calc((100% - 1216px) / 2));
+  --band-pad-y: clamp(56px, 8vw, 128px);
+  position: relative;
+  width: auto !important;
+  /* Some sections carry a max-width from their old layouts — Studio Heads was
+     capped at 1088px, which left its band a strip and crushed the cards to
+     100px. A band is the full column, always. */
+  max-width: none !important;
+  margin: 0 !important;
+  padding: var(--band-pad-y) var(--band-pad-x) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* The band sequence: Sky, White, Mint, White, Gray, Sky, White, Lavender, Sky,
+   White, Gray (footer), Sky. Three pastels plus two sticker washes, so the
+   scroll has a rhythm without a single divider line. */
+:root .app-shell[data-route='home'] .home-screen > .home-hero-layout { background: var(--sl-sky) !important; }
+:root .app-shell[data-route='home'] .home-screen > .ba-section { background: var(--sl-white) !important; }
+:root .app-shell[data-route='home'] .home-screen > .ig-statement { background: var(--sl-mint) !important; }
+:root .app-shell[data-route='home'] .home-screen > .ig-process { background: var(--sl-white) !important; }
+:root .app-shell[data-route='home'] .home-screen > .home-about-section { background: var(--sl-gray) !important; }
+:root .app-shell[data-route='home'] .home-screen > .heads { background: var(--sl-sky) !important; }
+:root .app-shell[data-route='home'] .home-screen > .c1-section { background: var(--sl-white) !important; }
+:root .app-shell[data-route='home'] .home-screen > .ig-tools { background: var(--sl-lavender) !important; }
+:root .app-shell[data-route='home'] .home-screen > .home-faq-section { background: var(--sl-sky) !important; }
+:root .app-shell[data-route='home'] .home-screen > .home-contact-section { background: var(--sl-white) !important; }
+:root .app-shell[data-route='home'] .home-screen > .ig-band { background: var(--sl-sky) !important; }
+
+/* The footer section is already full bleed (it translates itself out of the
+   column), so it only takes the band colour and the vertical padding. */
+:root .app-shell[data-route='home'] .home-status-marquee-section {
+  padding-block: clamp(56px, 8vw, 128px) !important;
+  padding-inline: 20px !important;
+  background: var(--sl-gray) !important;
+}
+
+/* --- Marquee ---------------------------------------------------------------- */
+
+:root .app-shell[data-route='home'] .home-marquee {
+  position: relative;
+  z-index: 60;
+  overflow: hidden;
+  background: var(--sl-black);
+  color: var(--sl-white);
+  border-block: 1px solid var(--sl-black);
+}
+
+:root .app-shell[data-route='home'] .home-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: sl-marquee 38s linear infinite;
+}
+
+:root .app-shell[data-route='home'] .home-marquee-group { display: flex; }
+
+:root .app-shell[data-route='home'] .home-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 9px 18px 9px 0;
+  font-family: var(--sl-font);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.032em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--sl-white) !important;
+}
+
+:root .app-shell[data-route='home'] .home-marquee-item i {
+  font-style: normal;
+  color: var(--sl-sun) !important;
+}
+
+@keyframes sl-marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* --- Tags ------------------------------------------------------------------- */
+
+:root .app-shell[data-route='home'] .ig-eyebrow,
+:root .app-shell[data-route='home'] .c1-badge,
+:root .app-shell[data-route='home'] .heads-eyebrow,
+:root .app-shell[data-route='home'] .ba-kicker,
+:root .app-shell[data-route='home'] .faq-kicker,
+:root .app-shell[data-route='home'] .advantage-pill {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin-bottom: 22px;
+  padding: 8px 14px !important;
+  border: 1px solid var(--sl-black) !important;
+  border-radius: 1600px !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+  font-family: var(--sl-font) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.032em !important;
+  text-transform: uppercase !important;
+  color: var(--sl-black) !important;
+  -webkit-text-fill-color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .ig-eyebrow::before,
+:root .app-shell[data-route='home'] .c1-badge::before,
+:root .app-shell[data-route='home'] .heads-eyebrow::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border: 1px solid var(--sl-black);
+  border-radius: 1600px;
+  background: var(--sl-ember);
+}
+
+:root .app-shell[data-route='home'] .ba-kicker i,
+:root .app-shell[data-route='home'] .faq-kicker-dot,
+:root .app-shell[data-route='home'] .advantage-pill > span {
+  width: 8px !important;
+  height: 8px !important;
+  border: 1px solid var(--sl-black) !important;
+  border-radius: 1600px !important;
+  background: var(--sl-ember) !important;
+  animation: none !important;
+}
+
+:root .app-shell[data-route='home'] .faq-kicker span,
+:root .app-shell[data-route='home'] .advantage-pill strong {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.032em !important;
+  text-transform: uppercase !important;
+  color: var(--sl-black) !important;
+  -webkit-text-fill-color: var(--sl-black) !important;
+}
+
+/* --- Buttons ---------------------------------------------------------------- */
+
+/* Black-filled or black-outlined only — the reference keeps blue and green
+   off controls entirely. */
+:root .app-shell[data-route='home'] .ig-btn {
+  gap: 10px;
+  padding: 14px 24px;
+  border: 1px solid var(--sl-black) !important;
+  border-radius: 1600px !important;
+  font-family: var(--sl-font);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: none !important;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+:root .app-shell[data-route='home'] .ig-btn-solid {
+  background: var(--sl-black) !important;
+  color: var(--sl-white) !important;
+}
+
+:root .app-shell[data-route='home'] .ig-btn-line {
+  background: var(--sl-white) !important;
+  color: var(--sl-black) !important;
+}
+
+@media (hover: hover) {
+  :root .app-shell[data-route='home'] .ig-btn:hover { transform: translateY(-2px); }
+  :root .app-shell[data-route='home'] .ig-btn-line:hover { background: var(--sl-sun) !important; }
+}
+
+/* --- Navigation ------------------------------------------------------------- */
+
+:root .app-shell[data-route='home'] > nav {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 639px) {
+  /* Sticky on a phone, so it keeps a backing to stay legible over content. */
+  :root .app-shell[data-route='home'] > nav {
+    background: var(--sl-sky) !important;
+    border-bottom: 1px solid var(--sl-black) !important;
+  }
+}
+
+:root .app-shell[data-route='home'] > nav .text-gray-900 {
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+  color: var(--sl-black) !important;
+}
+
+/* Logo mark: a white disc with a black outline. The logo file is white, so it
+   is inverted to black to sit on the white fill. */
+:root .app-shell[data-route='home'] .logo-3d-box {
+  border: 1.5px solid var(--sl-black) !important;
+  border-radius: 1600px !important;
+  background: var(--sl-white) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:root .app-shell[data-route='home'] .logo-3d-box > .absolute { display: none !important; }
+/* !important and a class deeper: a mobile performance rule strips filters
+   from this image, which left the white logo on the white disc on phones. */
+:root .app-shell[data-route='home'] .logo-3d-box .logo-3d-img { filter: invert(1) !important; }
+
+:root .app-shell[data-route='home'] .header-status-card {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .header-status-card::before,
+:root .app-shell[data-route='home'] .header-status-card::after { display: none !important; }
+
+:root .app-shell[data-route='home'] .header-status-card strong,
+:root .app-shell[data-route='home'] .header-status-rotator span { color: var(--sl-black) !important; }
+
+:root .app-shell[data-route='home'] .header-status-topline small {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-sun) !important;
+  box-shadow: none !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .header-theme-switch {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .header-status-action {
+  border: 1px solid var(--sl-black) !important;
+  border-radius: 1600px !important;
+  background: var(--sl-black) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: var(--sl-white) !important;
+}
+
+/* --- Hero ------------------------------------------------------------------- */
+
+:root .app-shell[data-route='home'] .home-screen > .home-hero-layout {
+  overflow: hidden;
+  isolation: isolate;
+  padding-top: clamp(24px, 4vw, 56px) !important;
+}
+
+:root .app-shell[data-route='home'] .home-hero-copy {
+  position: relative;
+  z-index: 1;
+}
+
+:root .app-shell[data-route='home'] .hero-stickers {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+:root .app-shell[data-route='home'] .hs-ribbon {
+  position: absolute;
+  left: 0;
+  top: clamp(200px, 17%, 300px);
+  width: 100%;
+  height: clamp(260px, 30vw, 520px);
+  overflow: visible;
+}
+
+:root .app-shell[data-route='home'] .hs-ribbon path {
+  fill: none;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+:root .app-shell[data-route='home'] .hs-ribbon-edge { stroke: var(--sl-black); stroke-width: 84; }
+:root .app-shell[data-route='home'] .hs-ribbon-body { stroke: var(--sl-blue); stroke-width: 78; }
+
+/* One flat highlight along the tube — what makes it read as inflated without
+   a gradient. */
+:root .app-shell[data-route='home'] .hs-ribbon-shine {
+  stroke: var(--sl-white);
+  stroke-width: 9;
+  stroke-dasharray: 220 90 60 400;
+  opacity: 0.55;
+}
+
+:root .app-shell[data-route='home'] .hs-sticker {
+  position: absolute;
+  width: clamp(58px, 6.2vw, 104px);
+  height: auto;
+  overflow: visible;
+}
+
+:root .app-shell[data-route='home'] .hs-coin { top: 10%; right: calc(var(--band-pad-x) - 10px); transform: rotate(12deg); }
+:root .app-shell[data-route='home'] .hs-badge { top: 31%; right: calc(var(--band-pad-x) + 110px); transform: rotate(-9deg); }
+:root .app-shell[data-route='home'] .hs-bubble { top: 4%; right: calc(var(--band-pad-x) + 220px); transform: rotate(6deg); }
+:root .app-shell[data-route='home'] .hs-check { top: 57%; right: calc(var(--band-pad-x) - 6px); transform: rotate(-8deg); }
+:root .app-shell[data-route='home'] .hs-cursor { top: 76%; right: calc(var(--band-pad-x) + 70px); transform: rotate(10deg); }
+
+:root .app-shell[data-route='home'] .ig-hero { padding-top: 12px; }
+
+/* The display block: crushed, uppercase, 800. */
+:root .app-shell[data-route='home'] .ig-display,
+:root .app-shell[data-route='home'] .ig-display-short {
+  max-width: none;
+  margin: 0 0 34px;
+  font-family: var(--sl-font) !important;
+  font-size: clamp(3rem, 8.4vw, 8.6rem);
+  font-weight: 800 !important;
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--sl-black) !important;
+}
+
+/* The key words as a Sunburst sticker, tilted, outlined. */
+:root .app-shell[data-route='home'] .ig-display em {
+  display: inline-block;
+  margin-top: 0.08em;
+  padding: 0.04em 0.12em 0.02em;
+  border: 3px solid var(--sl-black);
+  border-radius: 20px;
+  background: var(--sl-sun);
+  font-style: normal;
+  line-height: 0.82;
+  color: var(--sl-black) !important;
+  -webkit-text-fill-color: var(--sl-black);
+  transform: rotate(-2deg);
+}
+
+:root .app-shell[data-route='home'] .ig-lede {
+  max-width: 34ch;
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .ig-board .split-flap-text {
+  --split-flap-tile-color: var(--sl-black) !important;
+  --split-flap-text-color: var(--sl-white) !important;
+}
+
+/* Facts: three sticker cards in three palette colours. */
+:root .app-shell[data-route='home'] .ig-facts {
+  gap: 12px;
+  border-top: 0 !important;
+}
+
+:root .app-shell[data-route='home'] .ig-fact,
+:root .app-shell[data-route='home'] .ig-fact + .ig-fact {
+  padding: 22px 22px 20px !important;
+  border: var(--sl-line) !important;
+  border-radius: 20px;
+}
+
+:root .app-shell[data-route='home'] .ig-fact:nth-child(1) { background: var(--sl-lavender); }
+:root .app-shell[data-route='home'] .ig-fact:nth-child(2) { background: var(--sl-mint); }
+:root .app-shell[data-route='home'] .ig-fact:nth-child(3) { background: var(--sl-sun); }
+:root .app-shell[data-route='home'] .ig-fact::before { display: none; }
+
+:root .app-shell[data-route='home'] .ig-fact-index { color: rgba(0, 0, 0, 0.66); font-weight: 700; }
+
+:root .app-shell[data-route='home'] .ig-facts dt {
+  font-size: clamp(2.8rem, 5.6vw, 5rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .ig-facts dd {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.78) !important;
+}
+
+:root .app-shell[data-route='home'] .home-promo-card {
+  border: var(--sl-line) !important;
+  border-radius: 30px !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+}
+
+/* Service ring. */
+:root .app-shell[data-route='home'] .elastic-service-item {
+  border: var(--sl-line) !important;
+  background: var(--sl-white) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .elastic-service-item svg,
+:root .app-shell[data-route='home'] .elastic-service-item .leaf-mark { color: var(--sl-black) !important; }
+
+:root .app-shell[data-route='home'] .elastic-service-item.is-hovered {
+  background: var(--sl-black) !important;
+  color: var(--sl-white) !important;
+}
+
+:root .app-shell[data-route='home'] .elastic-service-item.is-hovered svg,
+:root .app-shell[data-route='home'] .elastic-service-item.is-hovered .leaf-mark { color: var(--sl-white) !important; }
+
+:root .app-shell[data-route='home'] .elastic-service-caption {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .elastic-service-caption strong { color: var(--sl-black) !important; }
+:root .app-shell[data-route='home'] .elastic-service-caption span { color: rgba(0, 0, 0, 0.7) !important; }
+
+/* --- Section headings --------------------------------------------------------- */
+
+:root .app-shell[data-route='home'] .heads-head h2,
+:root .app-shell[data-route='home'] .c1-title,
+:root .app-shell[data-route='home'] .ig-process-head h2,
+:root .app-shell[data-route='home'] .ig-statement h2,
+:root .app-shell[data-route='home'] .home-faq-section h2,
+:root .app-shell[data-route='home'] .advantage-gallery-center h2 {
+  font-family: var(--sl-font) !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--sl-black) !important;
+  -webkit-text-fill-color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .heads-head h2,
+:root .app-shell[data-route='home'] .c1-title,
+:root .app-shell[data-route='home'] .ig-process-head h2,
+:root .app-shell[data-route='home'] .ig-statement h2 {
+  font-size: clamp(2.3rem, 5vw, 4rem) !important;
+}
+
+:root .app-shell[data-route='home'] .heads-head p,
+:root .app-shell[data-route='home'] .ig-process-head p,
+:root .app-shell[data-route='home'] .c1-subtitle,
+:root .app-shell[data-route='home'] .ig-statement p {
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  line-height: 1.42 !important;
+  letter-spacing: -0.01em;
+  color: rgba(0, 0, 0, 0.74) !important;
+}
+
+/* --- Before / after ----------------------------------------------------------- */
+
+:root .app-shell[data-route='home'] .ba-head { border-bottom-color: var(--sl-black); }
+:root .app-shell[data-route='home'] .ba-index { font-weight: 700; color: rgba(0, 0, 0, 0.66); }
+
+:root .app-shell[data-route='home'] .ba-shell {
+  border: var(--sl-line);
+  border-radius: 30px;
+}
+
+:root .app-shell[data-route='home'] .ba-caption h2 {
+  font-weight: 700;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .ba-caption h2 em { color: var(--sl-violet) !important; }
+
+:root .app-shell[data-route='home'] .ba-hint {
+  border-color: var(--sl-black);
+  background: var(--sl-white);
+  color: var(--sl-black);
+}
+
+/* --- How we work: Mint band ---------------------------------------------------- */
+
+:root .app-shell[data-route='home'] .home-screen > .ig-statement h2 { max-width: 13ch; }
+
+/* The emphasis as a white sticker, tilted the other way from the hero's. */
+:root .app-shell[data-route='home'] .ig-statement h2 em {
+  display: inline-block;
+  padding: 0.02em 0.14em 0.06em;
+  border: 2px solid var(--sl-black);
+  border-radius: 16px;
+  background: var(--sl-white);
+  font-style: normal;
+  color: var(--sl-black) !important;
+  transform: rotate(1.5deg);
+}
+
+:root .app-shell[data-route='home'] .ig-promises { gap: 0; }
+
+:root .app-shell[data-route='home'] .ig-promises li {
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--sl-black);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .ig-promises li:first-child { border-top: 1px solid var(--sl-black); }
+
+:root .app-shell[data-route='home'] .ig-promises span {
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  border: 1px solid var(--sl-black);
+  border-radius: 10px;
+  background: var(--sl-white);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sl-black) !important;
+}
+
+/* --- Process: White band ------------------------------------------------------- */
+
+:root .app-shell[data-route='home'] .ig-stage-track { border-top: 0; }
+
+:root .app-shell[data-route='home'] .ig-stage-step { box-shadow: inset 0 2px 0 0 rgba(0, 0, 0, 0.16); }
+:root .app-shell[data-route='home'] .ig-stage-step.is-active { box-shadow: inset 0 3px 0 0 var(--sl-black); }
+
+:root .app-shell[data-route='home'] .ig-stage-step-n {
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+  color: rgba(0, 0, 0, 0.46);
+}
+
+:root .app-shell[data-route='home'] .ig-stage-step:hover .ig-stage-step-n { color: rgba(0, 0, 0, 0.7); }
+:root .app-shell[data-route='home'] .ig-stage-step.is-active .ig-stage-step-n { color: var(--sl-violet); }
+
+:root .app-shell[data-route='home'] .ig-stage-step-t { color: rgba(0, 0, 0, 0.64); }
+:root .app-shell[data-route='home'] .ig-stage-step.is-active .ig-stage-step-t { font-weight: 700; color: var(--sl-black); }
+
+/* The selected stage as an elevated Electric Blue card — blue as a surface,
+   never as a control. */
+:root .app-shell[data-route='home'] .ig-stage-detail {
+  padding: clamp(24px, 4vw, 48px);
+  border: var(--sl-line);
+  border-radius: 40px;
+  background: var(--sl-blue);
+}
+
+:root .app-shell[data-route='home'] .ig-stage-detail h3 {
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .ig-stage-n { font-weight: 700; color: rgba(0, 0, 0, 0.74); }
+
+:root .app-shell[data-route='home'] .ig-stage-detail p {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(0, 0, 0, 0.84) !important;
+}
+
+:root .app-shell[data-route='home'] .ig-stage-out {
+  border-color: var(--sl-black);
+  background: var(--sl-black);
+  font-weight: 700;
+  color: var(--sl-white);
+}
+
+/* --- The Leaf Advantage: Gray band --------------------------------------------- */
+
+/* The shell is absolutely positioned to its section, so on a band it would fill
+   the band edge to edge. Inset to sit just outside the content instead. */
+:root .app-shell[data-route='home'] .home-about-section .home-about-shell {
+  inset: calc(var(--band-pad-y) - 24px) calc(var(--band-pad-x) - 24px) !important;
+  border: var(--sl-line) !important;
+  border-radius: 40px !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+:root .app-shell[data-route='home'] .advantage-media-stage {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+:root .app-shell[data-route='home'] .advantage-gallery-topline span {
+  color: rgba(0, 0, 0, 0.64) !important;
+  -webkit-text-fill-color: rgba(0, 0, 0, 0.64) !important;
+}
+
+:root .app-shell[data-route='home'] .advantage-gallery-center {
+  border: var(--sl-line) !important;
+  border-radius: 20px !important;
+  background: var(--sl-sun) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+:root .app-shell[data-route='home'] .advantage-gallery-center p {
+  font-weight: 500 !important;
+  color: rgba(0, 0, 0, 0.78) !important;
+}
+
+:root .app-shell[data-route='home'] .advantage-stat-grid {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+:root .app-shell[data-route='home'] .advantage-stat-card {
+  border: var(--sl-line) !important;
+  border-radius: 20px !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+:root .app-shell[data-route='home'] .advantage-stat-card:nth-child(1) { background: var(--sl-lavender) !important; }
+:root .app-shell[data-route='home'] .advantage-stat-card:nth-child(2) { background: var(--sl-mint) !important; }
+:root .app-shell[data-route='home'] .advantage-stat-card:nth-child(3) { background: var(--sl-blue) !important; }
+:root .app-shell[data-route='home'] .advantage-stat-card:nth-child(4) { background: var(--sl-sun) !important; }
+
+:root .app-shell[data-route='home'] .advantage-stat-card-experience::before { display: none !important; }
+
+:root .app-shell[data-route='home'] .advantage-stat-card span,
+:root .app-shell[data-route='home'] .advantage-stat-card span em {
+  font-weight: 800 !important;
+  color: var(--sl-black) !important;
+  -webkit-text-fill-color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .advantage-stat-card strong {
+  font-weight: 600 !important;
+  color: rgba(0, 0, 0, 0.78) !important;
+  -webkit-text-fill-color: rgba(0, 0, 0, 0.78) !important;
+}
+
+/* --- Studio heads: Sky band ---------------------------------------------------- */
+
+:root .app-shell[data-route='home'] .heads-profile .pc-card {
+  border: var(--sl-line);
+}
+
+:root .app-shell[data-route='home'] .heads-foot {
+  margin-top: 36px !important;
+  padding: 20px 24px !important;
+  border: var(--sl-line) !important;
+  border-radius: 20px !important;
+  background: var(--sl-white) !important;
+}
+
+:root .app-shell[data-route='home'] .heads-foot p { font-weight: 500; color: rgba(0, 0, 0, 0.76) !important; }
+:root .app-shell[data-route='home'] .heads-foot strong { color: var(--sl-black) !important; }
+
+:root .app-shell[data-route='home'] .heads-foot button {
+  border: 1px solid var(--sl-black) !important;
+  border-radius: 1600px !important;
+  background: var(--sl-black) !important;
+  box-shadow: none !important;
+  color: var(--sl-white) !important;
+}
+
+/* --- Services: White band ------------------------------------------------------ */
+
+:root .app-shell[data-route='home'] .c1-title { max-width: 16ch; }
+
+:root .app-shell[data-route='home'] .c1-svc-card {
+  padding: 24px !important;
+  border: var(--sl-line) !important;
+  border-radius: 20px !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+  transition: transform 0.18s ease, background 0.18s ease !important;
+}
+
+/* A hover that gives the card a colour rather than a shadow. */
+@media (hover: hover) {
+  :root .app-shell[data-route='home'] .c1-svc-card:hover {
+    background: var(--sl-lavender) !important;
+    transform: translateY(-3px);
+  }
+}
+
+:root .app-shell[data-route='home'] .c1-svc-card h3 {
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .c1-svc-card p {
+  font-weight: 500 !important;
+  color: rgba(0, 0, 0, 0.72) !important;
+}
+
+/* Icon stickers, cycling through the palette. */
+:root .app-shell[data-route='home'] .c1-svc-icon {
+  border: 1px solid var(--sl-black) !important;
+  border-radius: 16px !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .c1-svc-card[data-accent='0'] .c1-svc-icon { background: var(--sl-blue) !important; }
+:root .app-shell[data-route='home'] .c1-svc-card[data-accent='1'] .c1-svc-icon { background: var(--sl-mint) !important; }
+:root .app-shell[data-route='home'] .c1-svc-card[data-accent='2'] .c1-svc-icon { background: var(--sl-lavender) !important; }
+:root .app-shell[data-route='home'] .c1-svc-card[data-accent='3'] .c1-svc-icon { background: var(--sl-sun) !important; }
+
+:root .app-shell[data-route='home'] .c1-svc-cta {
+  font-weight: 700 !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .c1-btn {
+  border: 1px solid var(--sl-black) !important;
+  border-radius: 1600px !important;
+  background: var(--sl-black) !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+  color: var(--sl-white) !important;
+}
+
+:root .app-shell[data-route='home'] .c1-btn.is-ghost {
+  background: var(--sl-white) !important;
+  color: var(--sl-black) !important;
+}
+
+/* --- Tools: Lavender band ------------------------------------------------------ */
+
+:root .app-shell[data-route='home'] .ig-tool-group {
+  --tool-c: var(--sl-black);
+  --tool-soft: var(--sl-blue);
+  --tool-line: var(--sl-black);
+  --tool-glow: var(--sl-white);
+  --tool-shadow: transparent;
+}
+
+:root .app-shell[data-route='home'] .ig-tool-group:nth-child(2) { --tool-soft: var(--sl-mint); }
+:root .app-shell[data-route='home'] .ig-tool-group:nth-child(3) { --tool-soft: var(--sl-sun); }
+
+:root .app-shell[data-route='home'] .ig-tool-group h3 {
+  font-weight: 700;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .ig-tool-group h3::before {
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--sl-black);
+  background: var(--tool-soft);
+}
+
+:root .app-shell[data-route='home'] .ig-tools .ig-tool-group li {
+  font-weight: 600;
+  box-shadow: none !important;
+}
+
+:root .app-shell[data-route='home'] .ig-tools.is-in .ig-tool-group li:hover,
+:root .app-shell[data-route='home'] .ig-tools.is-in .ig-tool-group li:active {
+  background: var(--sl-black);
+  color: var(--sl-white) !important;
+  box-shadow: none;
+}
+
+/* --- FAQ: Sky band ------------------------------------------------------------- */
+
+:root .app-shell[data-route='home'] .home-faq-section .faq-accent-title {
+  background: none !important;
+  color: var(--sl-violet) !important;
+  -webkit-text-fill-color: var(--sl-violet) !important;
+}
+
+:root .app-shell[data-route='home'] .faq-warm-aura { display: none !important; }
+
+:root .app-shell[data-route='home'] .faq-intro-copy {
+  font-weight: 500 !important;
+  color: rgba(0, 0, 0, 0.74) !important;
+}
+
+/* Five classes deep: these also carry .premium-glass, which the home
+   stylesheet strips at (0,4,0) !important. */
+:root .app-shell[data-route='home'] .home-faq-section .faq-glass-card {
+  border: var(--sl-line) !important;
+  border-radius: 20px !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+:root .app-shell[data-route='home'] .home-faq-section .faq-glass-card.is-active {
+  background: var(--sl-sun) !important;
+}
+
+:root .app-shell[data-route='home'] .faq-question,
+:root .app-shell[data-route='home'] .faq-question.is-active {
+  font-weight: 600 !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .faq-chevron {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .faq-chevron.is-active {
+  background: var(--sl-black) !important;
+  color: var(--sl-white) !important;
+}
+
+:root .app-shell[data-route='home'] .faq-glass-card p {
+  font-weight: 500 !important;
+  color: rgba(0, 0, 0, 0.8) !important;
+}
+
+:root .app-shell[data-route='home'] .faq-divider { background: var(--sl-black) !important; }
+
+:root .app-shell[data-route='home'] .faq-video-ring {
+  border: var(--sl-line) !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+}
+
+:root .app-shell[data-route='home'] .faq-video-badge {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-ember) !important;
+  box-shadow: none !important;
+}
+
+:root .app-shell[data-route='home'] .faq-badge-text { color: var(--sl-black) !important; }
+:root .app-shell[data-route='home'] .home-faq-section .bg-gray-900 { background: var(--sl-black) !important; }
+
+/* --- Contact pass: White band --------------------------------------------------- */
+
+:root .app-shell[data-route='home'] .access-color-wrap,
+:root .app-shell[data-route='home'] .access-color-wrap:hover { filter: none !important; }
+
+:root .app-shell[data-route='home'] .access-color-pass {
+  border: var(--sl-line) !important;
+  border-radius: 40px !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+:root .app-shell[data-route='home'] .access-color-pass::before { display: none !important; }
+
+:root .app-shell[data-route='home'] .access-color-stub {
+  background: var(--sl-lavender) !important;
+  border-color: var(--sl-black) !important;
+}
+
+/* Notches filled with the band colour and outlined, so they read as cut. */
+:root .app-shell[data-route='home'] .access-ticket-notch {
+  border: var(--sl-line) !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+}
+
+:root .app-shell[data-route='home'] .access-color-badge {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-mint) !important;
+  box-shadow: none !important;
+}
+
+:root .app-shell[data-route='home'] .access-color-badge span { color: var(--sl-black) !important; }
+
+:root .app-shell[data-route='home'] .access-color-pulse {
+  border: 1px solid var(--sl-black);
+  background: var(--sl-ember) !important;
+  box-shadow: none !important;
+}
+
+:root .app-shell[data-route='home'] .access-color-title {
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  color: var(--sl-black) !important;
+}
+
+/* Black, not violet: violet on the lavender stub measured 4.17:1, under the
+   4.5 this small uppercase line needs. */
+:root .app-shell[data-route='home'] .access-color-protocol {
+  font-weight: 700 !important;
+  color: var(--sl-black) !important;
+}
+:root .app-shell[data-route='home'] .access-color-label { color: rgba(0, 0, 0, 0.66) !important; }
+
+:root .app-shell[data-route='home'] .access-color-link,
+:root .app-shell[data-route='home'] .access-email-text { color: var(--sl-black) !important; }
+
+:root .app-shell[data-route='home'] .access-color-icon {
+  border: 1px solid var(--sl-black) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .access-color-icon-blue { background: var(--sl-blue) !important; }
+:root .app-shell[data-route='home'] .access-color-icon-green { background: var(--sl-mint) !important; }
+
+:root .app-shell[data-route='home'] .access-color-online {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-mint) !important;
+  box-shadow: none !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .access-color-reply {
+  border: 1px solid var(--sl-black) !important;
+  border-radius: 20px !important;
+  background: var(--sl-white) !important;
+}
+
+:root .app-shell[data-route='home'] .access-color-reply p,
+:root .app-shell[data-route='home'] .access-narrative-copy { color: var(--sl-black) !important; }
+
+:root .app-shell[data-route='home'] .access-narrative-copy { font-weight: 500 !important; }
+
+:root .app-shell[data-route='home'] .narrative-input,
+:root .app-shell[data-route='home'] .narrative-select {
+  border: var(--sl-line) !important;
+  border-radius: 1600px !important;
+  background: var(--sl-white) !important;
+  color: var(--sl-black) !important;
+}
+
+/* -webkit-text-fill-color, not just color. The dark theme sets the fields'
+   fill to white, and fill beats color — so "Select a Service" and anything
+   typed rendered white on the white pill while color itself read black. */
+:root .app-shell[data-route='home'] .narrative-input,
+:root .app-shell[data-route='home'] .narrative-select {
+  -webkit-text-fill-color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .narrative-input::placeholder {
+  color: rgba(0, 0, 0, 0.55) !important;
+  -webkit-text-fill-color: rgba(0, 0, 0, 0.55) !important;
+}
+
+:root .app-shell[data-route='home'] .narrative-input:focus,
+:root .app-shell[data-route='home'] .narrative-select:focus {
+  border-color: var(--sl-violet) !important;
+  box-shadow: 0 0 0 2px var(--sl-violet) !important;
+}
+
+:root .app-shell[data-route='home'] .narrative-select option {
+  background: var(--sl-white);
+  color: var(--sl-black);
+}
+
+:root .app-shell[data-route='home'] .access-color-form .text-gray-900 { color: rgba(0, 0, 0, 0.72) !important; }
+
+:root .app-shell[data-route='home'] .access-color-form button[type='submit'] {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-black) !important;
+  box-shadow: none !important;
+  color: var(--sl-white) !important;
+}
+
+/* The shimmer sweep is a gradient; the inner disc becomes a white sticker. */
+:root .app-shell[data-route='home'] .access-color-form button[type='submit'] > .absolute { display: none !important; }
+
+:root .app-shell[data-route='home'] .access-color-form button[type='submit'] .rounded-full {
+  background: var(--sl-white) !important;
+  color: var(--sl-black) !important;
+}
+
+/* Mint is a sticker colour, not a success state; the confirmation is dark
+   green text, which reads on white. */
+:root .app-shell[data-route='home'] .access-color-form .text-emerald-600 { color: #067647 !important; }
+
+/* --- Footer: Electric Blue card on a Gray band ----------------------------------- */
+
+:root .app-shell[data-route='home'] .status-footer-shell {
+  border: var(--sl-line) !important;
+  border-radius: 40px !important;
+  background: var(--sl-blue) !important;
+  box-shadow: none !important;
+  color: var(--sl-black) !important;
+  font-family: var(--sl-font);
+}
+
+/* The grid texture and the blurred orbs are gradients and blur; both go. */
+:root .app-shell[data-route='home'] .status-footer-shell::before,
+:root .app-shell[data-route='home'] .status-footer-glow { display: none !important; }
+
+:root .app-shell[data-route='home'] .status-footer-topline > span:first-child,
+:root .app-shell[data-route='home'] .status-footer-contact-rail,
+:root .app-shell[data-route='home'] .status-footer-contact-rail span {
+  color: rgba(0, 0, 0, 0.78) !important;
+}
+
+:root .app-shell[data-route='home'] .status-footer-live {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .status-footer-live i {
+  border: 1px solid var(--sl-black);
+  background: var(--sl-mint) !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+:root .app-shell[data-route='home'] .status-footer-hero p {
+  font-weight: 600 !important;
+  color: rgba(0, 0, 0, 0.8) !important;
+}
+
+:root .app-shell[data-route='home'] .status-footer-hero h2 {
+  font-weight: 800 !important;
+  line-height: 0.82 !important;
+  letter-spacing: -0.03em !important;
+  text-transform: uppercase;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .status-footer-hero h2 span {
+  margin-top: 0.08em;
+  padding: 0.04em 0.12em 0.02em;
+  border: 3px solid var(--sl-black);
+  border-radius: 20px;
+  background: var(--sl-sun);
+  font-weight: 800 !important;
+  color: var(--sl-black) !important;
+  transform: rotate(-2deg);
+}
+
+:root .app-shell[data-route='home'] .status-footer-cta {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-black) !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+  color: var(--sl-white) !important;
+}
+
+:root .app-shell[data-route='home'] .status-footer-cta b {
+  border: 1px solid var(--sl-black);
+  background: var(--sl-white) !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .status-footer-metrics,
+:root .app-shell[data-route='home'] .status-footer-metrics article {
+  border-color: var(--sl-black) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+:root .app-shell[data-route='home'] .status-footer-metrics article > span,
+:root .app-shell[data-route='home'] .status-footer-metrics p {
+  font-weight: 600 !important;
+  color: rgba(0, 0, 0, 0.78) !important;
+}
+
+:root .app-shell[data-route='home'] .status-footer-metrics strong {
+  font-weight: 800 !important;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .status-footer-contact-rail a { color: var(--sl-black) !important; }
+
+@media (hover: hover) {
+  :root .app-shell[data-route='home'] .status-footer-contact-rail a:hover { text-decoration: underline; }
+}
+
+/* --- Closing band: Sky ------------------------------------------------------------ */
+
+:root .app-shell[data-route='home'] .ig-band h2 {
+  max-width: 14ch;
+  font-size: clamp(2.6rem, 7vw, 6.4rem) !important;
+  font-weight: 800 !important;
+  line-height: 0.82 !important;
+  letter-spacing: -0.03em !important;
+  text-transform: uppercase;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .ig-band p {
+  font-weight: 500;
+  line-height: 1.42;
+  color: rgba(0, 0, 0, 0.76) !important;
+}
+
+/* --- Dock and floating action ----------------------------------------------------- */
+
+:root .app-shell[data-route='home'] .leaf-dock {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-white) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+:root .app-shell[data-route='home'] .leaf-dock-item { color: var(--sl-black) !important; }
+
+:root .app-shell[data-route='home'] .leaf-dock-item.is-active {
+  background: var(--sl-black) !important;
+  box-shadow: none !important;
+  color: var(--sl-white) !important;
+}
+
+:root .app-shell[data-route='home'] .unified-floating-action {
+  border: 1px solid var(--sl-black) !important;
+  background: var(--sl-black) !important;
+  box-shadow: none !important;
+  color: var(--sl-white) !important;
+}
+
+/* --- Narrow screens ----------------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  /* Behind the headline, not the promo card. Offsets are from the top of the
+     hero band, which starts below the marquee and nav: the card ends near
+     205px into the band and the headline runs roughly 300-460px. */
+  :root .app-shell[data-route='home'] .hs-ribbon { top: 290px; height: 190px; }
+  :root .app-shell[data-route='home'] .hs-sticker { width: 52px; }
+  :root .app-shell[data-route='home'] .hs-bubble,
+  :root .app-shell[data-route='home'] .hs-cursor,
+  :root .app-shell[data-route='home'] .hs-check { display: none; }
+  /* Beside the studio tag, clear of the promo card it was hiding behind. */
+  :root .app-shell[data-route='home'] .hs-coin { top: 340px; right: 14px; }
+  :root .app-shell[data-route='home'] .hs-badge { top: 420px; right: 18px; }
+}
+
+@media (max-width: 640px) {
+  :root .app-shell[data-route='home'] .ig-facts { gap: 8px; }
+
+  :root .app-shell[data-route='home'] .ig-fact,
+  :root .app-shell[data-route='home'] .ig-fact + .ig-fact {
+    padding: 14px 12px !important;
+    border-radius: 16px;
+  }
+
+  :root .app-shell[data-route='home'] .ig-facts dt { font-size: 2.2rem; }
+  :root .app-shell[data-route='home'] .ig-facts dd { font-size: 12px; }
+
+  :root .app-shell[data-route='home'] .ig-display em { border-width: 2px; border-radius: 12px; }
+
+  :root .app-shell[data-route='home'] .c1-svc-card { padding: 16px !important; }
+  :root .app-shell[data-route='home'] .c1-subtitle br { display: none; }
+
+  :root .app-shell[data-route='home'] .status-footer-contact-rail a,
+  :root .app-shell[data-route='home'] .status-footer-contact-rail span {
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+
+  :root .app-shell[data-route='home'] .ig-btn { padding: 14px 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root .app-shell[data-route='home'] .home-marquee-track { animation: none; }
+}
+
+/* --- Studio Heads: redesigned for both formats -------------------------------
+
+   Desktop: the heading and the studio note on the left, the two people on the
+   right as large sticker cards, tilted in opposite directions. Tablet and
+   phone: one column — heading, both cards side by side, then the note. */
+
+:root .app-shell[data-route='home'] .home-screen > .heads {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  grid-template-areas:
+    'head grid'
+    'foot grid';
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(32px, 5vw, 80px);
+  align-items: start;
+}
+
+:root .app-shell[data-route='home'] .heads-head {
+  grid-area: head;
+  max-width: 34rem !important;
+  margin-bottom: 0 !important;
+  align-self: end;
+}
+
+:root .app-shell[data-route='home'] .heads-grid {
+  grid-area: grid;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: clamp(16px, 2.4vw, 32px) !important;
+  align-self: center;
+  justify-content: stretch !important;
+}
+
+:root .app-shell[data-route='home'] .heads-foot {
+  grid-area: foot;
+  align-self: start;
+  max-width: 34rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+:root .app-shell[data-route='home'] .heads-swipe-hint { display: none !important; }
+
+/* Cards: stickers, not glowing glass. */
+:root .app-shell[data-route='home'] .heads-profile.pc-card-wrapper { max-width: none; }
+:root .app-shell[data-route='home'] .heads-profile:nth-child(1) { rotate: -2.5deg; }
+:root .app-shell[data-route='home'] .heads-profile:nth-child(2) { rotate: 2deg; margin-top: 36px; }
+
+:root .app-shell[data-route='home'] .heads-profile .pc-behind { display: none !important; }
+
+:root .app-shell[data-route='home'] .heads-profile .pc-card {
+  border: 2px solid var(--sl-black) !important;
+  border-radius: 24px !important;
+  box-shadow: none !important;
+}
+
+/* Name and role as stickers on the photo: readable on any picture. */
+:root .app-shell[data-route='home'] .heads-profile .pc-details {
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+:root .app-shell[data-route='home'] .heads-profile .pc-details h3 {
+  margin: 0;
+  padding: 6px 12px;
+  border: 1.5px solid var(--sl-black);
+  border-radius: 12px;
+  background: var(--sl-white);
+  font-size: clamp(14px, 1.4vw, 18px);
+  font-weight: 800;
+  letter-spacing: 0;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .heads-profile .pc-details p {
+  padding: 4px 10px;
+  border: 1.5px solid var(--sl-black);
+  border-radius: 1600px;
+  background: var(--sl-sun);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sl-black) !important;
+}
+
+:root .app-shell[data-route='home'] .heads-profile:nth-child(2) .pc-details p { background: var(--sl-lavender); }
+
+/* The contact row: a white pill with a black button. */
+:root .app-shell[data-route='home'] .heads-profile .pc-user-info {
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  padding: 6px 6px 6px 8px;
+  border: 1.5px solid var(--sl-black);
+  border-radius: 1600px;
+  background: var(--sl-white);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:root .app-shell[data-route='home'] .heads-profile .pc-mini-avatar { border: 1.5px solid var(--sl-black); }
+:root .app-shell[data-route='home'] .heads-profile .pc-handle { font-weight: 700; color: var(--sl-black) !important; }
+:root .app-shell[data-route='home'] .heads-profile .pc-status { font-weight: 500; color: rgba(0, 0, 0, 0.66) !important; }
+
+:root .app-shell[data-route='home'] .heads-profile .pc-contact-btn {
+  padding: 9px 14px;
+  border: 1px solid var(--sl-black);
+  border-radius: 1600px;
+  background: var(--sl-black);
+  font-weight: 700;
+  color: var(--sl-white) !important;
+}
+
+@media (hover: hover) {
+  :root .app-shell[data-route='home'] .heads-profile .pc-contact-btn:hover {
+    background: var(--sl-sun);
+    color: var(--sl-black) !important;
+  }
+}
+
+:root .app-shell[data-route='home'] .heads-foot button {
+  padding: 14px 22px !important;
+  font-weight: 700 !important;
+}
+
+/* One column once the two-up heading and cards stop fitting side by side. */
+@media (max-width: 1000px) {
+  :root .app-shell[data-route='home'] .home-screen > .heads {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'head'
+      'grid'
+      'foot';
+    grid-template-rows: auto;
+    row-gap: 36px;
+  }
+
+  :root .app-shell[data-route='home'] .heads-head { max-width: 40rem !important; align-self: start; }
+  :root .app-shell[data-route='home'] .heads-foot { max-width: none; margin-top: 0 !important; }
+  :root .app-shell[data-route='home'] .heads-profile:nth-child(2) { margin-top: 24px; }
+}
+
+/* Phones: cards are about 160px, so the contact row stacks and the extras
+   that cannot fit — mini avatar, studio line — step out. A pill cannot hold a
+   stacked row, so it becomes a rounded card. */
+@media (max-width: 760px) {
+  :root .app-shell[data-route='home'] .heads-profile:nth-child(1) { rotate: -1.5deg; }
+  :root .app-shell[data-route='home'] .heads-profile:nth-child(2) { rotate: 1.5deg; margin-top: 18px; }
+
+  :root .app-shell[data-route='home'] .heads-profile .pc-details { top: 10px; left: 10px; right: 10px; gap: 4px; }
+  :root .app-shell[data-route='home'] .heads-profile .pc-details h3 { padding: 4px 8px; border-radius: 9px; font-size: 12px; }
+  :root .app-shell[data-route='home'] .heads-profile .pc-details p { padding: 3px 7px; font-size: 9.5px; }
+
+  :root .app-shell[data-route='home'] .heads-profile .pc-user-info {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    padding: 6px;
+    border-radius: 14px;
+  }
+
+  :root .app-shell[data-route='home'] .heads-profile .pc-contact-btn {
+    width: 100%;
+    padding: 7px 8px;
+    font-size: 11px;
+  }
+}
+
+/* The heading and the studio note are always shown on the home page. They
+   used to wait for a scroll observer to add .is-visible, and when that did not
+   fire — after navigating away and back, or anywhere observers are throttled —
+   the section kept its cards and lost its heading. A heading must not depend
+   on an animation hook. */
+:root .app-shell[data-route='home'] .heads .heads-head,
+:root .app-shell[data-route='home'] .heads .heads-foot {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Faces first. The name and role stickers sat at the top of each photo — right
+   over the heads — and the card laid a dark gradient across its top third to
+   keep the old white names readable. The stickers carry their own solid
+   backgrounds now, so the wash and the glare layers go, and the stickers move
+   down to sit just above the contact pill, where the photos are bodies and
+   background rather than faces. */
+:root .app-shell[data-route='home'] .heads-profile .pc-avatar-content::after,
+:root .app-shell[data-route='home'] .heads-profile .pc-shine,
+:root .app-shell[data-route='home'] .heads-profile .pc-glare {
+  display: none !important;
+}
+
+:root .app-shell[data-route='home'] .heads-profile .pc-details {
+  top: auto;
+  /* 80px, not 74: the cards are tilted, and at 74 the first card's sticker
+     box ran 2px into the contact pill once rotated. */
+  bottom: 80px;
+}
+
+@media (max-width: 760px) {
+  /* The contact row stacks on a phone and stands about 64px tall. */
+  :root .app-shell[data-route='home'] .heads-profile .pc-details {
+    top: auto;
+    bottom: 80px;
+  }
+}
+
+/* --- Type matched to the rest of the site ------------------------------------
+
+   Measured from the Portfolio page: Outfit, display at 400-650 in sentence
+   case with tight tracking, body at 400. The home page had been set in 800
+   uppercase with crushed leading, which made the same family look like a
+   different font. Everything below restates the weights, the case and the
+   leading at the same specificity as the rules it replaces. The small pills —
+   tags and the marquee — stay uppercase at 700, because that is how the site's
+   own pills are set. */
+
+:root .app-shell[data-route='home'] .ig-display,
+:root .app-shell[data-route='home'] .ig-display-short {
+  font-weight: 500 !important;
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+  text-transform: none;
+}
+
+:root .app-shell[data-route='home'] .ig-display em { line-height: 1; }
+
+:root .app-shell[data-route='home'] .heads-head h2,
+:root .app-shell[data-route='home'] .c1-title,
+:root .app-shell[data-route='home'] .ig-process-head h2,
+:root .app-shell[data-route='home'] .ig-statement h2,
+:root .app-shell[data-route='home'] .home-faq-section h2,
+:root .app-shell[data-route='home'] .advantage-gallery-center h2,
+:root .app-shell[data-route='home'] .ba-caption h2 {
+  font-weight: 500 !important;
+  letter-spacing: -0.03em !important;
+}
+
+:root .app-shell[data-route='home'] .ig-stage-detail h3,
+:root .app-shell[data-route='home'] .ig-band h2,
+:root .app-shell[data-route='home'] .status-footer-hero h2,
+:root .app-shell[data-route='home'] .access-color-title {
+  font-weight: 500 !important;
+  line-height: 0.96 !important;
+  letter-spacing: -0.04em !important;
+  text-transform: none !important;
+}
+
+:root .app-shell[data-route='home'] .status-footer-hero h2 span { font-weight: 500 !important; }
+
+/* Figures. */
+:root .app-shell[data-route='home'] .ig-facts dt,
+:root .app-shell[data-route='home'] .ig-stage-step-n,
+:root .app-shell[data-route='home'] .status-footer-metrics strong {
+  font-weight: 500 !important;
+}
+
+:root .app-shell[data-route='home'] .advantage-stat-card span,
+:root .app-shell[data-route='home'] .advantage-stat-card span em { font-weight: 600 !important; }
+
+/* Card and item titles. */
+:root .app-shell[data-route='home'] .c1-svc-card h3,
+:root .app-shell[data-route='home'] .ig-tool-group h3,
+:root .app-shell[data-route='home'] .faq-question,
+:root .app-shell[data-route='home'] .faq-question.is-active,
+:root .app-shell[data-route='home'] .heads-profile .pc-details h3 {
+  font-weight: 600 !important;
+}
+
+/* Body copy at 400. */
+:root .app-shell[data-route='home'] .ig-lede,
+:root .app-shell[data-route='home'] .heads-head p,
+:root .app-shell[data-route='home'] .ig-process-head p,
+:root .app-shell[data-route='home'] .c1-subtitle,
+:root .app-shell[data-route='home'] .ig-statement p,
+:root .app-shell[data-route='home'] .ig-stage-detail p,
+:root .app-shell[data-route='home'] .c1-svc-card p,
+:root .app-shell[data-route='home'] .faq-intro-copy,
+:root .app-shell[data-route='home'] .faq-glass-card p,
+:root .app-shell[data-route='home'] .heads-foot p,
+:root .app-shell[data-route='home'] .ig-band p,
+:root .app-shell[data-route='home'] .advantage-gallery-center p,
+:root .app-shell[data-route='home'] .access-narrative-copy,
+:root .app-shell[data-route='home'] .ig-facts dd,
+:root .app-shell[data-route='home'] .status-footer-hero p,
+:root .app-shell[data-route='home'] .status-footer-metrics p {
+  font-weight: 400 !important;
+}
+
+/* Controls at 500 rather than 700 — the site's buttons are 400-600. */
+:root .app-shell[data-route='home'] .ig-btn,
+:root .app-shell[data-route='home'] .c1-btn,
+:root .app-shell[data-route='home'] .heads-foot button,
+:root .app-shell[data-route='home'] .status-footer-cta,
+:root .app-shell[data-route='home'] .heads-profile .pc-contact-btn,
+:root .app-shell[data-route='home'] .c1-svc-cta {
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+}
+
+/* --- The logo holds still ------------------------------------------------------
+
+   The nav logo floated on a looping 3D keyframe and tilted again on hover.
+   It is a fixed mark here: no animation, no transform, nothing to transition. */
+:root .app-shell[data-route='home'] .perspective-wrapper,
+:root .app-shell[data-route='home'] .logo-3d-box-container,
+:root .app-shell[data-route='home'] .logo-3d-box,
+:root .app-shell[data-route='home'] .logo-3d-img,
+:root .app-shell[data-route='home'] .group:hover .logo-3d-box-container,
+:root .app-shell[data-route='home'] .group:hover .logo-3d-img {
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* The lede as a white sticker card. With the headline back in sentence case it
+   runs two lines instead of four, so the ribbon now passes behind the lede as
+   well — and its black edge lines were crossing small body text. A solid card
+   hides the ribbon behind the paragraph at every width, which a fixed ribbon
+   offset could never guarantee as the headline rewraps. */
+:root .app-shell[data-route='home'] .ig-lede {
+  position: relative;
+  z-index: 1;
+  width: fit-content;
+  max-width: min(38ch, 100%);
+  padding: 14px 18px;
+  border: 1.5px solid var(--sl-black);
+  border-radius: 20px;
+  background: var(--sl-white);
+}

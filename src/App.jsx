@@ -13,6 +13,9 @@ import './MobilePerf.css';
 // Home page editorial system — must follow MobilePerf so its flat paper
 // surfaces win over the shared glass treatments.
 import './HomeIgnite.css';
+/* After HomeIgnite on purpose: the Slush system restyles the same home page
+   and wins ties by coming later. */
+import './HomeSlush.css';
 import { useSectionReveals } from './HomeReveals';
 import SplitFlapText from './SplitFlapText';
 import ProfileCard from './ProfileCard';
@@ -20,6 +23,8 @@ import Stepper, { Step } from './Stepper';
 import BeforeAfterVideo from './BeforeAfterVideo';
 import LeafMark from './LeafMark';
 import ServiceIllustration from './ServiceIllustration';
+import HeroStickers from './HeroStickers';
+import HomeMarquee from './HomeMarquee';
 import LoadingScreen from './LoadingScreen';
 import EnquiryTicket from './EnquiryTicket';
 import InfiniteSpiral from './InfiniteSpiral';
@@ -529,11 +534,18 @@ const App = () => {
 
   // Reveal the Studio Heads section once, the first time it scrolls into
   // view. transform/opacity only — cheap to animate, no layout thrash.
+  //
+  // Keyed on the route. It used to attach once, on first mount: leave the home
+  // page before reaching this section and come back, and the section remounted
+  // as a new element that nothing was observing — so it never revealed, and
+  // the heading and footer sat at opacity 0 for the rest of the visit. Once it
+  // has revealed it stays revealed; the state outlives the remount.
   useEffect(() => {
+    if (activeNav !== 'home' || headsVisible) return undefined;
     const node = headsRef.current;
     if (!node || typeof IntersectionObserver === 'undefined') {
       setHeadsVisible(true);
-      return;
+      return undefined;
     }
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -546,7 +558,7 @@ const App = () => {
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [activeNav, headsVisible]);
 
   const promoBanners = [
     { 
@@ -2588,6 +2600,9 @@ const App = () => {
       <div className="absolute bottom-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-tr from-[#D0F5E5]/30 to-transparent blur-3xl -z-10 pointer-events-none"></div>
       <div className="absolute top-[20%] left-[-5%] w-[40vw] h-[40vw] rounded-full bg-gradient-to-br from-[#DFE4F4]/40 to-transparent blur-3xl -z-10 pointer-events-none"></div>
 
+      {/* The black announcement strip — home only. */}
+      {activeNav === 'home' && <HomeMarquee />}
+
       {/* Top Navigation */}
       <nav className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-8 flex justify-between items-center sticky top-0 sm:relative z-50 sm:z-10 bg-[#FDFDFD]/82 sm:bg-transparent backdrop-blur-2xl sm:backdrop-blur-none border-b border-white/70 sm:border-b-0">
         <div className="flex items-center gap-3 group cursor-pointer z-20">
@@ -2637,6 +2652,7 @@ const App = () => {
           
           {/* SECTION 1: Top Hero (Two Columns - Completely separated from About) */}
           <div className="home-hero-layout grid grid-cols-1 gap-8 items-center relative z-20">
+            <HeroStickers />
 
             {/* Hero Text, Ads, and Services Icons */}
             <div className="home-hero-copy w-full max-w-2xl mx-auto pt-2 sm:pt-4 lg:pt-8 flex flex-col gap-6 lg:gap-8">
@@ -3049,7 +3065,9 @@ const App = () => {
               <span className="c1-badge">Service Suite</span>
               <h2 className="c1-title">Everything your brand needs, from one studio.</h2>
               <p className="c1-subtitle">
-                Eight core services covering strategy, design,
+                {/* The space is explicit: on phones the <br> is hidden, and
+                    without it the words ran together as "design,engineering". */}
+                Eight core services covering strategy, design,{' '}
                 <br />
                 engineering, and advertising.
               </p>
