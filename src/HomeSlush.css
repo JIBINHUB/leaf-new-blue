@@ -1633,13 +1633,13 @@
   inset: calc(var(--band-pad-y) - 36px) max(12px, calc(var(--band-pad-x) - 24px)) !important;
 }
 
-/* --- Logo: bigger, and the mark fills its circle ---------------------------------
+/* --- Logo: the circle and the mark inside it ---------------------------------------
 
-   The logo file carries a transparent margin around its disc, so at its old
-   size the mark sat small inside the outlined circle. The image is scaled past
-   that margin and clipped to the circle, so the black disc and white leaf fill
-   it edge to edge. Sizes stated with !important because the markup fixes them
-   with utility classes. */
+   An outlined white circle with the logo's black disc and white leaf set
+   inside it, leaving a narrow white ring. The logo file carries a transparent
+   margin around its disc, so the image is sized against that margin rather
+   than against the circle. Sizes stated with !important because the markup
+   fixes them with utility classes. */
 :root .app-shell[data-route='home'] .perspective-wrapper {
   width: auto !important;
   height: auto !important;
@@ -1659,11 +1659,13 @@
   position: absolute;
   /* 512px file, 400px disc: 128% puts the disc at the full width of the box.
      The disc sits about 2% above the file's centre, hence the nudge down. */
-  width: 128% !important;
-  height: 128% !important;
+  /* 104%: the disc comes to about 81% of the circle, leaving a white ring
+     inside the outline. The circle itself keeps its size. */
+  width: 104% !important;
+  height: 104% !important;
   max-width: none !important;
-  left: -14%;
-  top: -12%;
+  left: -2%;
+  top: -1%;
   object-fit: contain;
 }
 

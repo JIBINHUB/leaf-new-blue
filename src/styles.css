@@ -28123,30 +28123,7 @@
           -webkit-tap-highlight-color: transparent;
         }
 
-        /* Static minimal outer ring, no motion at rest */
-        .unified-floating-action::before {
-          content: "";
-          position: absolute;
-          inset: -6px;
-          border-radius: 50%;
-          border: 1px solid currentColor;
-          opacity: 0.22;
-          pointer-events: none;
-          z-index: -1;
-        }
-
-        /* A single, quiet ring that arrives once when the button first appears */
-        .unified-floating-action::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          border-radius: 50%;
-          border: 1.5px solid currentColor;
-          pointer-events: none;
-          z-index: -1;
-          opacity: 0;
-          animation: unified-ring-arrive 0.9s ease-out;
-        }
+        /* No outer ring: the solid circle stands on its own. */
 
         /* --- WhatsApp Solid State --- */
         .unified-floating-action.is-whatsapp {
