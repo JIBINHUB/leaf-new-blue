@@ -227,6 +227,10 @@ const Masonry = ({
     if (!root) return undefined;
 
     const load = (node) => {
+      // Poster first: phones (iOS Safari in particular) never paint a frame
+      // for a preload="metadata" video, so without one the tile stays blank.
+      const poster = node.dataset.poster;
+      if (poster && node.getAttribute('poster') !== poster) node.setAttribute('poster', poster);
       const src = node.dataset.src;
       if (!src || node.getAttribute('src') === src) return;
       node.setAttribute('src', src);
@@ -369,6 +373,7 @@ const Masonry = ({
                 <video
                   className="item-media"
                   data-src={item.src}
+                  data-poster={item.poster}
                   muted
                   loop
                   playsInline

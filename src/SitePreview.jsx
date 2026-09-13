@@ -17,7 +17,7 @@ import { useEffect, useRef, useState } from 'react';
 const FRAME_WIDTH = 1280;
 const FRAME_HEIGHT = 900;
 
-export default function SitePreview({ url, domain, title, canPreview = true }) {
+export default function SitePreview({ url, domain, title, image = '', canPreview = true }) {
   const holderRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -52,6 +52,23 @@ export default function SitePreview({ url, domain, title, canPreview = true }) {
      its own. Either way the domain panel stands in, rather than the blank
      white box a blocked frame leaves behind — the block is enforced by the
      browser, so no error ever reaches the iframe for us to catch. */
+  /* A site that refuses framing but has a screenshot shows the screenshot:
+     a picture of the real page reads far better than a bare domain name. */
+  if (image && (!canPreview || failed)) {
+    return (
+      <span className="pf-web-frame" ref={holderRef}>
+        <img
+          src={image}
+          alt={`${title} home page`}
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block' }}
+        />
+      </span>
+    );
+  }
+
   if (!canPreview || failed) {
     return (
       <span className="pf-web-fallback" ref={holderRef}>

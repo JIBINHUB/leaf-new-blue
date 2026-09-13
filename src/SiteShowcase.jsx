@@ -123,6 +123,7 @@ export default function SiteShowcase({ sites, rotateMs = HOLD_MS }) {
                 url={site.url}
                 domain={domain}
                 title={site.name}
+                image={site.image}
                 canPreview={site.preview !== false}
               />
             </span>

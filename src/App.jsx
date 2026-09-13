@@ -1628,6 +1628,13 @@ const App = () => {
      --------------------------------------------------------------------- */
   const websiteProjects = [
     {
+      name: 'ORU CODE',
+      url: 'https://orucode.online',
+      services: ['Web design', 'Development'],
+      note: 'Free website design library and UI components, made in Kerala.',
+      image: ''
+    },
+    {
       name: 'Mallugrapher UK',
       url: 'https://mallugrapheruk.com',
       services: ['Web design', 'Development'],
@@ -1670,14 +1677,31 @@ const App = () => {
       image: ''
     },
     {
-      /* cleartax.in sends x-frame-options: SAMEORIGIN, so it cannot be shown
-         live in a frame the way the others are — the card falls back to the
-         domain panel and the link still opens the real site. */
+      /* cleartax.in, wearrae.in and underneat.in all refuse to be framed
+         (x-frame-options SAMEORIGIN / DENY), so a live frame shows nothing.
+         Each carries a screenshot of its home page instead; the link still
+         opens the real site. Retake the screenshot if the site changes. */
       name: 'ClearTax',
       url: 'https://cleartax.in',
       services: ['Design'],
       note: '',
-      image: '',
+      image: '/assets/portfolio/websites/cleartax.jpg',
+      preview: false
+    },
+    {
+      name: 'Rae',
+      url: 'https://wearrae.in',
+      services: ['Web design', 'Development', 'E-commerce'],
+      note: 'Online store for a women’s fashion label.',
+      image: '/assets/portfolio/websites/wearrae.jpg',
+      preview: false
+    },
+    {
+      name: 'UNDERNEAT',
+      url: 'https://underneat.in',
+      services: ['Web design', 'Development', 'E-commerce'],
+      note: 'Online store for a lingerie and shapewear brand.',
+      image: '/assets/portfolio/websites/underneat.jpg',
       preview: false
     },
     {
@@ -2267,6 +2291,11 @@ const App = () => {
     id: item.src,
     img: toThumb(item.src),
     src: item.src,
+    /* A still of each video's opening frame, so the tile is never blank on a
+       phone before the video itself has loaded. */
+    poster: item.type === 'video'
+      ? `/assets/portfolio/thumbs/${item.src.split('/').pop().replace(/\.[^.]+$/, '.jpg')}`
+      : undefined,
     type: item.type,
     title: item.title,
     category: item.category
