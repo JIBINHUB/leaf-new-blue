@@ -10,11 +10,9 @@ import './DarkMode.css';
 // Last import wins the cascade — this strips backdrop blur and ambient
 // animation on phones, where they are the main cause of scroll jank.
 import './MobilePerf.css';
-// Home page editorial system — must follow MobilePerf so its flat paper
-// surfaces win over the shared glass treatments.
+// Home page editorial foundation, followed by the new glass direction below.
 import './HomeIgnite.css';
-/* After HomeIgnite on purpose: the Slush system restyles the same home page
-   and wins ties by coming later. */
+/* Retained for lower home sections; GlassRefresh restyles its visual system. */
 import './HomeSlush.css';
 import { useSectionReveals } from './HomeReveals';
 import SplitFlapText from './SplitFlapText';
@@ -30,6 +28,8 @@ import InfiniteSpiral from './InfiniteSpiral';
 import Masonry from './Masonry';
 import SiteShowcase from './SiteShowcase';
 import './PortfolioEditorial.css';
+import './GlassRefresh.css';
+import './GenieTheme.css';
 import { 
   Mail, 
   Home, 
@@ -59,6 +59,8 @@ import {
   MapPin,
   Send,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Volume2,
   VolumeX,
@@ -412,13 +414,7 @@ const pageSeo = {
 
 const App = () => {
   const [activeNav, setActiveNav] = useState(getNavFromPath);
-  const [theme, setTheme] = useState(() => {
-    if (typeof window === 'undefined') return 'light';
-    const savedTheme = window.localStorage.getItem('leaf-theme');
-    if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  });
-  const [activeAd, setActiveAd] = useState(0);
+  const [theme] = useState('light');
   const [completedSteps, setCompletedSteps] = useState([]);
   /* Which boxes were left empty on the last submit, and the ticket the enquiry
      came back with. */
@@ -438,6 +434,7 @@ const App = () => {
   const [selectedLaunchPlan, setSelectedLaunchPlan] = useState(1);
   const [selectedAppointmentDay, setSelectedAppointmentDay] = useState(1);
   const [selectedAppointmentTime, setSelectedAppointmentTime] = useState('11:30 AM');
+  const [bookingMonthOffset, setBookingMonthOffset] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [likedPortfolioItems, setLikedPortfolioItems] = useState([]);
   const [sharedPortfolioItem, setSharedPortfolioItem] = useState('');
@@ -511,7 +508,6 @@ const App = () => {
   ];
 
   const localLeafLogoWhite = "/assets/brand/leaf-creationism-logo-white.png";
-  const localAdVideo = "/assets/media/leaf-ad-carousel.mp4";
   const localFaqVideo = "/assets/media/faq-vantadrop.mp4";
   const localServicesHeroVideo = "/assets/media/services-hero-showcase.mp4";
   const studioHeads = [
@@ -558,55 +554,6 @@ const App = () => {
     observer.observe(node);
     return () => observer.disconnect();
   }, [activeNav, headsVisible]);
-
-  const promoBanners = [
-    { 
-      id: 1, 
-      tag: "Limited Time",
-      title: "Flat 20% Off UI/UX", 
-      desc: "Elevate your digital presence today.",
-      bgColor: "#2050E3",
-      theme: "dark",
-      img: "/assets/ads/uiux-offer.jpg",
-      position: "55% 58%"
-    },
-    { 
-      id: 2, 
-      tag: "New Launch",
-      title: "Next-Gen AI Ads", 
-      desc: "Smart campaigns that convert.",
-      bgColor: "#F4EFE6",
-      theme: "light",
-      video: localAdVideo
-    },
-    { 
-      id: 3, 
-      tag: "Award Winning",
-      title: "Best UI/UX Design", 
-      desc: "Recognized for premium digital experiences.",
-      bgColor: "#18181b",
-      theme: "dark",
-      img: "/assets/ads/best-uiux-design.webp",
-      position: "50% 55%"
-    },
-    { 
-      id: 4, 
-      tag: "Exclusive",
-      title: "Brand Identity Lift", 
-      desc: "Redefine your market presence.",
-      bgColor: "#f59e0b", 
-      theme: "dark",
-      img: "/assets/ads/brand-identity-lift.jpg?v=strategy-v2",
-      position: "38% 50%"
-    }
-  ];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveAd((prev) => (prev + 1) % promoBanners.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -1308,6 +1255,7 @@ const App = () => {
     day.setDate(day.getDate() + idx + 1);
     return {
       id: idx,
+      dateObj: day,
       label: day.toLocaleDateString('en-IN', { weekday: 'short', timeZone: 'Asia/Kolkata' }),
       date: day.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', timeZone: 'Asia/Kolkata' }),
       full: day.toLocaleDateString('en-IN', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })
@@ -1321,6 +1269,17 @@ const App = () => {
     { time: '07:30 PM', label: 'Founder window', note: 'Best for urgent decisions' }
   ];
   const selectedAppointment = appointmentDays.find((day) => day.id === selectedAppointmentDay) || appointmentDays[0];
+  const bookingMonth = new Date(currentTime.getFullYear(), currentTime.getMonth() + bookingMonthOffset, 1);
+  const bookingCalendarStart = new Date(bookingMonth);
+  bookingCalendarStart.setDate(1 - ((bookingMonth.getDay() + 6) % 7));
+  const bookingCalendarDays = Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(bookingCalendarStart);
+    date.setDate(bookingCalendarStart.getDate() + index);
+    const appointment = appointmentDays.find((day) => day.dateObj.toDateString() === date.toDateString());
+    return { date, appointment, inMonth: date.getMonth() === bookingMonth.getMonth() };
+  });
+  const maxBookingMonthOffset = (appointmentDays[6].dateObj.getFullYear() - currentTime.getFullYear()) * 12
+    + appointmentDays[6].dateObj.getMonth() - currentTime.getMonth();
   const selectedSlot = appointmentSlots.find((slot) => slot.time === selectedAppointmentTime) || appointmentSlots[0];
   const appointmentMessage = `Hi Leaf Creationism, I want to book a ${selectedSchedule.title} on ${selectedAppointment.full} at ${selectedSlot.time} IST.`;
   const appointmentMailHref = `mailto:leafcreationism@gmail.com?subject=${encodeURIComponent(`Appointment request: ${selectedSchedule.title}`)}&body=${encodeURIComponent(`${appointmentMessage}\n\nSession length: ${selectedSchedule.time}\nFocus: ${selectedSlot.note}`)}`;
@@ -2558,61 +2517,21 @@ const App = () => {
      route, so the pages visitors actually land on all close the same way
      instead of stopping dead after their last section. */
   const studioFooter = (
-    <section className="home-status-marquee-section relative left-1/2 w-screen -translate-x-1/2 z-10" aria-label="Leaf Creationism live project status">
-      <div className="status-footer-shell">
-        <div className="status-footer-glow status-footer-glow-one" aria-hidden="true" />
-        <div className="status-footer-glow status-footer-glow-two" aria-hidden="true" />
-
-        <div className="status-footer-topline">
-          <span>Leaf Creationism / studio signal</span>
-          <span className={`status-footer-live ${isStudioOnline ? 'is-live' : 'is-offline'}`}>
-            <i aria-hidden="true" />
-            {isStudioOnline ? 'Available for new projects' : 'Brief queue open'}
-          </span>
-        </div>
-
-        <div className="status-footer-hero">
-          <div>
-            <p>One focused creative team.</p>
-            <h2>Ideas in.<br /><span>Impact out.</span></h2>
-          </div>
-          <a className="status-footer-cta" href="mailto:leafcreationism@gmail.com">
-            <span>Start a project</span>
-            <b><ArrowUpRight size={21} /></b>
-          </a>
-        </div>
-
-        <div className="status-footer-metrics" aria-label="Studio performance">
-          <article>
-            <span>01 / Launches</span>
-            <strong>124</strong>
-            <p>Products launched</p>
-          </article>
-          <article>
-            <span>02 / Network</span>
-            <strong>86</strong>
-            <p>Global partners</p>
-          </article>
-          <article>
-            <span>03 / Trust</span>
-            <strong>98%</strong>
-            <p>Client retention</p>
-          </article>
-          <article>
-            <span>04 / Experience</span>
-            <strong>{studioActiveYears}Y</strong>
-            <p>{studioActiveExtraDays} days beyond</p>
-          </article>
-        </div>
-
-        <div className="status-footer-contact-rail">
-          <span>© {currentTime.getFullYear()} Leaf Creationism</span>
-          <a href="mailto:leafcreationism@gmail.com">leafcreationism@gmail.com</a>
-          <a href="tel:+918589038479">+91 85890 38479</a>
-          <span>{indiaTimeLabel} IST</span>
-        </div>
+    <footer className="genie-footer" aria-label="Leaf Creationism footer">
+      <div className="genie-footer-cta">
+        <span>Have something in mind?</span>
+        <h2>Let's make it<br /><em>worth noticing.</em></h2>
+        <a href="mailto:leafcreationism@gmail.com" className="genie-button">Start a project <ArrowUpRight size={19} /></a>
+        <img src="/assets/genie-hero-objects.png" alt="" loading="lazy" aria-hidden="true" />
       </div>
-    </section>
+      <div className="genie-footer-grid">
+        <div className="genie-footer-brand"><strong>Leaf Creationism</strong><p>A focused creative studio in Kerala, India. Making clear ideas feel unforgettable.</p></div>
+        <div><strong>Explore</strong><a href="/">Home</a><a href="/services">Services</a><a href="/portfolio">Our work</a></div>
+        <div><strong>Plan</strong><a href="/workspace">Service store</a><a href="/launch-cloud">Launch Cloud</a><a href="/cart">Project cart</a></div>
+        <div><strong>Say hello</strong><a href="mailto:leafcreationism@gmail.com">Email us</a><a href="tel:+918589038479">+91 85890 38479</a><a href="https://share.google/JWbzJVOLgpjNOATfm" target="_blank" rel="noopener noreferrer">Kerala, India ↗</a></div>
+      </div>
+      <div className="genie-footer-bottom"><span>© {currentTime.getFullYear()} Leaf Creationism</span><span>{isStudioOnline ? 'Studio open' : 'Brief queue open'} · {indiaTimeLabel} IST</span></div>
+    </footer>
   );
 
   return (
@@ -2645,6 +2564,10 @@ const App = () => {
             Leaf Creationism
           </span>
         </div>
+        <div className="genie-nav-links" aria-label="Explore Leaf Creationism">
+          <button type="button" onClick={() => navigateTo('services')}>Services</button>
+          <button type="button" onClick={() => navigateTo('portfolio')}>Our work</button>
+        </div>
         
         <div className={`header-status-card ${isStudioOnline ? 'is-online' : 'is-offline'}`} aria-label={headerStatusMessages.join(', ')}>
           <div className="header-status-copy">
@@ -2660,11 +2583,6 @@ const App = () => {
               ))}
             </div>
           </div>
-          <ThemeSwitch
-            theme={theme}
-            onToggle={() => setTheme((currentTheme) => currentTheme === 'dark' ? 'light' : 'dark')}
-            iconSize={15}
-          />
           <button className="header-status-action" type="button" onClick={() => navigateTo('workspace')}>
             CONTACT US
           </button>
@@ -2682,80 +2600,21 @@ const App = () => {
             {/* Hero Text, Ads, and Services Icons */}
             <div className="home-hero-copy w-full max-w-2xl mx-auto pt-2 sm:pt-4 lg:pt-8 flex flex-col gap-6 lg:gap-8">
               
-              {/* Horizontal Banner Carousel */}
-              <div className="home-promo-card relative w-full max-w-xl overflow-hidden rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] group bg-white">
-                <div 
-                  className="flex transition-transform duration-700 ease-in-out h-40 sm:h-48"
-                  style={{ 
-                    transform: `translate3d(calc(-${activeAd * 100}% - ${activeAd * 4}px), 0, 0)`,
-                    gap: '4px'
-                  }}
-                >
-                  {promoBanners.map((banner) => (
-                    <div 
-                      key={banner.id} 
-                      className={`w-full flex-shrink-0 flex items-center ${banner.theme === 'light' ? 'text-gray-900' : 'text-white'} relative overflow-hidden rounded-[1.5rem]`}
-                      style={{ backgroundColor: banner.bgColor }}
-                    >
-                      <div 
-                        className="absolute right-0 top-0 bottom-0 w-[65%] sm:w-[55%] z-0"
-                        style={{
-                          maskImage: 'linear-gradient(to right, transparent 0%, black 35%)',
-                          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 35%)'
-                        }}
-                      >
-                        {banner.video ? (
-                          <video 
-                            src={banner.video} 
-                            autoPlay 
-                            loop 
-                            muted 
-                            playsInline
-                            className={`w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700 ease-out ${banner.theme === 'light' ? 'mix-blend-normal' : 'mix-blend-luminosity group-hover:mix-blend-normal'}`}
-                          />
-                        ) : (
-                          <img 
-                            src={banner.img} 
-                            alt={banner.title} 
-                            style={{ objectPosition: banner.position || 'center' }}
-                            className={`w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700 ease-out ${banner.theme === 'light' ? 'mix-blend-normal' : 'mix-blend-luminosity group-hover:mix-blend-normal'}`}
-                          />
-                        )}
-                      </div>
-
-                      <div className="p-6 sm:p-8 flex flex-col justify-center items-start relative z-10 w-full max-w-[70%]">
-                        <span className={`${banner.theme === 'light' ? 'bg-black/5 border-black/10 text-gray-800' : 'bg-white/20 border-white/30 text-white'} backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase mb-3 border shadow-sm`}>
-                          {banner.tag}
-                        </span>
-                        <h3 className={`text-xl sm:text-2xl font-semibold mb-1.5 leading-tight ${banner.theme === 'light' ? 'text-gray-900' : 'text-white drop-shadow-md'}`}>
-                          {banner.title}
-                        </h3>
-                        <p className={`text-sm ${banner.theme === 'light' ? 'text-gray-700' : 'text-white/90 drop-shadow-sm'} font-light line-clamp-2`}>
-                          {banner.desc}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
-                  {promoBanners.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setActiveAd(idx)}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        idx === activeAd ? 'w-6 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/80'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-
               {/* Welcome Text */}
               {/* Type-led hero: eyebrow, a plain statement of what the studio
                   does and who for, then two actions. No ornament. */}
               <div className="home-welcome-copy ig-hero">
-                <span className="ig-eyebrow">Creative studio · Kerala, India</span>
+                <a
+                  className="home-location-glow"
+                  href="https://share.google/JWbzJVOLgpjNOATfm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open our studio location on Google Maps"
+                >
+                  <MapPin size={17} strokeWidth={1.8} aria-hidden="true" />
+                  <span>Our studio · Kerala, India</span>
+                  <ArrowUpRight size={16} strokeWidth={1.8} aria-hidden="true" />
+                </a>
 
                 {/* Four words instead of a sentence. What the studio makes is
                     named in the line underneath and again in the service grid,
@@ -2795,9 +2654,6 @@ const App = () => {
                   <button type="button" className="ig-btn ig-btn-solid" onClick={() => navigateTo('workspace')}>
                     Start a project
                   </button>
-                  <button type="button" className="ig-btn ig-btn-line" onClick={() => navigateTo('portfolio')}>
-                    See our work
-                  </button>
                 </div>
 
                 <dl className="ig-facts">
@@ -2817,6 +2673,10 @@ const App = () => {
                     <dd>team, idea<br />to launch</dd>
                   </div>
                 </dl>
+              </div>
+
+              <div className="genie-hero-art">
+                <img src="/assets/genie-hero-objects.png" alt="Playful cloud, crayon, leaf, flower and envelope representing our creative studio" fetchPriority="high" />
               </div>
 
               {/* Elastic Service Stack */}
@@ -2967,7 +2827,7 @@ const App = () => {
                   </div>
 
                   <h2>
-                    WHY LEADING BRANDS CHOOSE LEAF CREATIONISM
+                    Why leading brands choose Leaf Creationism
                   </h2>
 
                   <p>
@@ -3417,7 +3277,6 @@ const App = () => {
              </div>
           </div>
           
-          {studioFooter}
 
           {/* Closing band on the alternate surface. */}
           <section className="ig-band" aria-label="Start a project with Leaf Creationism">
@@ -4858,7 +4717,6 @@ const App = () => {
             </div>
           </section>
 
-          {studioFooter}
         </main>
       )}
 
@@ -4872,7 +4730,7 @@ const App = () => {
               </div>
               <div>
                 <span className="text-[11px] font-bold tracking-widest text-[#60a5fa] uppercase block">Leaf Creationism / Project Cart</span>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Project Cart & Launch Flow</h1>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Your project, beautifully planned.</h1>
               </div>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#05070c] border border-white/10 text-xs font-semibold text-slate-300">
@@ -4977,26 +4835,39 @@ const App = () => {
                   })}
                 </div>
 
+                <div className="glass-booking-layout">
+                <div className="glass-booking-date">
                 <div className="workspace-date-label">
                   <span>Pick a date</span>
                   <small>Next seven studio days</small>
                 </div>
-                <div className="workspace-date-strip" aria-label="Choose appointment day">
-                  {appointmentDays.map((day) => (
-                    <button
-                      key={day.id}
-                      type="button"
-                      onClick={() => setSelectedAppointmentDay(day.id)}
-                      className={selectedAppointmentDay === day.id ? 'is-selected' : ''}
-                      aria-pressed={selectedAppointmentDay === day.id}
-                    >
-                      <span>{day.label}</span>
-                      <strong>{day.date.split(' ')[0]}</strong>
-                      <small>{day.date.split(' ')[1]}</small>
-                    </button>
-                  ))}
+                <div className="glass-booking-calendar" aria-label="Choose appointment day">
+                  <div className="glass-booking-calendar-head">
+                    <strong>{bookingMonth.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}</strong>
+                    <div>
+                      <button type="button" onClick={() => setBookingMonthOffset((month) => Math.max(0, month - 1))} disabled={bookingMonthOffset === 0} aria-label="Previous month"><ChevronLeft size={17} /></button>
+                      <button type="button" onClick={() => setBookingMonthOffset((month) => Math.min(maxBookingMonthOffset, month + 1))} disabled={bookingMonthOffset >= maxBookingMonthOffset} aria-label="Next month"><ChevronRight size={17} /></button>
+                    </div>
+                  </div>
+                  <div className="glass-booking-calendar-grid">
+                    {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, index) => <span className="glass-calendar-weekday" key={`${day}-${index}`}>{day}</span>)}
+                    {bookingCalendarDays.map(({ date, appointment, inMonth }) => (
+                      <button
+                        key={date.toDateString()}
+                        type="button"
+                        onClick={() => appointment && setSelectedAppointmentDay(appointment.id)}
+                        disabled={!appointment || !inMonth}
+                        className={`${selectedAppointmentDay === appointment?.id ? 'is-selected' : ''} ${inMonth ? '' : 'is-outside'}`}
+                        aria-label={`${date.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}${appointment && inMonth ? ', available' : ', unavailable in this month view'}`}
+                        aria-pressed={Boolean(appointment && inMonth && selectedAppointmentDay === appointment.id)}
+                      >{date.getDate()}</button>
+                    ))}
+                  </div>
+                  <p><span /> Available for a studio call <b>{selectedAppointment.full}</b></p>
+                </div>
                 </div>
 
+                <div className="glass-booking-times">
                 <div className="workspace-date-label">
                   <span>Pick a time</span>
                   <small>Fixed IST slots</small>
@@ -5014,6 +4885,9 @@ const App = () => {
                       <span>{slot.label}</span>
                     </button>
                   ))}
+                </div>
+                <div className="glass-booking-note"><Check size={16} /> No payment is required to request a call.</div>
+                </div>
                 </div>
               </div>
 
@@ -5228,6 +5102,8 @@ const App = () => {
           </Stepper>
         </main>
       )}
+
+      {studioFooter}
 
       {/* One morphing action circle: WhatsApp changes into project cart */}
       <button
