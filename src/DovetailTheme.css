@@ -305,3 +305,37 @@ html,body,#root { background:#0a0a0a !important; }
   .leaf-arc-sticky {height:100svh;min-height:0;}
   .leaf-phone-live-site {pointer-events:none;}
 }
+
+/* Hero spacing and the selected-work wordmark ticker. */
+:root .app-shell[data-route] > nav.dt-nav {border:0 !important;box-shadow:none !important;}
+.dt-reference-hero {padding-top:72px;}
+:root .app-shell[data-route] .dt-home .dt-reference-title {margin-top:140px !important;}
+.leaf-hero-description {max-width:660px;margin:24px 0 0;color:#b9c4d5;font:400 clamp(16px,1.4vw,19px)/1.55 var(--dt-font);}
+.leaf-client-loop {display:flex;align-items:center;gap:36px;padding:48px 0 52px;}
+.leaf-client-label {flex:none;color:#8f9cb1;font:10px var(--dt-mono);letter-spacing:.12em;}
+.leaf-client-window {min-width:0;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
+.leaf-client-track,.leaf-client-list {display:flex;align-items:center;width:max-content;}
+.leaf-client-track {animation:leaf-client-scroll 28s linear infinite;}
+.leaf-client-window:hover .leaf-client-track,.leaf-client-window:focus-within .leaf-client-track {animation-play-state:paused;}
+.leaf-client-list {gap:65px;padding-right:65px;color:#dbe2ee;}
+.leaf-client-oru {font:700 19px/1 var(--dt-font);letter-spacing:-.06em;white-space:nowrap;}
+.leaf-client-oru b {color:#fff;}
+.leaf-client-mallu {font:600 16px/1 var(--dt-font);letter-spacing:.08em;white-space:nowrap;}
+.leaf-client-mallu small {font-size:10px;color:#9facc1;}
+@keyframes leaf-client-scroll {to {transform:translateX(-50%);}}
+@media(max-width:700px){
+  .dt-reference-hero {padding-top:48px;}
+  :root .app-shell[data-route] .dt-home .dt-reference-title {margin-top:54px !important;font-size:clamp(50px,14.5vw,90px) !important;}
+  .leaf-hero-description {margin-top:20px;font-size:16px;line-height:1.55;}
+  .leaf-client-loop {display:block;padding:34px 0 38px;}
+  .leaf-client-label {display:block;margin-bottom:18px;}
+  .leaf-client-list {gap:42px;padding-right:42px;}
+  .leaf-client-oru {font-size:17px;}.leaf-client-mallu {font-size:14px;}
+}
+@media(prefers-reduced-motion:reduce){.leaf-client-track {animation:none;}.leaf-client-window {overflow-x:auto;mask-image:none;}.leaf-client-list[aria-hidden='true'] {display:none;}}
+/* Hide the header while moving down, and bring it back on upward scroll. */
+:root .app-shell[data-route] > nav.dt-nav { transition:transform .3s ease, opacity .3s ease; }
+:root .app-shell[data-route] > nav.dt-nav.dt-nav-hidden { transform:translateY(-120%); opacity:0; pointer-events:none; }
+:root .app-shell[data-route] > nav.dt-nav:focus-within { transform:none; opacity:1; pointer-events:auto; }
+@media (prefers-reduced-motion:reduce) { :root .app-shell[data-route] > nav.dt-nav { transition:none; } }
+@media (max-width: 700px) { .dt-reference-top .leaf-google-reviews { margin-top: 36px; } }

@@ -1,0 +1,36 @@
+/* Off+Brand uses a custom proprietary face; Helvetica/Arial provide a close, broadly available substitute. */
+:root { --dt-font: 'Helvetica Neue', Helvetica, Arial, sans-serif; --dt-mono: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+html body .app-shell,
+html body .app-shell :is(h1,h2,h3,h4,h5,h6,p,a,button,input,textarea,select,label,li,strong,small,em,span) { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important; }
+
+/* The reference uses upright, regular-weight display typography. */
+html body #root .app-shell :is(h1,h2,h3,h4,h5,h6,p,a,button,input,textarea,select,label,li,strong,small,em,i,span) { font-style: normal !important; }
+html body #root .app-shell :is(h1,h2) { font-weight: 400 !important; text-transform: uppercase; }
+html body #root .app-shell :is(h1,h2) :is(em,strong,span) { font-weight: inherit !important; }
+html body #root .app-shell .leaf-dock :is(button, span) { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important; font-weight: 400 !important; font-style: normal !important; text-transform: uppercase; }
+
+/* Remove editorial section labels without hiding functional price or service labels. */
+html body #root .app-shell :is(
+  .leaf-poster-showcase-head .dt-eyebrow,
+  .dt-section-head .dt-eyebrow,
+  .dt-services-hero > .dt-container > .dt-eyebrow,
+  .dt-cta > div > .dt-eyebrow,
+  .leaf-featured-heading > .dt-eyebrow,
+  .leaf-people-copy > .dt-eyebrow,
+  .leaf-process-intro > .dt-eyebrow,
+  .leaf-service-orbit-heading > .dt-eyebrow,
+  .leaf-arc-heading > span,
+  .leaf-about-topline,
+  .leaf-about-overline,
+  .contact-kicker,
+  .store-eyebrow,
+  .launch-simple-heading > span,
+  .launch-simple-hero > div > span,
+  .pe-label
+) { display: none !important; }
+
+/* Close the gaps left by removed labels and keep section content aligned. */
+html body #root .app-shell :is(.leaf-poster-showcase-head, .leaf-featured-heading, .leaf-people-copy, .leaf-process-intro, .leaf-service-orbit-heading, .launch-simple-heading) h2 { margin-top: 0 !important; }
+html body #root .app-shell .leaf-about-copy { padding-top: 24px; }
+html body #root .app-shell .portfolio-editorial-page .pe-head > div { display: none; }
+html body #root .app-shell .portfolio-editorial-page .pe-head { grid-template-columns: 1fr; }

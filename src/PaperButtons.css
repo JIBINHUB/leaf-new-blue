@@ -1,0 +1,72 @@
+/* Paper labels for primary actions, inspired by the notes in the studio section. */
+.app-shell[data-route] :is(
+  .leaf-about-actions button,
+  .leaf-about-footer button,
+  .leaf-featured-heading button,
+  .leaf-orbit-actions button,
+  .dt-cta button,
+  .dt-primary,
+  .dt-secondary,
+  .store-card-actions .store-btn,
+  .launch-simple-hero > div > button,
+  .launch-simple-plans article > button,
+  .launch-simple-cta button
+) {
+  position: relative;
+  border-radius: 0 !important;
+  clip-path: polygon(1% 2%, 17% 0, 31% 2%, 49% 0, 68% 1%, 85% 0, 99% 2%, 100% 27%, 99% 50%, 100% 73%, 98% 98%, 78% 100%, 62% 98%, 44% 100%, 24% 98%, 1% 100%, 0 74%, 1% 48%, 0 23%);
+  box-shadow: inset 0 1px 0 #ffffff40, inset 0 -3px 0 #00000020 !important;
+  transition: transform .22s ease, filter .22s ease !important;
+}
+.app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 11px;
+  height: 11px;
+  background: linear-gradient(135deg, transparent 49%, #ffffff30 50%, #ffffff12 100%);
+  pointer-events: none;
+}
+.app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button):hover {
+  transform: translateY(-3px) rotate(-1deg);
+  filter: brightness(1.04);
+
+}
+.app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button):focus-visible {
+  clip-path: none;
+  outline: 2px solid #88adff;
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button) { transition: none !important; }
+}
+@media (max-width: 700px) {
+  .app-shell[data-route] .unified-floating-action {
+    bottom: calc(88px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 18px !important;
+  }
+}
+
+/* The studio actions use a lightly irregular paper edge; the secondary stays open. */
+.app-shell[data-route] .leaf-about-actions button {
+  clip-path: polygon(1% 2%, 17% 0, 31% 2%, 49% 0, 68% 1%, 85% 0, 99% 2%, 100% 27%, 99% 50%, 100% 73%, 98% 98%, 78% 100%, 62% 98%, 44% 100%, 24% 98%, 1% 100%, 0 74%, 1% 48%, 0 23%);
+  min-height: 48px;
+  padding: 12px 19px;
+}
+.app-shell[data-route] .leaf-about-actions .leaf-about-primary {
+  background: repeating-linear-gradient(0deg, #ffffff0a 0 1px, transparent 1px 4px), linear-gradient(135deg, #527cff, #3863ef) !important;
+  color: #fff !important;
+  border: 1px solid #89a9ff !important;
+  box-shadow: inset 0 1px 0 #ffffff66, inset 0 -2px 0 #223e9a55 !important;
+}
+.app-shell[data-route] .leaf-about-actions .leaf-about-secondary {
+  color: #f6f3e9 !important;
+  background: transparent !important;
+  border: 1.5px solid #e9e4d6 !important;
+  box-shadow: inset 0 0 0 1px #f8f5e522 !important;
+}
+.app-shell[data-route] .leaf-about-actions .leaf-about-secondary:hover {
+  background: #f4f0e415 !important;
+}
+.app-shell[data-route] .leaf-about-actions button:focus-visible { clip-path: none; }

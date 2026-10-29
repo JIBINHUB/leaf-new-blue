@@ -1,0 +1,61 @@
+/* Rounded glowing actions with a folded corner, adapted from the supplied design. */
+:root .app-shell[data-route='workspace'] .store-card .store-card-actions .store-btn {
+  background: #10151e !important;
+  border: 1px solid #78889f !important;
+  color: #fff !important;
+}
+:root .app-shell[data-route='workspace'] .store-card .store-card-actions .is-added { box-shadow: inset 0 0 0 2px #adffd2 !important; }
+:root .app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  clip-path: none !important;
+  min-height: 48px;
+  border: 1px solid #ffffff35 !important;
+  border-radius: 12px !important;
+  background: #10151e !important;
+  color: #fff !important;
+  box-shadow: inset 0 1px 1px #ffffff20, 0 6px 18px #0005 !important;
+  transition: transform .25s ease, box-shadow .25s ease, filter .25s ease !important;
+}
+:root .app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button)::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: 11px;
+  background: radial-gradient(circle at 15% 70%, #ffffff99 0 1px, transparent 2px), radial-gradient(circle at 70% 90%, #ffffff88 0 1px, transparent 2px), radial-gradient(circle at 45% 60%, #ffffff77 0 1px, transparent 2px), linear-gradient(178deg, #ffffff30, transparent 45%);
+  animation: glow-button-points 2.8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes glow-button-points { from { background-position: 0 8px, 0 12px, 0 4px, 0 0; } to { background-position: 0 -10px, 0 -16px, 0 -12px, 0 0; } }
+:root .app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: auto;
+  width: 15px;
+  height: 15px;
+  border-radius: 0 10px 0 7px;
+  background: linear-gradient(225deg, #e9edf3 0 35%, #8f9aac 36%, #313c4e 100%);
+  box-shadow: -1px 2px 4px #22124c66;
+  pointer-events: none;
+  transition: transform .35s ease;
+}
+:root .app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button):hover { transform: translateY(-2px); filter: brightness(1.12); box-shadow: inset 0 1px 1px #ffffff35, 0 10px 24px #0007 !important; }
+:root .app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button):hover::after { transform: translate(16px, -16px); }
+:root .app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button):active { transform: scale(.95); }
+:root .app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button):focus-visible { outline: 2px solid #c9c0ff; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { :root .app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button), :root .app-shell[data-route] :is(.leaf-about-actions button, .store-card-actions .store-btn)::after { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { :root .app-shell[data-route] :is(.leaf-about-actions button, .leaf-about-footer button, .leaf-featured-heading button, .leaf-orbit-actions button, .dt-cta button, .dt-primary, .dt-secondary, .store-card-actions .store-btn, .launch-simple-hero > div > button, .launch-simple-plans article > button, .launch-simple-cta button)::before { animation: none; } }
+
+/* Restore the original action hierarchy while retaining the folded corner. */
+:root .app-shell[data-route] :is(.leaf-about-actions .leaf-about-primary, .leaf-orbit-actions .dt-blue-button, .launch-simple-plans article.is-selected > button) {
+  background: radial-gradient(65% 90% at 50% 110%, #8ab4ff80, transparent 100%), #416cff !important;
+  border-color: #8cafff !important;
+  color: #fff !important;
+}
+:root .app-shell[data-route] :is(.leaf-about-actions .leaf-about-primary, .leaf-orbit-actions .dt-blue-button, .launch-simple-plans article.is-selected > button)::after { background: linear-gradient(225deg, #f7faff 0 35%, #a4c3ff 36%, #4472e7 100%); }
+:root .app-shell[data-route='workspace'] .store-card .store-card-actions .is-buy { background: #edf2fa !important; border-color: #edf2fa !important; color: #11151c !important; }
+:root .app-shell[data-route] .dt-primary { background: #edf2fa !important; border-color: #edf2fa !important; color: #11151c !important; }

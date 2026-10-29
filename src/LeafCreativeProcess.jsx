@@ -1,18 +1,62 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import './LeafCreativeProcess.css';
 
 const stages = [
-  { title: 'Find the story behind your brand', label: '01 / DISCOVER', detail: 'We listen to your goals, understand your audience, and find the idea that gives your project direction.' },
-  { title: 'Turn strategy into a visual identity', label: '02 / CREATE', detail: 'From brand systems to interfaces, we shape a clear visual language that feels unmistakably yours.' },
-  { title: 'Build digital experiences that work', label: '03 / BUILD', detail: 'We bring design and technology together to create responsive websites and products ready for real people.' },
-  { title: 'Launch with a consistent voice', label: '04 / LAUNCH', detail: 'Campaigns, content, and thoughtful details help your brand show up confidently across every touchpoint.' },
+  { label: '01', title: 'Find your direction', detail: 'We bring your goals, audience and ideas into focus before the first pixel is designed.', tags: ['Strategy', 'Audience', 'Brand story'], bars: [94, 72, 55] },
+  { label: '02', title: 'Design a distinct identity', detail: 'A thoughtful visual identity and intuitive interface give your brand a clear, memorable voice.', tags: ['Brand identity', 'UI / UX', 'Creative direction'], bars: [86, 76, 60] },
+  { label: '03', title: 'Build for real people', detail: 'We turn that direction into responsive websites and digital experiences designed to grow with you.', tags: ['Web development', 'Mobile', 'Performance'], bars: [90, 70, 48] },
+  { label: '04', title: 'Launch with impact', detail: 'Campaigns, content and launch support bring the work together across every touchpoint.', tags: ['Campaigns', 'Content', 'Launch'], bars: [95, 66, 52] },
 ];
+
 export default function LeafCreativeProcess({ navigateTo }) {
   const [active, setActive] = useState(0);
-  return <section className="leaf-process" id="leaf-approach"><div className="dt-container">
-    <div className="leaf-process-intro"><span className="dt-eyebrow">A CONNECTED CREATIVE PROCESS</span><h2>Build a brand<br/><em>that moves people.</em></h2><p>From the first idea to the final launch, we connect every part of your creative project.</p><div className="leaf-orbit-actions"><button className="dt-blue-button" onClick={() => navigateTo('workspace')}>Start a project</button><button className="dt-secondary" onClick={() => navigateTo('services')}>Explore services <ArrowUpRight size={15}/></button></div></div>
-    <div className="leaf-process-grid"><div className="leaf-process-tabs" aria-label="Creative process stages">{stages.map((stage,i)=><button type="button" key={stage.label} className={i===active?'active':''} aria-pressed={i===active} onClick={()=>setActive(i)}>{stage.title}</button>)}</div><div className="leaf-process-content" aria-live="polite"><div className="leaf-process-visual" aria-hidden="true"><div className="leaf-process-pixels">{Array.from({length:80},(_,i)=><i key={i} style={{'--i':i}} />)}</div><svg viewBox="0 0 420 210"><path d="M125 12V198 M155 22V188 M185 32V178 M215 42V168 M125 12L215 42L215 168L125 198Z M125 58L215 73 M125 105H215 M125 152L215 137 M215 42L365 82 M215 168L365 128 M215 105H365"/><ellipse cx="365" cy="105" rx="15" ry="50"/><ellipse cx="365" cy="105" rx="5" ry="37"/></svg></div><span className="dt-eyebrow">{stages[active].label}</span><p>{stages[active].detail}</p><button type="button" onClick={()=>navigateTo('services')}>Explore our services <ArrowUpRight size={15}/></button></div></div>
-    <div className="leaf-process-cards"><div><span className="dt-eyebrow">THE LEAF APPROACH</span><p>“Good ideas become great experiences when strategy, creativity and technology work together.”</p><span>LEAF CREATIONISM / CREATIVE STUDIO</span></div><div><strong>01<span>→</span>04</strong><p>One connected process</p><small>From discovery to launch, with your team at every step.</small></div></div>
-  </div></section>;
+  const stageRef = useRef(null);
+  useEffect(() => {
+    const section = stageRef.current;
+    if (!section) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (reduced.matches) return;
+      const rect = section.getBoundingClientRect();
+      const distance = Math.max(1, section.offsetHeight - window.innerHeight);
+      const progress = Math.max(0, Math.min(1, -rect.top / distance));
+      section.style.setProperty('--process-progress', progress.toFixed(4));
+      if (rect.top <= 0 && rect.bottom >= window.innerHeight) {
+        setActive(Math.min(stages.length - 1, Math.floor(progress * stages.length)));
+      }
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    reduced.addEventListener('change', schedule);
+    return () => { window.removeEventListener('scroll', schedule); window.removeEventListener('resize', schedule); reduced.removeEventListener('change', schedule); if (frame) cancelAnimationFrame(frame); };
+  }, []);
+  const stage = stages[active];
+  return <section className="leaf-process" id="leaf-approach" aria-labelledby="leaf-process-title">
+    <div className="dt-container">
+      <div className="leaf-process-intro">
+        <span className="dt-eyebrow">FROM FIRST THOUGHT TO LAUNCH</span>
+        <h2 id="leaf-process-title">Make ideas <em>move</em><br />your business forward.</h2>
+        <p>Strategy, design and technology come together to build brands and digital experiences people remember.</p>
+        <div className="leaf-orbit-actions"><button type="button" className="dt-blue-button" onClick={() => navigateTo('workspace')}>Start a project</button><button type="button" className="dt-secondary" onClick={() => navigateTo('services')}>Explore services <ArrowUpRight size={15}/></button></div>
+      </div>
+      <div className="leaf-process-scroll" ref={stageRef}>
+      <div className="leaf-process-stage">
+        <div className="leaf-process-globe">
+          <div className="leaf-process-globe-art" aria-hidden="true"><div className="leaf-process-orbit leaf-process-orbit-one"/><div className="leaf-process-orbit leaf-process-orbit-two"/><div className="leaf-process-sphere"><i/><i/><i/><i/><i/><i/><b/><b/><b/></div><span className="leaf-process-traveller"/></div>
+          <div className="leaf-process-points" aria-label="Choose a creative stage">{stages.map((item,i)=><button type="button" key={item.label} className={`leaf-process-point leaf-process-point-${i}${active===i?' is-active':''}`} aria-label={`${item.label}: ${item.title}`} aria-pressed={active===i} onClick={()=>setActive(i)}><span>{item.label}</span></button>)}</div>
+        </div>
+        <div className="leaf-process-right">
+          <div className="leaf-process-panels" aria-hidden="true"><div className="leaf-process-brief"><span>THE LEAF APPROACH</span><p>From <b>ideas</b> to <b>impact</b>, every detail has a purpose.</p><small>Strategy · Design · Development</small></div><div className="leaf-process-chart" key={stage.label}>{stage.tags.map((tag,i)=><div key={tag} style={{'--bar':`${stage.bars[i]}%`}}><span>{tag}</span></div>)}</div></div>
+          <div className="leaf-process-details" key={stage.label} aria-live="polite"><h3><span>{stage.label}</span> {stage.title}</h3><p>{stage.detail}</p><button type="button" onClick={() => navigateTo('services')}>Explore our services <ArrowUpRight size={15}/></button></div>
+          <div className="leaf-process-tabs" aria-label="Creative process stages">{stages.map((item,i)=><button key={item.label} type="button" onClick={() => setActive(i)} aria-pressed={active===i} className={active===i?'active':''}><span>{item.label}</span>{item.title}</button>)}</div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>;
 }

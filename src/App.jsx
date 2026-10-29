@@ -25,6 +25,11 @@ import './GlassRefresh.css';
 import DovetailHome from './DovetailHome';
 import DovetailServices from './DovetailServices';
 import './DovetailTheme.css';
+import './PaperButtons.css';
+import './StoreGlassCards.css';
+import './GlowButtons.css';
+import './SiteTypography.css';
+import ContactPage from './ContactPage';
 import LetterGlitch from './LetterGlitch';
 import { 
   Mail, 
@@ -252,6 +257,7 @@ const navPathMap = {
   workspace: '/workspace',
   launch: '/launch-cloud',
   portfolio: '/portfolio',
+  contact: '/contact',
   referenceCart: '/cart'
 };
 
@@ -270,6 +276,11 @@ const getNavFromPath = () => {
 };
 
 const pageSeo = {
+  contact: {
+    path: '/contact',
+    title: 'Contact | Start a Project with Leaf Creationism',
+    description: 'Tell Leaf Creationism about your branding, design, website or advertising project.'
+  },
   home: {
     path: '/',
     title: 'Leaf Creationism | Advertising Agency, AI Ads, Web Design & Branding in Kerala',
@@ -305,6 +316,19 @@ const pageSeo = {
 
 const App = () => {
   const [activeNav, setActiveNav] = useState(getNavFromPath);
+  const [headerHidden, setHeaderHidden] = useState(false);
+
+  useEffect(() => {
+    let previous = window.scrollY;
+    const onScroll = () => {
+      const current = window.scrollY;
+      if (current < 80) setHeaderHidden(false);
+      else if (Math.abs(current - previous) > 5) setHeaderHidden(current > previous);
+      previous = current;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   const [completedSteps, setCompletedSteps] = useState([]);
   /* Which boxes were left empty on the last submit, and the ticket the enquiry
      came back with. */
@@ -1491,14 +1515,14 @@ const App = () => {
     },
     {
       name: 'NAINU Boutique',
-      url: 'https://nainuboutique.shop',
+      url: 'https://nainuboutique.com',
       services: ['Web design', 'Development', 'E-commerce'],
       note: 'Online store for an Indian clothing boutique.',
       image: ''
     },
     {
       name: 'UNIQ Floors',
-      url: 'https://jibinchacko.online',
+      url: 'https://leafcreationism.online',
       services: ['Web design', 'Development'],
       note: 'Site for a wood, LVT and laminate flooring supplier.',
       image: ''
@@ -1557,17 +1581,6 @@ const App = () => {
       url: 'https://leafcreationism.in',
       services: ['Web design', 'Development', 'SEO'],
       note: 'Our own studio site — design system, build, and search setup.',
-      image: ''
-    },
-    {
-      /* Added at the owner's request. Worth knowing: this domain is an alias
-         of the same Vercel deployment as leafcreationism.in, so it serves the
-         identical site — the list shows the studio twice. Delete either entry
-         to show it once. */
-      name: 'Leaf Creationism (.online)',
-      url: 'https://leafcreationism.online',
-      services: ['Web design', 'Development', 'SEO'],
-      note: 'The studio site on its second domain.',
       image: ''
     }
   ];
@@ -2120,6 +2133,10 @@ const App = () => {
   const domeGalleryImages = portfolioItems
     .filter((item) => item.type === 'image')
     .map((item) => ({ src: toThumb(item.src), alt: item.title }));
+  // Portfolio content is static; keep the carousel list stable across app updates.
+  const homeCarouselItems = useMemo(() => portfolioItems
+    .filter((item) => item.type === 'image')
+    .map((item) => ({ src: toThumb(item.src), alt: item.title, title: item.title, subtitle: item.category })), []);
   /* Masonry expects { id, img, height }. Height drives the stagger: taking it
      from each piece's own span keeps the columns uneven, which is the point of
      a masonry layout, and keeps a given piece the same size on every visit. */
@@ -2395,20 +2412,21 @@ const App = () => {
       <div className="absolute bottom-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-tr from-[#D0F5E5]/30 to-transparent blur-3xl -z-10 pointer-events-none"></div>
       <div className="absolute top-[20%] left-[-5%] w-[40vw] h-[40vw] rounded-full bg-gradient-to-br from-[#DFE4F4]/40 to-transparent blur-3xl -z-10 pointer-events-none"></div>
 
-      <div className="dt-announcement">LEAF CREATIONISM &nbsp; · &nbsp; INDEPENDENT CREATIVE STUDIO &nbsp; <span>KERALA, INDIA ↗</span></div>
-      <nav className="dt-nav" aria-label="Main navigation">
+      <nav className={`dt-nav${headerHidden ? ' dt-nav-hidden' : ''}`} aria-label="Main navigation">
         <button className="dt-brand" type="button" onClick={() => navigateTo('home')}><img src={localLeafLogoWhite} alt=""/><span>Leaf Creationism</span></button>
         <div className={`dt-header-status ${isStudioOnline ? 'is-online' : 'is-offline'}`}>
           <div className="dt-header-time" aria-label={`Studio time ${indiaTimeLabel} India Standard Time`}>
             <div className="dt-header-time-line"><strong>{indiaTimeLabel}</strong><span>{isStudioOnline ? 'OPEN TILL 9 PM' : 'OPENS 10 AM'}</span></div>
             <small>{isStudioOnline ? 'LEAF ONLINE NOW' : 'QUEUE OPENS NEXT WINDOW'}</small>
           </div>
-          <button className="dt-nav-cta" type="button" onClick={() => navigateTo('workspace')}>CONTACT US</button>
+          <button className="dt-nav-cta" type="button" onClick={() => navigateTo('contact')}>CONTACT US</button>
         </div>
       </nav>
 
       {/* Home */}
-      {activeNav === 'home' && <DovetailHome navigateTo={navigateTo} openServiceModal={openServiceModal} serviceCategories={serviceCategories} serviceTaglines={serviceTaglines} studioHeads={studioHeads} />}
+      {activeNav === 'home' && <DovetailHome navigateTo={navigateTo} openServiceModal={openServiceModal} serviceCategories={serviceCategories} serviceTaglines={serviceTaglines} studioHeads={studioHeads} websiteProjects={websiteProjects} portfolioImages={homeCarouselItems} />}
+
+      {activeNav === 'contact' && <ContactPage />}
 
       {/* Services */}
       {activeNav === 'services' && <DovetailServices capabilities={capabilities} serviceCategories={serviceCategories} navigateTo={navigateTo} openServiceModal={openServiceModal} />}
@@ -2471,7 +2489,6 @@ const App = () => {
             {serviceCategories
               .filter((service) => storeFilter === 'All' || servicePricing[service.id]?.group === storeFilter)
               .map((service, index) => {
-                const ServiceIcon = service.icon;
                 const price = servicePricing[service.id];
                 const inCart = completedSteps.includes(service.id);
                 return (
@@ -2488,7 +2505,7 @@ const App = () => {
                       onClick={() => openServiceModal(service.id)}
                       aria-label={`View ${service.name} details`}
                     >
-                      <span className="store-card-icon"><ServiceIcon size={28} strokeWidth={1.7} /></span>
+                      <span className="store-card-glass" aria-hidden="true" />
                       <span className="store-card-group">{price?.group}</span>
                       <span className="store-card-view">View details <ArrowUpRight size={12} /></span>
                     </button>
@@ -3548,14 +3565,10 @@ const App = () => {
                   <span className="pe-label">( Websites )</span>
                 </div>
                 <p>
-                  Sites we designed, built and launched. Each one loads live below,
-                  so what you are looking at is the real page as it runs today.
+                  Sites we designed, built and launched. Select a project to visit the website.
                 </p>
               </div>
 
-              {/* One site at a time, big enough to read. The old stack showed six
-                  360px cards at once — none of them legible — and it needed
-                  preserve-3d, which mobile Safari and Chrome fail to paint here. */}
               <SiteShowcase sites={websiteProjects} />
             </section>
           )}

@@ -5,3 +5,4 @@
 @keyframes review-enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:700px){.leaf-google-reviews{margin-top:28px;width:min(350px,100%)}}
 @media(prefers-reduced-motion:reduce){.leaf-google-review{animation:none}}
+@media(max-width:700px){.leaf-google-reviews{width:min(300px,100%);min-height:0;padding:13px 15px;margin-top:20px}}

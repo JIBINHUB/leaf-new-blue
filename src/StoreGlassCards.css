@@ -1,0 +1,32 @@
+/* Glass forms and editorial spacing for service pricing cards. */
+:root .app-shell[data-route='workspace'] .store-page .store-grid { gap: 18px; }
+:root .app-shell[data-route='workspace'] .store-page .store-card { background: #0b0b0c !important; border: 1px solid #303135 !important; border-radius: 12px !important; box-shadow: inset 0 1px #ffffff0c !important; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-media { min-height: 270px; background: #000 !important; border: 0 !important; border-radius: 0 !important; }
+.store-card-glass { display: block; width: min(205px, 52%); aspect-ratio: 1; background: url('/assets/services/glass-forms.png') 0 0 / 200% 200% no-repeat; transition: transform .55s cubic-bezier(.2,.7,.2,1); }
+.store-card[data-accent='1'] .store-card-glass { background-position: 100% 0; }
+.store-card[data-accent='2'] .store-card-glass { background-position: 0 100%; }
+.store-card[data-accent='3'] .store-card-glass { background-position: 100% 100%; }
+.store-card:hover .store-card-glass, .store-card-media:focus-visible .store-card-glass { transform: scale(1.07) rotate(3deg); }
+:root .app-shell[data-route='workspace'] .store-card .store-card-view { left: auto; right: 16px; bottom: 16px; padding: 9px 12px; border: 1px solid #8d9bae66; border-radius: 999px; background: #171b21e8; color: #f2f6ff; font-size: 10px; letter-spacing: .06em; transform: translateY(8px); opacity: 0; transition: opacity .2s ease, transform .2s ease; }
+:root .app-shell[data-route='workspace'] .store-card:hover .store-card-view, :root .app-shell[data-route='workspace'] .store-card-media:focus-visible .store-card-view { opacity: 1; transform: translateY(0); }
+@media (hover: none) { :root .app-shell[data-route='workspace'] .store-card .store-card-view { opacity: 1; transform: none; } }
+:root .app-shell[data-route='workspace'] .store-card .store-card-group { background: transparent; color: #a6afbd !important; border-radius: 0; letter-spacing: .16em; top: 18px; left: 20px; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-body { padding: 24px 24px 8px; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-body h2 { font-size: 22px; letter-spacing: -.03em; margin-bottom: 10px; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-body > p { font-size: 14px; line-height: 1.6; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-includes { margin-top: 20px; gap: 7px; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-price { border-top: 1px solid #343840; padding-top: 20px; margin-top: 24px; }
+:root .app-shell[data-route='workspace'] .store-card .store-price-label { color: #9ba8bd; letter-spacing: .12em; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-price strong { font-size: 28px; letter-spacing: -.04em; margin: 7px 0; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-actions { padding: 12px 24px 24px; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-actions .store-btn { min-height: 46px; font-size: 13px; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-actions .is-cart { background: transparent !important; border: 1px solid #5c6675 !important; color: #f5f7fb !important; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-actions .is-cart.is-added { border-color: #75d6ab !important; color: #a2e9c6 !important; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-actions .is-buy { background: #edf2fa !important; color: #11151c !important; border: 1px solid #edf2fa !important; }
+:root .app-shell[data-route='workspace'] .store-card .store-card-actions .store-btn:hover { transform: translateY(-2px); filter: brightness(1.12); }
+@media (max-width: 700px) {
+  :root .app-shell[data-route='workspace'] .store-card .store-card-media { min-height: 200px; }
+  :root .app-shell[data-route='workspace'] .store-card .store-card-body { padding: 20px 18px 8px; }
+  :root .app-shell[data-route='workspace'] .store-card .store-card-actions { padding: 12px 18px 20px; }
+}
+@media (prefers-reduced-motion: reduce) { .store-card-glass { transition: none; } .store-card:hover .store-card-glass, .store-card-media:focus-visible .store-card-glass { transform: none; } }
