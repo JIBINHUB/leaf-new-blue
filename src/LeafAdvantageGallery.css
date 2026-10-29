@@ -1,0 +1,79 @@
+:root .app-shell[data-route='home'] .dt-home > section.leaf-advantage-arc {
+  position:relative; height:230vh; min-height:1740px; padding:0 !important;
+  background:#0a0a0a !important; color:#fff !important; overflow:visible;
+}
+.leaf-arc-sticky { position:sticky; top:0; height:100vh; min-height:720px; background:#0a0a0a; overflow:clip; isolation:isolate; }
+.leaf-arc-heading { position:absolute; z-index:3; top:9%; left:50%; width:min(740px,calc(100% - 48px)); transform:translateX(-50%); text-align:center; pointer-events:none; }
+.leaf-arc-heading > span { display:block; margin-bottom:21px; font-size:11px; font-weight:500; color:#a7a7a7; letter-spacing:.09em; text-transform:uppercase; }
+:root .app-shell[data-route='home'] .leaf-arc-heading h2 { margin:0 !important; font-size:clamp(37px,3.8vw,52px) !important; font-weight:500 !important; line-height:1.13 !important; letter-spacing:-.035em !important; }
+:root .app-shell[data-route='home'] .leaf-arc-heading > p { max-width:550px; margin:26px auto 0; font-size:17px; line-height:1.5; color:#a7a7a7; }
+.leaf-arc-projects { position:absolute; inset:0; margin:0 !important; padding:0 !important; list-style:none; pointer-events:none; }
+.leaf-arc-card { position:absolute; left:0; top:0; width:clamp(140px,11vw,180px); height:clamp(140px,11vw,180px); margin:0; pointer-events:auto; }
+.leaf-arc-project { display:block; width:100%; height:100%; position:relative; isolation:isolate; padding:0; border:0; border-radius:20px; background:#ffffff18; box-shadow:0 14px 28px -14px #4d42644d,0 3px 7px #63557814; cursor:pointer; transform:perspective(750px) rotateY(-7deg); transition:transform .5s cubic-bezier(.2,.75,.25,1),box-shadow .5s ease; -webkit-tap-highlight-color:transparent; }
+.leaf-arc-project-image { display:block; width:100%; height:100%; padding:0; border-radius:inherit; background:transparent; overflow:hidden; }
+.leaf-arc-project img { display:block; width:100%; height:100%; object-fit:cover; border-radius:inherit; }
+.leaf-arc-project:is(:hover,.is-active) { transform:perspective(750px) translateY(-17px) rotateY(5deg) scale(1.09); box-shadow:0 24px 38px -17px #4d426470,0 5px 10px #6355781a; }
+/* Transparent edge refraction and a moving reflection over full-bleed artwork. */
+.leaf-arc-project::before,.leaf-arc-project::after { content:""; position:absolute; inset:0; z-index:2; border-radius:inherit; pointer-events:none; }
+.leaf-arc-project::before { box-shadow:inset 1px 1px 1px #ffffffd9,inset -1px -1px 2px #ffffff80,inset 0 0 8px #ffffff30; background:linear-gradient(140deg,#ffffff26,transparent 34%,transparent 70%,#ffffff12); }
+.leaf-arc-project::after { background:linear-gradient(115deg,transparent 20%,#ffffff06 35%,#ffffff52 48%,#ffffff0a 60%,transparent 75%); background-size:250% 100%; background-position:100% 0; opacity:.5; transition:background-position .8s cubic-bezier(.2,.75,.25,1),opacity .5s; }
+.leaf-arc-project:is(:hover,.is-active)::after { background-position:0 0; opacity:.85; }
+.leaf-arc-project:focus-visible { outline:3px solid #6798ff; outline-offset:5px; }
+.leaf-arc-detail { position:absolute; z-index:4; top:35%; left:50%; width:min(480px,calc(100% - 48px)); min-height:108px; text-align:center; pointer-events:none; transform:translate(-50%,12px); opacity:0; transition:opacity .3s ease,transform .4s ease; }
+.leaf-arc-detail.is-active { opacity:1; transform:translate(-50%,0); }
+.leaf-arc-detail > div { animation:leaf-arc-detail-in .35s ease both; }
+@keyframes leaf-arc-detail-in { from { opacity:0; translate:0 6px; } to { opacity:1; translate:0 0; } }
+.leaf-arc-detail span { display:block; margin-bottom:10px; font-size:11px; color:#6798ff; letter-spacing:.015em; }
+:root .app-shell[data-route='home'] .leaf-arc-detail h3 { margin:0; font-size:25px !important; font-weight:500 !important; line-height:1.2 !important; letter-spacing:-.025em !important; }
+:root .app-shell[data-route='home'] .leaf-arc-detail p { margin:12px auto 0; max-width:380px; font-size:14px; line-height:1.45; color:#a7a7a7; }
+.leaf-arc-footer { position:absolute; z-index:5; bottom:104px; left:50%; display:flex; align-items:center; justify-content:center; gap:20px; width:max-content; max-width:calc(100% - 32px); transform:translateX(-50%); }
+:root .app-shell[data-route='home'] .leaf-arc-footer p { margin:0; font-size:13px; color:#a7a7a7; text-align:center; }
+.leaf-arc-footer button { flex:none; display:grid; place-items:center; width:36px; height:36px; padding:0; border:1px solid #454545; border-radius:50%; background:#1e1e1e; color:#fff; cursor:pointer; transition:background .2s ease,transform .2s ease; }
+.leaf-arc-footer button:hover { background:#313131; transform:translateY(-2px); }
+.leaf-arc-footer button:focus-visible { outline:2px solid #6798ff; outline-offset:3px; }
+.leaf-arc-touch-hint { display:none; }
+@media(max-width:900px) {
+  :root .app-shell[data-route='home'] .leaf-arc-heading h2 { font-size:42px !important; }
+  .leaf-arc-heading { width:calc(100% - 40px); }
+}
+@media(max-width:640px) {
+  /* Clip horizontal artwork without creating a scrolling ancestor for pinned scenes. */
+  html:has(.app-shell[data-route='home']),
+  body:has(.app-shell[data-route='home']),
+  #root:has(.app-shell[data-route='home']) { overflow-x:clip; overflow-y:visible; }
+  :root .app-shell[data-route='home'] .dt-home > section.leaf-advantage-arc { height:200vh; min-height:1280px; }
+  .leaf-arc-sticky { min-height:640px; }
+  .leaf-arc-heading { top:8%; width:calc(100% - 40px); }
+  .leaf-arc-heading > span { margin-bottom:17px; font-size:10px; }
+  :root .app-shell[data-route='home'] .leaf-arc-heading h2 { max-width:340px; margin:0 auto !important; font-size:32px !important; line-height:1.15 !important; }
+  :root .app-shell[data-route='home'] .leaf-arc-heading > p { max-width:290px; margin-top:20px; font-size:14px; }
+  .leaf-arc-card { width:104px; height:104px; }
+  .leaf-arc-project { border-radius:14px; }
+  .leaf-arc-project-image,.leaf-arc-project img { border-radius:inherit; }
+  .leaf-arc-detail { top:35%; width:calc(100% - 44px); min-height:98px; }
+  .leaf-arc-detail span { font-size:10px; margin-bottom:7px; }
+  :root .app-shell[data-route='home'] .leaf-arc-detail h3 { font-size:20px !important; }
+  :root .app-shell[data-route='home'] .leaf-arc-detail p { max-width:280px; font-size:12px; margin-top:8px; }
+  .leaf-arc-footer { bottom:180px; gap:10px; }
+  .leaf-arc-footer button { width:30px; height:30px; }
+  :root .app-shell[data-route='home'] .leaf-arc-footer p { max-width:230px; font-size:11px; }
+  .leaf-arc-desktop-hint { display:none; }.leaf-arc-touch-hint { display:inline; }
+}
+@media(prefers-reduced-motion:reduce) {
+  :root .app-shell[data-route='home'] .dt-home > section.leaf-advantage-arc { height:auto; min-height:0; }
+  .leaf-arc-sticky { position:relative; height:auto; min-height:0; padding:100px 0 90px; }
+  .leaf-arc-heading { position:relative; top:auto; margin:0 auto; left:auto; transform:none; }
+  .leaf-arc-projects { position:relative; display:flex; gap:24px; overflow-x:auto; padding:40px 30px !important; margin-top:140px !important; pointer-events:auto; }
+  .leaf-arc-card { position:relative; flex:none; transform:none !important; opacity:1 !important; visibility:visible !important; }
+  .leaf-arc-detail { top:290px; }
+  .leaf-arc-footer { position:relative; bottom:auto; left:auto; transform:none; margin:10px auto 0; }
+  .leaf-arc-project,.leaf-arc-detail,.leaf-arc-detail > div,.leaf-arc-footer button { animation:none !important; transition:none !important; }
+  .leaf-arc-project:is(:hover,.is-active) { transform:translateY(-7px); }
+}
+
+:root .app-shell[data-route='home'] .leaf-arc-heading h2,:root .app-shell[data-route='home'] .leaf-arc-detail h3 { color:#fff !important; }
+:root .app-shell[data-route='home'] .leaf-arc-heading > span { font-family:'JetBrains Mono',monospace; letter-spacing:.08em; }
+.leaf-arc-project { border-radius:8px; }
+@media(max-width:640px) { .leaf-arc-project { border-radius:8px; } .leaf-arc-footer { bottom:90px; } }
+/* A clipped x-axis must not create a scrolling container around the sticky gallery. */
+:root .app-shell[data-route='home'] { overflow-x:clip !important; overflow-y:visible !important; }

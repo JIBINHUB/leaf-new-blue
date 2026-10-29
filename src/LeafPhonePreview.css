@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
+
+.leaf-phone-preview {
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  overflow:hidden;
+  background:none;
+}
+.leaf-phone-scene {
+  position:relative;
+  display:grid;
+  place-items:center;
+  height:650px;
+  overflow:hidden;
+  perspective:1100px;
+}
+.leaf-phone-stream { position:absolute; z-index:1; inset:0; overflow:hidden; pointer-events:none; }
+.leaf-phone-device {
+  position:relative;
+  z-index:2;
+  box-sizing:border-box;
+  width:282px;
+  height:575px;
+  padding:3px;
+  border:3px solid #6d3047;
+  border-left-color:#c28b9c;
+  border-top-color:#e8c4ce;
+  border-right-color:#4b1c30;
+  border-bottom-color:#5a253b;
+  border-radius:44px;
+  background:linear-gradient(110deg,#f5d6dd 0%,#a35d76 7%,#57233b 15%,#c28c9f 27%,#6e3049 53%,#3d1327 78%,#d6a5b4 100%);
+  box-shadow:
+    1px 1px 0 rgba(255,226,235,.8) inset,
+    -2px -1px 0 rgba(34,4,18,.55) inset,
+    13px 23px 34px rgba(0,0,0,.64),
+    23px 35px 55px rgba(0,0,0,.28);
+  transform:rotate(-9deg) rotateY(-12deg);
+  animation:leaf-phone-float 6s ease-in-out infinite;
+}
+.leaf-phone-device::before {
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border:1px solid rgba(255,217,228,.68);
+  border-radius:inherit;
+  box-shadow:inset 0 0 0 1px rgba(46,7,23,.5);
+  pointer-events:none;
+}
+.leaf-phone-side-button {
+  position:absolute;
+  z-index:-1;
+  display:block;
+  width:4px;
+  border-radius:3px 0 0 3px;
+  background:linear-gradient(90deg,#3f1429,#b27388 56%,#5a2239);
+  box-shadow:-2px 1px 3px rgba(0,0,0,.5);
+}
+.leaf-phone-side-button-one { left:-8px; top:105px; height:24px; }
+.leaf-phone-side-button-two { left:-8px; top:157px; height:38px; }
+.leaf-phone-side-button-three { left:-8px; top:204px; height:38px; }
+.leaf-phone-screen {
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  border:1px solid #151119;
+  border-radius:37px;
+  background:#f0f2f5;
+}
+.leaf-phone-screen::after {
+  content:"";
+  position:absolute;
+  z-index:3;
+  inset:0;
+  border-radius:inherit;
+  background:linear-gradient(105deg,rgba(255,255,255,.11),transparent 28%,transparent 75%,rgba(255,255,255,.08));
+  box-shadow:inset 1px 1px 2px rgba(255,255,255,.55),inset -1px -1px 2px rgba(0,0,0,.12);
+  pointer-events:none;
+}
+.leaf-phone-photo { position:absolute; inset:0; overflow:hidden; background:#eff1f4; }
+.leaf-phone-live-site{position:absolute;top:0;left:0;width:147%;height:147%;border:0;transform:scale(.680272);transform-origin:top left;pointer-events:none;background:#fff}
+.leaf-phone-photo::before {
+  content:"";
+  position:absolute;
+  inset:-25px;
+  background-image:var(--phone-image);
+  background-position:center;
+  background-size:cover;
+  filter:blur(23px) brightness(1.18) saturate(.72);
+  opacity:.75;
+  transform:scale(1.06);
+}
+.leaf-phone-photo > .leaf-phone-slide {
+  position:absolute;
+  inset:0;
+  display:block;
+  width:110%;
+  max-width:none;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  opacity:0;
+  transition:opacity .45s ease;
+}
+.leaf-phone-photo > .leaf-phone-slide.is-active { opacity:1; }
+.leaf-phone-loader{position:absolute;z-index:2;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#fff;color:#151515;animation:leaf-phone-loader-in .25s ease both;font-family:Arial,sans-serif}
+.leaf-phone-loader strong{font-size:22px;letter-spacing:-.06em}.leaf-phone-loader-0 strong span{color:#f14837}.leaf-phone-loader small{font-size:8px;letter-spacing:.18em;color:#777}.leaf-phone-loader-line{width:90px;height:2px;background:#ddd;overflow:hidden}.leaf-phone-loader-line i{display:block;width:100%;height:100%;background:#f04b3d;transform-origin:left;animation:leaf-phone-load 1.4s ease forwards}
+.leaf-phone-loader-1{background:#eeeae0;color:#403b34}.leaf-phone-loader-1 strong{font-size:16px;letter-spacing:.02em}.leaf-phone-loader-1 strong span{font-weight:400}.leaf-phone-loader-1 small{font-size:7px;color:#877f73}.leaf-phone-loader-film{position:absolute;left:0;right:0;bottom:18px;height:10px;background:repeating-linear-gradient(90deg,#c9c5bc 0 8px,transparent 8px 16px);animation:leaf-phone-film 1.2s ease both}
+@keyframes leaf-phone-load{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes leaf-phone-film{from{opacity:.2;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes leaf-phone-loader-in{from{opacity:0}to{opacity:1}}
+.leaf-phone-island {
+  position:absolute;
+  z-index:4;
+  top:12px;
+  left:50%;
+  width:79px;
+  height:21px;
+  border-radius:20px;
+  background:#090b10;
+  box-shadow:0 1px 2px rgba(255,255,255,.22),inset 0 -1px 2px #202731;
+  transform:translateX(-50%);
+}
+.leaf-phone-island::after {
+  content:"";
+  position:absolute;
+  right:11px;
+  top:9px;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:#142038;
+  box-shadow:0 0 1px #5685a3;
+}
+@keyframes leaf-phone-float {
+  50% { transform:translateY(-11px) rotate(-7deg) rotateY(-8deg); }
+}
+.leaf-phone-float {
+  position:absolute;
+  left:50%;
+  top:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:55px;
+  opacity:0;
+  animation-duration:16s;
+  animation-timing-function:ease-in-out;
+  animation-iteration-count:infinite;
+  animation-delay:calc(var(--item) * -4s + var(--lane) * .65s);
+}
+.leaf-phone-incoming {
+  min-width:205px;
+  padding:13px 21px;
+  border:1px solid rgba(255,255,255,.92);
+  border-radius:50px;
+  background:linear-gradient(120deg,#ffe45f,#fffef5 78%);
+  color:#1f2025;
+  box-shadow:0 12px 28px rgba(0,0,0,.32),inset 0 1px 0 #fff;
+  font:400 15px/1.3 'Poppins',sans-serif;
+  animation-name:leaf-service-enter;
+}
+.leaf-phone-incoming b { font-weight:400; white-space:nowrap; }
+.leaf-phone-outgoing {
+  width:64px;
+  height:64px;
+  border:1px solid #fff;
+  border-radius:50%;
+  background:linear-gradient(145deg,#fffefa,#ffe45f);
+  color:#1f2025;
+  box-shadow:0 13px 28px rgba(0,0,0,.34),inset 0 2px 3px #fff;
+  animation-name:leaf-result-exit;
+}
+@keyframes leaf-service-enter {
+  0% { transform:translate(calc(-50vw - 180px), -65%) rotate(-5deg) scale(.9); opacity:0; }
+  6% { opacity:1; }
+  14% { transform:translate(-310px, -50%) rotate(0) scale(1); opacity:1; }
+  24% { transform:translate(-145px, -50%) scale(.86); opacity:0; }
+  25%,100% { transform:translate(-145px, -50%); opacity:0; }
+}
+@keyframes leaf-result-exit {
+  0%,23% { transform:translate(110px, -50%); opacity:0; }
+  30% { transform:translate(190px, -50%); opacity:1; }
+  43% { opacity:1; }
+  50% { transform:translate(calc(50vw + 180px), -50%); opacity:0; }
+  51%,100% { transform:translate(calc(50vw + 180px), -50%); opacity:0; }
+}
+@media(max-width:700px) {
+  .leaf-phone-scene { height:530px; }
+  .leaf-phone-device { width:266px; height:542px; transform:scale(.76) rotate(-9deg) rotateY(-12deg); animation-name:leaf-phone-mobile; }
+  .leaf-phone-incoming { min-width:150px; padding:10px 13px; font-size:11px; }
+  .leaf-phone-outgoing { width:49px; height:49px; }
+  .leaf-phone-outgoing svg { width:21px; height:21px; }
+  @keyframes leaf-phone-mobile { 50% { transform:scale(.76) translateY(-11px) rotate(-7deg) rotateY(-8deg); } }
+  @keyframes leaf-service-enter {
+    0% { transform:translate(calc(-50vw - 150px), -65%) rotate(-5deg) scale(.9); opacity:0; }
+    6% { opacity:1; }
+    14% { transform:translate(-210px, -50%) rotate(0) scale(1); opacity:1; }
+    24% { transform:translate(-130px, -50%) scale(.86); opacity:0; }
+    25%,100% { transform:translate(-130px, -50%); opacity:0; }
+  }
+  @keyframes leaf-result-exit {
+    0%,23% { transform:translate(90px, -50%); opacity:0; }
+    30% { transform:translate(135px, -50%); opacity:1; }
+    43% { opacity:1; }
+    50% { transform:translate(calc(50vw + 150px), -50%); opacity:0; }
+    51%,100% { transform:translate(calc(50vw + 150px), -50%); opacity:0; }
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .leaf-phone-device { animation:none; }
+  .leaf-phone-float { animation:none; }
+  .leaf-phone-incoming:first-child { opacity:1; transform:translate(-300px,-50%); }
+  .leaf-phone-outgoing:nth-child(2) { opacity:1; transform:translate(165px,-50%); }
+  .leaf-phone-slide { transition:none; }
+}
+.leaf-phone-float {top:calc(50% - 45px + var(--lane) * 90px)}
+html[data-theme] .app-shell .leaf-phone-scene .leaf-phone-incoming b {color:#161616 !important;-webkit-text-fill-color:#161616;text-shadow:none}
+@media(max-width:700px){.leaf-phone-float{top:calc(50% - 35px + var(--lane) * 70px)}}

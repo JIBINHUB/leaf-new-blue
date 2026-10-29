@@ -1,0 +1,46 @@
+.leaf-reveal{height:250vh;position:relative;background:#090d15;color:#f7f9ff;font-family:var(--dt-font)}
+.leaf-reveal-sticky{position:sticky;top:0;display:flex;align-items:center;justify-content:center;height:100vh;min-height:620px;overflow:hidden;padding:70px 30px;background:radial-gradient(ellipse at 50% 50%,#172845 0%,#0d1421 44%,#090d15 77%)}
+.leaf-reveal-sticky::before{content:"";position:absolute;inset:0;opacity:.26;background-image:linear-gradient(#41618d 1px,transparent 1px),linear-gradient(90deg,#41618d 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at center,#000 5%,transparent 78%);pointer-events:none}
+.leaf-reveal-sticky::after{content:"";position:absolute;inset:10% 14%;border:1px solid #6796ed18;border-radius:50%;transform:scale(calc(.9 + var(--reveal) * .15));pointer-events:none}
+.leaf-reveal-halo{position:absolute;pointer-events:none;border-radius:50%;filter:blur(55px);animation:leaf-reveal-breathe 7s ease-in-out infinite alternate}
+.leaf-reveal-halo-one{width:340px;height:340px;left:-130px;top:16%;background:#285db63a}
+.leaf-reveal-halo-two{width:430px;height:430px;right:-210px;bottom:-90px;background:#316bea30;animation-delay:-3s}
+:root .app-shell[data-route] .leaf-reveal-intro{position:absolute;top:30%;left:0;width:100%;margin:0;text-align:center;color:#a5b7d7;font-size:16px;letter-spacing:-.02em;opacity:calc(1 - var(--reveal));transform:translateY(calc(var(--reveal) * -28px))}
+.leaf-reveal-initial{position:absolute;top:50%;left:50%;display:flex;gap:10px;transform:translate(-50%,-50%) scale(calc(1 - var(--reveal) * .22));opacity:calc(1 - var(--reveal) * 2);pointer-events:none}
+.leaf-reveal-icon{position:relative;display:inline-grid;place-items:center;flex:none;vertical-align:middle;width:72px;height:72px;padding:0;border:1px solid #d4e9ff90;border-radius:50%;color:#eff8ff;background:radial-gradient(circle at 28% 18%,#ffffffbd 0%,#b7dcff8c 13%,#4d92e379 35%,#123c85d9 76%,#071a41 100%);box-shadow:inset 0 2px 5px #ffffffce,inset -6px -10px 18px #09174499,0 15px 35px #0209169c,0 0 25px #3c79db56;backdrop-filter:blur(16px);cursor:pointer;isolation:isolate;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .35s}
+.leaf-reveal-icon::before{content:"";position:absolute;inset:5px;border:1px solid #e4f4ff73;border-radius:inherit;box-shadow:inset 0 1px 2px #fff8;pointer-events:none}
+.leaf-reveal-icon::after{content:"";position:absolute;top:9%;left:15%;width:54%;height:22%;border-radius:50%;background:#ffffff82;filter:blur(8px);transform:rotate(-22deg);pointer-events:none}
+.leaf-reveal-icon svg{position:relative;z-index:1;filter:drop-shadow(0 2px 3px #091a4899)}
+.leaf-reveal-color-1{background:radial-gradient(circle at 28% 18%,#ffffffc7 0%,#bed4ff96 14%,#6b79d595 38%,#1d357f 78%,#0a1641 100%)}
+.leaf-reveal-color-2{background:radial-gradient(circle at 28% 18%,#ffffffc7 0%,#b2f0f896 14%,#4b9ab99c 38%,#174e78 78%,#09273b 100%)}
+.leaf-reveal-color-3{background:radial-gradient(circle at 28% 18%,#ffffffc7 0%,#d0dfff96 14%,#7799cf9c 38%,#244474 78%,#0e203e 100%)}
+button.leaf-reveal-icon:hover,button.leaf-reveal-icon:focus-visible{transform:translateY(-8px) scale(1.1);border-color:#fff;box-shadow:inset 0 2px 5px #fff,0 20px 45px #020916a8,0 0 35px #83b6ff99;outline:none}
+.leaf-reveal-initial .leaf-reveal-icon{animation:leaf-reveal-icon-float 4s ease-in-out infinite alternate;animation-delay:calc(var(--icon-index) * -.35s)}
+:root .app-shell[data-route] .leaf-reveal-statement{position:relative;z-index:1;max-width:1100px;margin:0;text-align:center;font-family:var(--dt-font);font-size:clamp(36px,4.7vw,68px);font-weight:600;line-height:1.32;letter-spacing:-.045em;color:#f8fbff!important;opacity:var(--reveal);transform:translateY(calc((1 - var(--reveal)) * 50px))}
+.leaf-reveal-statement>span{display:block}
+.leaf-reveal-statement .leaf-reveal-icon{margin:0 .04em}
+:root .app-shell[data-route] .leaf-reveal-hint{position:absolute;bottom:9%;color:#91a6c7;font-size:12px;opacity:var(--reveal)}
+@keyframes leaf-reveal-icon-float{to{transform:translateY(-13px) rotate(7deg)}}
+@keyframes leaf-reveal-breathe{to{transform:translate(30px,-20px) scale(1.2);opacity:.6}}
+@media(max-width:700px){.leaf-reveal{height:200vh}.leaf-reveal-sticky{padding:60px 15px}.leaf-reveal-icon{width:42px;height:42px}.leaf-reveal-icon svg{width:20px;height:20px}.leaf-reveal-initial{flex-wrap:wrap;justify-content:center;width:90%;gap:8px}.leaf-reveal-initial .leaf-reveal-icon{width:47px;height:47px}.leaf-reveal-statement>span{display:inline}:root .app-shell[data-route] .leaf-reveal-statement{font-size:clamp(27px,7vw,39px);line-height:1.65}.leaf-reveal-halo-one{left:-220px}.leaf-reveal-halo-two{right:-320px}}
+@media(prefers-reduced-motion:reduce){.leaf-reveal{height:auto}.leaf-reveal-sticky{position:relative;min-height:100vh}.leaf-reveal-initial,.leaf-reveal-intro{display:none}.leaf-reveal-halo,.leaf-reveal-initial .leaf-reveal-icon{animation:none}.leaf-reveal-icon{transition:none}}
+
+/* Soft, colourful dimensional icons echo the mascot's material. */
+.leaf-reveal-sticky{background:#090b0f}
+.leaf-reveal-sticky::before{display:none}
+.leaf-reveal-sticky::after{border-color:#98b4ff14}
+.leaf-reveal-icon{border:1px solid #ffffffaa;border-radius:28%;color:#fff;background:radial-gradient(circle at 27% 17%,#fff 0%,#bde8ff 10%,#56a9ff 39%,#2564dc 75%,#1945a8 100%);box-shadow:inset 2px 3px 6px #fff9,inset -4px -7px 9px #123c9a70,0 7px 0 #1a4590,0 14px 24px #0008;backdrop-filter:none}
+.leaf-reveal-icon::before{inset:3px;border-radius:25%;border-color:#ffffff46;box-shadow:none}
+.leaf-reveal-icon::after{opacity:.6;filter:blur(5px)}
+.leaf-reveal-icon svg{filter:drop-shadow(0 2px 1px #15346c80);stroke-width:2}
+.leaf-reveal-color-1{background:radial-gradient(circle at 27% 17%,#fff 0%,#edddff 10%,#bc93ff 40%,#8156d8 78%,#5531a4 100%);box-shadow:inset 2px 3px 6px #fff9,inset -4px -7px 9px #4a258770,0 7px 0 #573599,0 14px 24px #0008}
+.leaf-reveal-color-2{background:radial-gradient(circle at 27% 17%,#fff 0%,#d4fff1 10%,#73dab8 40%,#2fa988 78%,#15765c 100%);box-shadow:inset 2px 3px 6px #fff9,inset -4px -7px 9px #15685170,0 7px 0 #18745e,0 14px 24px #0008}
+.leaf-reveal-color-3{background:radial-gradient(circle at 27% 17%,#fff 0%,#fff0d3 10%,#ffbc8d 40%,#e97856 78%,#ba4f39 100%);box-shadow:inset 2px 3px 6px #fff9,inset -4px -7px 9px #9d392970,0 7px 0 #ab523a,0 14px 24px #0008}
+.leaf-reveal-initial .leaf-reveal-icon{animation:leaf-reveal-icon-float 3.8s ease-in-out infinite alternate}
+.leaf-reveal-statement .leaf-reveal-icon{transform:translateY(calc((1 - var(--reveal)) * 28px)) rotate(calc((1 - var(--reveal)) * -12deg));transition:transform .25s ease,box-shadow .3s}
+@media(max-width:700px){.leaf-reveal-icon{box-shadow:inset 2px 3px 6px #fff9,inset -4px -7px 9px #19355b70,0 4px 0 #223d6a,0 8px 16px #0008}}
+.leaf-reveal-icon,.leaf-reveal-icon::before{border-radius:50%}
+.leaf-reveal-icon{box-shadow:inset 0 2px 5px #ffffffbd,inset -5px -8px 12px #132b5d80,0 9px 18px #0009,0 0 16px #548cff30}
+.leaf-reveal-statement .leaf-reveal-icon{opacity:var(--reveal);transform:translateY(calc((1 - var(--reveal)) * (22px + var(--icon-index) * 3px))) scale(calc(.8 + var(--reveal) * .2));transition:transform .35s cubic-bezier(.22,.7,.2,1),opacity .35s ease,box-shadow .3s}
+:root .app-shell[data-route] .leaf-reveal-statement{transform:translateY(calc((1 - var(--reveal)) * 35px));transition:transform .3s ease,opacity .3s ease}
+@media(prefers-reduced-motion:reduce){.leaf-reveal-statement .leaf-reveal-icon,:root .app-shell[data-route] .leaf-reveal-statement{transition:none}}

@@ -1,0 +1,47 @@
+/* One set of characters travels from the central cluster into the message and back. */
+:root .app-shell[data-route='home'] .home-screen > section.leaf-scroll-story { position:relative; height:390vh; min-height:2300px; padding:0 !important; background:#fff !important; overflow:visible; --story-words:0; --story-label:1; --story-clouds:1; --story-exit:0; }
+:root .app-shell[data-route='home'] { overflow-x:clip !important; overflow-y:visible !important; }
+.leaf-scroll-story-sticky { position:sticky; top:0; height:100vh; min-height:560px; overflow:clip; background:#fff; isolation:isolate; }
+.leaf-scroll-story-content { position:absolute; inset:0; z-index:2; text-align:center; }
+.leaf-scroll-story-kicker { position:absolute; top:29%; left:20px; right:20px; margin:0; color:#555e6d; font:500 17px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif; letter-spacing:-.015em; opacity:var(--story-label); }
+:root .app-shell[data-route='home'] .leaf-scroll-story-heading { position:absolute; top:52%; left:50%; width:min(1120px,calc(100% - 48px)); margin:0 !important; transform:translate(-50%,-50%); font-family:'Inter',ui-sans-serif,system-ui,sans-serif !important; font-size:clamp(36px,4.8vw,70px) !important; font-weight:500 !important; line-height:1.3 !important; letter-spacing:-.045em !important; color:#10151e !important; }
+.leaf-story-line { display:block; white-space:nowrap; }
+.leaf-story-words { opacity:var(--story-words); }
+.leaf-story-slot,.leaf-story-moving-token { display:inline-flex; align-items:center; justify-content:center; border-radius:50%; overflow:hidden; }
+.leaf-story-slot { width:1em; height:1em; vertical-align:-.17em; visibility:hidden; }
+.leaf-story-moving-tokens { position:absolute; inset:0; z-index:3; pointer-events:none; }
+.leaf-story-moving-token { position:absolute; top:0; left:0; will-change:transform; }
+.leaf-story-moving-token:first-child { z-index:5; }
+.leaf-story-slot img,.leaf-story-moving-token img { width:100%; height:100%; object-fit:contain; }
+.leaf-story-slot .leaf-prop-sprite,.leaf-story-moving-token .leaf-prop-sprite { display:block; width:100%; height:100%; filter:none; }
+.leaf-story-token-mint { background:linear-gradient(145deg,#d9ffe8,#a6eec8); }
+.leaf-story-token-blue { background:linear-gradient(145deg,#d7f0ff,#90c9ff); }
+.leaf-story-token-peach { background:linear-gradient(145deg,#ffe4d1,#ffae82); }
+.leaf-story-token-lilac { background:linear-gradient(145deg,#f2e1ff,#c9a5ff); }
+.leaf-story-token-yellow { background:linear-gradient(145deg,#fff6cf,#ffda81); }
+.leaf-scroll-story-sticky .leaf-story-cloud { z-index:1; opacity:var(--story-clouds); transform:translateY(calc((1 - var(--story-clouds)) * 80px)); }
+.leaf-scroll-story-sticky .leaf-story-cloud-left { left:-75px; top:14%; }
+.leaf-scroll-story-sticky .leaf-story-cloud-right { right:-55px; bottom:8%; }
+:root .app-shell[data-route='home'] .leaf-create-showcase { --create-progress:0; }
+.leaf-create-card { animation:none; }
+.leaf-create-card-design { transform:translate(calc((1 - var(--create-progress)) * -170px),calc((1 - var(--create-progress)) * 110px + 15px)) rotate(calc(-12deg - (1 - var(--create-progress)) * 15deg)); }
+.leaf-create-card-build { transform:translateY(calc((1 - var(--create-progress)) * 200px - 19px)) rotate(calc(1deg + (1 - var(--create-progress)) * 8deg)); }
+.leaf-create-card-launch { transform:translate(calc((1 - var(--create-progress)) * 170px),calc((1 - var(--create-progress)) * 110px + 15px)) rotate(calc(12deg + (1 - var(--create-progress)) * 15deg)); }
+
+@media(max-width:800px) {
+  :root .app-shell[data-route='home'] .home-screen > section.leaf-scroll-story { height:350vh; min-height:2000px; }
+  :root .app-shell[data-route='home'] .leaf-scroll-story-heading { width:calc(100% - 28px); font-size:clamp(21px,4.8vw,38px) !important; line-height:1.5 !important; }
+  .leaf-scroll-story-kicker { font-size:14px; top:30%; }
+  .leaf-scroll-story-sticky .leaf-story-cloud { scale:.55; }
+}
+@media(prefers-reduced-motion:reduce) {
+  :root .app-shell[data-route='home'] .home-screen > section.leaf-scroll-story { height:auto; min-height:620px; }
+  .leaf-scroll-story-sticky { position:relative; height:620px; }
+  .leaf-scroll-story-kicker { top:20%; opacity:1; }
+  .leaf-story-moving-tokens { display:none; }
+  .leaf-story-slot { visibility:visible; }
+  .leaf-story-words { opacity:1; }
+  .leaf-create-card-design { transform:rotate(-12deg) translateY(15px); }
+  .leaf-create-card-build { transform:rotate(1deg) translateY(-19px); }
+  .leaf-create-card-launch { transform:rotate(12deg) translateY(15px); }
+}

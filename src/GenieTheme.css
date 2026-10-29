@@ -1,0 +1,543 @@
+/* Leaf's daylight notebook direction, based on the supplied Geniestudio spec.
+   Inter is the specified substitute for Aeonik and Geist; the proprietary faces
+   are not shipped with this repository. */
+:root .app-shell[data-route] {
+  --genie-sky:#ebf5ff; --genie-paper:#fafdff; --genie-ink:#0a0d12;
+  --genie-charcoal:#181d27; --genie-body:#535862; --genie-fog:#93979f;
+  --genie-blue:#0069e0; --genie-lavender:#f1e6ff; --genie-mint:#d3f6e3;
+  --genie-peach:#fff2eb; --genie-powder:#cce7ff;
+  background:var(--genie-sky) !important; color:var(--genie-ink) !important;
+  font-family:'Inter',ui-sans-serif,system-ui,sans-serif !important;
+}
+:root .app-shell[data-route] :is(h1,h2,h3,h4,h5,h6) {
+  font-family:'Inter',ui-sans-serif,system-ui,sans-serif !important;
+  font-weight:500 !important; letter-spacing:-.02em !important; color:var(--genie-ink) !important;
+}
+:root .app-shell[data-route] :is(p,li,button,a,input,select,textarea) {
+  font-family:'Inter',ui-sans-serif,system-ui,sans-serif !important;
+  letter-spacing:-.01em;
+}
+:root .app-shell[data-route] p { color:var(--genie-body); }
+:root .app-shell[data-route] > .blur-3xl { display:none !important; }
+
+/* Minimal, typographic navigation. */
+:root .app-shell[data-route] > nav {
+  width:min(1200px,calc(100% - 48px)) !important; max-width:1200px !important;
+  min-height:88px; margin:auto !important; padding:14px 0 !important;
+  background:transparent !important; border:0 !important; box-shadow:none !important;
+  backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+  display:grid !important; grid-template-columns:1fr auto 1fr; gap:32px;
+}
+:root .app-shell[data-route] > nav .logo-3d-box {
+  border:0 !important; border-radius:50% !important; background:var(--genie-charcoal) !important;
+  box-shadow:none !important;
+}
+:root .app-shell[data-route] > nav .logo-3d-box .logo-3d-img { filter:none !important; }
+:root .app-shell[data-route] > nav .text-gray-900 { color:var(--genie-ink) !important; font-size:20px !important; font-weight:500 !important; }
+:root .app-shell[data-route] .genie-nav-links { display:flex; align-items:center; gap:36px; }
+:root .app-shell[data-route] .genie-nav-links button {
+  padding:10px 0; border:0; background:transparent; color:var(--genie-ink);
+  font-size:16px; font-weight:500; cursor:pointer;
+}
+:root .app-shell[data-route] .genie-nav-links button:hover { color:var(--genie-blue); }
+:root .app-shell[data-route] > nav .header-status-card {
+  justify-self:end; display:flex; width:auto; padding:0 !important; border:0 !important;
+  background:none !important; box-shadow:none !important; backdrop-filter:none !important;
+}
+:root .app-shell[data-route] > nav .header-status-card::before,
+:root .app-shell[data-route] > nav .header-status-card::after,
+:root .app-shell[data-route] > nav .header-status-copy { display:none !important; }
+:root .app-shell[data-route] > nav .header-status-action,
+:root .app-shell[data-route] .genie-button {
+  display:inline-flex; align-items:center; justify-content:center; gap:12px;
+  min-height:48px; padding:12px 30px !important; border:1px solid var(--genie-ink) !important;
+  border-radius:9999px !important; color:#fff !important; background:var(--genie-charcoal) !important;
+  box-shadow:0 1px 2px rgba(10,13,18,.8),0 0 0 1px #0a0d12 !important;
+  font-size:14px !important; font-weight:500 !important; letter-spacing:-.01em !important;
+  text-decoration:none; cursor:pointer; transition:transform .3s ease,background .3s ease;
+}
+:root .app-shell[data-route] > nav .header-status-action:hover,
+:root .app-shell[data-route] .genie-button:hover { transform:translateY(-2px); background:#303744 !important; }
+
+/* Centered hero and floating objects. */
+:root .app-shell[data-route='home'] .home-screen { background:var(--genie-sky) !important; }
+:root .app-shell[data-route='home'] .home-screen > .home-hero-layout {
+  min-height:auto !important; padding:70px 24px 94px !important;
+  background:var(--genie-sky) !important;
+}
+:root .app-shell[data-route='home'] .home-hero-copy {
+  max-width:1200px !important; display:flex !important; flex-direction:column;
+  align-items:center; gap:0 !important; margin:auto !important; text-align:center;
+}
+:root .app-shell[data-route='home'] .home-welcome-copy { display:contents !important; }
+:root .app-shell[data-route='home'] .home-location-glow {
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  width:max-content !important; max-width:calc(100vw - 40px); white-space:nowrap; flex-wrap:nowrap;
+  order:1; min-height:34px !important; padding:7px 14px !important;
+  border:1px solid #c8dcf4 !important; border-radius:9999px !important;
+  color:var(--genie-body) !important; background:var(--genie-paper) !important;
+  box-shadow:none !important; font-size:12px !important;
+}
+:root .app-shell[data-route='home'] .home-location-glow :is(span,svg) { color:var(--genie-body) !important; }
+:root .app-shell[data-route='home'] .ig-display,
+:root .app-shell[data-route='home'] .ig-display-short {
+  order:2; max-width:1150px !important; margin:26px auto 0 !important;
+  color:var(--genie-ink) !important; font-size:clamp(4rem,9vw,9.25rem) !important;
+  font-weight:500 !important; line-height:1.05 !important; letter-spacing:-.02em !important;
+  text-align:center !important;
+}
+:root .app-shell[data-route='home'] .ig-display em {
+  color:var(--genie-blue) !important; -webkit-text-fill-color:var(--genie-blue) !important;
+  font-weight:500 !important; font-style:normal;
+}
+:root .app-shell[data-route='home'] .ig-lede {
+  order:3; max-width:650px !important; margin:25px auto 0 !important;
+  color:var(--genie-body) !important; font-size:clamp(16px,1.5vw,18px) !important;
+  font-weight:500 !important; line-height:1.5 !important; text-align:center !important;
+}
+:root .app-shell[data-route='home'] .genie-hero-art {
+  order:4; width:min(560px,70vw); height:clamp(330px,45vw,510px); margin:12px auto 0;
+  display:flex; align-items:center; justify-content:center; position:relative;
+}
+:root .app-shell[data-route='home'] .genie-hero-art::before {
+  content:''; position:absolute; inset:14% 5% 9%; border:3px solid transparent; border-radius:90px;
+  background:linear-gradient(var(--genie-sky),var(--genie-sky)) padding-box,
+    linear-gradient(150deg,#479dff,#0069e0) border-box;
+  opacity:.65; transform:rotate(-7deg); pointer-events:none;
+}
+:root .app-shell[data-route='home'] .genie-hero-art img {
+  position:relative; z-index:1; height:100%; width:100%; object-fit:contain;
+  filter:drop-shadow(0 18px 28px rgba(37,88,151,.1)); animation:genie-float 6s ease-in-out infinite alternate;
+}
+@keyframes genie-float { to { transform:translateY(-13px) rotate(2deg); } }
+:root .app-shell[data-route='home'] .ig-actions { order:5; margin:15px auto 0 !important; justify-content:center !important; }
+:root .app-shell[data-route='home'] .ig-btn-solid {
+  min-height:52px; padding:12px 32px !important; border:1px solid var(--genie-ink) !important;
+  border-radius:9999px !important; background:var(--genie-charcoal) !important; color:#fff !important;
+  box-shadow:0 1px 2px rgba(10,13,18,.8),0 0 0 1px #0a0d12 !important; font-size:16px !important; font-weight:500 !important;
+}
+:root .app-shell[data-route='home'] .ig-btn-line {
+  min-height:52px; border:0 !important; border-radius:9999px !important;
+  background:transparent !important; color:var(--genie-ink) !important; box-shadow:none !important;
+  font-size:16px !important; font-weight:500 !important;
+}
+:root .app-shell[data-route='home'] .ig-facts,
+:root .app-shell[data-route='home'] .ig-board { display:none !important; }
+:root .app-shell[data-route='home'] .elastic-service-shell { order:6; margin-top:65px !important; }
+
+/* Section rhythm, typography, cards and pastel blocks on the home page. */
+:root .app-shell[data-route='home'] .home-screen > :is(section,div):not(.home-hero-layout) {
+  background:var(--genie-sky) !important;
+  color:var(--genie-ink) !important;
+}
+:root .app-shell[data-route='home'] .home-screen > :is(.ba-section,.ig-process,.c1-section,.home-contact-section,.ig-tools) { background:#f6f7f8 !important; }
+:root .app-shell[data-route='home'] .home-screen :is(h2,h3) { font-weight:500 !important; letter-spacing:-.02em !important; color:var(--genie-ink) !important; }
+:root .app-shell[data-route='home'] .home-screen :is(.ig-statement h2,.ig-process h2,.home-about-section h2,.heads h2,.c1-section h2,.home-faq-section h2) {
+  font-size:clamp(48px,5vw,72px) !important; line-height:1.11 !important;
+}
+:root .app-shell[data-route='home'] .home-screen :is(.home-about-shell,.ig-stage-detail,.advantage-media-stage,.advantage-gallery-center,.c1-svc-card,.faq-glass-card,.heads-profile,.home-promo-card) {
+  border:0 !important; border-radius:32px !important; background:var(--genie-paper) !important;
+  box-shadow:none !important; backdrop-filter:none !important;
+}
+:root .app-shell[data-route='home'] .home-screen :is(.ig-stage-step,.advantage-pill,.ig-tool-group) {
+  border:0 !important; border-radius:32px !important; background:var(--genie-paper) !important; box-shadow:none !important;
+}
+:root .app-shell[data-route='home'] .home-screen :is(.ig-stage-step,.c1-svc-card):nth-child(3n+1) { background:var(--genie-lavender) !important; }
+:root .app-shell[data-route='home'] .home-screen :is(.ig-stage-step,.c1-svc-card):nth-child(3n+2) { background:var(--genie-mint) !important; }
+:root .app-shell[data-route='home'] .home-screen :is(.ig-stage-step,.c1-svc-card):nth-child(3n) { background:var(--genie-powder) !important; }
+:root .app-shell[data-route='home'] .home-screen :is(.ig-btn,.c1-btn,.c1-svc-cta,.access-color-form button) { border-radius:9999px !important; }
+:root .app-shell[data-route='home'] .home-screen :is(.c1-btn,.c1-svc-cta) { background:var(--genie-charcoal) !important; color:#fff !important; border:0 !important; box-shadow:none !important; }
+:root .app-shell[data-route='home'] .home-screen :is(.faq-kicker,.faq-accent-title,.heads-eyebrow) { color:var(--genie-blue) !important; }
+:root .app-shell[data-route='home'] .faq-video-orbit {
+  width:min(68vw,280px) !important; aspect-ratio:1 !important;
+}
+:root .app-shell[data-route='home'] .faq-video-ring,
+:root .app-shell[data-route='home'] .faq-video-circle {
+  border:0 !important; border-radius:32px !important; box-shadow:none !important;
+  background:var(--genie-lavender) !important;
+}
+:root .app-shell[data-route='home'] .faq-video-circle {
+  inset:0 !important; background:var(--genie-lavender) url('/assets/genie-hero-objects.png') center/contain no-repeat !important;
+}
+:root .app-shell[data-route='home'] .faq-video-circle > :is(video,div) { display:none !important; }
+:root .app-shell[data-route='home'] .faq-video-badge {
+  background:var(--genie-charcoal) !important; border:0 !important; box-shadow:none !important;
+}
+:root .app-shell[data-route='home'] .faq-video-badge span { color:#fff !important; }
+
+/* Services: pale editorial intro, one floating illustration and paper rows. */
+:root .app-shell[data-route='services'] .services-page { max-width:1200px !important; padding-top:90px !important; }
+:root .app-shell[data-route='services'] .services-page h1 { font-size:clamp(64px,7vw,112px) !important; max-width:12ch; line-height:1.05 !important; }
+:root .app-shell[data-route='services'] .services-page > div:first-child h1 span { color:var(--genie-ink) !important; font-weight:500 !important; }
+:root .app-shell[data-route='services'] .services-page > div:first-child p { color:var(--genie-body) !important; font-size:18px !important; }
+:root .app-shell[data-route='services'] .services-liquid-pill,
+:root .app-shell[data-route='services'] .services-liquid-filter {
+  border:0 !important; border-radius:9999px !important; color:var(--genie-ink) !important;
+  background:var(--genie-paper) !important; box-shadow:none !important; backdrop-filter:none !important;
+}
+:root .app-shell[data-route='services'] .services-liquid-pill :is(svg,span) { color:var(--genie-blue) !important; }
+:root .app-shell[data-route='services'] .services-liquid-filter.is-active {
+  background:var(--genie-charcoal) !important; color:#fff !important; box-shadow:none !important;
+}
+:root .app-shell[data-route='services'] .services-showcase-shell {
+  min-height:480px; overflow:hidden !important; border:0 !important; border-radius:32px !important;
+  background:var(--genie-lavender) url('/assets/genie-hero-objects.png') center/auto 90% no-repeat !important;
+  box-shadow:none !important;
+}
+:root .app-shell[data-route='services'] .services-showcase-shell :is(img,video) { visibility:hidden !important; }
+:root .app-shell[data-route='services'] .services-showcase-card,
+:root .app-shell[data-route='services'] .services-showcase-video { min-height:450px; background:transparent !important; }
+:root .app-shell[data-route='services'] .services-liquid-row,
+:root .app-shell[data-route='services'] .services-liquid-row.is-active,
+:root .app-shell[data-route='services'] .services-liquid-phase {
+  border:0 !important; border-radius:32px !important; background:var(--genie-paper) !important;
+  box-shadow:none !important; backdrop-filter:none !important;
+}
+:root .app-shell[data-route='services'] .services-liquid-row.is-active { background:var(--genie-powder) !important; }
+:root .app-shell[data-route='services'] .services-liquid-row h2 { color:var(--genie-ink) !important; font-weight:500 !important; }
+:root .app-shell[data-route='services'] .services-liquid-panel p { color:var(--genie-body) !important; }
+:root .app-shell[data-route='services'] .services-liquid-tag,
+:root .app-shell[data-route='services'] .services-liquid-item { border:0 !important; border-radius:16px !important; background:#fff !important; box-shadow:none !important; }
+:root .app-shell[data-route='services'] .services-liquid-media { border:0 !important; border-radius:24px !important; box-shadow:none !important; }
+:root .app-shell[data-route='services'] .services-liquid-phase:nth-child(4n+1) { background:var(--genie-lavender) !important; }
+:root .app-shell[data-route='services'] .services-liquid-phase:nth-child(4n+2) { background:var(--genie-mint) !important; }
+:root .app-shell[data-route='services'] .services-liquid-phase:nth-child(4n+3) { background:var(--genie-powder) !important; }
+:root .app-shell[data-route='services'] .services-liquid-phase:nth-child(4n) { background:#fff2be !important; }
+:root .app-shell[data-route='services'] .services-liquid-phase :is(h3,p,span) { color:var(--genie-ink) !important; }
+
+/* Store: product-like service cards become calm category tiles. */
+:root .app-shell[data-route='workspace'] .store-page {
+  --s-bg:var(--genie-sky); --s-card:var(--genie-paper); --s-border:transparent;
+  --s-text:var(--genie-ink); --s-muted:var(--genie-body);
+  --s-accent:var(--genie-blue); --s-buy:var(--genie-charcoal); --s-ok:#197d52;
+  max-width:1200px !important;
+}
+:root .app-shell[data-route='workspace'] .store-head {
+  min-height:410px; align-items:center; padding:clamp(30px,5vw,72px) !important;
+  border:0 !important; border-radius:32px !important;
+  background:var(--genie-paper) url('/assets/genie-hero-objects.png') right 5% center/auto 87% no-repeat !important;
+  color:var(--genie-ink) !important; box-shadow:none !important;
+}
+:root .app-shell[data-route='workspace'] .store-head > div:first-child { max-width:54%; position:relative; z-index:1; }
+:root .app-shell[data-route='workspace'] .store-head h1 {
+  max-width:10ch; color:var(--genie-ink) !important; font-size:clamp(54px,5.8vw,88px) !important;
+  font-weight:500 !important; line-height:1.05 !important; letter-spacing:-.02em !important;
+}
+:root .app-shell[data-route='workspace'] .store-head p { color:var(--genie-body) !important; font-size:16px; }
+:root .app-shell[data-route='workspace'] .store-eyebrow { background:var(--genie-powder) !important; color:var(--genie-blue) !important; font-weight:500; }
+:root .app-shell[data-route='workspace'] .store-head-trust span { color:var(--genie-body) !important; }
+:root .app-shell[data-route='workspace'] .store-cart-chip {
+  border:0 !important; border-radius:9999px !important; background:var(--genie-charcoal) !important;
+  box-shadow:none !important; color:#fff !important;
+}
+:root .app-shell[data-route='workspace'] .store-cart-chip :is(strong,small,svg) { color:#fff !important; }
+:root .app-shell[data-route='workspace'] .store-filters { gap:10px; padding:22px 0; }
+:root .app-shell[data-route='workspace'] .store-filters button {
+  border:0 !important; border-radius:9999px !important; background:var(--genie-paper) !important;
+  color:var(--genie-ink) !important; box-shadow:none !important; font-weight:500 !important;
+}
+:root .app-shell[data-route='workspace'] .store-filters button.is-active { background:var(--genie-charcoal) !important; color:#fff !important; }
+:root .app-shell[data-route='workspace'] .store-grid { gap:20px !important; }
+:root .app-shell[data-route='workspace'] .store-card {
+  border:0 !important; border-radius:32px !important; background:var(--genie-paper) !important;
+  box-shadow:none !important; backdrop-filter:none !important; overflow:hidden;
+}
+:root .app-shell[data-route='workspace'] .store-card:hover { transform:translateY(-3px); box-shadow:none !important; }
+:root .app-shell[data-route='workspace'] .store-card.is-in-cart { outline:3px solid var(--genie-blue); outline-offset:-3px; }
+:root .app-shell[data-route='workspace'] .store-card-media,
+:root .app-shell[data-route='workspace'] .store-card:nth-child(n) .store-card-media {
+  min-height:180px; border:0 !important; background:var(--genie-lavender) !important;
+}
+:root .app-shell[data-route='workspace'] .store-card:nth-child(4n+2) .store-card-media { background:var(--genie-mint) !important; }
+:root .app-shell[data-route='workspace'] .store-card:nth-child(4n+3) .store-card-media { background:var(--genie-powder) !important; }
+:root .app-shell[data-route='workspace'] .store-card:nth-child(4n) .store-card-media { background:#fff2be !important; }
+:root .app-shell[data-route='workspace'] .store-card-icon {
+  width:72px; height:72px; color:var(--genie-blue) !important; border:0 !important;
+  border-radius:24px !important; background:rgba(255,255,255,.63) !important;
+  box-shadow:none !important; backdrop-filter:none !important;
+}
+:root .app-shell[data-route='workspace'] .store-card-group,
+:root .app-shell[data-route='workspace'] .store-card-view { color:var(--genie-body) !important; }
+:root .app-shell[data-route='workspace'] .store-card-body h2,
+:root .app-shell[data-route='workspace'] .store-card-price strong { color:var(--genie-ink) !important; font-weight:500 !important; }
+:root .app-shell[data-route='workspace'] .store-card-body p,
+:root .app-shell[data-route='workspace'] .store-card-includes li { color:var(--genie-body) !important; }
+:root .app-shell[data-route='workspace'] .store-card-badge { background:var(--genie-charcoal) !important; }
+:root .app-shell[data-route='workspace'] .store-btn { min-height:44px; border-radius:9999px !important; font-weight:500 !important; }
+:root .app-shell[data-route='workspace'] .store-btn.is-cart { background:#f6f7f8 !important; color:var(--genie-ink) !important; border:0 !important; }
+:root .app-shell[data-route='workspace'] .store-btn.is-buy,
+:root .app-shell[data-route='workspace'] .store-btn.is-cart.is-added { background:var(--genie-charcoal) !important; color:#fff !important; border:0 !important; }
+:root .app-shell[data-route='workspace'] .store-assurance > div,
+:root .app-shell[data-route='workspace'] .store-callout {
+  border:0 !important; border-radius:32px !important; background:var(--genie-paper) !important; box-shadow:none !important;
+}
+:root .app-shell[data-route='workspace'] .store-callout { background:var(--genie-powder) !important; }
+:root .app-shell[data-route='workspace'] .store-callout :is(h2,p,span) { color:var(--genie-ink) !important; }
+:root .app-shell[data-route='workspace'] .store-callout a { background:var(--genie-charcoal) !important; color:#fff !important; border-radius:9999px !important; }
+
+/* Launch Cloud: white editorial panels and pastel categories. */
+:root .app-shell[data-route='launch'] .launch-simple-page { max-width:1200px !important; gap:24px !important; color:var(--genie-ink) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-hero {
+  padding:clamp(32px,5vw,72px) !important; border:0 !important; border-radius:32px !important;
+  background:var(--genie-paper) !important; box-shadow:none !important;
+}
+:root .app-shell[data-route='launch'] .launch-simple-hero h1 { color:var(--genie-ink) !important; font-size:clamp(54px,5vw,82px) !important; font-weight:500 !important; }
+:root .app-shell[data-route='launch'] .launch-simple-hero > div > :is(span,p) { color:var(--genie-body) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-hero > div > span { color:var(--genie-blue) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-hero > aside {
+  border:0 !important; border-radius:32px !important; background:var(--genie-powder) !important; backdrop-filter:none !important;
+}
+:root .app-shell[data-route='launch'] .launch-simple-live { background:#fff !important; border:0 !important; border-radius:9999px !important; color:var(--genie-ink) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-hero aside :is(strong,p) { color:var(--genie-ink) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-hero aside > article { border-color:rgba(10,13,18,.11) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-hero aside > article > span { background:var(--genie-charcoal) !important; color:#fff !important; }
+:root .app-shell[data-route='launch'] .launch-simple-hero > div > button,
+:root .app-shell[data-route='launch'] .launch-simple-plans article > button,
+:root .app-shell[data-route='launch'] .launch-simple-cta button {
+  min-height:46px; border:0 !important; border-radius:9999px !important;
+  background:var(--genie-charcoal) !important; color:#fff !important; box-shadow:none !important; font-weight:500 !important;
+}
+:root .app-shell[data-route='launch'] .launch-simple-section,
+:root .app-shell[data-route='launch'] .launch-simple-included,
+:root .app-shell[data-route='launch'] .launch-simple-cta {
+  border:0 !important; border-radius:32px !important; background:var(--genie-paper) !important; box-shadow:none !important; backdrop-filter:none !important;
+}
+:root .app-shell[data-route='launch'] .launch-simple-heading > span,
+:root .app-shell[data-route='launch'] .launch-simple-included > div:first-child > span { color:var(--genie-blue) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-heading h2,
+:root .app-shell[data-route='launch'] .launch-simple-included h2,
+:root .app-shell[data-route='launch'] .launch-simple-cta h2 { color:var(--genie-ink) !important; font-weight:500 !important; }
+:root .app-shell[data-route='launch'] .launch-simple-heading > p { color:var(--genie-body) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-guide article,
+:root .app-shell[data-route='launch'] .launch-simple-plans article,
+:root .app-shell[data-route='launch'] .launch-simple-providers article {
+  border:0 !important; border-radius:32px !important; background:var(--genie-lavender) !important;
+}
+:root .app-shell[data-route='launch'] .launch-simple-guide article:nth-child(3n+2),
+:root .app-shell[data-route='launch'] .launch-simple-plans article:nth-child(3n+2) { background:var(--genie-mint) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-guide article:nth-child(3n),
+:root .app-shell[data-route='launch'] .launch-simple-plans article:nth-child(3n) { background:var(--genie-powder) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-plans article.is-selected { outline:3px solid var(--genie-blue); outline-offset:-3px; }
+:root .app-shell[data-route='launch'] .launch-simple-guide article :is(span,h3,p,svg),
+:root .app-shell[data-route='launch'] .launch-simple-plans article :is(span,h3,p,strong,small,li),
+:root .app-shell[data-route='launch'] .launch-simple-providers article :is(strong,p) { color:var(--genie-ink) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-plans article > button,
+:root .app-shell[data-route='launch'] .launch-simple-plans article.is-selected > button { color:#fff !important; background:var(--genie-charcoal) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-providers article:nth-child(4n+2) { background:var(--genie-mint) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-providers article:nth-child(4n+3) { background:var(--genie-powder) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-providers article:nth-child(4n) { background:#fff2be !important; }
+:root .app-shell[data-route='launch'] .launch-simple-included > div:last-child span { background:#f6f7f8 !important; color:var(--genie-body) !important; border-radius:16px !important; }
+:root .app-shell[data-route='launch'] .launch-simple-cta { background:var(--genie-lavender) !important; }
+:root .app-shell[data-route='launch'] .launch-simple-cta :is(span,h2) { color:var(--genie-ink) !important; }
+
+/* Portfolio: work remains visible, while the interface becomes daylight paper. */
+:root .app-shell[data-route='portfolio'] .portfolio-editorial-page {
+  --pe-ink:var(--genie-ink); --pe-mute:var(--genie-body); --pe-line:rgba(10,13,18,.12);
+  background:var(--genie-sky) !important; color:var(--genie-ink) !important;
+  font-family:'Inter',sans-serif !important;
+}
+:root .app-shell[data-route='portfolio'] .portfolio-editorial-page :is(h1,h2,h3,p,span,button,a) { font-family:'Inter',sans-serif !important; }
+:root .app-shell[data-route='portfolio'] .pe-title h1 { font-weight:500 !important; color:var(--genie-ink) !important; letter-spacing:-.02em !important; }
+:root .app-shell[data-route='portfolio'] .pe-title h1 :is(em,span) { color:var(--genie-blue) !important; }
+:root .app-shell[data-route='portfolio'] .pe-label,
+:root .app-shell[data-route='portfolio'] .pe-num { color:var(--genie-blue) !important; }
+:root .app-shell[data-route='portfolio'] .pe-para,
+:root .app-shell[data-route='portfolio'] .pe-note {
+  border:0 !important; border-radius:32px !important; background:var(--genie-paper) !important;
+  box-shadow:none !important; padding:clamp(30px,4vw,56px) !important;
+}
+:root .app-shell[data-route='portfolio'] .pe-note { background:var(--genie-lavender) !important; }
+:root .app-shell[data-route='portfolio'] .pe-section { border-color:rgba(10,13,18,.1) !important; }
+:root .app-shell[data-route='portfolio'] .pe-statement { font-weight:500 !important; color:var(--genie-ink) !important; }
+:root .app-shell[data-route='portfolio'] .pe-facts { background:var(--genie-paper) !important; border-radius:32px !important; }
+
+/* Project cart: paper steps and a calm sky header. */
+:root .app-shell[data-route='referenceCart'] .reference-cart-page {
+  max-width:1200px !important; background:transparent !important; border:0 !important;
+  box-shadow:none !important; padding:24px 0 90px !important;
+}
+:root .app-shell[data-route='referenceCart'] .cart-stepper-header {
+  border:0 !important; border-radius:32px !important; background:var(--genie-paper) !important;
+  box-shadow:none !important; padding:clamp(28px,4vw,54px) !important;
+}
+:root .app-shell[data-route='referenceCart'] .cart-stepper-header :is(h1,span,strong) { color:var(--genie-ink) !important; }
+:root .app-shell[data-route='referenceCart'] .cart-stepper-header h1 { font-size:clamp(42px,5vw,72px) !important; font-weight:500 !important; line-height:1.07 !important; }
+:root .app-shell[data-route='referenceCart'] .cart-stepper-header .bg-gradient-to-tr { background:var(--genie-powder) !important; color:var(--genie-blue) !important; box-shadow:none !important; }
+:root .app-shell[data-route='referenceCart'] .cart-stepper-header .bg-\[\#05070c\] { background:#f6f7f8 !important; border:0 !important; }
+:root .app-shell[data-route='referenceCart'] .cart-stepper-header > div:first-child > div:first-child {
+  background:var(--genie-powder) !important; border:0 !important; box-shadow:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .cart-stepper-header > div:last-child {
+  background:#f3f5f7 !important; border:0 !important; color:var(--genie-body) !important;
+  backdrop-filter:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .cart-stepper-header > div:last-child strong { color:var(--genie-ink) !important; }
+:root .app-shell[data-route='referenceCart'] .cart-stepper-card {
+  background:var(--genie-paper) !important; border:0 !important; box-shadow:none !important;
+  backdrop-filter:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .step-indicator-row,
+:root .app-shell[data-route='referenceCart'] .footer-container { background:var(--genie-paper) !important; border-color:#e6edf4 !important; }
+:root .app-shell[data-route='referenceCart'] .step-indicator-wrapper.is-active,
+:root .app-shell[data-route='referenceCart'] .next-button,
+:root .app-shell[data-route='referenceCart'] .next-button:hover {
+  background:var(--genie-charcoal) !important; border:0 !important; box-shadow:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .step-indicator-wrapper.is-active .step-indicator-inner { background:var(--genie-blue) !important; }
+:root .app-shell[data-route='referenceCart'] .reference-cart-panel,
+:root .app-shell[data-route='referenceCart'] .reference-empty-card,
+:root .app-shell[data-route='referenceCart'] .reference-service-chip,
+:root .app-shell[data-route='referenceCart'] .reference-appointment-card,
+:root .app-shell[data-route='referenceCart'] .workspace-call-types {
+  border:0 !important; border-radius:32px !important; background:var(--genie-paper) !important;
+  box-shadow:none !important; backdrop-filter:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .reference-cart-panel::before,
+:root .app-shell[data-route='referenceCart'] .reference-cart-panel::after { display:none !important; }
+:root .app-shell[data-route='referenceCart'] .reference-cart-page :is(.reference-submit-button,.reference-whatsapp-button,.step-action-btn) {
+  border-radius:9999px !important; background:var(--genie-charcoal) !important; color:#fff !important; box-shadow:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .reference-cart-page :is(p,small) { color:var(--genie-body) !important; }
+:root .app-shell[data-route='referenceCart'] .reference-schedule-picker {
+  color:var(--genie-ink) !important; background:var(--genie-powder) !important;
+  border:0 !important; border-radius:32px !important; box-shadow:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .workspace-call-types { background:transparent !important; }
+:root .app-shell[data-route='referenceCart'] .workspace-call-types button,
+:root .app-shell[data-route='referenceCart'] .workspace-call-types button.is-selected {
+  color:var(--genie-ink) !important; background:var(--genie-paper) !important;
+  border:0 !important; border-radius:9999px !important; box-shadow:none !important;
+  backdrop-filter:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .workspace-call-types button.is-selected {
+  background:var(--genie-charcoal) !important; color:#fff !important;
+}
+:root .app-shell[data-route='referenceCart'] .workspace-call-types button :is(strong,small) {
+  color:var(--genie-ink) !important; font-weight:500 !important;
+}
+:root .app-shell[data-route='referenceCart'] .workspace-call-types button.is-selected :is(strong,small,svg) { color:#fff !important; }
+:root .app-shell[data-route='referenceCart'] .glass-booking-date,
+:root .app-shell[data-route='referenceCart'] .glass-booking-times {
+  background:var(--genie-paper) !important; border:0 !important; border-radius:28px !important;
+  box-shadow:none !important; backdrop-filter:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .workspace-date-label span,
+:root .app-shell[data-route='referenceCart'] .glass-booking-calendar-head strong { color:var(--genie-ink) !important; font-weight:500 !important; }
+:root .app-shell[data-route='referenceCart'] .workspace-date-label small,
+:root .app-shell[data-route='referenceCart'] .glass-calendar-weekday { color:var(--genie-fog) !important; }
+:root .app-shell[data-route='referenceCart'] .glass-booking-calendar-head button {
+  color:var(--genie-ink) !important; border:0 !important; background:#f1f5f9 !important;
+}
+:root .app-shell[data-route='referenceCart'] .glass-booking-calendar-grid button {
+  color:var(--genie-ink) !important; background:#f1f5f9 !important; border:0 !important;
+  border-radius:15px !important; font-weight:500 !important;
+}
+:root .app-shell[data-route='referenceCart'] .glass-booking-calendar-grid button:disabled { color:var(--genie-fog) !important; opacity:.55; }
+:root .app-shell[data-route='referenceCart'] .glass-booking-calendar-grid button:not(:disabled):hover { background:var(--genie-lavender) !important; }
+:root .app-shell[data-route='referenceCart'] .glass-booking-calendar-grid button.is-selected,
+:root .app-shell[data-route='referenceCart'] .glass-booking-calendar-grid button.is-selected:hover {
+  color:#fff !important; background:var(--genie-blue) !important; box-shadow:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .glass-booking-calendar p,
+:root .app-shell[data-route='referenceCart'] .glass-booking-calendar p b,
+:root .app-shell[data-route='referenceCart'] .glass-booking-note { color:var(--genie-body) !important; }
+:root .app-shell[data-route='referenceCart'] .workspace-time-grid button {
+  color:var(--genie-ink) !important; background:#f1f5f9 !important; border:0 !important;
+  box-shadow:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .workspace-time-grid button.is-selected {
+  color:#fff !important; background:var(--genie-charcoal) !important; border:0 !important;
+  box-shadow:none !important;
+}
+:root .app-shell[data-route='referenceCart'] .workspace-time-grid button :is(strong,span) { color:var(--genie-ink) !important; font-weight:500 !important; }
+:root .app-shell[data-route='referenceCart'] .workspace-time-grid button.is-selected :is(strong,span) { color:#fff !important; }
+:root .app-shell[data-route='referenceCart'] .reference-appointment-card { background:var(--genie-lavender) !important; border:0 !important; }
+
+/* Wide CTA followed by a four-column link grid. */
+:root .app-shell[data-route] .genie-footer {
+  position:relative; z-index:2; width:min(1200px,calc(100% - 48px));
+  margin:96px auto 100px; color:var(--genie-ink); font-family:'Inter',sans-serif;
+}
+:root .app-shell[data-route] .genie-footer-cta {
+  position:relative; min-height:460px; padding:clamp(34px,5vw,72px);
+  overflow:hidden; border-radius:32px; background:var(--genie-paper);
+  display:flex; flex-direction:column; align-items:flex-start; justify-content:center;
+}
+:root .app-shell[data-route] .genie-footer-cta > span {
+  color:var(--genie-blue); font-size:14px; font-weight:500;
+}
+:root .app-shell[data-route] .genie-footer-cta h2 {
+  position:relative; z-index:2; margin:20px 0 30px;
+  color:var(--genie-ink) !important; font-size:clamp(48px,6vw,84px); font-weight:500 !important;
+  line-height:1.08; letter-spacing:-.02em !important;
+}
+:root .app-shell[data-route] .genie-footer-cta h2 em { color:var(--genie-blue); font-style:normal; }
+:root .app-shell[data-route] .genie-footer-cta .genie-button { position:relative; z-index:2; }
+:root .app-shell[data-route] .genie-footer-cta img {
+  position:absolute; right:2%; bottom:-12%; width:min(42%,420px); height:auto; transform:rotate(10deg);
+}
+:root .app-shell[data-route] .genie-footer-grid {
+  display:grid; grid-template-columns:2fr repeat(3,1fr); gap:42px;
+  padding:64px 8px 56px; border-bottom:1px solid rgba(10,13,18,.13);
+}
+:root .app-shell[data-route] .genie-footer-grid > div { display:flex; flex-direction:column; align-items:flex-start; gap:14px; }
+:root .app-shell[data-route] .genie-footer-grid strong { margin-bottom:6px; color:var(--genie-ink) !important; font-size:16px; font-weight:500; }
+:root .app-shell[data-route] .genie-footer-brand strong { font-size:22px; letter-spacing:-.03em; }
+:root .app-shell[data-route] .genie-footer-brand p { max-width:240px; font-size:14px; line-height:1.5; color:var(--genie-body) !important; }
+:root .app-shell[data-route] .genie-footer-grid a { color:var(--genie-body) !important; font-size:14px; text-decoration:none; }
+:root .app-shell[data-route] .genie-footer-grid a:hover { color:var(--genie-blue) !important; }
+:root .app-shell[data-route] .genie-footer-bottom { display:flex; justify-content:space-between; gap:20px; padding:25px 8px 0; color:var(--genie-fog); font-size:12px; }
+
+/* Smaller navigation objects should stay quiet next to the light canvas. */
+:root .app-shell[data-route] .leaf-dock {
+  border:0 !important; border-radius:9999px !important; background:var(--genie-paper) !important;
+  box-shadow:0 14px 20px 4px rgba(4,69,144,.08) !important;
+}
+:root .app-shell[data-route] .leaf-dock-item,
+:root .app-shell[data-route] .leaf-dock-item.is-active { border-radius:9999px !important; background:transparent !important; color:var(--genie-ink) !important; box-shadow:none !important; }
+:root .app-shell[data-route] .leaf-dock-item.is-active { outline:2px solid var(--genie-blue); outline-offset:-2px; color:var(--genie-blue) !important; }
+:root .app-shell[data-route] .unified-floating-action.is-cart,
+:root .app-shell[data-route] .unified-floating-action.is-whatsapp {
+  border:0 !important; background:var(--genie-charcoal) !important; color:#fff !important;
+  box-shadow:0 1px 2px rgba(10,13,18,.8),0 0 0 1px var(--genie-ink) !important;
+}
+
+@media(max-width:900px) {
+  :root .app-shell[data-route] > nav { grid-template-columns:1fr auto; width:calc(100% - 36px) !important; gap:12px; }
+  :root .app-shell[data-route] .genie-nav-links { display:none; }
+  :root .app-shell[data-route='workspace'] .store-head { background-size:auto 66% !important; background-position:right -55px center !important; }
+  :root .app-shell[data-route='workspace'] .store-head > div:first-child { max-width:63%; }
+  :root .app-shell[data-route] .genie-footer-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:640px) {
+  :root .app-shell[data-route] > nav { position:relative !important; min-height:66px; padding:8px 0 !important; }
+  :root .app-shell[data-route] > nav .text-gray-900 { display:block !important; font-size:16px !important; }
+  :root .app-shell[data-route] > nav .logo-3d-box-container { width:42px; height:42px; }
+  :root .app-shell[data-route] > nav .logo-3d-box { width:39px; height:39px; }
+  :root .app-shell[data-route] > nav .header-status-action { min-height:38px; padding:8px 13px !important; font-size:10px !important; }
+  :root .app-shell[data-route='home'] .home-screen > .home-hero-layout { padding:50px 18px 80px !important; }
+  :root .app-shell[data-route='home'] .ig-display,
+  :root .app-shell[data-route='home'] .ig-display-short { font-size:clamp(44px,11.5vw,72px) !important; max-width:100% !important; }
+  :root .app-shell[data-route='home'] .ig-display br { display:none; }
+  :root .app-shell[data-route='home'] .genie-hero-art { width:min(95vw,450px); height:350px; }
+  :root .app-shell[data-route='home'] .genie-hero-art::before { border-radius:65px; }
+  :root .app-shell[data-route='home'] .elastic-service-shell { margin-top:45px !important; }
+  :root .app-shell[data-route='workspace'] .store-head { min-height:0; padding:32px !important; background-image:none !important; }
+  :root .app-shell[data-route='workspace'] .store-head > div:first-child { max-width:100%; }
+  :root .app-shell[data-route='services'] .services-page { padding-top:55px !important; }
+  :root .app-shell[data-route='services'] .services-page h1 { font-size:clamp(48px,11vw,72px) !important; }
+  :root .app-shell[data-route='services'] .services-showcase-shell { min-height:330px; background-size:auto 83% !important; }
+  :root .app-shell[data-route='services'] .services-showcase-card,
+  :root .app-shell[data-route='services'] .services-showcase-video { min-height:310px; }
+  :root .app-shell[data-route='launch'] .launch-simple-hero h1 { font-size:clamp(46px,10vw,68px) !important; }
+  :root .app-shell[data-route] .genie-footer { width:calc(100% - 24px); margin:64px auto 105px; }
+  :root .app-shell[data-route] .genie-footer-cta { min-height:430px; padding:32px; justify-content:flex-start; }
+  :root .app-shell[data-route] .genie-footer-cta h2 { font-size:clamp(40px,10vw,56px); margin:20px 0; }
+  :root .app-shell[data-route] .genie-footer-cta img { width:220px; right:-30px; bottom:-30px; }
+  :root .app-shell[data-route] .genie-footer-grid { grid-template-columns:repeat(2,1fr); gap:30px 20px; padding:45px 8px; }
+  :root .app-shell[data-route] .genie-footer-brand { grid-column:1/-1; }
+  :root .app-shell[data-route] .genie-footer-bottom { flex-direction:column; }
+}
+@media(prefers-reduced-motion:reduce) {
+  :root .app-shell[data-route='home'] .genie-hero-art img { animation:none; }
+}

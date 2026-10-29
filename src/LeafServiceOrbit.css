@@ -1,0 +1,23 @@
+.leaf-service-orbit { position:relative; overflow:hidden; padding:115px 24px 88px; background:#080b10; border-block:1px solid #22262d; color:#f5f7fb; }
+.leaf-service-orbit-heading { position:relative; z-index:2; max-width:900px; margin:0 auto; text-align:center; }
+.leaf-service-orbit-heading .dt-eyebrow { color:#a7a7a7; }
+:root .app-shell[data-route] .dt-home .leaf-service-orbit-heading h2 { margin:30px auto 22px; color:#f5f7fb !important; font:600 clamp(44px,6.4vw,86px)/1.05 var(--dt-font) !important; letter-spacing:-.052em !important; }
+.leaf-service-orbit-heading h2 em { font-family:Georgia,serif; font-weight:400; font-style:normal; letter-spacing:-.055em; }
+.leaf-orbit-inline { display:inline-grid; place-items:center; width:.82em; height:.82em; margin:0 .06em; vertical-align:-.08em; border:1px solid #414b5c; border-radius:22%; background:linear-gradient(150deg,#f5f8ff,#777f8e 45%,#c9d3e2 60%,#525b69); color:#111923; transform:rotate(-9deg); }
+.leaf-orbit-inline svg { width:52%; height:52%; }
+:root .app-shell[data-route] .dt-home .leaf-service-orbit-heading > p { max-width:660px; margin:0 auto; color:#c4c7cd !important; font-size:18px; line-height:1.55; }
+.leaf-orbit-actions { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin-top:28px; }
+.leaf-orbit-stage { position:relative; width:min(1050px,100%); height:490px; margin:62px auto 0; }
+.leaf-orbit-lines { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+.leaf-orbit-ring { fill:none; stroke:#49515c; stroke-width:1; stroke-dasharray:3 5; opacity:.7; }
+.leaf-orbit-dot { fill:#355dff; }.leaf-orbit-dot.is-dim { opacity:.5; }
+/* The studio mark is layered with an offset metallic edge to give the real logo depth. */
+.leaf-orbit-core { position:absolute; z-index:1; top:34%; left:50%; width:160px; height:160px; transform:translateX(-50%) perspective(600px) rotateY(-12deg) rotateX(7deg); filter:drop-shadow(0 0 35px #2048db80); animation:leaf-logo-float 5s ease-in-out infinite; }
+.leaf-orbit-core img { display:block; width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 10px 14px rgba(0,0,0,.5)); }
+@keyframes leaf-logo-float { 50% { transform:translateX(-50%) translateY(-8px) perspective(600px) rotateY(8deg) rotateX(4deg); } }
+@media (prefers-reduced-motion:reduce) { .leaf-orbit-core { animation:none; } }
+.leaf-orbit-label { position:absolute; left:var(--label-x); top:var(--label-y); z-index:3; display:inline-flex; align-items:center; gap:8px; max-width:170px; padding:8px 10px; transform:translate(-50%,-50%); border:1px solid #454950; border-radius:6px; background:#1a1d23; color:#e6e8ed; font:10px/1.2 var(--dt-mono); text-transform:uppercase; letter-spacing:.04em; cursor:pointer; white-space:nowrap; transition:background .2s,border-color .2s,color .2s; }
+.leaf-orbit-label svg { color:#8c9bb7; flex:none; }.leaf-orbit-label:hover,.leaf-orbit-label.is-selected { border-color:#6798ff; background:#202b40; color:#fff; }.leaf-orbit-label.is-selected svg { transform:rotate(45deg); }
+.leaf-orbit-detail { display:flex; justify-content:center; align-items:center; gap:40px; min-height:120px; width:min(670px,100%); margin:0 auto; text-align:left; }.leaf-orbit-detail>p { color:#8e939d; font:11px var(--dt-mono); letter-spacing:.04em; text-align:center; }.leaf-orbit-detail>p span { color:#6798ff; }.leaf-orbit-detail>div { flex:1; }.leaf-orbit-detail h3 { margin:8px 0; font:500 22px var(--dt-font); color:#fff; }.leaf-orbit-detail>div p { margin:0; color:#a7a7a7; font-size:14px; line-height:1.5; }
+@media(max-width:700px) { .leaf-service-orbit { padding:80px 14px 64px; }.leaf-service-orbit-heading h2 { font-size:clamp(38px,9.5vw,58px) !important; }.leaf-service-orbit-heading > p { font-size:15px !important; }.leaf-orbit-stage { height:350px; margin-top:38px; }.leaf-orbit-lines { inset:12% -30%; width:160%; height:76%; }.leaf-orbit-core { top:34%; width:105px; height:105px; }.leaf-orbit-label { padding:7px 6px; font-size:8px; gap:3px; }.leaf-orbit-label svg { width:10px; }.leaf-orbit-detail { flex-direction:column; align-items:center; gap:16px; min-height:115px; text-align:center; }.leaf-orbit-detail>div p { max-width:320px; } }
+@media(prefers-reduced-motion:reduce) { .leaf-orbit-dot { display:none; }.leaf-orbit-label { transition:none; } }

@@ -10,26 +10,22 @@ import './DarkMode.css';
 // Last import wins the cascade — this strips backdrop blur and ambient
 // animation on phones, where they are the main cause of scroll jank.
 import './MobilePerf.css';
-// Home page editorial system — must follow MobilePerf so its flat paper
-// surfaces win over the shared glass treatments.
+// Home page editorial foundation, followed by the new glass direction below.
 import './HomeIgnite.css';
-/* After HomeIgnite on purpose: the Slush system restyles the same home page
-   and wins ties by coming later. */
+/* Retained for lower home sections; GlassRefresh restyles its visual system. */
 import './HomeSlush.css';
-import { useSectionReveals } from './HomeReveals';
-import SplitFlapText from './SplitFlapText';
-import ProfileCard from './ProfileCard';
 import Stepper, { Step } from './Stepper';
-import BeforeAfterVideo from './BeforeAfterVideo';
 import LeafMark from './LeafMark';
-import ServiceIllustration from './ServiceIllustration';
-import HeroStickers, { HeroRibbon } from './HeroStickers';
 import LoadingScreen from './LoadingScreen';
 import EnquiryTicket from './EnquiryTicket';
-import InfiniteSpiral from './InfiniteSpiral';
 import Masonry from './Masonry';
 import SiteShowcase from './SiteShowcase';
 import './PortfolioEditorial.css';
+import './GlassRefresh.css';
+import DovetailHome from './DovetailHome';
+import DovetailServices from './DovetailServices';
+import './DovetailTheme.css';
+import LetterGlitch from './LetterGlitch';
 import { 
   Mail, 
   Home, 
@@ -59,6 +55,8 @@ import {
   MapPin,
   Send,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Volume2,
   VolumeX,
@@ -69,9 +67,7 @@ import {
   Database,
   Film,
   Activity,
-  Plus,
-  Sun,
-  Moon
+  Plus
 } from 'lucide-react';
 
 // Custom Icon Component using the company logo
@@ -86,130 +82,27 @@ const WhatsAppIcon = ({ size = 24, className = "" }) => (
   </svg>
 );
 
-const ThemeSwitch = ({ theme, onToggle, iconSize = 16 }) => {
-  const isDark = theme === 'dark';
-
-  return (
-    <button
-      type="button"
-      className="header-theme-switch"
-      onClick={onToggle}
-      aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-      aria-pressed={isDark}
-      title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-    >
-      <Sun size={iconSize} className={`theme-switch-sun ${isDark ? '' : 'is-active'}`} />
-      <Moon size={iconSize} className={`theme-switch-moon ${isDark ? 'is-active' : ''}`} />
-    </button>
-  );
-};
-
-const DockNavigation = ({ items, activeId, onNavigate }) => {
-  const dockRef = useRef(null);
-  const animationFrameRef = useRef(null);
-  const baseSize = 48;
-  const distance = 92;
-  const magnification = 1.58;
-
-  const animateDock = () => {
-    const dock = dockRef.current;
-    if (!dock) {
-      animationFrameRef.current = null;
-      return;
-    }
-
-    let isMoving = false;
-    dock.querySelectorAll('[data-dock-wrap]').forEach((wrapper) => {
-      const current = Number(wrapper.dataset.currentSize || baseSize);
-      const target = Number(wrapper.dataset.targetSize || baseSize);
-      const next = current + (target - current) * 0.18;
-      const settled = Math.abs(target - next) < 0.08;
-      const size = settled ? target : next;
-
-      wrapper.dataset.currentSize = String(size);
-      wrapper.style.width = `${size}px`;
-      const button = wrapper.querySelector('[data-dock-item]');
-      if (button) button.style.setProperty('--dock-size', `${size}px`);
-      if (!settled) isMoving = true;
-    });
-
-    animationFrameRef.current = isMoving ? requestAnimationFrame(animateDock) : null;
-  };
-
-  const startDockAnimation = () => {
-    if (animationFrameRef.current === null) {
-      animationFrameRef.current = requestAnimationFrame(animateDock);
-    }
-  };
-
-  const setDockTargets = (getSize) => {
-    const dock = dockRef.current;
-    if (!dock) return;
-    dock.querySelectorAll('[data-dock-wrap]').forEach((wrapper, index) => {
-      wrapper.dataset.targetSize = String(getSize(wrapper, index));
-    });
-    startDockAnimation();
-  };
-
-  const resetDock = () => {
-    setDockTargets(() => baseSize);
-  };
-
-  const handlePointerMove = (event) => {
-    if (event.pointerType === 'touch') return;
-    const dock = dockRef.current;
-    if (!dock) return;
-
-    setDockTargets((wrapper) => {
-      const rect = wrapper.getBoundingClientRect();
-      const center = rect.left + rect.width / 2;
-      const delta = Math.abs(event.clientX - center);
-      const gaussian = (magnification - 1) * Math.exp(-(delta * delta) / (2 * distance * distance)) + 1;
-      return Math.min(baseSize * magnification, baseSize * gaussian);
-    });
-  };
-
-  useEffect(() => {
-    resetDock();
-    return () => {
-      if (animationFrameRef.current !== null) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-    };
-  }, []);
-
-  return (
-    <div
-      ref={dockRef}
-      className="leaf-dock"
-      role="navigation"
-      aria-label="Primary navigation"
-      onPointerMove={handlePointerMove}
-      onPointerLeave={resetDock}
-    >
-      {items.map((item) => {
-        const IconComponent = item.icon;
-        const isActive = activeId === item.id;
-        return (
-          <div className="leaf-dock-item-wrap" data-dock-wrap key={item.id}>
-            <button
-              type="button"
-              data-dock-item
-              className={`leaf-dock-item ${isActive ? 'is-active' : ''}`}
-              aria-label={item.label}
-              aria-current={isActive ? 'page' : undefined}
-              onClick={() => onNavigate(item.id)}
-            >
-              <IconComponent />
-              {item.hasNotification && <i className="leaf-dock-notification"></i>}
-            </button>
-            <span className="leaf-dock-tooltip" aria-hidden="true">{item.label}</span>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+const DockNavigation = ({ items, activeId, onNavigate }) => (
+  <nav className="leaf-dock" aria-label="Bottom navigation">
+    {items.map((item) => {
+      const Icon = item.icon;
+      const active = activeId === item.id;
+      return (
+        <button
+          key={item.id}
+          type="button"
+          className={`leaf-dock-item ${active ? 'is-active' : ''}`}
+          aria-label={item.label}
+          aria-current={active ? 'page' : undefined}
+          onClick={() => onNavigate(item.id)}
+        >
+          <Icon aria-hidden="true" />
+          <span className="leaf-dock-label">{item.label}</span>
+        </button>
+      );
+    })}
+  </nav>
+);
 
 const ElasticServiceStack = ({
   items,
@@ -412,13 +305,6 @@ const pageSeo = {
 
 const App = () => {
   const [activeNav, setActiveNav] = useState(getNavFromPath);
-  const [theme, setTheme] = useState(() => {
-    if (typeof window === 'undefined') return 'light';
-    const savedTheme = window.localStorage.getItem('leaf-theme');
-    if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  });
-  const [activeAd, setActiveAd] = useState(0);
   const [completedSteps, setCompletedSteps] = useState([]);
   /* Which boxes were left empty on the last submit, and the ticket the enquiry
      came back with. */
@@ -438,6 +324,7 @@ const App = () => {
   const [selectedLaunchPlan, setSelectedLaunchPlan] = useState(1);
   const [selectedAppointmentDay, setSelectedAppointmentDay] = useState(1);
   const [selectedAppointmentTime, setSelectedAppointmentTime] = useState('11:30 AM');
+  const [bookingMonthOffset, setBookingMonthOffset] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [likedPortfolioItems, setLikedPortfolioItems] = useState([]);
   const [sharedPortfolioItem, setSharedPortfolioItem] = useState('');
@@ -511,7 +398,6 @@ const App = () => {
   ];
 
   const localLeafLogoWhite = "/assets/brand/leaf-creationism-logo-white.png";
-  const localAdVideo = "/assets/media/leaf-ad-carousel.mp4";
   const localFaqVideo = "/assets/media/faq-vantadrop.mp4";
   const localServicesHeroVideo = "/assets/media/services-hero-showcase.mp4";
   const studioHeads = [
@@ -559,55 +445,6 @@ const App = () => {
     return () => observer.disconnect();
   }, [activeNav, headsVisible]);
 
-  const promoBanners = [
-    { 
-      id: 1, 
-      tag: "Limited Time",
-      title: "Flat 20% Off UI/UX", 
-      desc: "Elevate your digital presence today.",
-      bgColor: "#2050E3",
-      theme: "dark",
-      img: "/assets/ads/uiux-offer.jpg",
-      position: "55% 58%"
-    },
-    { 
-      id: 2, 
-      tag: "New Launch",
-      title: "Next-Gen AI Ads", 
-      desc: "Smart campaigns that convert.",
-      bgColor: "#F4EFE6",
-      theme: "light",
-      video: localAdVideo
-    },
-    { 
-      id: 3, 
-      tag: "Award Winning",
-      title: "Best UI/UX Design", 
-      desc: "Recognized for premium digital experiences.",
-      bgColor: "#18181b",
-      theme: "dark",
-      img: "/assets/ads/best-uiux-design.webp",
-      position: "50% 55%"
-    },
-    { 
-      id: 4, 
-      tag: "Exclusive",
-      title: "Brand Identity Lift", 
-      desc: "Redefine your market presence.",
-      bgColor: "#f59e0b", 
-      theme: "dark",
-      img: "/assets/ads/brand-identity-lift.jpg?v=strategy-v2",
-      position: "38% 50%"
-    }
-  ];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveAd((prev) => (prev + 1) % promoBanners.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
-
   useEffect(() => {
     const timer = window.setInterval(() => {
       setFloatingActionMode((mode) => mode === 'whatsapp' ? 'cart' : 'whatsapp');
@@ -618,10 +455,10 @@ const App = () => {
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
-    document.documentElement.dataset.theme = theme;
-    document.documentElement.style.colorScheme = theme;
-    window.localStorage.setItem('leaf-theme', theme);
-  }, [theme]);
+    document.documentElement.dataset.theme = 'dark';
+    document.documentElement.style.colorScheme = 'dark';
+    window.localStorage.setItem('leaf-theme', 'dark');
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -807,7 +644,6 @@ const App = () => {
   // Entrance animations for the home page sections. This call previously sat
   // inside the account block and was removed with it, leaving the hook
   // imported but never invoked — so nothing ever received .ig-reveal.
-  useSectionReveals(activeNav === 'home');
 
   /* The five delivery stages. Shared by the wheel, which selects one, and the
      panel, which shows it in full — the wheel fades and blurs everything it is
@@ -1308,6 +1144,7 @@ const App = () => {
     day.setDate(day.getDate() + idx + 1);
     return {
       id: idx,
+      dateObj: day,
       label: day.toLocaleDateString('en-IN', { weekday: 'short', timeZone: 'Asia/Kolkata' }),
       date: day.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', timeZone: 'Asia/Kolkata' }),
       full: day.toLocaleDateString('en-IN', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })
@@ -1321,6 +1158,17 @@ const App = () => {
     { time: '07:30 PM', label: 'Founder window', note: 'Best for urgent decisions' }
   ];
   const selectedAppointment = appointmentDays.find((day) => day.id === selectedAppointmentDay) || appointmentDays[0];
+  const bookingMonth = new Date(currentTime.getFullYear(), currentTime.getMonth() + bookingMonthOffset, 1);
+  const bookingCalendarStart = new Date(bookingMonth);
+  bookingCalendarStart.setDate(1 - ((bookingMonth.getDay() + 6) % 7));
+  const bookingCalendarDays = Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(bookingCalendarStart);
+    date.setDate(bookingCalendarStart.getDate() + index);
+    const appointment = appointmentDays.find((day) => day.dateObj.toDateString() === date.toDateString());
+    return { date, appointment, inMonth: date.getMonth() === bookingMonth.getMonth() };
+  });
+  const maxBookingMonthOffset = (appointmentDays[6].dateObj.getFullYear() - currentTime.getFullYear()) * 12
+    + appointmentDays[6].dateObj.getMonth() - currentTime.getMonth();
   const selectedSlot = appointmentSlots.find((slot) => slot.time === selectedAppointmentTime) || appointmentSlots[0];
   const appointmentMessage = `Hi Leaf Creationism, I want to book a ${selectedSchedule.title} on ${selectedAppointment.full} at ${selectedSlot.time} IST.`;
   const appointmentMailHref = `mailto:leafcreationism@gmail.com?subject=${encodeURIComponent(`Appointment request: ${selectedSchedule.title}`)}&body=${encodeURIComponent(`${appointmentMessage}\n\nSession length: ${selectedSchedule.time}\nFocus: ${selectedSlot.note}`)}`;
@@ -2523,96 +2371,14 @@ const App = () => {
   ].join('\n');
   const referenceMailHref = `mailto:leafcreationism@gmail.com?subject=${encodeURIComponent('Portfolio reference enquiry')}&body=${encodeURIComponent(referenceMessage)}`;
   const referenceWhatsAppHref = `https://wa.me/918589038479?text=${encodeURIComponent(referenceMessage)}`;
-  const leafAdvantageMedia = [
-    ['upcreate-strategy-poster.jpg', 'Strategy and campaign design'],
-    ['podlight-interface-system.jpg', 'Digital product interface'],
-    ['follicle-product-campaign.jpg', 'Product campaign direction'],
-    ['frodir-mobile-dashboard.webp', 'Mobile product experience'],
-    ['noble-energy-identity-system.jpg', 'Brand identity system'],
-    ['green-bird-mark-system.webp', 'Logo and mark design'],
-    ['superchat-campaign.jpg', 'AI advertising campaign'],
-    ['denim-product-campaign.jpg', 'Fashion campaign design'],
-    ['ludic-comfort-campaign.jpg', 'Product advertising'],
-    ['navo-identity-cover.jpg', 'Technology brand identity'],
-    ['navo-smart-home.jpg', 'Product visualisation'],
-    ['gaming-controller-campaign.webp', 'Product photography'],
-    ['christmas-fashion-campaign.jpg', 'Fashion art direction'],
-    ['nurtura-mobile-app.jpg', 'Healthcare mobile experience']
-  ].map(([file, label]) => ({
-    type: 'image',
-    src: `/assets/portfolio/new-work/${file}`,
-    label
-  }));
-  /* Both the advantage cylinder and the portfolio dome render these images at
-     roughly 250px wide, so they load the 640px thumbnails instead of the
-     multi-megabyte originals. */
-  /* Same reason as masonryItems: a new array each render restarted the
-     spiral's observers and animation loop every few seconds. */
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const advantageSpiralImages = useMemo(
-    () => leafAdvantageMedia.slice(0, 10).map((item) => ({ src: toThumb(item.src), alt: item.label })),
-    []
-  );
-
   /* The studio sign-off. Defined once and rendered at the end of more than one
      route, so the pages visitors actually land on all close the same way
      instead of stopping dead after their last section. */
   const studioFooter = (
-    <section className="home-status-marquee-section relative left-1/2 w-screen -translate-x-1/2 z-10" aria-label="Leaf Creationism live project status">
-      <div className="status-footer-shell">
-        <div className="status-footer-glow status-footer-glow-one" aria-hidden="true" />
-        <div className="status-footer-glow status-footer-glow-two" aria-hidden="true" />
-
-        <div className="status-footer-topline">
-          <span>Leaf Creationism / studio signal</span>
-          <span className={`status-footer-live ${isStudioOnline ? 'is-live' : 'is-offline'}`}>
-            <i aria-hidden="true" />
-            {isStudioOnline ? 'Available for new projects' : 'Brief queue open'}
-          </span>
-        </div>
-
-        <div className="status-footer-hero">
-          <div>
-            <p>One focused creative team.</p>
-            <h2>Ideas in.<br /><span>Impact out.</span></h2>
-          </div>
-          <a className="status-footer-cta" href="mailto:leafcreationism@gmail.com">
-            <span>Start a project</span>
-            <b><ArrowUpRight size={21} /></b>
-          </a>
-        </div>
-
-        <div className="status-footer-metrics" aria-label="Studio performance">
-          <article>
-            <span>01 / Launches</span>
-            <strong>124</strong>
-            <p>Products launched</p>
-          </article>
-          <article>
-            <span>02 / Network</span>
-            <strong>86</strong>
-            <p>Global partners</p>
-          </article>
-          <article>
-            <span>03 / Trust</span>
-            <strong>98%</strong>
-            <p>Client retention</p>
-          </article>
-          <article>
-            <span>04 / Experience</span>
-            <strong>{studioActiveYears}Y</strong>
-            <p>{studioActiveExtraDays} days beyond</p>
-          </article>
-        </div>
-
-        <div className="status-footer-contact-rail">
-          <span>© {currentTime.getFullYear()} Leaf Creationism</span>
-          <a href="mailto:leafcreationism@gmail.com">leafcreationism@gmail.com</a>
-          <a href="tel:+918589038479">+91 85890 38479</a>
-          <span>{indiaTimeLabel} IST</span>
-        </div>
-      </div>
-    </section>
+    <footer className="dt-footer" aria-label="Leaf Creationism footer">
+      <div className="dt-footer-grid dt-container"><div className="dt-footer-brand"><strong>Leaf Creationism</strong><p>An independent creative studio in Kerala, India. Strategy, design and technology under one roof.</p></div><div><strong>EXPLORE</strong><a href="/">Home</a><a href="/services">Services</a><a href="/portfolio">Our work</a></div><div><strong>PLAN</strong><a href="/workspace">Service store</a><a href="/launch-cloud">Launch Cloud</a><a href="/cart">Project cart</a></div><div><strong>SAY HELLO</strong><a href="mailto:leafcreationism@gmail.com">Email us ↗</a><a href="tel:+918589038479">+91 85890 38479</a><a href="https://share.google/JWbzJVOLgpjNOATfm" target="_blank" rel="noopener noreferrer">Kerala, India ↗</a></div></div>
+      <div className="dt-footer-bottom dt-container"><span>© {currentTime.getFullYear()} Leaf Creationism</span><span>{isStudioOnline ? 'STUDIO OPEN' : 'BRIEF QUEUE OPEN'} · {indiaTimeLabel} IST</span></div>
+    </footer>
   );
 
   return (
@@ -2622,1037 +2388,30 @@ const App = () => {
          adopts it and every other route keeps its existing surface. */
       data-route={activeNav}
     >
+      <LetterGlitch className="leaf-site-glitch" glitchColors={['#799fff','#61dca3']} baseColor="#8d9cb8" fontSize={14} spacing={0.6} density={0.9} baseOpacity={0.16} glitchAmount={0.5} speed={1} cursorRadius={140} clickEffect="tear" flow={0.5} dpr={1.5} aria-hidden="true" />
       {loaderPhase !== 'done' && <LoadingScreen leaving={loaderPhase === 'out'} quick={loaderQuick} />}
       {/* Soft Background Gradients */}
       <div className="absolute top-[-10%] right-[-5%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-b from-[#FAE696]/20 to-transparent blur-3xl -z-10 pointer-events-none"></div>
       <div className="absolute bottom-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-tr from-[#D0F5E5]/30 to-transparent blur-3xl -z-10 pointer-events-none"></div>
       <div className="absolute top-[20%] left-[-5%] w-[40vw] h-[40vw] rounded-full bg-gradient-to-br from-[#DFE4F4]/40 to-transparent blur-3xl -z-10 pointer-events-none"></div>
 
-      {/* Top Navigation */}
-      <nav className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-8 flex justify-between items-center sticky top-0 sm:relative z-50 sm:z-10 bg-[#FDFDFD]/82 sm:bg-transparent backdrop-blur-2xl sm:backdrop-blur-none border-b border-white/70 sm:border-b-0">
-        <div className="flex items-center gap-3 group cursor-pointer z-20">
-          <div className="perspective-wrapper w-14 h-14 flex items-center justify-center logo-3d-box-container">
-            <div className="logo-3d-box relative w-12 h-12 bg-gradient-to-tr from-[#153bb5] to-[#406af5] rounded-[14px] flex items-center justify-center">
-              <div className="absolute inset-0 rounded-[14px] border-t-2 border-l-2 border-white/30 pointer-events-none mix-blend-overlay"></div>
-              <img 
-                src={localLeafLogoWhite}
-                alt="Leaf Creationism Logo" 
-                className="h-7 w-auto object-contain logo-3d-img" 
-              />
-            </div>
+      <div className="dt-announcement">LEAF CREATIONISM &nbsp; · &nbsp; INDEPENDENT CREATIVE STUDIO &nbsp; <span>KERALA, INDIA ↗</span></div>
+      <nav className="dt-nav" aria-label="Main navigation">
+        <button className="dt-brand" type="button" onClick={() => navigateTo('home')}><img src={localLeafLogoWhite} alt=""/><span>Leaf Creationism</span></button>
+        <div className={`dt-header-status ${isStudioOnline ? 'is-online' : 'is-offline'}`}>
+          <div className="dt-header-time" aria-label={`Studio time ${indiaTimeLabel} India Standard Time`}>
+            <div className="dt-header-time-line"><strong>{indiaTimeLabel}</strong><span>{isStudioOnline ? 'OPEN TILL 9 PM' : 'OPENS 10 AM'}</span></div>
+            <small>{isStudioOnline ? 'LEAF ONLINE NOW' : 'QUEUE OPENS NEXT WINDOW'}</small>
           </div>
-          <span className="text-2xl font-semibold tracking-tight text-gray-900 hidden sm:block group-hover:text-[#2050E3] transition-colors duration-300">
-            Leaf Creationism
-          </span>
-        </div>
-        
-        <div className={`header-status-card ${isStudioOnline ? 'is-online' : 'is-offline'}`} aria-label={headerStatusMessages.join(', ')}>
-          <div className="header-status-copy">
-            <div className="header-status-topline">
-              <strong>{indiaTimeLabel}</strong>
-              <small>{isStudioOnline ? 'TILL 9 PM' : 'OPENS 10 AM'}</small>
-            </div>
-            <div className="header-status-rotator">
-              {headerStatusMessages.map((message, index) => (
-                <span className={index === headerStatusIndex ? 'is-active' : ''} key={message}>
-                  {message}
-                </span>
-              ))}
-            </div>
-          </div>
-          <ThemeSwitch
-            theme={theme}
-            onToggle={() => setTheme((currentTheme) => currentTheme === 'dark' ? 'light' : 'dark')}
-            iconSize={15}
-          />
-          <button className="header-status-action" type="button" onClick={() => navigateTo('workspace')}>
-            CONTACT US
-          </button>
+          <button className="dt-nav-cta" type="button" onClick={() => navigateTo('workspace')}>CONTACT US</button>
         </div>
       </nav>
 
-      {/* Main Content - Home View */}
-      {activeNav === 'home' && (
-        <main className="home-screen max-w-6xl mx-auto px-4 sm:px-6 pt-0 sm:pt-4 pb-0 relative z-10 animate-fade-in flex flex-col gap-16 lg:gap-24">
-          
-          {/* SECTION 1: Top Hero (Two Columns - Completely separated from About) */}
-          <div className="home-hero-layout grid grid-cols-1 gap-8 items-center relative z-20">
-            <HeroStickers />
-
-            {/* Hero Text, Ads, and Services Icons */}
-            <div className="home-hero-copy w-full max-w-2xl mx-auto pt-2 sm:pt-4 lg:pt-8 flex flex-col gap-6 lg:gap-8">
-              
-              {/* Horizontal Banner Carousel */}
-              <div className="home-promo-card relative w-full max-w-xl overflow-hidden rounded-[1.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] group bg-white">
-                <div 
-                  className="flex transition-transform duration-700 ease-in-out h-40 sm:h-48"
-                  style={{ 
-                    transform: `translate3d(calc(-${activeAd * 100}% - ${activeAd * 4}px), 0, 0)`,
-                    gap: '4px'
-                  }}
-                >
-                  {promoBanners.map((banner) => (
-                    <div 
-                      key={banner.id} 
-                      className={`w-full flex-shrink-0 flex items-center ${banner.theme === 'light' ? 'text-gray-900' : 'text-white'} relative overflow-hidden rounded-[1.5rem]`}
-                      style={{ backgroundColor: banner.bgColor }}
-                    >
-                      <div 
-                        className="absolute right-0 top-0 bottom-0 w-[65%] sm:w-[55%] z-0"
-                        style={{
-                          maskImage: 'linear-gradient(to right, transparent 0%, black 35%)',
-                          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 35%)'
-                        }}
-                      >
-                        {banner.video ? (
-                          <video 
-                            src={banner.video} 
-                            autoPlay 
-                            loop 
-                            muted 
-                            playsInline
-                            className={`w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700 ease-out ${banner.theme === 'light' ? 'mix-blend-normal' : 'mix-blend-luminosity group-hover:mix-blend-normal'}`}
-                          />
-                        ) : (
-                          <img 
-                            src={banner.img} 
-                            alt={banner.title} 
-                            style={{ objectPosition: banner.position || 'center' }}
-                            className={`w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700 ease-out ${banner.theme === 'light' ? 'mix-blend-normal' : 'mix-blend-luminosity group-hover:mix-blend-normal'}`}
-                          />
-                        )}
-                      </div>
-
-                      <div className="p-6 sm:p-8 flex flex-col justify-center items-start relative z-10 w-full max-w-[70%]">
-                        <span className={`${banner.theme === 'light' ? 'bg-black/5 border-black/10 text-gray-800' : 'bg-white/20 border-white/30 text-white'} backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase mb-3 border shadow-sm`}>
-                          {banner.tag}
-                        </span>
-                        <h3 className={`text-xl sm:text-2xl font-semibold mb-1.5 leading-tight ${banner.theme === 'light' ? 'text-gray-900' : 'text-white drop-shadow-md'}`}>
-                          {banner.title}
-                        </h3>
-                        <p className={`text-sm ${banner.theme === 'light' ? 'text-gray-700' : 'text-white/90 drop-shadow-sm'} font-light line-clamp-2`}>
-                          {banner.desc}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
-                  {promoBanners.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setActiveAd(idx)}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        idx === activeAd ? 'w-6 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/80'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Welcome Text */}
-              {/* Type-led hero: eyebrow, a plain statement of what the studio
-                  does and who for, then two actions. No ornament. */}
-              <div className="home-welcome-copy ig-hero">
-                <span className="ig-eyebrow">Creative studio · Kerala, India</span>
-
-                {/* Four words instead of a sentence. What the studio makes is
-                    named in the line underneath and again in the service grid,
-                    so the headline's job is to be worth stopping for rather
-                    than to list everything. */}
-                <h1 className="ig-display ig-display-short">
-                  We build the reason<br />
-                  people <em>choose you.</em>
-                </h1>
-
-                <p className="ig-lede">
-                  UI/UX, web and mobile development, branding, AI advertising and motion —
-                  delivered by one focused team, from first sketch to launch day.
-                </p>
-
-                {/* Services on a departure board: the page's one moving
-                    element, and it puts the studio's range above the fold
-                    instead of leaving it to the grid further down. */}
-                <div className="ig-board">
-                  <HeroRibbon />
-                  <span className="ig-eyebrow">What we do</span>
-                  <SplitFlapText
-                    words={['UI/UX', 'WEBSITES', 'MOBILE APPS', 'AI ADS', 'BRANDING', 'MOTION']}
-                    padTo={11}
-                    charset="alpha"
-                    tileColor="#14161a"
-                    textColor="#ffffff"
-                    tileRadius={6}
-                    gap={4}
-                    fontSize={26}
-                    flipsPerChar={6}
-                    cycleDelay={2200}
-                  />
-                </div>
-
-                <div className="ig-actions">
-                  <button type="button" className="ig-btn ig-btn-solid" onClick={() => navigateTo('workspace')}>
-                    Start a project
-                  </button>
-                  <button type="button" className="ig-btn ig-btn-line" onClick={() => navigateTo('portfolio')}>
-                    See our work
-                  </button>
-                </div>
-
-                <dl className="ig-facts">
-                  <div className="ig-fact">
-                    <span className="ig-fact-index" aria-hidden="true">01</span>
-                    <dt>8</dt>
-                    <dd>services under<br />one roof</dd>
-                  </div>
-                  <div className="ig-fact">
-                    <span className="ig-fact-index" aria-hidden="true">02</span>
-                    <dt>10</dt>
-                    <dd>cities served<br />across Kerala</dd>
-                  </div>
-                  <div className="ig-fact">
-                    <span className="ig-fact-index" aria-hidden="true">03</span>
-                    <dt>1</dt>
-                    <dd>team, idea<br />to launch</dd>
-                  </div>
-                </dl>
-              </div>
-
-              {/* Elastic Service Stack */}
-              <div className="service-icon-shell elastic-service-shell">
-                <ElasticServiceStack
-                  items={serviceCategories}
-                  onSelect={openServiceModal}
-                  itemSize={isMobileViewport ? 78 : 100}
-                  overlap={isMobileViewport ? 30 : 38}
-                  pushForce={isMobileViewport ? 12 : 16}
-                />
-              </div>
-            </div>
-
-          </div>
-
-
-          {/* Before and after, on one frame. The same shot in two states, split
-              by a handle the visitor drags — which shows what the studio adds
-              far faster than a paragraph claiming it. Both clips are our own
-              work, so nothing here needs a licence or a client's permission. */}
-          <section className="ba-section" aria-label="Before and after a Leaf Creationism edit">
-            {/* No panel behind the video. It is already a rectangle with a
-                border and a shadow, and putting it inside a second one just
-                framed a frame. What is left is a hairline, two small labels
-                and the footage — the page's own paper carries it. */}
-            <div className="ba-head">
-              <span className="ba-kicker"><i aria-hidden="true" />Before / after</span>
-              <span className="ba-index">01 / 02</span>
-            </div>
-
-            <div className="ba-stage">
-              <BeforeAfterVideo
-                beforeSrc="/assets/media/work-before.mp4"
-                afterSrc="/assets/media/work-after.mp4"
-                beforeLabel="Before"
-                afterLabel="After"
-                start={48}
-              />
-            </div>
-
-            <div className="ba-caption">
-              <h2>Drag the line. That gap is <em>the work</em>.</h2>
-              <span className="ba-hint">Drag the handle, or use the arrow keys</span>
-            </div>
-          </section>
-
-          {/* Positioning statement — two columns, hairline rule, no card. */}
-          <section className="ig-statement" aria-label="How Leaf Creationism works">
-            <div>
-              <span className="ig-eyebrow">How we work</span>
-              <h2>One team, from first sketch to <em>launch day</em>.</h2>
-            </div>
-            <div>
-              <p>
-                No account managers and no handoffs to a junior team. The people who design
-                and direct your project are the ones you talk to — through strategy, design,
-                build and launch.
-              </p>
-
-              {/* The three promises, each on its own accent marker, so the
-                  claim reads as specific rather than as a paragraph. */}
-              <ul className="ig-promises">
-                <li><span>01</span>You talk to the people doing the work</li>
-                <li><span>02</span>One team across design, build and launch</li>
-                <li><span>03</span>A written quote before anything starts</li>
-              </ul>
-
-              <button type="button" className="ig-btn ig-btn-solid" onClick={() => navigateTo('workspace')}>
-                Start a project
-              </button>
-            </div>
-          </section>
-
-          {/* Process — what actually happens after an enquiry. The page went
-              from a one-line "how we work" straight to the service grid, so a
-              visitor never learned what they would be buying. Deliverables are
-              described rather than durations, since timings vary per project
-              and an invented number would be a claim we cannot stand behind. */}
-          <section className="ig-process" aria-label="How a Leaf Creationism project runs">
-            <div className="ig-process-head">
-              <span className="ig-eyebrow">How a project runs</span>
-              <h2>Five stages, and you see the work at every one.</h2>
-              <p>
-                No black box and no month of silence. Each stage ends with something
-                you can look at, comment on, and sign off before the next begins.
-              </p>
-            </div>
-
-            {/* A numbered track, not a wheel.
-
-                The wheel that was here had to swallow the page's own scroll to
-                turn — a non-passive wheel handler calling preventDefault, and
-                touch-action: pan-x, which tells a phone that a vertical swipe
-                over it is not a scroll. Once it was made larger it covered
-                enough of the screen that the home page simply stopped
-                scrolling on touch. A row of stages costs none of that, and all
-                five are readable at once instead of one at a time. */}
-            <div className="ig-stage-track" role="tablist" aria-label="Project stages">
-              {projectStages.map((stage, index) => (
-                <button
-                  key={stage.n}
-                  type="button"
-                  role="tab"
-                  id={`stage-tab-${stage.n}`}
-                  aria-selected={index === activeStageIndex}
-                  aria-controls="stage-detail"
-                  className={`ig-stage-step${index === activeStageIndex ? ' is-active' : ''}`}
-                  onClick={() => setActiveStageIndex(index)}
-                >
-                  <span className="ig-stage-step-n">{stage.n}</span>
-                  <span className="ig-stage-step-t">{stage.title}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* The selected stage, in full. Announced politely so the change
-                reaches a screen reader without interrupting. */}
-            <div
-              className="ig-stage-detail"
-              id="stage-detail"
-              role="tabpanel"
-              aria-live="polite"
-              key={activeStage.n}
-            >
-              <span className="ig-stage-n">{activeStage.n} of 05</span>
-              <h3>{activeStage.title}</h3>
-              <p>{activeStage.body}</p>
-              <span className="ig-stage-out">{activeStage.out}</span>
-            </div>
-          </section>
-
-          {/* SECTION 2: Separated "About" Section (No longer touching top components) */}
-          <div className="home-about-section w-full relative group/about z-10">
-            {/* Clean standalone glass container for the About Section */}
-            <div className="home-about-shell absolute inset-0 rounded-[2.5rem] sm:rounded-[4rem] z-0 transition-all duration-700"></div>
-
-            <div className="advantage-showcase relative z-10">
-              <div className="advantage-media-stage">
-                <div className="advantage-gallery-topline">
-                  <span>Leaf Creationism</span>
-                </div>
-
-                <div className="advantage-gallery-center">
-                  <div className="advantage-pill">
-                    <span></span>
-                    <strong>The Leaf Advantage</strong>
-                  </div>
-
-                  <h2>
-                    WHY LEADING BRANDS CHOOSE LEAF CREATIONISM
-                  </h2>
-
-                  <p>
-                    A complete creative system for brands that need design, code, motion, and growth working together.
-                  </p>
-                </div>
-
-                {/* A helix of the work, turning past the viewer. Supplied by
-                    the owner and safe where the ring was not: it computes its
-                    own depth and emits translate3d/scale only, with no
-                    transform-style: preserve-3d anywhere — which is the thing
-                    mobile Safari and Chrome fail to paint on this site. Drag
-                    or scroll moves it too, so it is not only decoration. */}
-                <InfiniteSpiral
-                  className="adv-spiral"
-                  items={advantageSpiralImages}
-                  /* "auto", not "all". The drag mode sets touch-action:
-                     pan-x on the root, which on a phone means a vertical
-                     swipe over the spiral is not treated as a page scroll —
-                     the second place the home page could be caught. */
-                  animationMode="auto"
-                  speed={0.42}
-                  cardsPerTurn={7}
-                  /* The component scales everything down by how much of the
-                     card height its box can hold, so a shorter card keeps the
-                     spiral at full size instead of shrinking it into a huddle
-                     in the middle. Radius is what spreads it across the
-                     stage. */
-                  cardWidth={isMobileViewport ? 96 : 134}
-                  cardHeight={isMobileViewport ? 136 : 190}
-                  radius={isMobileViewport ? 132 : 330}
-                  verticalSpacing={isMobileViewport ? 46 : 68}
-                  cardRadius={isMobileViewport ? 12 : 16}
-                  centerScale={1.14}
-                  edgeFade={0.34}
-                  /* Per-frame blur on up to ten cards is a real cost on weak
-                     GPUs. The edge fade alone reads the same on a phone. */
-                  edgeBlur={isMobileViewport ? 0 : 4}
-                />
-
-                <div className="advantage-stat-grid">
-                  {[
-                    ['124', 'Products launched'],
-                    ['86', 'Global partners'],
-                    ['98%', 'Client retention'],
-                    [studioExperienceLabel, 'Experience active']
-                  ].map(([num, label]) => (
-                    <div key={label} className={`advantage-stat-card ${label === 'Experience active' ? 'advantage-stat-card-experience' : ''}`}>
-                      <span>
-                        {label === 'Experience active' ? (
-                          <>
-                            <em>{studioExperienceParts[0]}</em>
-                            <em>{studioExperienceParts[1]}</em>
-                          </>
-                        ) : num}
-                      </span>
-                      <strong>{label}</strong>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* SECTION 3: Studio Heads */}
-          {/* SECTION 3: Studio Heads — editorial numbered profiles */}
-          <section
-            className={`heads ${headsVisible ? 'is-visible' : ''}`}
-            aria-label="Leaf Creationism leadership"
-            ref={headsRef}
-          >
-            <header className="heads-head">
-              <span className="heads-eyebrow">Studio Heads</span>
-              <h2>Two people behind<br />every single launch.</h2>
-              <p>
-                No account managers, no handoffs to a junior team. The people who design and
-                direct your project are the ones you talk to.
-              </p>
-            </header>
-
-            <div className="heads-grid">
-              {studioHeads.map((person) => (
-                <ProfileCard
-                  key={person.name}
-                  className="heads-profile"
-                  avatarUrl={person.image}
-                  name={person.name}
-                  title={person.role}
-                  handle={person.name.toLowerCase().replace(/[^a-z]/g, '')}
-                  status="Leaf Creationism"
-                  contactText="Work with us"
-                  behindGlowColor="rgba(32, 80, 227, 0.5)"
-                  innerGradient="linear-gradient(145deg, #1c2740 0%, #2050e3 100%)"
-                  grainUrl=""
-                  iconUrl=""
-                  onContactClick={() => navigateTo('workspace')}
-                />
-              ))}
-            </div>
-
-            <p className="heads-swipe-hint" aria-hidden="true">
-              <i></i> Swipe to meet the team
-            </p>
-
-            <footer className="heads-foot">
-              <p>
-                <strong>One studio. Two creative heads.</strong> From brand direction and product
-                systems to campaigns and launches, every decision stays close to the people
-                leading the work.
-              </p>
-              <button type="button" onClick={() => navigateTo('workspace')}>
-                Work with the studio <ArrowUpRight size={15} />
-              </button>
-            </footer>
-          </section>
-
-
-          {/* SECTION 3.1: Service Suite — gradient card design, real services */}
-          <section className="c1-section" aria-label="Leaf Creationism services">
-            <div className="c1-container">
-              <span className="c1-badge">Service Suite</span>
-              <h2 className="c1-title">Everything your brand needs, from one studio.</h2>
-              <p className="c1-subtitle">
-                {/* The space is explicit: on phones the <br> is hidden, and
-                    without it the words ran together as "design,engineering". */}
-                Eight core services covering strategy, design,{' '}
-                <br />
-                engineering, and advertising.
-              </p>
-
-              <div className="c1-svc-grid">
-                {serviceCategories.map((service, index) => {
-                  const ServiceIcon = service.icon;
-                  return (
-                    <button
-                      key={service.id}
-                      type="button"
-                      className="c1-svc-card"
-                      data-accent={index % 4}
-                      onClick={() => openServiceModal(service.id)}
-                      aria-label={`View ${service.name} service`}
-                    >
-                      <span className="c1-svc-icon">
-                        <ServiceIcon size={22} strokeWidth={1.9} />
-                      </span>
-                      <h3>{service.name}</h3>
-                      <p>{serviceTaglines[service.id]}</p>
-                      <span className="c1-svc-cta">
-                        Learn more
-                        <ArrowRight size={14} strokeWidth={2} />
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="c1-actions">
-                <button type="button" className="c1-btn" onClick={() => navigateTo('workspace')}>
-                  Book a strategy call
-                </button>
-                <button type="button" className="c1-btn is-ghost" onClick={() => navigateTo('services')}>
-                  Explore all services
-                </button>
-              </div>
-            </div>
-          </section>
-
-          {/* Tools — a capability signal that costs nothing to verify, unlike a
-              client logo wall, which needs permission we do not have yet.
-              Named as text rather than logos: these are third-party marks, and
-              a plain wordmark list suits a type-led page anyway. */}
-          <section className="ig-tools" aria-label="Tools and platforms Leaf Creationism builds with">
-            <span className="ig-eyebrow">What we build with</span>
-            <div className="ig-tool-groups">
-              {[
-                { label: 'Design', items: ['Figma', 'Adobe Creative Cloud', 'Blender', 'After Effects'] },
-                { label: 'Build', items: ['React', 'Next.js', 'Webflow', 'Framer', 'WordPress', 'Shopify'] },
-                { label: 'Launch', items: ['Vercel', 'Netlify', 'AWS', 'Cloudflare', 'Google Cloud'] }
-              ].map((group, groupIndex) => (
-                <div className="ig-tool-group" key={group.label}>
-                  <h3>{group.label}</h3>
-                  <ul>
-                    {group.items.map((item, itemIndex) => (
-                      <li
-                        key={item}
-                        /* Deterministic rather than random: the same chip lands
-                           at the same angle on every visit, and on a re-render
-                           nothing jumps. */
-                        style={{
-                          '--fall-delay': `${(groupIndex * 4 + itemIndex) * 55}ms`,
-                          '--fall-rot': `${(((groupIndex * 7 + itemIndex * 37) % 11) - 5)}deg`
-                        }}
-                      >
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* SECTION 3.5: Edgy Editorial FAQ Section */}
-          <div className="home-faq-section faq-warm-glass w-full relative z-10 -mt-2 lg:-mt-4 mb-16 lg:mb-24 group/faq">
-            <div className="relative w-full max-w-[1120px] mx-auto flex flex-col lg:grid lg:grid-cols-[0.92fr_1.08fr] gap-10 lg:gap-16 items-start">
-              
-              {/* Background Glow */}
-              <div className="faq-warm-aura absolute top-1/2 left-1/4 w-[50%] h-[50%] blur-[100px] rounded-full pointer-events-none -z-10 transition-transform duration-1000 group-hover/faq:scale-110"></div>
-              
-              {/* Left Side: Sticky Title Deck */}
-              <div className="w-full lg:sticky lg:top-32 relative z-10">
-                 <div className="faq-kicker inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6">
-                    <span className="faq-kicker-dot w-2 h-2 rounded-full animate-pulse"></span>
-                    <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase">Uncomfortable Truths</span>
-                 </div>
-                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight text-gray-900 mb-5 drop-shadow-sm">
-                    You ask.<br/>
-                    <span className="faq-accent-title text-transparent bg-clip-text">We spill.</span>
-                 </h2>
-                 <p className="faq-intro-copy text-gray-600 font-light text-base lg:text-lg leading-relaxed mb-7 max-w-md">
-                    No PR fluff. No corporate jargon. Just the raw reality of how we operate and why we're the best at it.
-                 </p>
-
-                 <div className="faq-video-orbit relative w-[min(68vw,15rem)] sm:w-64 lg:w-[17rem] aspect-[9/16] mx-auto lg:mx-0 mb-8">
-                   <div className="faq-video-ring absolute inset-0"></div>
-                   <div className="faq-video-circle absolute inset-[0.42rem] sm:inset-2 overflow-hidden">
-                     <video
-                       src={localFaqVideo}
-                       autoPlay
-                       loop
-                       muted
-                       playsInline
-                       preload="metadata"
-                       className="absolute inset-0 w-full h-full object-cover"
-                     />
-                     <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-white/10 mix-blend-overlay"></div>
-                   </div>
-                   <div className="faq-video-badge absolute -right-3 sm:-right-5 bottom-6 sm:bottom-8 rounded-full px-4 py-2">
-                     <span className="faq-badge-text block text-[9px] font-black uppercase tracking-[0.2em]">Live clarity</span>
-                   </div>
-                 </div>
-                 
-                 {/* Decorative Line */}
-                 <div className="hidden lg:flex items-center gap-4 opacity-30">
-                    <div className="h-px bg-gray-900 w-12"></div>
-                    <div className="w-2 h-2 rounded-full bg-gray-900"></div>
-                 </div>
-              </div>
-
-              {/* Right Side: Interactive Glass Accordion */}
-              <div className="w-full flex flex-col gap-4 relative z-10">
-                 {faqs.map((faq, index) => {
-                    const isActive = activeFaq === index;
-                    return (
-                       <div 
-                         key={index} 
-                         onClick={() => setActiveFaq(isActive ? null : index)}
-                         className={`faq-glass-card premium-glass rounded-[1.35rem] border transition-all duration-500 cursor-pointer overflow-hidden ${isActive ? 'is-active' : ''}`}
-                       >
-                          <div className="p-5 sm:p-6 flex items-center justify-between gap-5 relative z-10">
-                             <h3 className={`faq-question text-base sm:text-lg font-medium tracking-tight transition-colors duration-300 ${isActive ? 'is-active' : ''}`}>
-                                {faq.q}
-                             </h3>
-                             <div className={`faq-chevron w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shrink-0 transition-all duration-500 border ${isActive ? 'is-active rotate-180' : ''}`}>
-                                <ChevronDown size={20} className={`transition-transform duration-500 ${isActive ? 'rotate-180 scale-110' : ''}`} />
-                             </div>
-                          </div>
-                          <div 
-                            className="px-5 sm:px-6 transition-all duration-500 ease-in-out relative z-0"
-                            style={{ 
-                              maxHeight: isActive ? '300px' : '0px', 
-                              opacity: isActive ? 1 : 0, 
-                              paddingBottom: isActive ? '1.5rem' : '0',
-                              transform: isActive ? 'translateY(0)' : 'translateY(-10px)'
-                            }}
-                          >
-                             <div className="faq-divider w-full h-px mb-5"></div>
-                             <p className="text-gray-600 font-light leading-relaxed text-sm sm:text-base pr-4">
-                                {faq.a}
-                             </p>
-                          </div>
-                       </div>
-                    );
-                 })}
-              </div>
-            </div>
-          </div>
-
-          {/* SECTION 4: Editorial VIP Pass & Narrative Form */}
-          <div className="home-contact-section w-full relative z-10 -mt-2 lg:-mt-4 group/contact mb-16">
-             
-             {/* Master Wrapper for Pass Drop Shadow */}
-             <div className="access-color-wrap relative w-full max-w-[1080px] mx-auto filter transition-all duration-700 hover:-translate-y-2">
-                
-                {/* Background Liquid Aura */}
-                <div className="access-aura access-aura-one absolute pointer-events-none z-0"></div>
-                <div className="access-aura access-aura-two absolute pointer-events-none z-0"></div>
-                <div className="access-aura access-aura-three absolute pointer-events-none z-0"></div>
-
-                {/* The Ticket / Pass Container */}
-                <div className="access-color-pass relative w-full backdrop-blur-3xl rounded-[2.5rem] sm:rounded-[3rem] flex flex-col md:flex-row overflow-hidden border z-10">
-                   
-                   {/* --- Left Stub: Metadata --- */}
-                   <div className="access-color-stub w-full md:w-[40%] p-6 sm:p-10 lg:p-12 relative flex flex-col justify-between border-b md:border-b-0 md:border-r-[2px] border-dashed">
-                      
-                      {/* CSS Cutout Notches (Desktop) */}
-                      <div className="access-ticket-notch hidden md:block absolute -right-5 top-[-20px] w-10 h-10 rounded-full z-20"></div>
-                      <div className="access-ticket-notch hidden md:block absolute -right-5 bottom-[-20px] w-10 h-10 rounded-full z-20"></div>
-
-                      <div className="relative z-10">
-                         <div className="access-color-badge inline-flex items-center gap-2 px-3 py-1 rounded-full mb-10">
-                            <div className="access-color-pulse w-1.5 h-1.5 rounded-full"></div>
-                            <span className="text-[9px] font-bold tracking-[0.2em] uppercase">Access Granted</span>
-                         </div>
-
-                         <h3 className="access-color-title text-3xl sm:text-5xl font-light tracking-tighter mb-2 leading-none">
-                            INITIATE
-                         </h3>
-                         <p className="access-color-protocol text-xs font-bold tracking-widest uppercase mb-8 sm:mb-12">Project Protocol // 01</p>
-                      </div>
-
-                      <div className="flex flex-col gap-6 relative z-10">
-                         {/* Direct Email Info */}
-                         <div className="flex flex-col gap-2">
-                            <span className="access-color-label text-[10px] font-bold uppercase tracking-[0.2em]">Email Uplink</span>
-                            <a href="mailto:leafcreationism@gmail.com" className="access-color-link text-gray-900 font-medium tracking-tight transition-colors flex items-center gap-3 w-fit group/mail">
-                               <div className="access-color-icon access-color-icon-blue w-8 h-8 rounded-full flex items-center justify-center transition-colors">
-                                  <Mail size={16} />
-                               </div>
-                               <span className="access-email-text">leafcreationism@gmail.com</span>
-                            </a>
-                         </div>
-
-                         {/* WhatsApp Info */}
-                         <div className="flex flex-col gap-2">
-                            <span className="access-color-label text-[10px] font-bold uppercase tracking-[0.2em]">WhatsApp Link</span>
-                            <a href="https://wa.me/918589038479" target="_blank" rel="noopener noreferrer" className="access-color-link text-gray-900 font-medium tracking-tight transition-colors flex items-center gap-3 group/wa w-fit">
-                               <div className="access-color-icon access-color-icon-green w-8 h-8 rounded-full flex items-center justify-center transition-colors">
-                                  <WhatsAppIcon size={16} />
-                               </div>
-                               Call or Chat 
-                               <span className="access-color-online px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider transition-colors shadow-sm">
-                                  ONLINE
-                               </span>
-                            </a>
-                         </div>
-
-                         <div className="access-color-reply rounded-2xl border p-4">
-                            <span className="access-color-label text-[10px] font-bold uppercase tracking-[0.2em]">Typical reply</span>
-                            <p className="text-gray-900 font-semibold mt-1">{isStudioOnline ? 'Within 2 hours' : 'Next working window'}</p>
-                         </div>
-                      </div>
-                   </div>
-
-                   {/* --- Right Main: The Narrative Form --- */}
-                   <div className="access-color-form w-full md:w-[60%] p-6 sm:p-12 lg:p-16 relative flex flex-col justify-center">
-                      
-                      <form className="w-full relative z-10" onSubmit={submitAccessRequest}>
-                         
-                         {/* The Mad Libs Paragraph */}
-                         <h2 className="access-narrative-copy text-[22px] sm:text-[28px] lg:text-[30px] font-light leading-[1.85] sm:leading-[1.9] text-gray-600 tracking-tight text-left">
-                            Hello Leaf team, my name is 
-                            <input
-                              type="text"
-                              name="name"
-                              required
-                              placeholder="Your Name"
-                              className="narrative-input access-input-name w-[140px] sm:w-[180px]"
-                              value={accessForm.name}
-                              onChange={(event) => updateAccessField('name', event.target.value)}
-                            />
-                            and I am representing 
-                            {/* Field and full stop share a nowrap span: a line can break
-                                between an inline-block and the text after it, which was
-                                dropping each "." onto the start of the next line. */}
-                            <span className="narrative-unit">
-                              <input
-                                type="text"
-                                name="company"
-                                required
-                                placeholder="Company Name"
-                                className="narrative-input access-input-company w-[180px] sm:w-[220px]"
-                                value={accessForm.company}
-                                onChange={(event) => updateAccessField('company', event.target.value)}
-                              />.
-                            </span>{' '}
-                            <br className="hidden lg:block"/>
-                            I am looking for an elite agency to help me with 
-                            <span className="narrative-unit">
-                            <div className="inline-block relative">
-                               <select
-                                 name="service"
-                                 required
-                                 className="narrative-select access-input-service w-[200px] sm:w-[240px]"
-                                 value={accessForm.service}
-                                 onChange={(event) => updateAccessField('service', event.target.value)}
-                               >
-                                  <option value="" disabled>Select a Service</option>
-                                  <option value="uiux">UI/UX Design</option>
-                                  <option value="web">Web Development</option>
-                                  <option value="brand">Brand Identity</option>
-                                  <option value="ai">AI Marketing Ads</option>
-                               </select>
-                            </div>.
-                            </span>{' '}
-                            <br className="hidden lg:block"/>
-                            You can reach me at 
-                            <input
-                              type="email"
-                              name="email"
-                              required
-                              placeholder="Email Address"
-                              className="narrative-input access-input-email w-[200px] sm:w-[260px]"
-                              value={accessForm.email}
-                              onChange={(event) => updateAccessField('email', event.target.value)}
-                            />
-                            to discuss how we can dominate the market.
-                         </h2>
-
-                         <div className="mt-12 sm:mt-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                            <div className="flex items-center gap-3 opacity-60">
-                               <Shield size={16} className="text-gray-900" />
-                               <span className="text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-gray-900">Encrypted Transmission</span>
-                            </div>
-
-                            {/* Oversized Premium Submit Button */}
-                            <button type="submit" disabled={formStatus === 'sending'} className="group/btn relative overflow-hidden bg-gray-900 text-white rounded-full pl-8 pr-2 py-2 flex items-center gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_40px_rgba(32,80,227,0.3)] hover:bg-[#2050E3] transition-all duration-500 transform hover:-translate-y-1 disabled:opacity-60 disabled:cursor-wait">
-                               <span className="font-semibold text-sm tracking-wide z-10">{formStatus === 'sending' ? 'Sending...' : 'Send Request'}</span>
-                               <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm relative z-10 group-hover/btn:bg-white group-hover/btn:text-[#2050E3] transition-colors duration-500">
-                                  <ArrowUpRight size={20} className="group-hover/btn:rotate-45 transition-transform duration-500" />
-                               </div>
-                               {/* Hover Shimmer */}
-                               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_1s_ease-out_forwards]"></div>
-                            </button>
-                         </div>
-
-                         {formStatus === 'access-sent' && (
-                           <p className="mt-5 text-sm font-semibold text-emerald-600">Request sent. We will reach you within 24 hours. Your data is safe with us.</p>
-                         )}
-                         {formStatus === 'error' && (
-                           <p className="mt-5 text-sm font-semibold text-red-500">Could not send right now. Please try again.</p>
-                         )}
-
-                      </form>
-                   </div>
-                </div>
-             </div>
-          </div>
-          
-          {studioFooter}
-
-          {/* Closing band on the alternate surface. */}
-          <section className="ig-band" aria-label="Start a project with Leaf Creationism">
-            <span className="ig-eyebrow">Next step</span>
-            <h2>Planning a new website or campaign? Let's talk.</h2>
-            <p>
-              Tell us what you are building. We come back with a written quote, a timeline,
-              and the team who would actually do the work.
-            </p>
-            <div className="ig-actions">
-              <button type="button" className="ig-btn ig-btn-solid" onClick={() => navigateTo('workspace')}>
-                Start a project
-              </button>
-              <button type="button" className="ig-btn ig-btn-line" onClick={() => navigateTo('launch')}>
-                Explore Launch Cloud
-              </button>
-            </div>
-          </section>
-        </main>
-      )}
-
-      {/* Services View */}
-      {activeNav === 'services' && (
-        <main className="services-page max-w-6xl mx-auto px-5 sm:px-6 pt-10 sm:pt-14 pb-32 relative z-10 animate-fade-in">
-          <div className="mb-10 sm:mb-14 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <div className="max-w-3xl">
-              <div className="services-liquid-pill inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 w-fit">
-                <Layers size={14} className="text-emerald-500" />
-                <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-emerald-600">Services</span>
-              </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-light tracking-tight text-gray-900 leading-[1.02]">
-                Idea to launch, <span className="font-medium">nothing outsourced.</span>
-              </h1>
-              <p className="text-gray-500 max-w-xl mt-4 text-base sm:text-lg font-light">
-                Strategy, brand campaigns, product design, and engineering working as one connected system from idea to launch.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-2 sm:gap-3 lg:max-w-sm lg:justify-end">
-              {capabilities.map((cap, idx) => (
-                <button
-                  key={cap.id}
-                  onClick={() => setActiveCapability(idx)}
-                  className={`services-liquid-filter px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
-                    activeCapability === idx
-                      ? 'is-active text-white'
-                      : 'text-gray-600 hover:text-emerald-700'
-                  }`}
-                >
-                  {cap.title}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* The band shows whichever discipline is selected above. It used to
-              be a stock 3D render of a computer mouse — nothing to do with the
-              studio, the page, or the filters, which made the buttons above it
-              look like they did nothing. */}
-          <section className="services-showcase-shell relative overflow-visible text-white mb-12 sm:mb-16">
-            <div className="relative z-10">
-              <div className="services-showcase-track services-showcase-single-track">
-                <div className="services-showcase-card services-single-showcase-card group/story">
-                  <div className="services-showcase-video">
-                    {capabilities.map((cap, idx) => (
-                      <img
-                        key={`showcase-${cap.id}`}
-                        src={cap.image}
-                        alt={activeCapability === idx ? `${cap.title} at Leaf Creationism` : ''}
-                        aria-hidden={activeCapability !== idx}
-                        loading={idx === 0 ? 'eager' : 'lazy'}
-                        decoding="async"
-                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-                          activeCapability === idx ? 'opacity-100' : 'opacity-0'
-                        }`}
-                      />
-                    ))}
-                    <span className="services-showcase-caption">
-                      <em>{String(activeCapability + 1).padStart(2, '0')}</em>
-                      {capabilities[activeCapability]?.title}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="relative w-full group/capabilities">
-            <div className="absolute top-20 left-1/4 w-[60%] h-[60%] bg-gradient-to-tr from-emerald-300/20 to-[#0ea5e9]/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
-
-            <div className="flex flex-col lg:flex-row gap-0 lg:gap-16 items-start relative">
-              <div className="w-full lg:w-[55%] flex flex-col relative z-10 gap-3">
-                {capabilities.map((cap, idx) => {
-                  const isActive = activeCapability === idx;
-                  return (
-                    <div
-                      key={cap.id}
-                      role="button"
-                      tabIndex={0}
-                      aria-expanded={isActive}
-                      data-capability={cap.id}
-                      onClick={() => setActiveCapability(idx)}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter' || event.key === ' ') {
-                          event.preventDefault();
-                          setActiveCapability(idx);
-                        }
-                      }}
-                      className={`services-liquid-row group/cap cursor-pointer relative px-4 sm:px-5 py-7 sm:py-9 transition-all duration-500 ${isActive ? 'is-active' : ''}`}
-                    >
-                      <div className="relative z-10 flex items-center justify-between pr-4 sm:pr-8">
-                        <div className="flex items-start sm:items-center gap-4 sm:gap-8">
-                          <span className={`font-mono text-sm sm:text-base font-bold transition-colors duration-500 pt-2 sm:pt-0 ${isActive ? 'text-emerald-600' : 'text-gray-300 group-hover/cap:text-gray-400'}`}>
-                            0{idx + 1}
-                          </span>
-                          <h2 className={`text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight transition-all duration-500 origin-left ${isActive ? 'text-gray-900 translate-x-2 sm:translate-x-4' : 'text-gray-300 group-hover/cap:text-gray-500'}`}>
-                            {cap.title}
-                          </h2>
-                        </div>
-
-                        <div className={`services-liquid-arrow w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 transition-all duration-500 ${isActive ? 'is-active transform rotate-0' : '-rotate-45'}`}>
-                          <ArrowRight size={20} className="sm:w-6 sm:h-6" />
-                        </div>
-                      </div>
-
-                      <div className={`services-liquid-panel ${isActive ? 'is-active' : ''} pl-12 sm:pl-20 pr-4 sm:pr-8`}>
-                        <div className="services-liquid-panel-inner">
-                          <p className="text-gray-600 font-light text-base sm:text-lg leading-relaxed mb-6">
-                            {cap.desc}
-                          </p>
-
-                          <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 lg:mb-2">
-                            {cap.tags.map((tag, tIdx) => (
-                              <span key={tIdx} className="services-liquid-tag px-4 py-2 rounded-full text-gray-700 text-[10px] sm:text-xs font-semibold tracking-wider uppercase">
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-
-                          <div className="grid sm:grid-cols-2 gap-2.5 mb-6">
-                            {cap.items.map((item, itemIdx) => (
-                              <div
-                                key={item}
-                                className="services-liquid-item group/item relative overflow-hidden rounded-2xl px-4 py-3"
-                              >
-                                <div className="flex items-center gap-3">
-                                  <span className="text-[10px] font-black text-emerald-500">0{itemIdx + 1}</span>
-                                  <span className="text-sm font-semibold text-gray-800">{item}</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="services-liquid-media block lg:hidden w-full aspect-[4/3] sm:aspect-video rounded-[1.5rem] overflow-hidden relative mt-6">
-                            <img src={cap.image} alt={cap.title} loading="lazy" decoding="async" className="w-full h-full object-cover transform scale-105" />
-                            <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-transparent mix-blend-overlay"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="hidden lg:block w-[45%] relative min-h-[600px] z-10 lg:sticky lg:top-32">
-                <div className="services-liquid-media w-full aspect-[4/5] rounded-[2.5rem] overflow-hidden relative group/sticky">
-                  {capabilities.map((cap, idx) => (
-                    <div
-                      key={`services-media-${cap.id}`}
-                      className={`absolute inset-0 w-full h-full overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] origin-bottom ${activeCapability === idx ? 'opacity-100 scale-100 z-10 delay-100' : 'opacity-0 scale-105 z-0 pointer-events-none'}`}
-                    >
-                      <img src={cap.image} alt={cap.title} loading="lazy" decoding="async" className={`w-full h-full object-cover transition-transform duration-[1.1s] ease-out ${activeCapability === idx ? 'scale-100' : 'scale-105'}`} />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent mix-blend-overlay"></div>
-
-                      <div className={`services-liquid-badge absolute bottom-6 left-6 px-4 py-2 rounded-full flex items-center gap-2 transition-all duration-500 delay-300 ${activeCapability === idx ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-white shadow-sm drop-shadow-md">
-                          {cap.title} Showcase
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="absolute inset-0 rounded-[calc(2.5rem-6px)] shadow-[inset_0_0_34px_rgba(0,0,0,0.12)] pointer-events-none z-20"></div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="services-phase-section mt-16 sm:mt-24">
-            <div className="mb-8 sm:mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-              <div>
-                <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.28em] text-emerald-600 mb-3">Every phase matters</p>
-                <h2 className="text-3xl sm:text-5xl font-light tracking-tight text-gray-900">
-                  How we keep the work sharp.
-                </h2>
-              </div>
-              <p className="text-sm sm:text-base text-gray-500 max-w-md font-light">
-                A simple operating rhythm for keeping strategy honest, craft sharp, and delivery focused.
-              </p>
-            </div>
-
-            <div className="services-phase-track grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {servicePhases.map((phase, idx) => {
-                const PhaseIcon = phase.icon;
-                return (
-                  <div
-                    key={phase.title}
-                    style={{
-                      '--phase-a': phase.colorA,
-                      '--phase-b': phase.colorB,
-                      '--phase-c': phase.colorC,
-                      '--phase-delay': `${idx * 0.45}s`
-                    }}
-                    className="services-liquid-phase group/phase relative overflow-hidden min-h-[15rem] rounded-[2rem] p-5 sm:p-6 transition-all duration-500"
-                  >
-                    <div className="services-phase-orb services-phase-orb-a"></div>
-                    <div className="services-phase-orb services-phase-orb-b"></div>
-                    <div className="relative z-10 flex flex-col h-full">
-                      <div className="flex items-center justify-between mb-10">
-                        <div className="services-liquid-phase-icon w-12 h-12 rounded-2xl text-white flex items-center justify-center">
-                          <PhaseIcon size={20} />
-                        </div>
-                        <span className="text-xs font-black text-gray-300">0{idx + 1}</span>
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3">{phase.title}</h3>
-                      <p className="text-sm text-gray-500 font-light leading-relaxed">{phase.desc}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        </main>
-      )}
+      {/* Home */}
+      {activeNav === 'home' && <DovetailHome navigateTo={navigateTo} openServiceModal={openServiceModal} serviceCategories={serviceCategories} serviceTaglines={serviceTaglines} studioHeads={studioHeads} />}
+
+      {/* Services */}
+      {activeNav === 'services' && <DovetailServices capabilities={capabilities} serviceCategories={serviceCategories} navigateTo={navigateTo} openServiceModal={openServiceModal} />}
 
       {/* Unified Schedule + Delivery Workspace */}
       {/* SERVICE STORE — browse services like products, add to cart or buy now */}
@@ -4858,7 +3617,6 @@ const App = () => {
             </div>
           </section>
 
-          {studioFooter}
         </main>
       )}
 
@@ -4872,7 +3630,7 @@ const App = () => {
               </div>
               <div>
                 <span className="text-[11px] font-bold tracking-widest text-[#60a5fa] uppercase block">Leaf Creationism / Project Cart</span>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Project Cart & Launch Flow</h1>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Your project, beautifully planned.</h1>
               </div>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#05070c] border border-white/10 text-xs font-semibold text-slate-300">
@@ -4912,7 +3670,7 @@ const App = () => {
                   <h3>Selected Service Suite</h3>
                   <p>Choose the core creative and engineering services for your project.</p>
                 </div>
-                <button type="button" className="step-action-btn" onClick={() => navigateTo('home')}>
+                <button type="button" className="step-action-btn" onClick={() => navigateTo('workspace')}>
                   <Plus size={14} />
                   <span>Add Services</span>
                 </button>
@@ -4940,8 +3698,8 @@ const App = () => {
                 ) : (
                   <div className="reference-empty-card">
                     <strong>No service selected yet</strong>
-                    <p>Go back to Home and choose services in Build Your Project, or continue with your custom brief.</p>
-                    <button type="button" onClick={() => navigateTo('home')}>Choose services</button>
+                    <p>Choose services from the store, or continue with your custom brief.</p>
+                    <button type="button" onClick={() => navigateTo('workspace')}>Choose services</button>
                   </div>
                 )}
               </div>
@@ -4977,26 +3735,39 @@ const App = () => {
                   })}
                 </div>
 
+                <div className="glass-booking-layout">
+                <div className="glass-booking-date">
                 <div className="workspace-date-label">
                   <span>Pick a date</span>
                   <small>Next seven studio days</small>
                 </div>
-                <div className="workspace-date-strip" aria-label="Choose appointment day">
-                  {appointmentDays.map((day) => (
-                    <button
-                      key={day.id}
-                      type="button"
-                      onClick={() => setSelectedAppointmentDay(day.id)}
-                      className={selectedAppointmentDay === day.id ? 'is-selected' : ''}
-                      aria-pressed={selectedAppointmentDay === day.id}
-                    >
-                      <span>{day.label}</span>
-                      <strong>{day.date.split(' ')[0]}</strong>
-                      <small>{day.date.split(' ')[1]}</small>
-                    </button>
-                  ))}
+                <div className="glass-booking-calendar" aria-label="Choose appointment day">
+                  <div className="glass-booking-calendar-head">
+                    <strong>{bookingMonth.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}</strong>
+                    <div>
+                      <button type="button" onClick={() => setBookingMonthOffset((month) => Math.max(0, month - 1))} disabled={bookingMonthOffset === 0} aria-label="Previous month"><ChevronLeft size={17} /></button>
+                      <button type="button" onClick={() => setBookingMonthOffset((month) => Math.min(maxBookingMonthOffset, month + 1))} disabled={bookingMonthOffset >= maxBookingMonthOffset} aria-label="Next month"><ChevronRight size={17} /></button>
+                    </div>
+                  </div>
+                  <div className="glass-booking-calendar-grid">
+                    {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, index) => <span className="glass-calendar-weekday" key={`${day}-${index}`}>{day}</span>)}
+                    {bookingCalendarDays.map(({ date, appointment, inMonth }) => (
+                      <button
+                        key={date.toDateString()}
+                        type="button"
+                        onClick={() => appointment && setSelectedAppointmentDay(appointment.id)}
+                        disabled={!appointment || !inMonth}
+                        className={`${selectedAppointmentDay === appointment?.id ? 'is-selected' : ''} ${inMonth ? '' : 'is-outside'}`}
+                        aria-label={`${date.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}${appointment && inMonth ? ', available' : ', unavailable in this month view'}`}
+                        aria-pressed={Boolean(appointment && inMonth && selectedAppointmentDay === appointment.id)}
+                      >{date.getDate()}</button>
+                    ))}
+                  </div>
+                  <p><span /> Available for a studio call <b>{selectedAppointment.full}</b></p>
+                </div>
                 </div>
 
+                <div className="glass-booking-times">
                 <div className="workspace-date-label">
                   <span>Pick a time</span>
                   <small>Fixed IST slots</small>
@@ -5014,6 +3785,9 @@ const App = () => {
                       <span>{slot.label}</span>
                     </button>
                   ))}
+                </div>
+                <div className="glass-booking-note"><Check size={16} /> No payment is required to request a call.</div>
+                </div>
                 </div>
               </div>
 
@@ -5229,6 +4003,8 @@ const App = () => {
         </main>
       )}
 
+      {studioFooter}
+
       {/* One morphing action circle: WhatsApp changes into project cart */}
       <button
         type="button"
@@ -5265,159 +4041,10 @@ const App = () => {
       </div>
 
 
-      {/* Full Screen Service Details Modal - Liquid Glass UI */}
-      {showServiceModal && (
-        <div className="service-detail-modal fixed inset-0 z-[100] overflow-y-auto animate-slide-up font-sans hide-scrollbar bg-[#f8f9fc]">
-          
-          {/* Named rather than left as bare Tailwind utilities so the dark
-              theme has something to hold on to — the blobs blend and the veil
-              is white, both of which have to change on a dark ground. */}
-          <div className="service-modal-aura fixed inset-0 pointer-events-none overflow-hidden z-0">
-            <div className="service-modal-blob absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#2050E3]/20 rounded-full mix-blend-multiply filter blur-[80px] animate-blob"></div>
-            <div className="service-modal-blob absolute top-[20%] right-[-10%] w-[40vw] h-[40vw] bg-[#8b5cf6]/20 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-2000"></div>
-            <div className="service-modal-blob absolute bottom-[-20%] left-[20%] w-[60vw] h-[60vw] bg-[#0ea5e9]/20 rounded-full mix-blend-multiply filter blur-[80px] animate-blob animation-delay-4000"></div>
-            <div className="service-modal-veil absolute inset-0 bg-white/40 backdrop-blur-[60px]"></div>
-          </div>
-
-          <div className="sticky top-4 sm:top-6 z-50 flex justify-center w-full px-4 sm:px-6 pointer-events-none">
-            <div className="premium-glass px-2 py-2 rounded-full flex items-center gap-2 sm:gap-4 pointer-events-auto animate-fade-in-down">
-              <button 
-                onClick={() => setShowServiceModal(false)}
-                className="w-10 h-10 rounded-full bg-white/60 hover:bg-white flex items-center justify-center transition-all text-gray-700 shadow-sm border border-white/50 hover:scale-105"
-              >
-                <X size={20} />
-              </button>
-              <div className="flex items-center gap-2 pr-1 sm:pr-2">
-                 <div className="w-6 h-6 rounded-full bg-[#2050E3] flex items-center justify-center text-white hidden sm:flex">
-                   {activeCategoryData && React.createElement(activeCategoryData.icon, { size: 12 })}
-                 </div>
-                 <span className="font-semibold text-xs sm:text-sm tracking-widest uppercase text-gray-800 drop-shadow-sm">
-                   {activeCategoryData?.name}
-                 </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => enquireAboutService(activeCategoryData?.id)}
-                className="px-5 sm:px-6 py-2.5 rounded-full bg-[#2050E3] text-white text-xs sm:text-sm font-medium hover:bg-blue-700 hover:shadow-[0_4px_15px_rgba(32,80,227,0.4)] transition-all transform hover:-translate-y-0.5"
-              >
-                Get Quote
-              </button>
-            </div>
-          </div>
-
-          <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-8 sm:pt-16 pb-32">
-            
-            <div className="flex flex-col lg:flex-row items-center gap-8 sm:gap-12 lg:gap-20 mb-16 sm:mb-32">
-              <div className="w-full lg:w-1/2 flex flex-col justify-center animate-fade-in text-center lg:text-left items-center lg:items-start" style={{ animationDelay: '0.1s' }}>
-                <h1 className="text-4xl sm:text-6xl lg:text-[72px] font-semibold text-gray-900 leading-[1.1] sm:leading-[1.05] tracking-tight mb-4 sm:mb-6 drop-shadow-sm">
-                  {activeCategoryData?.title}
-                </h1>
-                <p className="text-base sm:text-xl lg:text-2xl text-gray-700 font-light leading-relaxed mb-6 sm:mb-10 max-w-lg">
-                  {activeCategoryData?.heroDesc}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => document.getElementById('service-process')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                  className="w-full sm:w-fit inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full premium-glass hover:bg-white/80 text-gray-900 text-sm sm:text-lg font-medium transition-all duration-300 group hover:shadow-lg hover:-translate-y-1 border border-white/60"
-                >
-                  <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2050E3] flex items-center justify-center text-white group-hover:scale-110 transition-transform shrink-0">
-                     <ArrowRight size={14} className="sm:w-4 sm:h-4" />
-                  </span>
-                  See how we do it
-                </button>
-              </div>
-
-              <div className="w-full lg:w-1/2 relative h-[260px] sm:h-[450px] lg:h-[550px] animate-fade-in mt-4 lg:mt-0" style={{ animationDelay: '0.2s' }}>
-                 <div className="service-editorial-media absolute inset-0 overflow-hidden">
-                   {/* Drawn here rather than fetched: the eight stock renders
-                       were the same AI-looking lilac blob and said nothing
-                       about the service under them. */}
-                   <ServiceIllustration id={activeCategoryData?.id} label={activeCategoryData?.name} />
-                 </div>
-                 <div className="absolute -bottom-4 -left-2 sm:-bottom-10 sm:-left-10 premium-glass px-4 sm:px-6 py-2.5 sm:py-4 rounded-full flex items-center gap-3 sm:gap-4 animate-float-rotate-1 max-w-[90%] border border-white/40">
-                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/80 flex items-center justify-center text-[#2050E3] shadow-sm shrink-0">
-                      <ArrowUpRight size={16} className="sm:w-5 sm:h-5" />
-                   </div>
-                   <div className="flex flex-col truncate">
-                     <span className="text-[10px] sm:text-xs text-gray-500 font-bold tracking-widest uppercase">Premium</span>
-                     <span className="text-sm sm:text-base text-gray-900 font-semibold truncate">{activeCategoryData?.name}</span>
-                   </div>
-                 </div>
-              </div>
-            </div>
-
-            <div className="relative mb-16 sm:mb-40 flex flex-col md:flex-row gap-5 sm:gap-8 justify-center items-center md:items-stretch">
-               
-               <div className="w-full md:w-5/12 premium-glass bg-white/30 border border-white/40 p-6 sm:p-12 rounded-[1.5rem] sm:rounded-[3rem] animate-fade-in group hover:-translate-y-2 transition-transform duration-500 relative overflow-hidden" style={{ animationDelay: '0.3s' }}>
-                  <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-red-400/10 rounded-full blur-2xl sm:blur-3xl -mr-10 -mt-10 group-hover:scale-150 transition-transform duration-700"></div>
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-red-50 text-red-500 flex items-center justify-center mb-4 sm:mb-6 shadow-sm border border-red-100">
-                     <X size={20} className="sm:w-6 sm:h-6" />
-                  </div>
-                  <h3 className="text-xl sm:text-3xl font-medium text-gray-900 mb-3 sm:mb-4 tracking-tight">You're losing customers.</h3>
-                  <p className="text-gray-600 leading-relaxed font-light text-sm sm:text-lg relative z-10">
-                    {activeCategoryData?.problem}
-                  </p>
-               </div>
-
-               <div className="hidden md:flex w-2/12 items-center justify-center animate-fade-in z-20" style={{ animationDelay: '0.4s' }}>
-                  <div className="w-16 h-16 rounded-full premium-glass flex items-center justify-center text-[#2050E3] shadow-lg border border-white/60 animate-bounce-x">
-                    <ArrowRight size={28} />
-                  </div>
-               </div>
-
-               <div className="w-full md:w-5/12 premium-glass bg-[#2050E3]/5 border border-[#2050E3]/20 p-6 sm:p-12 rounded-[1.5rem] sm:rounded-[3rem] md:mt-16 animate-fade-in group hover:-translate-y-2 transition-transform duration-500 relative overflow-hidden shadow-[0_10px_40px_rgba(32,80,227,0.1)]" style={{ animationDelay: '0.5s' }}>
-                  <div className="absolute top-0 right-0 w-24 h-24 sm:w-40 sm:h-40 bg-[#2050E3]/10 rounded-full blur-2xl sm:blur-3xl -mr-10 -mt-10 group-hover:scale-150 transition-transform duration-700"></div>
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#2050E3] text-white flex items-center justify-center mb-4 sm:mb-6 shadow-md shadow-[#2050E3]/30 border border-white/20">
-                     <Check size={20} strokeWidth={3} className="sm:w-6 sm:h-6" />
-                  </div>
-                  <h3 className="text-xl sm:text-3xl font-medium text-gray-900 mb-3 sm:mb-4 tracking-tight">We fix it completely.</h3>
-                  <p className="text-gray-600 leading-relaxed font-light text-sm sm:text-lg relative z-10">
-                    {activeCategoryData?.solution}
-                  </p>
-               </div>
-            </div>
-
-            <div className="w-full" id="service-process">
-              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-semibold text-center text-gray-900 mb-3 sm:mb-4 tracking-tight drop-shadow-sm">How the magic happens.</h2>
-              <p className="text-center text-gray-500 mb-8 sm:mb-16 font-light text-sm sm:text-lg px-4">Our proven 3-step formula to pure digital bliss.</p>
-              
-              <div className="flex flex-col md:flex-row gap-4 sm:gap-8 relative">
-                <div className="hidden md:block absolute top-1/2 left-10 right-10 h-0.5 bg-gradient-to-r from-transparent via-[#2050E3]/30 to-transparent -translate-y-1/2 z-0"></div>
-
-                {activeCategoryData?.process.map((p, i) => (
-                  <div key={i} className={`flex-1 premium-glass p-6 sm:p-10 rounded-[1.5rem] sm:rounded-[3rem] relative overflow-hidden group hover:bg-white/60 transition-all duration-500 hover:-translate-y-2 sm:hover:-translate-y-3 shadow-sm sm:shadow-lg z-10 animate-fade-in border border-white/60`} style={{ animationDelay: `${0.6 + (i * 0.1)}s` }}>
-                    <div className="absolute -top-10 -right-10 w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-bl from-[#2050E3]/20 to-transparent rounded-full blur-xl sm:blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <div className="text-[80px] sm:text-[120px] font-black text-gray-900/5 absolute -bottom-6 -right-2 sm:-bottom-10 sm:-right-4 pointer-events-none group-hover:text-[#2050E3]/10 transition-colors duration-500 leading-none">
-                      {p.step}
-                    </div>
-
-                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white/80 shadow-sm border border-white flex items-center justify-center text-[#2050E3] font-bold text-lg sm:text-xl mb-4 sm:mb-6 relative z-10 group-hover:scale-110 transition-transform duration-300">
-                      {p.step}
-                    </div>
-                    
-                    <h4 className="text-lg sm:text-2xl font-semibold text-gray-900 mb-2 sm:mb-4 relative z-10">{p.title}</h4>
-                    <p className="text-gray-600 font-light leading-relaxed text-sm sm:text-base relative z-10">{p.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-16 sm:mt-32 text-center flex flex-col items-center animate-fade-in" style={{ animationDelay: '0.9s' }}>
-               <div className="premium-glass p-6 sm:p-16 rounded-[2rem] sm:rounded-[4rem] border border-white/60 shadow-[0_10px_30px_rgba(0,0,0,0.05)] w-full max-w-4xl relative overflow-hidden">
-                 <div className="absolute inset-0 bg-gradient-to-t from-[#2050E3]/10 to-transparent pointer-events-none"></div>
-                 <h2 className="text-2xl sm:text-5xl font-semibold text-gray-900 mb-6 sm:mb-8 tracking-tight relative z-10">Ready to stop being boring?</h2>
-                 <button
-                   type="button"
-                   onClick={() => enquireAboutService(activeCategoryData?.id)}
-                   className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 sm:px-10 py-3.5 sm:py-5 rounded-full bg-gray-900 text-white text-sm sm:text-lg font-medium hover:bg-[#2050E3] hover:shadow-[0_10px_30px_rgba(32,80,227,0.3)] hover:-translate-y-1 transition-all duration-300 relative z-10 group"
-                 >
-                   Enquire about {activeCategoryData?.name} <ArrowUpRight size={18} className="sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                 </button>
-               </div>
-            </div>
-
-          </div>
+      {showServiceModal && activeCategoryData && (
+        <div className="dt-modal" role="dialog" aria-modal="true" aria-labelledby="dt-modal-title">
+          <div className="dt-modal-bar"><button type="button" className="dt-secondary" onClick={() => setShowServiceModal(false)}><X size={16}/> Close</button><span className="dt-eyebrow">LEAF / SERVICE DETAILS</span><button type="button" className="dt-primary" onClick={() => enquireAboutService(activeCategoryData.id)}>Get a quote <ArrowUpRight size={16}/></button></div>
+          <div className="dt-container dt-modal-content"><span className="dt-eyebrow">OUR SERVICES / {activeCategoryData.name}</span><h1 id="dt-modal-title">{activeCategoryData.name}</h1><p className="dt-modal-lede">{serviceTaglines[activeCategoryData.id]}</p><div className="dt-modal-summary"><div><span className="dt-eyebrow">STARTING FROM</span><strong>{formatInr(servicePricing[activeCategoryData.id]?.from ?? 0)}</strong><p>A written quote is agreed before work begins.</p></div><div><span className="dt-eyebrow">DELIVERY WINDOW</span><strong>{servicePricing[activeCategoryData.id]?.weeks}</strong><p>Final timing depends on your project scope.</p></div></div><div className="dt-modal-includes"><span className="dt-eyebrow">WHAT'S INCLUDED</span><h2>Built around your brief.</h2><div>{servicePricing[activeCategoryData.id]?.includes?.map(item => <p key={item}><Check size={16}/>{item}</p>)}</div></div><button type="button" className="dt-primary" onClick={() => enquireAboutService(activeCategoryData.id)}>Enquire about {activeCategoryData.name} <ArrowUpRight size={16}/></button></div>
         </div>
       )}
 

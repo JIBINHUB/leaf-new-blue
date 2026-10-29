@@ -9,6 +9,10 @@
 import { useEffect } from 'react';
 
 const REVEAL_TARGETS = [
+  '.leaf-create-showcase h2',
+  '.leaf-create-stage',
+  '.leaf-more-head',
+  '.leaf-more-card',
   '.home-about-section',
   '.c1-svc-card',
   '.pc-card-wrapper',
