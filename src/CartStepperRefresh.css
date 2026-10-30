@@ -149,3 +149,16 @@
   }
 
 :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .step-default { padding:0 !important; }
+/* Submission actions follow Leaf's neutral button palette. */
+:root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .reference-submit-row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+:root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .reference-submit-row .reference-submit-button {
+  display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:48px; padding:12px 22px; flex:1 1 240px;
+  background:#f1f2f5 !important; background-image:none !important; border:1px solid #fff !important; border-radius:10px !important; color:#17181b !important; box-shadow:none !important; font-weight:500 !important;
+}
+:root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .reference-submit-row .reference-submit-button svg { color:#17181b !important; }
+:root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .reference-submit-row .reference-whatsapp-button {
+  display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:48px; padding:12px 22px; flex:0 1 180px;
+  background:#1b1c20 !important; background-image:none !important; border:1px solid #55575e !important; border-radius:10px !important; color:#f5f5f7 !important; box-shadow:none !important; text-decoration:none; font-weight:500 !important;
+}
+:root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .reference-submit-row .reference-submit-button:disabled { opacity:.65; cursor:wait; }
+@media(max-width:500px){ :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .reference-submit-row > :is(button,a) { flex:1 1 100%; } }
