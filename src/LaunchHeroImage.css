@@ -67,3 +67,8 @@
 @media (max-width: 700px) {
   :root .app-shell[data-route='launch'] .launch-simple-page .launch-simple-hero.launch-simple-hero { border-radius: 20px !important; }
 }
+
+/* Keep all four creative options together without clipping on small screens. */
+.launch-simple-page .launch-creative-guide { grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: visible; }
+@media (max-width: 900px) { .launch-simple-page .launch-creative-guide { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .launch-simple-page .launch-creative-guide { grid-template-columns: 1fr; } }

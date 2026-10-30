@@ -3179,7 +3179,7 @@ const App = () => {
               <h2>More ways to bring your launch to life.</h2>
               <p>Choose the pieces you need. We’ll agree on the deliverables and quote for your project before work starts.</p>
             </div>
-            <div className="launch-simple-guide">
+            <div className="launch-simple-guide launch-creative-guide">
               {launchCreativeBundles.map((item) => {
                 const CreativeIcon = item.icon;
                 return <article key={item.title}>

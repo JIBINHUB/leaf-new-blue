@@ -44,3 +44,9 @@
  html body #root .app-shell .leaf-people-card-bottom small{display:block;font-family:'Poppins',sans-serif!important;font-size:12px!important;line-height:1.5!important;margin-top:6px;color:#e5e9f1}
  .leaf-people-photo::after{inset:45% 0 0;background:linear-gradient(transparent,rgba(8,10,17,.95))}
 }
+
+/* Explicitly hide the reverse face as well as using backface-visibility.
+   Some mobile browsers otherwise paint the reverse face's text through it. */
+.leaf-people-card { visibility: visible; transition: visibility 0s .42s; }
+.leaf-people-card[aria-hidden='true'] { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .leaf-people-card { transition: none; } }
