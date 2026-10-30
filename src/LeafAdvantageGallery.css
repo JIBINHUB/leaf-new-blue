@@ -86,3 +86,8 @@
  .leaf-arc-detail{top:29%}
  .leaf-arc-footer{bottom:42px}
 }
+@media(max-width:640px) and (prefers-reduced-motion:no-preference){
+ .leaf-arc-heading{top:82px}
+ .leaf-arc-footer{bottom:110px;gap:14px}
+ .leaf-arc-footer button{width:36px;height:36px;flex:none}
+}

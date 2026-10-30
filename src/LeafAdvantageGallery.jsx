@@ -49,7 +49,7 @@ export default function LeafAdvantageGallery({ items }) {
       const center = clamp(start + progress * Math.max(0, items.length - visibleCount) + offsetRef.current, 0, items.length - 1);
       centerRef.current = center;
       const radius = rect.width * (mobile ? 0.76 : 0.59);
-      const step = mobile ? 22 : 18;
+      const step = mobile ? 28 : 18;
       const cardWidth = cardRefs.current[0]?.offsetWidth || 164;
       const entrance = (1 - clamp((height - rect.top) / height)) * 95;
 
