@@ -9,3 +9,7 @@
 /* The lazy-loaded carousel's generic height must not collapse this section. */
 .flex-carousel.leaf-poster-carousel { height:clamp(420px,53vw,660px); }
 @media(max-width:700px){ .flex-carousel.leaf-poster-carousel { height:440px; } }
+.leaf-mobile-work-gallery{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:32px 24px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.leaf-mobile-work-gallery figure{flex:0 0 72%;margin:0;scroll-snap-align:center;min-width:0}
+.leaf-mobile-work-gallery img{display:block;width:100%;height:340px;object-fit:contain;background:#101216;border-radius:12px}
+.leaf-mobile-work-gallery figcaption{color:#e5e5e5;font-size:13px;line-height:1.5;margin-top:14px}

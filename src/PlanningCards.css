@@ -30,3 +30,21 @@
  .app-shell .leaf-feature-cards .project-folder-scene { inset:42% 0 0; }
  .app-shell .leaf-feature-cards .project-folder-detail { left:5%;right:5%;padding:12px; }
 }
+@media(max-width:700px){
+ html body #root .app-shell .leaf-feature-cards .leaf-feature-grid{grid-template-columns:minmax(0,1fr)!important;gap:18px}
+ html body #root .app-shell .leaf-feature-cards .leaf-feature-card{grid-row:auto!important;padding:26px 22px!important;min-height:0!important}
+ html body #root .app-shell .leaf-feature-cards .leaf-feature-brief{min-height:470px!important}
+ html body #root .app-shell .leaf-feature-cards .leaf-feature-card h3{font-size:28px!important;max-width:none}
+ html body #root .app-shell .leaf-feature-cards .leaf-feature-card > p{font-size:15px!important;max-width:none}
+ .app-shell .leaf-feature-cards .planning-check{font-size:14px;min-height:44px}
+ .app-shell .leaf-feature-cards .launch-lattice-panel{flex-direction:row;align-items:center;gap:18px}
+ .app-shell .leaf-feature-cards .launch-lattice-panel p{font-size:13px!important}
+ .app-shell .leaf-feature-cards .project-folder-scene{inset:34% 0 0}
+ .app-shell .leaf-feature-cards .project-folder{width:240px;max-width:78%}
+}
+/* Keep phone rendering quiet; motion follows gestures rather than running continuously. */
+@media(max-width:700px){
+ .app-shell :is(.leaf-code-background span,.dt-code-rain div,.leaf-phone-float,.leaf-phone-device,.leaf-process-orbit,.leaf-service-feature-visual,.leaf-service-feature-icon,.launch-lattice span){animation:none!important}
+ .app-shell :is(.leaf-code-background,.dt-code-rain){opacity:.35}
+ .app-shell .leaf-service-feature-visual{transform:none}
+}

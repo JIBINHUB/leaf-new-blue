@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Code2, PenTool, Megaphone, Palette, Smartphone, ShoppingBag, LayoutGrid, Video } from 'lucide-react';
 import './LeafPhonePreview.css';
 
@@ -13,19 +13,7 @@ const messages = [
   { service: 'Shopify Development', icon: ShoppingBag },
 ];
 
-const phoneImages = [{ url: 'https://orucode.online/', name: 'ORU CODE' }];
-
 export default function LeafPhonePreview() {
-  const [activeImage, setActiveImage] = useState(0);
-
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
-    const interval = window.setInterval(() => setActiveImage(index => index + 1), 9000);
-    return () => window.clearInterval(interval);
-  }, []);
-
   return <div className="leaf-phone-preview" aria-label="Leaf services turning ideas into outcomes">
     <div className="leaf-phone-scene">
       <div className="leaf-phone-stream" aria-hidden="true">
@@ -44,7 +32,7 @@ export default function LeafPhonePreview() {
         <span className="leaf-phone-side-button leaf-phone-side-button-three" aria-hidden="true" />
         <div className="leaf-phone-screen">
           <div className="leaf-phone-photo">
-            <iframe key={activeImage} className="leaf-phone-live-site" src={phoneImages[0].url} title={`${phoneImages[0].name} live website preview`} tabIndex={-1} />
+            <img className="leaf-phone-static-site" src="/assets/portfolio/websites/orucode-mobile-hero.png" alt="ORU CODE website home page" loading="lazy" decoding="async" draggable={false} />
           </div>
           <div className="leaf-phone-island" aria-hidden="true" />
         </div>

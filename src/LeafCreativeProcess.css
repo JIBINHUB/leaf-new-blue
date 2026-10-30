@@ -55,3 +55,9 @@
 }
 @media(max-width:700px) and (max-height:740px){.leaf-process-scroll{height:auto}.leaf-process-stage{position:relative;top:auto}.leaf-process-globe{width:min(75vw,310px)}}
 @media(prefers-reduced-motion:reduce){.leaf-process-scroll{height:auto}.leaf-process-stage{position:relative;top:auto;height:auto}.leaf-process-globe-art,.leaf-process-traveller{transform:none}.leaf-process-chart,.leaf-process-details{animation:none}}
+@media(max-width:700px){
+ .leaf-process-intro .leaf-orbit-actions{gap:12px; margin-top:24px}
+ .leaf-process-scroll{margin-top:48px}
+ .leaf-process-stage{gap:24px}
+ .leaf-process-panels{margin-bottom:20px}
+}
