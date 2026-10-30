@@ -38,3 +38,9 @@
 .leaf-people-card-id small { color:#9ea9bb; font:inherit; font-size:9px; }
 .leaf-people-next { display:flex; align-items:center; gap:6px; padding:10px 12px; border:1px solid #ffffff20; border-radius:11px; background:linear-gradient(#414857,#292e39); color:#fff; white-space:nowrap; }
 @media(prefers-reduced-motion:reduce) { .leaf-people-card-inner,.leaf-people-flip.is-flipped .leaf-people-card-inner { transform:none; } .leaf-people-flip.is-flipped .leaf-people-card-inner { transform:rotateY(180deg); } }
+@media(max-width:700px){
+ .leaf-people-card-bottom{left:18px;right:18px;bottom:18px;text-align:left}
+ html body #root .app-shell .leaf-people-card-bottom strong{display:block;font-family:'Poppins',sans-serif!important;font-size:23px!important;font-weight:500!important;line-height:1.25!important;letter-spacing:-.025em!important;white-space:normal}
+ html body #root .app-shell .leaf-people-card-bottom small{display:block;font-family:'Poppins',sans-serif!important;font-size:12px!important;line-height:1.5!important;margin-top:6px;color:#e5e9f1}
+ .leaf-people-photo::after{inset:45% 0 0;background:linear-gradient(transparent,rgba(8,10,17,.95))}
+}

@@ -29,3 +29,9 @@ html body #root .app-shell .leaf-old-ad-copy strong{font-size:19px;line-height:1
 html body #root .app-shell .leaf-old-ad-copy p{font-size:11px;line-height:1.5;margin:8px 0 0}
 .leaf-old-ad-copy span{font-size:8px;margin-bottom:8px;color:#aab7d2}
 .leaf-old-ad-dots{left:18px}
+/* Blend the image into the offer background with a soft edge. */
+.leaf-old-ad{display:block;background:#17233e}
+.leaf-old-ad-media{inset:0 0 0 34%;mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.3) 24%,#000 65%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.3) 24%,#000 65%)}
+.leaf-old-ad-copy{width:65%;max-width:65%;height:100%;box-sizing:border-box;background:transparent;padding:22px 18px 36px;justify-content:center}
+html body #root .app-shell .leaf-old-ad-copy strong{font-size:clamp(17px,3.8vw,21px);line-height:1.3;max-width:235px}
+html body #root .app-shell .leaf-old-ad-copy p{max-width:210px}
