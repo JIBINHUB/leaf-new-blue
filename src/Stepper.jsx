@@ -21,6 +21,7 @@ export default function Stepper({
   backButtonText = 'Back',
   nextButtonText = 'Continue',
   disableStepIndicators = false,
+  hideFinalButton = false,
   stepLabels = ['Services', 'Appointment', 'References', 'Contact'],
   renderStepIndicator,
   ...rest
@@ -81,6 +82,7 @@ export default function Stepper({
                       updateStep(stepNumber);
                     }
                   }}
+                  aria-current={isCurrent ? 'step' : undefined}
                   className={`step-indicator-wrapper ${isCurrent ? 'is-active' : ''} ${isComplete ? 'is-complete' : ''}`}
                 >
                   <StepIndicator
@@ -131,7 +133,7 @@ export default function Stepper({
                   <span>{backButtonText}</span>
                 </button>
               )}
-              <button 
+              {!(hideFinalButton && isLastStep) && <button
                 type="button"
                 onClick={isLastStep ? handleComplete : handleNext} 
                 className={`next-button ${isLastStep ? 'is-complete-btn' : ''}`} 
@@ -139,7 +141,7 @@ export default function Stepper({
               >
                 <span>{isLastStep ? 'Submit Project Enquiry' : nextButtonText}</span>
                 <span>›</span>
-              </button>
+              </button>}
             </div>
           </div>
         )}

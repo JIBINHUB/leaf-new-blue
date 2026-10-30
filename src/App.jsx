@@ -349,9 +349,14 @@ const App = () => {
   const [activeCapability, setActiveCapability] = useState(0);
   const [selectedScheduleType, setSelectedScheduleType] = useState('discovery');
   const [selectedLaunchPlan, setSelectedLaunchPlan] = useState(1);
-  const [selectedAppointmentDay, setSelectedAppointmentDay] = useState(1);
+  const [selectedAppointmentDay, setSelectedAppointmentDay] = useState(0);
   const [selectedAppointmentTime, setSelectedAppointmentTime] = useState('11:30 AM');
-  const [bookingMonthOffset, setBookingMonthOffset] = useState(0);
+  const [bookingMonthOffset, setBookingMonthOffset] = useState(() => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    return (tomorrow.getFullYear() - today.getFullYear()) * 12 + tomorrow.getMonth() - today.getMonth();
+  });
   const [currentTime, setCurrentTime] = useState(new Date());
   const [likedPortfolioItems, setLikedPortfolioItems] = useState([]);
   const [sharedPortfolioItem, setSharedPortfolioItem] = useState('');
@@ -2381,7 +2386,7 @@ const App = () => {
          adopts it and every other route keeps its existing surface. */
       data-route={activeNav}
     >
-      {(!isMobileViewport || activeNav === 'services') && <LetterGlitch className="leaf-site-glitch" glitchColors={['#799fff','#61dca3']} baseColor="#8d9cb8" fontSize={isMobileViewport ? 17 : 14} spacing={0.6} density={isMobileViewport ? 0.45 : 0.9} baseOpacity={0.16} glitchAmount={isMobileViewport ? 0.2 : 0.5} speed={isMobileViewport ? 0.35 : 1} cursorRadius={140} clickEffect="tear" flow={isMobileViewport ? 0 : 0.5} dpr={isMobileViewport ? 1 : 1.5} aria-hidden="true" />}
+      {(!isMobileViewport || activeNav === 'services' || activeNav === 'home') && <LetterGlitch className="leaf-site-glitch" glitchColors={['#799fff','#61dca3']} baseColor="#8d9cb8" fontSize={isMobileViewport ? 17 : 14} spacing={0.6} density={isMobileViewport ? 0.45 : 0.9} baseOpacity={0.16} glitchAmount={isMobileViewport ? 0.2 : 0.5} speed={isMobileViewport ? 0.35 : 1} cursorRadius={140} clickEffect="tear" flow={isMobileViewport ? 0 : 0.5} dpr={isMobileViewport ? 1 : 1.5} aria-hidden="true" />}
       {loaderPhase !== 'done' && <LoadingScreen leaving={loaderPhase === 'out'} quick={loaderQuick} />}
       {/* Soft Background Gradients */}
       <div className="absolute top-[-10%] right-[-5%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-b from-[#FAE696]/20 to-transparent blur-3xl -z-10 pointer-events-none"></div>
@@ -3641,6 +3646,7 @@ const App = () => {
           <Stepper
             initialStep={1}
             stepLabels={['Services', 'Strategy Call', 'Contact']}
+            hideFinalButton
             /* Two faults here, both fixed by never letting the stepper
                "complete".
 
