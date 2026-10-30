@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import LeafAdvantageGallery from './LeafAdvantageGallery';
 import LeafServiceOrbit from './LeafServiceOrbit';
 import LeafCreativeProcess from './LeafCreativeProcess';
@@ -7,9 +7,12 @@ import LeafAbout from './LeafAbout';
 import LeafFeaturedWork from './LeafFeaturedWork';
 import LeafStudioHeads from './LeafStudioHeads';
 import LeafGoogleReviews from './LeafGoogleReviews';
-import FlexCarousel from './FlexCarousel';
+const FlexCarousel = lazy(() => import('./FlexCarousel'));
 import './LeafPosterCarousel.css';
-import { ArrowRight, ArrowUpRight, Layers, PenTool, Code2, Megaphone, Check, Plus, Compass } from 'lucide-react';
+import './LeafFeatureScenes.css';
+import ProjectFolder from './ProjectFolder';
+import { PlanningChecklist, LaunchLattice } from './PlanningCards';
+import { ArrowRight, ArrowUpRight, Layers, PenTool, Code2, Megaphone, Check, Plus } from 'lucide-react';
 
 const services = [
   { icon: PenTool, label: '01 / DESIGN', title: 'Design that feels intuitive.', text: 'Thoughtful interfaces and brand systems, built around the people using them.', id: 'uiux' },
@@ -75,7 +78,7 @@ export default function DovetailHome({ navigateTo, openServiceModal, serviceCate
     </section>
     <section ref={galleryRef} className="leaf-poster-showcase" aria-labelledby="leaf-poster-showcase-title">
       <div className="dt-container leaf-poster-showcase-head"><div><span className="dt-eyebrow">SELECTED POSTERS / LEAF CREATIONISM</span><h2 id="leaf-poster-showcase-title">Ideas in the <span className="leaf-pixel-accent">wild.</span></h2><p>A closer look at the campaigns, identities and visuals we’ve made.</p></div><button type="button" className="dt-secondary" onClick={() => navigateTo('portfolio')}>Explore all work <ArrowUpRight size={16}/></button></div>
-      {galleryReady ? <FlexCarousel items={portfolioImages} preset="liquid" intro="rise" fit="natural" cardHeight={0.52} bend={0.13} dispersion={0.1} squeeze={0.06} gap={22} radius={12} autoplay interval={4} captureWheel={false} className="leaf-poster-carousel" /> : <div className="leaf-poster-carousel" aria-hidden="true" />}
+      {galleryReady ? <Suspense fallback={<div className="leaf-poster-carousel" aria-hidden="true" />}><FlexCarousel items={portfolioImages} preset="liquid" intro="rise" fit="natural" cardHeight={0.52} bend={0.13} dispersion={0.1} squeeze={0.06} gap={22} radius={12} autoplay interval={4} captureWheel={false} className="leaf-poster-carousel" /></Suspense> : <div className="leaf-poster-carousel" aria-hidden="true" />}
       <p className="leaf-poster-instruction">DRAG TO EXPLORE <span>↔</span> &nbsp;·&nbsp; USE ARROW KEYS</p>
     </section>
     <LeafAbout navigateTo={navigateTo} />
@@ -85,7 +88,7 @@ export default function DovetailHome({ navigateTo, openServiceModal, serviceCate
     <LeafServiceOrbit serviceCategories={serviceCategories} serviceTaglines={serviceTaglines} navigateTo={navigateTo} openServiceModal={openServiceModal} />
     <section className="dt-section dt-container dt-services"><div className="dt-section-head"><div><span className="dt-eyebrow">WHAT WE DO</span><h2>Built to move<br/>your brand forward.</h2></div><button type="button" className="dt-secondary" onClick={() => navigateTo('services')}>All services <ArrowUpRight size={16}/></button></div><div className="dt-service-grid">{services.map(({icon:Icon,label,title,text,id})=><button className="dt-service-card" key={id} type="button" onClick={()=>openServiceModal(id)}><span className="dt-service-top"><Icon size={21}/><ArrowUpRight size={16}/></span><span className="dt-eyebrow">{label}</span><strong>{title}</strong><p>{text}</p><span className="dt-card-link">Explore service <ArrowRight size={15}/></span></button>)}</div></section>
     <LeafAdvantageGallery items={posters} />
-    <section className="dt-section dt-container"><div className="dt-section-head"><div><span className="dt-eyebrow">HOW WE WORK</span><h2>One team, from first<br/>sketch to launch.</h2></div><p>Clear milestones and direct conversations keep your project moving.</p></div><div className="dt-steps">{[['01','Discover','We listen, ask questions, and map the right starting point.'],['02','Design','We turn the direction into a clear, considered experience.'],['03','Build & launch','We bring the details together and get your project ready for the world.']].map(([n,t,d])=><div key={n}><span>{n} <Compass size={16}/></span><strong>{t}</strong><p>{d}</p></div>)}</div></section>
+    <section className="leaf-feature-cards dt-container" aria-labelledby="leaf-features-title"><div className="leaf-feature-intro"><h2 id="leaf-features-title">Everything your idea needs.</h2><p>From the first conversation to launch, we make the next step clear.</p></div><div className="leaf-feature-grid"><article className="leaf-feature-card leaf-feature-brief"><h3>Start with your idea</h3><p>Tell us your goals. We’ll shape a clear direction together.</p><ProjectFolder /></article><article className="leaf-feature-card leaf-feature-design"><h3>Plan your project</h3><p>Use this simple checklist to prepare for your first conversation.</p><PlanningChecklist /></article><article className="leaf-feature-card leaf-feature-launch"><h3>Find your next step</h3><p>Bring your idea closer to launch with the right services.</p><LaunchLattice /></article></div></section>
     <section className="dt-section dt-container dt-cta"><div><span className="dt-eyebrow">READY WHEN YOU ARE</span><h2>Let’s make something<br/>worth noticing.</h2><p>Tell us what you’re working on. We’ll help you find the next step.</p></div><button type="button" className="dt-primary" onClick={()=>navigateTo('workspace')}>Start a project <ArrowUpRight size={16}/></button></section>
   </main>;
 }

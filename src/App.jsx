@@ -3650,8 +3650,6 @@ const App = () => {
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               <span>{selectedServiceItems.length} service{selectedServiceItems.length === 1 ? '' : 's'}</span>
               <span className="opacity-40">•</span>
-              <span>{selectedReferenceItems.length} reference{selectedReferenceItems.length === 1 ? '' : 's'}</span>
-              <span className="opacity-40">•</span>
               <strong className="text-emerald-400">₹0 due now</strong>
             </div>
           </section>
@@ -3659,7 +3657,7 @@ const App = () => {
           {/* Luxury Animated Stepper */}
           <Stepper
             initialStep={1}
-            stepLabels={['Services', 'Strategy Call', 'References', 'Contact']}
+            stepLabels={['Services', 'Strategy Call', 'Contact']}
             /* Two faults here, both fixed by never letting the stepper
                "complete".
 
@@ -3810,65 +3808,6 @@ const App = () => {
                   <strong>{selectedSchedule.title}</strong>
                   <p>{selectedAppointment.full} / {selectedSlot.time} IST / {selectedSlot.note}</p>
                 </div>
-              </div>
-            </Step>
-
-            {/* STEP 3: Portfolio References */}
-            <Step>
-              <div className="step-content-head">
-                <div>
-                  <h3>Visual Inspiration & References (Optional)</h3>
-                  <p>Saved portfolio references to guide the aesthetic direction.</p>
-                </div>
-                <button type="button" className="step-action-btn" onClick={() => navigateTo('portfolio')}>
-                  <Plus size={14} />
-                  <span>Browse Work</span>
-                </button>
-              </div>
-
-              <div className="reference-references-container pt-2">
-                {selectedReferenceItems.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {selectedReferenceItems.map((item) => (
-                      <article
-                        key={item.src}
-                        className={`reference-selected-card ratio-${getPortfolioRatio(item)}`}
-                        style={{ '--portfolio-ratio': getPortfolioAspectRatio(item) }}
-                      >
-                        <div>
-                          {item.type === 'video' ? (
-                            <video
-                              src={item.src}
-                              muted
-                              playsInline
-                              preload="metadata"
-                              onLoadedMetadata={(event) => rememberPortfolioRatio(item.src, event.currentTarget.videoWidth, event.currentTarget.videoHeight)}
-                            />
-                          ) : (
-                            <img
-                              src={item.src}
-                              alt={item.title}
-                              loading="lazy"
-                              onLoad={(event) => rememberPortfolioRatio(item.src, event.currentTarget.naturalWidth, event.currentTarget.naturalHeight)}
-                            />
-                          )}
-                        </div>
-                        <section>
-                          <span>{item.category}</span>
-                          <strong>{item.title}</strong>
-                          <p>{item.format} reference saved for your enquiry.</p>
-                          <button type="button" onClick={() => togglePortfolioReference(item)}>Remove</button>
-                        </section>
-                      </article>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="reference-empty-card">
-                    <strong>No visual references added yet</strong>
-                    <p>You can add visual references from our portfolio gallery, or skip to contact details.</p>
-                    <button type="button" onClick={() => navigateTo('portfolio')}>Explore Portfolio</button>
-                  </div>
-                )}
               </div>
             </Step>
 

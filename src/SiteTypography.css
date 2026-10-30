@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500&display=swap');
 /* Off+Brand uses a custom proprietary face; Helvetica/Arial provide a close, broadly available substitute. */
 :root { --dt-font: 'Helvetica Neue', Helvetica, Arial, sans-serif; --dt-mono: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 html body .app-shell,
@@ -9,8 +8,9 @@ html body #root .app-shell :is(h1,h2,h3,h4,h5,h6,p,a,button,input,textarea,selec
 html body #root .app-shell :is(h1,h2) { font-weight: 400 !important; text-transform: uppercase; }
 html body #root .app-shell :is(h1,h2) :is(em,strong,span) { font-weight: inherit !important; }
 html body #root .app-shell :is(h1,h2) .leaf-pixel-accent,
-html body #root .app-shell :is(h1,h2) em { font-family: 'Pixelify Sans', monospace !important; font-weight: 400 !important; letter-spacing: -.035em; }
-html body #root .app-shell .leaf-dock :is(button, span) { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important; font-weight: 400 !important; font-style: normal !important; text-transform: uppercase; }
+html body #root .app-shell :is(h1,h2) em { font-family: 'Poppins', sans-serif !important; font-weight: 400 !important; letter-spacing: -.035em; text-transform: lowercase; }
+html body #root .app-shell .leaf-dock :is(button, span) { font-family: 'Poppins', sans-serif !important; font-weight: 400 !important; font-style: normal !important; text-transform: uppercase; }
+html body #root .app-shell .leaf-old-ad-copy, html body #root .app-shell .leaf-old-ad-copy :is(h2,h3,p,span,strong) { font-family: 'Poppins', sans-serif !important; font-weight: 400 !important; }
 
 /* Remove editorial section labels without hiding functional price or service labels. */
 html body #root .app-shell :is(

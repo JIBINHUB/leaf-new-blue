@@ -57,3 +57,4 @@
 .leaf-process-scroll { height: 270vh; }
 @media(max-width:700px) { .leaf-process { padding-bottom: 30px; } .leaf-process-scroll { height: 185vh; } }
 @media(prefers-reduced-motion:reduce) { .leaf-process-scroll { height: auto; } }
+@media(max-width:700px){.leaf-process-scroll{height:auto;margin-top:30px}.leaf-process-stage{position:relative;top:auto;height:auto;overflow:visible;display:grid;gap:24px;align-content:start}.leaf-process-globe{width:min(78%,330px);margin:0 auto}.leaf-process-panels{display:flex;flex-direction:column;gap:12px;height:auto;margin-bottom:22px}.leaf-process-brief,.leaf-process-chart{position:relative;inset:auto;width:100%;transform:none;animation:none;box-sizing:border-box}.leaf-process-chart div{max-width:100%;box-sizing:border-box}.leaf-process-details{animation:none}.leaf-process-tabs{padding-bottom:12px}}
