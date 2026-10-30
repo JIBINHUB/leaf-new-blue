@@ -66,15 +66,6 @@ export default function DovetailHome({ navigateTo, openServiceModal, serviceCate
         <div className="dt-reference-top"><div className="leaf-old-ad" aria-label="Studio offers"><div className="leaf-old-ad-media">{ads[ad].video && !mobile ? <video src={ads[ad].video} autoPlay muted loop playsInline /> : <img src={ads[ad].image || "/assets/ads/best-uiux-design.webp"} alt="" />}</div><div className="leaf-old-ad-copy"><span>{ads[ad].tag}</span><strong>{ads[ad].title}</strong><p>{ads[ad].description}</p></div><div className="leaf-old-ad-dots">{ads.map((item,index)=><button key={item.title} type="button" aria-label={`Show ${item.title}`} aria-pressed={ad === index} onClick={()=>setAd(index)} />)}</div></div><LeafGoogleReviews /></div>
         <h1 className="dt-reference-title"><span>Make <img className="leaf-enter-photo" src="/assets/hero/enter-key-yellow.png" alt="" /> ideas</span><span className="leaf-hero-title-last"><span>worth</span> <span className="leaf-pixel-accent">noticing</span></span></h1>
         <p className="leaf-hero-description">Leaf Creationism is a creative studio in Kerala, building distinctive brands, websites and digital experiences that help businesses grow.</p>
-        <div className="leaf-client-loop" role="region" aria-label="Selected website projects">
-          <span className="leaf-client-label">SELECTED WORK</span>
-          <div className="leaf-client-window"><div className="leaf-client-track">
-            {[0, 1].map(copy => <div className="leaf-client-list" key={copy} aria-hidden={copy ? true : undefined}>
-              <span className="leaf-client-oru">ORU <b>CODE</b></span><span className="leaf-client-mallu">MALLUGRAPHER <small>UK</small></span>
-              <span className="leaf-client-oru">ORU <b>CODE</b></span><span className="leaf-client-mallu">MALLUGRAPHER <small>UK</small></span>
-            </div>)}
-          </div></div>
-        </div>
         <LeafPhonePreview navigateTo={navigateTo} />
       </div>
     </section>

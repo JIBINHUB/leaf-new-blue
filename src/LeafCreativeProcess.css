@@ -62,3 +62,10 @@
  .leaf-process-panels{margin-bottom:20px}
 }
 .leaf-process-intro .leaf-orbit-actions{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px}
+/* Stage copy must not resize the mobile pin and move its scroll boundaries. */
+@media(max-width:700px) and (min-height:741px) and (prefers-reduced-motion:no-preference){
+ .leaf-process-stage{height:calc(100svh - 100px);align-content:center;grid-template-rows:auto auto;gap:20px}
+ .leaf-process-globe{width:min(76vw,29svh,320px)}
+ .leaf-process-details{min-height:132px}
+ .leaf-process-tabs{min-height:54px}
+}

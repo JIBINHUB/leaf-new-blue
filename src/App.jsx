@@ -2406,7 +2406,7 @@ const App = () => {
          adopts it and every other route keeps its existing surface. */
       data-route={activeNav}
     >
-      <LetterGlitch className="leaf-site-glitch" glitchColors={['#799fff','#61dca3']} baseColor="#8d9cb8" fontSize={14} spacing={0.6} density={0.9} baseOpacity={0.16} glitchAmount={0.5} speed={1} cursorRadius={140} clickEffect="tear" flow={0.5} dpr={1.5} aria-hidden="true" />
+      {!window.matchMedia('(max-width:700px)').matches && <LetterGlitch className="leaf-site-glitch" glitchColors={['#799fff','#61dca3']} baseColor="#8d9cb8" fontSize={14} spacing={0.6} density={0.9} baseOpacity={0.16} glitchAmount={0.5} speed={1} cursorRadius={140} clickEffect="tear" flow={0.5} dpr={1.5} aria-hidden="true" />}
       {loaderPhase !== 'done' && <LoadingScreen leaving={loaderPhase === 'out'} quick={loaderQuick} />}
       {/* Soft Background Gradients */}
       <div className="absolute top-[-10%] right-[-5%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-b from-[#FAE696]/20 to-transparent blur-3xl -z-10 pointer-events-none"></div>

@@ -6,3 +6,18 @@
 @media(max-width:700px){.leaf-google-reviews{margin-top:28px;width:min(350px,100%)}}
 @media(prefers-reduced-motion:reduce){.leaf-google-review{animation:none}}
 @media(max-width:700px){.leaf-google-reviews{width:min(300px,100%);min-height:0;padding:13px 15px;margin-top:20px}}
+.app-shell .leaf-google-reviews{width:min(350px,100%);box-sizing:border-box;border:1px solid #dadce0;background:#fff;color:#202124;border-radius:14px;padding:18px;backdrop-filter:none;box-shadow:0 6px 24px #0002;transform:none}
+.leaf-google-header{border-color:#e8eaed;padding-bottom:12px}
+.leaf-google-wordmark{color:#3c4043;font:500 14px/1.4 'Poppins',sans-serif}
+.leaf-google-wordmark b{color:#4285f4;font-size:22px;margin-right:7px}
+.leaf-google-header a{color:#5f6368;display:flex}
+.app-shell .leaf-google-business{color:#5f6368!important;font:400 10px/1.5 'Poppins',sans-serif;margin:10px 0 0}
+.leaf-google-review{animation:none;padding-top:12px}
+.leaf-google-review-body strong{color:#202124!important;font:500 13px/1.4 'Poppins',sans-serif}
+.leaf-google-stars{color:#f9ab00;font-size:13px;letter-spacing:1px}
+.app-shell .leaf-google-quote{color:#3c4043;font:400 12px/1.6 'Poppins',sans-serif;margin:5px 0 0}
+.leaf-google-more{margin-top:14px;font-size:11px;color:#3c4043}
+.leaf-google-more summary{cursor:pointer;min-height:28px}
+.leaf-google-more article{padding:10px 0;border-top:1px solid #e8eaed}
+.leaf-google-more blockquote{margin:5px 0;line-height:1.6}
+.leaf-google-source{display:flex;align-items:center;gap:6px;border-top:1px solid #e8eaed;margin-top:8px;padding-top:12px;color:#1967d2;font-size:11px;text-decoration:none}

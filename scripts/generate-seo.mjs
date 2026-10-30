@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 /**
  * Post-build SEO / AEO / GEO generator.
  *
@@ -306,6 +307,13 @@ function buildBody(route) {
       out.push(`<ul>${section.bullets.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`);
     }
     out.push('</section>');
+  }
+
+  if (route.key === 'home') {
+    const reviews = JSON.parse(readFileSync(new URL('../src/googleReviews.json', import.meta.url), 'utf8'));
+    out.push('<section><h2>Customer feedback for Leaf Creationism</h2>');
+    reviews.forEach(review => out.push(`<figure><blockquote>${escapeHtml(review.quote)}</blockquote><figcaption>${escapeHtml(review.name)}</figcaption></figure>`));
+    out.push('<p><a href="https://share.google/FF1yTWQbj1Gu2wtEr">Read customer reviews on Google</a></p></section>');
   }
 
   if (route.faq?.length) {
