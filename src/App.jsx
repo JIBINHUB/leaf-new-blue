@@ -3643,7 +3643,6 @@ const App = () => {
                 <ShoppingBag size={24} />
               </div>
               <div>
-                <span className="text-[11px] font-bold tracking-widest text-[#60a5fa] uppercase block">Leaf Creationism / Project Cart</span>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Your project, beautifully planned.</h1>
               </div>
             </div>
