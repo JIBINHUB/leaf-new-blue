@@ -1,7 +1,6 @@
 import React, { useState, Children, useRef, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Stepper.css';
-import './CartStepperRefresh.css';
 
 export default function Stepper({
   children,

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FolderOpen } from 'lucide-react';
 import './ProjectFolder.css';
 
 export default function ProjectFolder() {
@@ -9,7 +10,7 @@ export default function ProjectFolder() {
     <div className="project-folder" data-open={open}>
       <span className="project-folder-back" />
       {projects.map((project, i) => <button type="button" className={`project-folder-document document-${i}`} key={project.name} tabIndex={open ? 0 : -1} onClick={() => setSelected(i)} aria-label={`View ${project.name} project`}><img src={project.image} alt="" loading="lazy"/><strong>{project.name}</strong><small>VIEW PROJECT ↗</small></button>)}
-      <button type="button" className="project-folder-front" aria-expanded={open} onClick={() => { setOpen(!open); setSelected(null); }}><span className="folder-kicker">LEAF / CREATIVE WORK</span><strong>Ideas, made<br />real<span className="folder-spark"> ✦</span></strong><small>THREE PROJECTS INSIDE</small></button>
+      <button type="button" className="project-folder-front" aria-expanded={open} onClick={() => { setOpen(!open); setSelected(null); }}><FolderOpen className="folder-icon" size={22} aria-hidden="true"/><strong>Ideas, made<br />real</strong><small>THREE PROJECTS INSIDE</small></button>
     </div>
     {selected !== null ? <div className="project-folder-detail"><img src={projects[selected].image} alt={`${projects[selected].name} website preview`}/><strong>{projects[selected].name}</strong><p>{projects[selected].detail}</p><a href={projects[selected].url} target="_blank" rel="noopener noreferrer">Visit website ↗</a><button type="button" onClick={() => setSelected(null)}>Close</button></div> : <span className="project-folder-hint">{open ? 'Select a project' : 'Tap to open'} ↗</span>}
   </div>;
