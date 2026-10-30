@@ -1,0 +1,29 @@
+/* Extend the hero beneath the transparent site navigation. */
+:root .app-shell[data-route='services'] .dt-services-page { margin-top: -78px; }
+:root .app-shell[data-route='services'] .dt-services-page .dt-services-hero {
+  min-height: clamp(600px, 70vh, 780px);
+  display: flex;
+  align-items: center;
+  padding: 150px 0 90px;
+  background: linear-gradient(90deg, rgba(6,8,12,.96) 0%, rgba(6,8,12,.78) 38%, rgba(6,8,12,.18) 100%), linear-gradient(0deg, #0a0a0a, transparent 35%), url('../assets/services-hero-photo.jpg') center 32% / cover no-repeat !important;
+}
+:root .app-shell[data-route='services'] .dt-services-page .dt-services-hero .dt-container { width: min(1200px, calc(100% - 64px)); }
+:root .app-shell[data-route='services'] .dt-services-page .dt-services-hero h1 { max-width: 12ch; }
+:root .app-shell[data-route='services'] .dt-services-page .dt-services-hero p { color: #e1e2e5; }
+@media (max-width: 900px) and (min-width: 701px) {
+  :root .app-shell[data-route='services'] .dt-services-page .dt-services-hero { background-position: center, center, 60% center !important; }
+}
+@media (max-width: 700px) {
+  :root .app-shell[data-route='services'] .dt-services-page { margin-top: -65px; }
+  :root .app-shell[data-route='services'] .dt-services-page .dt-services-hero {
+    min-height: 690px;
+    align-items: end;
+    padding: 300px 0 55px;
+    background: linear-gradient(180deg, rgba(6,8,12,.32) 0%, rgba(6,8,12,.16) 25%, rgba(6,8,12,.85) 61%, #0a0a0a 100%), url('../assets/services-hero-photo.jpg') 68% top / cover no-repeat !important;
+  }
+  :root .app-shell[data-route='services'] .dt-services-page .dt-services-hero .dt-container { width: calc(100% - 36px); }
+  :root .app-shell[data-route='services'] .dt-services-page .dt-services-hero h1 { font-size: clamp(38px, 9vw, 56px); line-height: 1.08; }
+  :root .app-shell[data-route='services'] .dt-services-page .dt-services-hero .dt-actions { gap: 10px; flex-wrap: wrap; }
+}
+/* Let the animated site texture show through the dark page around the cards. */
+:root .app-shell[data-route='services'] .dt-services-page { position: relative; z-index: 1; background: transparent !important; }

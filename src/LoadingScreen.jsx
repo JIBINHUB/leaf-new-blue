@@ -1,5 +1,5 @@
 /**
- * LoadingScreen — the veil the site shows on arrival and between pages.
+ * LoadingScreen — the veil the site shows on first arrival.
  *
  * Deliberately simple: a fixed sheet and the animation. There is no progress
  * bar — the drawing is already the thing that says the site is working.

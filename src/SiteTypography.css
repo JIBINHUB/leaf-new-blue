@@ -38,3 +38,6 @@ html body #root .app-shell .portfolio-editorial-page .pe-head > div { display: n
 html body #root .app-shell .portfolio-editorial-page .pe-head { grid-template-columns: 1fr; }
 html body #root .app-shell .dt-reference-title img.leaf-enter-photo { width:clamp(125px,15vw,200px); height:clamp(125px,15vw,200px); }
 @media(max-width:700px) { html body #root .app-shell .dt-reference-title img.leaf-enter-photo { width:18vw; height:18vw; min-width:52px; min-height:52px; } }
+
+/* The overview label is hidden, so its text must occupy the full grid. */
+html body #root .app-shell .portfolio-editorial-page .pe-para { grid-template-columns: minmax(0, 1fr); }

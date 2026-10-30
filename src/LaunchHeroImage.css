@@ -1,0 +1,69 @@
+/* An illustrated backdrop with a soft fade behind the hero copy. */
+:root .app-shell[data-route] .launch-simple-page .launch-simple-hero.launch-simple-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  align-items: end;
+}
+:root .app-shell[data-route] .launch-simple-page .launch-simple-hero > div { position: relative; z-index: 1; }
+:root .app-shell[data-route] .launch-simple-page .launch-simple-hero > div > p { color: #eee !important; }
+:root .app-shell[data-route] .launch-simple-page .launch-simple-hero > aside {
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  background: rgba(10, 10, 11, .76) !important;
+  border: 1px solid rgba(255, 255, 255, .16) !important;
+  border-radius: 12px !important;
+}
+@media (max-width: 700px) {
+  :root .app-shell[data-route] .launch-simple-page .launch-simple-hero.launch-simple-hero {
+    min-height: 0;
+    padding-top: clamp(180px, 55vw, 290px) !important;
+  }
+}
+
+/* Poppins for supporting copy and section headings throughout Launch Cloud. */
+:root .app-shell[data-route='launch'] .launch-simple-page :is(h2, h3, p, strong, small, li, button, article span) {
+  font-family: 'Poppins', sans-serif !important;
+}
+:root .app-shell[data-route='launch'] .launch-simple-page :is(h2, h3) {
+  font-weight: 500 !important;
+}
+@media (max-width: 700px) {
+  :root .app-shell[data-route='launch'] .launch-simple-page .launch-simple-hero.launch-simple-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    padding: clamp(220px, 65vw, 290px) 20px 24px !important;
+  }
+  :root .app-shell[data-route='launch'] .launch-simple-page .launch-simple-hero h1 {
+    font-size: clamp(36px, 9vw, 48px) !important;
+    line-height: 1.05 !important;
+    overflow-wrap: normal;
+  }
+  :root .app-shell[data-route='launch'] .launch-simple-page .launch-simple-hero > div > p {
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+  }
+  :root .app-shell[data-route='launch'] .launch-simple-page .launch-simple-hero > aside {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+  }
+}
+/* Blue patterned background, shaded for readable white text. */
+:root .app-shell[data-route='launch'] .launch-simple-page .launch-simple-hero.launch-simple-hero {
+  background: linear-gradient(90deg, rgba(3, 9, 25, .75), rgba(3, 9, 25, .4)), linear-gradient(0deg, rgba(3, 9, 25, .65), transparent 65%), url('../assets/launch-cloud-pattern.png') center / cover no-repeat !important;
+}
+@media (max-width: 700px) {
+  :root .app-shell[data-route='launch'] .launch-simple-page .launch-simple-hero.launch-simple-hero {
+    padding: 48px 20px 24px !important;
+    background: linear-gradient(180deg, rgba(3, 9, 25, .55), rgba(3, 9, 25, .8)), url('../assets/launch-cloud-pattern.png') center / cover no-repeat !important;
+  }
+}
+:root .app-shell[data-route='launch'] .launch-simple-page .launch-simple-hero.launch-simple-hero {
+  border-radius: 24px !important;
+}
+@media (max-width: 700px) {
+  :root .app-shell[data-route='launch'] .launch-simple-page .launch-simple-hero.launch-simple-hero { border-radius: 20px !important; }
+}

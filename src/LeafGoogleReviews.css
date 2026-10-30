@@ -41,3 +41,8 @@
 .leaf-google-review-body{gap:4px}
 .leaf-google-avatar{box-shadow:inset 0 1px #ffffff30}
 .leaf-google-review-dots button[aria-pressed=true]:after{background:#b6cdff;box-shadow:0 0 7px #9bbcff70}
+
+.leaf-google-slides{display:grid;min-height:103px}
+.leaf-google-review{grid-area:1 / 1;opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .35s ease,transform .35s ease,visibility 0s linear .35s;animation:none}
+.leaf-google-review.is-active{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .35s ease,transform .35s ease,visibility 0s}
+@media(prefers-reduced-motion:reduce){.leaf-google-review{transition:none}}

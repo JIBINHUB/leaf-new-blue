@@ -123,8 +123,6 @@ const Masonry = ({
   hoverScale = 0.95,
   blurToFocus = true,
   colorShiftOnHover = false,
-  onItemClick,
-  selectedIds = []
 }) => {
   /* Phones get three columns, not one. At one per row this archive was a
      23,000px scroll of sixty-one full-width pictures, which is what "showing
@@ -347,19 +345,11 @@ const Masonry = ({
   return (
     <div ref={containerRef} className="list" style={{ height: containerHeight || undefined }}>
       {grid.map(item => {
-        const isSelected = selectedIds.includes(item.id);
-
         return (
           <div
             key={item.id}
             data-key={item.id}
-            className={`item-wrapper${isSelected ? ' is-selected' : ''}`}
-            /* Was window.open(item.url). These are portfolio pieces rather than
-               outbound links, so a click anywhere on the tile hands the item
-               back to the page, which adds it to the reference cart the enquiry
-               form already reads. The cart button below does the same thing and
-               is what keyboard and screen reader users get. */
-            onClick={() => onItemClick?.(item)}
+            className="item-wrapper"
             onMouseEnter={e => handleMouseEnter(e, item)}
             onMouseLeave={e => handleMouseLeave(e, item)}
           >
@@ -390,35 +380,6 @@ const Masonry = ({
                 <em>{item.title || 'Untitled piece'}</em>
                 {item.category && <i>{item.category}</i>}
               </span>
-
-              {/* The cart control. Stops the click bubbling so the tile's own
-                  handler does not toggle it straight back. */}
-              <button
-                type="button"
-                className="item-cart"
-                aria-pressed={isSelected}
-                aria-label={
-                  isSelected
-                    ? `Remove ${item.title || 'this piece'} from your references`
-                    : `Add ${item.title || 'this piece'} to your references`
-                }
-                onClick={e => {
-                  e.stopPropagation();
-                  onItemClick?.(item);
-                }}
-              >
-                {isSelected ? (
-                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                    <path d="M3 6h18" />
-                    <path d="M16 10a4 4 0 0 1-8 0" />
-                  </svg>
-                )}
-              </button>
 
               {colorShiftOnHover && (
                 <div

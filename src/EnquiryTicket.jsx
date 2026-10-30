@@ -83,8 +83,7 @@ const drawTicket = (canvas, ticket) => {
   const rows = [
     ['Name', ticket.name],
     ['Raised', ticket.date],
-    ['Services', ticket.services],
-    ['References', ticket.references]
+    ['Services', ticket.services]
   ];
 
   rows.forEach(([label, value], i) => {
@@ -177,7 +176,6 @@ export default function EnquiryTicket({ ticket }) {
               <span className="lt-item"><em>Name</em><b>{ticket.name}</b></span>
               <span className="lt-item"><em>Raised</em><b>{ticket.date}</b></span>
               <span className="lt-item"><em>Services</em><b>{ticket.services}</b></span>
-              <span className="lt-item"><em>References</em><b>{ticket.references}</b></span>
             </div>
           </div>
 

@@ -30,6 +30,8 @@ import './StoreGlassCards.css';
 import './GlowButtons.css';
 import './SiteTypography.css';
 import './CartStepperRefresh.css';
+import './LaunchHeroImage.css';
+import './ServicesHeroImage.css';
 import ContactPage from './ContactPage';
 import LetterGlitch from './LetterGlitch';
 import { 
@@ -310,7 +312,7 @@ const pageSeo = {
   referenceCart: {
     path: '/cart',
     title: 'Project Cart | Submit Your Leaf Creationism Enquiry',
-    description: 'Review selected services, appointment details, and portfolio references before submitting a private project enquiry to Leaf Creationism.'
+    description: 'Review selected services and appointment details before submitting a private project enquiry to Leaf Creationism.'
   }
 };
 
@@ -356,7 +358,6 @@ const App = () => {
   const [unmutedPortfolioItems, setUnmutedPortfolioItems] = useState([]);
   const [portfolioAudioAvailability, setPortfolioAudioAvailability] = useState({});
   const [portfolioMediaRatios, setPortfolioMediaRatios] = useState({});
-  const [referencePortfolioItems, setReferencePortfolioItems] = useState([]);
   const [referenceCartPulse, setReferenceCartPulse] = useState(false);
   const [activeStageIndex, setActiveStageIndex] = useState(0);
   const [floatingActionMode, setFloatingActionMode] = useState('whatsapp');
@@ -652,10 +653,6 @@ const App = () => {
   }, []);
 
   const navigateTo = (id, options = {}) => {
-    /* Between pages it is a curtain, not a performance. The loader runs its
-       quick variant, which fits the whole sequence into the shorter hold
-       instead of stopping part-way through it. */
-    if (id !== activeNav) runLoader(1250, true);
     setActiveNav(id);
     if (typeof window !== 'undefined') {
       const nextPath = navPathMap[id] || '/';
@@ -1387,7 +1384,7 @@ const App = () => {
       title: '3D Animation Launch',
       label: 'Motion identity',
       icon: Film,
-      desc: '3D visuals, product loops, hero motion, launch reels, and high-impact animated brand assets.',
+      desc: 'Give a product or idea another dimension with 3D visuals, short loops and launch-ready motion.',
       includes: ['3D hero visuals', 'Product motion loops', 'Launch reel exports']
     },
     {
@@ -1401,14 +1398,14 @@ const App = () => {
       title: 'AI Ads Engine',
       label: 'Growth launch',
       icon: Sparkles,
-      desc: 'AI-assisted ad angles, landing page hooks, creative testing structure, and performance-ready campaigns.',
+      desc: 'Explore ad concepts and campaign visuals with AI-assisted tools, shaped around your brand and reviewed by our team.',
       includes: ['Ad creative routes', 'Landing page hooks', 'Testing framework']
     },
     {
       title: 'Motion Graphics Pack',
       label: 'Reels + ads',
       icon: Activity,
-      desc: 'Animated explainers, reel graphics, kinetic text, service promos, and scroll-stopping ad motion.',
+      desc: 'Bring a story to life with animated text, explainers, social clips and promotional videos.',
       includes: ['Kinetic typography', 'Ad motion cuts', 'Short-form assets']
     }
   ];
@@ -2247,21 +2244,6 @@ const App = () => {
       ratios[src] === ratio ? ratios : { ...ratios, [src]: ratio }
     ));
   };
-  const selectedReferenceItems = portfolioItems.filter((item) => referencePortfolioItems.includes(item.src));
-  const togglePortfolioReference = (item) => {
-    setReferencePortfolioItems((items) => {
-      const isAdding = !items.includes(item.src);
-      const nextItems = items.includes(item.src)
-        ? items.filter((src) => src !== item.src)
-        : [...items, item.src];
-
-      if (isAdding) {
-        setReferenceCartPulse(true);
-        window.setTimeout(() => setReferenceCartPulse(false), 900);
-      }
-      return nextItems;
-    });
-  };
   const updateReferenceField = (field, value) => {
     setReferenceForm((form) => ({ ...form, [field]: value }));
   };
@@ -2273,7 +2255,7 @@ const App = () => {
     ? selectedServiceItems.map((service) => `${service.title} - ${service.desc}`).join('\n')
     : 'No services selected yet';
   const selectedAppointmentSummary = `${selectedSchedule.title} / ${selectedAppointment.full} / ${selectedSlot.time} IST / ${selectedSlot.note}`;
-  const hasEnquiryCartIntent = selectedReferenceItems.length > 0 || selectedServiceItems.length > 0;
+  const hasEnquiryCartIntent = selectedServiceItems.length > 0;
   const submitResendForm = async (payload, successMessage) => {
     setFormStatus('sending');
     try {
@@ -2334,10 +2316,7 @@ const App = () => {
       project_brief: referenceForm.project || 'Not added',
       selected_services: selectedServiceSummary,
       appointment_details: selectedAppointmentSummary,
-      selected_references: selectedReferenceItems.length
-        ? selectedReferenceItems.map((item, index) => `${index + 1}. ${item.title} / ${item.category} / ${item.src}`).join('\n')
-        : 'No portfolio references selected',
-      source: 'Reference cart / appointment enquiry'
+      source: 'Project cart / appointment enquiry'
     }, 'reference-sent');
 
     if (result?.success) {
@@ -2347,8 +2326,7 @@ const App = () => {
         id: result.requestId || 'LEAF-REQUEST',
         name: referenceForm.name.trim(),
         date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
-        services: selectedServiceItems.length ? `${selectedServiceItems.length} selected` : 'To discuss',
-        references: selectedReferenceItems.length ? `${selectedReferenceItems.length} saved` : 'None yet'
+        services: selectedServiceItems.length ? `${selectedServiceItems.length} selected` : 'To discuss'
       });
       setReferenceErrors({});
       setReferenceForm({ name: '', email: '', phone: '', project: '' });
@@ -2372,7 +2350,7 @@ const App = () => {
     }
   };
   const referenceMessage = [
-    'Hi Leaf Creationism, I want to enquire about work similar to these portfolio references.',
+    'Hi Leaf Creationism, I would like to enquire about a project.',
     '',
     `Name: ${referenceForm.name || 'Not added'}`,
     `Email: ${referenceForm.email || 'Not added'}`,
@@ -2382,12 +2360,9 @@ const App = () => {
     'Selected services:',
     selectedServiceSummary,
     '',
-    `Appointment: ${selectedAppointmentSummary}`,
-    '',
-    `Selected references (${selectedReferenceItems.length}):`,
-    ...selectedReferenceItems.map((item, index) => `${index + 1}. ${item.title} / ${item.category} / ${item.src}`)
+    `Appointment: ${selectedAppointmentSummary}`
   ].join('\n');
-  const referenceMailHref = `mailto:leafcreationism@gmail.com?subject=${encodeURIComponent('Portfolio reference enquiry')}&body=${encodeURIComponent(referenceMessage)}`;
+  const referenceMailHref = `mailto:leafcreationism@gmail.com?subject=${encodeURIComponent('Project enquiry')}&body=${encodeURIComponent(referenceMessage)}`;
   const referenceWhatsAppHref = `https://wa.me/918589038479?text=${encodeURIComponent(referenceMessage)}`;
   /* The studio sign-off. Defined once and rendered at the end of more than one
      route, so the pages visitors actually land on all close the same way
@@ -2406,7 +2381,7 @@ const App = () => {
          adopts it and every other route keeps its existing surface. */
       data-route={activeNav}
     >
-      {!window.matchMedia('(max-width:700px)').matches && <LetterGlitch className="leaf-site-glitch" glitchColors={['#799fff','#61dca3']} baseColor="#8d9cb8" fontSize={14} spacing={0.6} density={0.9} baseOpacity={0.16} glitchAmount={0.5} speed={1} cursorRadius={140} clickEffect="tear" flow={0.5} dpr={1.5} aria-hidden="true" />}
+      {(!isMobileViewport || activeNav === 'services') && <LetterGlitch className="leaf-site-glitch" glitchColors={['#799fff','#61dca3']} baseColor="#8d9cb8" fontSize={isMobileViewport ? 17 : 14} spacing={0.6} density={isMobileViewport ? 0.45 : 0.9} baseOpacity={0.16} glitchAmount={isMobileViewport ? 0.2 : 0.5} speed={isMobileViewport ? 0.35 : 1} cursorRadius={140} clickEffect="tear" flow={isMobileViewport ? 0 : 0.5} dpr={isMobileViewport ? 1 : 1.5} aria-hidden="true" />}
       {loaderPhase !== 'done' && <LoadingScreen leaving={loaderPhase === 'out'} quick={loaderQuick} />}
       {/* Soft Background Gradients */}
       <div className="absolute top-[-10%] right-[-5%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-b from-[#FAE696]/20 to-transparent blur-3xl -z-10 pointer-events-none"></div>
@@ -3085,15 +3060,15 @@ const App = () => {
             <div>
               <span><Cloud size={15} /> Launch Cloud</span>
               <h1>Ready to bring your idea online?</h1>
-              <p>Whether you’re launching a website, app or online store, we’ll help you make sense of the technology and get it live.</p>
+              <p>Launching something new? We can help with the website, hosting, creative work and the details that bring it all together.</p>
               <button type="button" onClick={() => navigateTo('workspace')}>Plan my launch <ArrowUpRight size={16} /></button>
             </div>
             <aside>
               <div className="launch-simple-live"><i className={isStudioOnline ? 'is-online' : 'is-offline'}></i>{isStudioOnline ? 'Leaf online' : 'Leaf offline'} <strong>{indiaTime} IST</strong></div>
               {[
-                ['1', 'Tell us the outcome', 'Website, app, store, campaign, or full launch.'],
-                ['2', 'We choose the stack', 'Hosting, backend, database, domain, and automation.'],
-                ['3', 'Build and launch', 'QA, deployment, creative assets, and support.']
+                ['1', 'Tell us what you’re making', 'A website, campaign, product or something else entirely.'],
+                ['2', 'Make a plan together', 'We’ll talk through the creative work, technology, timing and costs.'],
+                ['3', 'Create, check and launch', 'We’ll agree on what happens next and keep you involved along the way.']
               ].map(([step, title, text]) => (
                 <article key={step}>
                   <span>{step}</span>
@@ -3194,15 +3169,33 @@ const App = () => {
             </div>
           </section>
 
-          <section className="launch-simple-included">
-            <div>
-              <span>Also available</span>
-              <h2>Creative and launch operations.</h2>
+          <section className="launch-simple-section">
+            <div className="launch-simple-heading">
+              <h2>More ways to bring your launch to life.</h2>
+              <p>Choose the pieces you need. We’ll agree on the deliverables and quote for your project before work starts.</p>
             </div>
-            <div>
-              {[...launchFeatureRows.map((item) => item.title), ...launchCreativeBundles.map((item) => item.title)].map((item) => (
-                <span key={item}><Check size={14} /> {item}</span>
-              ))}
+            <div className="launch-simple-guide">
+              {launchCreativeBundles.map((item) => {
+                const CreativeIcon = item.icon;
+                return <article key={item.title}>
+                  <CreativeIcon size={21} />
+                  <h3>{item.title === 'AI Ads Engine' ? 'AI-assisted ads' : item.title}</h3>
+                  <p>{item.desc}</p>
+                  <ul>{item.includes.map((detail) => <li key={detail}>{detail}</li>)}</ul>
+                </article>;
+              })}
+            </div>
+          </section>
+
+          <section className="launch-simple-section">
+            <div className="launch-simple-heading"><h2>Good to know before we start.</h2></div>
+            <div className="launch-simple-providers">
+              {[
+                ['How does hosting work?', 'We help choose and configure a suitable provider. Hosting, domain and other third-party charges depend on your project and are discussed before launch.'],
+                ['Can I book creative work on its own?', 'Yes. Tell us whether you need a campaign, motion graphics, 3D visuals or a mix, and we’ll discuss the scope with you.'],
+                ['What happens after launch?', 'We can discuss updates, maintenance and support separately, so you know what is covered and what it costs.'],
+                ['Will AI ads guarantee results?', 'No campaign can promise results. We use AI as part of the creative process and agree on the work and any testing with you.']
+              ].map(([question, answer]) => <article key={question}><div><strong>{question}</strong></div><p>{answer}</p></article>)}
             </div>
           </section>
 
@@ -3581,22 +3574,12 @@ const App = () => {
                 <span className="pe-label">( Archive )</span>
               </div>
               <p>
-                {portfolioItems.length} public pieces, stills and films together.
-                Keep scrolling for the whole archive; tap any piece to add it to
-                your references.
+                Explore {portfolioItems.length} selected pieces, from stills to films.
               </p>
             </div>
 
-            {/* Every tile is sized to its own media, so nothing is cropped, and
-                clicking one adds it to the reference cart the enquiry form
-                already reads. */}
             <Masonry
               items={masonryItems}
-              selectedIds={referencePortfolioItems}
-              onItemClick={(item) => {
-                const match = portfolioItems.find((entry) => entry.src === item.id);
-                if (match) togglePortfolioReference(match);
-              }}
               animateFrom="bottom"
               scaleOnHover
               hoverScale={0.97}
@@ -3915,7 +3898,7 @@ const App = () => {
                 <div className="reference-privacy-note">
                   <Shield size={18} />
                   <p>
-                    Privacy policy: we use your details only to understand your enquiry and contact you about this project. Your data, references, and brief stay confidential with Leaf Creationism.
+                    Privacy policy: we use your details only to understand your enquiry and contact you about this project. Your details and brief stay confidential with Leaf Creationism.
                   </p>
                 </div>
 
@@ -3944,7 +3927,7 @@ const App = () => {
                 )}
 
                 {formStatus === 'reference-sent' && (
-                  <p className="reference-form-success">Enquiry sent. We have your services, appointment, references and contact details — a copy of this ticket is on its way to your inbox.</p>
+                  <p className="reference-form-success">Enquiry sent. We have your services, appointment and contact details — a copy of this ticket is on its way to your inbox.</p>
                 )}
                 {formStatus === 'error' && (
                   <p className="reference-form-error">Could not send right now. Please try again or use WhatsApp.</p>
@@ -3970,7 +3953,7 @@ const App = () => {
         }}
         aria-label={floatingActionMode === 'whatsapp'
           ? 'Chat with Leaf Creationism on WhatsApp'
-          : `Open project cart${hasEnquiryCartIntent ? ` with ${selectedServiceItems.length + selectedReferenceItems.length} selections` : ''}`
+          : `Open project cart${hasEnquiryCartIntent ? ` with ${selectedServiceItems.length} selections` : ''}`
         }
         title={floatingActionMode === 'whatsapp' ? 'WhatsApp' : 'Project cart'}
       >
@@ -3982,7 +3965,7 @@ const App = () => {
         </span>
         {hasEnquiryCartIntent && (
           <strong className={floatingActionMode === 'cart' ? 'is-visible' : ''}>
-            {selectedServiceItems.length + selectedReferenceItems.length}
+            {selectedServiceItems.length}
           </strong>
         )}
       </button>
