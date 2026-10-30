@@ -27,3 +27,20 @@
 .leaf-featured-media, .leaf-featured-card:nth-child(n) .leaf-featured-media { display: block; aspect-ratio: 3 / 4; padding: 0; background: #171a20; }
 .leaf-featured-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .leaf-featured-card:hover .leaf-featured-media img { transform: scale(1.025); }
+
+/* Project names stay readable; the disciplines glide into view on interaction. */
+.leaf-featured-caption { align-items: end; padding: 64px 22px 20px; background: linear-gradient(transparent, rgba(4, 7, 12, .78)); }
+.leaf-featured-title { display: block; max-width: calc(100% - 42px); font-size: clamp(12px, 1vw, 15px); font-weight: 400; line-height: 1.25; text-transform: uppercase; letter-spacing: .015em; transition: transform .4s ease; }
+.leaf-featured-plus { flex: none; transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.leaf-featured-details { position: absolute; left: 22px; right: 55px; bottom: 20px; overflow: hidden; opacity: 0; transform: translateY(8px); transition: opacity .3s ease, transform .4s ease; }
+.leaf-featured-marquee { display: flex; width: max-content; color: #e9edf6; font-size: 10px; line-height: 1.4; letter-spacing: .06em; text-transform: uppercase; animation: leaf-featured-marquee 12s linear infinite; animation-play-state: paused; }
+.leaf-featured-marquee > span { white-space: nowrap; }
+.leaf-featured-marquee i { font-style: normal; color: #a9c2ff; }
+.leaf-featured-card:is(:hover, :focus-visible) .leaf-featured-title { transform: translateY(-24px); }
+.leaf-featured-card:is(:hover, :focus-visible) .leaf-featured-details { opacity: 1; transform: translateY(0); }
+.leaf-featured-card:is(:hover, :focus-visible) .leaf-featured-marquee { animation-play-state: running; }
+.leaf-featured-card:is(:hover, :focus-visible) .leaf-featured-plus { transform: rotate(90deg); }
+@keyframes leaf-featured-marquee { to { transform: translateX(-50%); } }
+@media (hover: none) { .leaf-featured-title { transform: translateY(-20px); } .leaf-featured-details { opacity: 1; transform: none; } .leaf-featured-marquee { animation-play-state: paused; } }
+@media (max-width: 700px) { .leaf-featured-caption { padding: 48px 12px 14px; } .leaf-featured-details { left: 12px; bottom: 12px; right: 36px; } .leaf-featured-title { font-size: 11px; } .leaf-featured-plus { width: 22px; height: 22px; } .leaf-featured-marquee { font-size: 9px; } }
+@media (prefers-reduced-motion: reduce) { .leaf-featured-title, .leaf-featured-details, .leaf-featured-plus { transition: none; } .leaf-featured-marquee { animation: none; } }

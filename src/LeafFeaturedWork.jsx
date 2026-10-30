@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Plus } from 'lucide-react';
 import './LeafFeaturedWork.css';
 
 export default function LeafFeaturedWork({ items, navigateTo }) {
@@ -21,7 +21,13 @@ export default function LeafFeaturedWork({ items, navigateTo }) {
       <div className="leaf-featured-grid">
         {featuredItems.map((item, index) => <a className="leaf-featured-card" key={`${item.url}-${index}`} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${item.name} website`}>
           <span className="leaf-featured-media"><img src={previewFor(item)} alt={`Mobile website mockup for ${item.name}`} loading="lazy" decoding="async" /></span>
-          <span className="leaf-featured-caption"><span><strong>{item.name}</strong><small>{item.services.join(' / ')}</small></span><ArrowUpRight size={20}/></span>
+          <span className="leaf-featured-caption">
+            <span className="leaf-featured-title">{item.name}</span>
+            <span className="leaf-featured-details" aria-hidden="true">
+              <span className="leaf-featured-marquee"><span>{item.services.map((service, i) => <React.Fragment key={service}><i>{i % 2 ? '△' : '●'}</i> {service} &nbsp; </React.Fragment>)}</span><span>{item.services.map((service, i) => <React.Fragment key={service}><i>{i % 2 ? '△' : '●'}</i> {service} &nbsp; </React.Fragment>)}</span></span>
+            </span>
+            <Plus className="leaf-featured-plus" size={30} strokeWidth={1.4} aria-hidden="true" />
+          </span>
         </a>)}
       </div>
     </div>
