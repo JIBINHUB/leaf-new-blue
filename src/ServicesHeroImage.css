@@ -27,3 +27,17 @@
 }
 /* Let the animated site texture show through the dark page around the cards. */
 :root .app-shell[data-route='services'] .dt-services-page { position: relative; z-index: 1; background: transparent !important; }
+/* Show a small placeholder only while the actual image is loading. */
+:root .app-shell[data-route='services'] .dt-services-page .dt-services-hero { position: relative; isolation: isolate; overflow: hidden; background: #0a0a0a !important; }
+.dt-services-hero-photo { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: center 32%; }
+.dt-services-hero::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(90deg, rgba(6,8,12,.96), rgba(6,8,12,.78) 38%, rgba(6,8,12,.18)), linear-gradient(0deg, #0a0a0a, transparent 35%); }
+.dt-services-image-loader { position: absolute; top: 25%; right: 22%; width: 24px; height: 24px; border: 2px solid #ffffff40; border-top-color: #fff; border-radius: 50%; animation: services-loader-spin .8s linear infinite; }
+@keyframes services-loader-spin { to { transform: rotate(360deg); } }
+@media (max-width: 700px) {
+  .dt-services-hero-photo { object-position: 68% top; }
+  .dt-services-hero::before { background: linear-gradient(180deg, rgba(6,8,12,.32), rgba(6,8,12,.16) 25%, rgba(6,8,12,.85) 61%, #0a0a0a); }
+}
+@media (prefers-reduced-motion: reduce) { .dt-services-image-loader { animation: none; } }
+@media (prefers-reduced-motion: reduce) {
+  :root .app-shell[data-route='services'] .dt-services-page.animate-fade-in { animation: none; opacity: 1; transform: none; }
+}

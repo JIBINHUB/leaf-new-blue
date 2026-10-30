@@ -43,3 +43,31 @@
 :root .app-shell[data-route] .reference-cart-page.request-checkout-page :is(button,a,input,textarea):focus-visible{outline:2px solid #eee!important;outline-offset:3px}
 :root .app-shell[data-route] .reference-cart-page.request-checkout-page .step-indicator-wrapper.is-active .step-indicator-inner{background:transparent!important;color:#141519!important;box-shadow:none!important}
 :root .app-shell[data-route] .reference-cart-page.request-checkout-page .active-dot{background:#25262a!important;box-shadow:none!important}
+/* Match the home page type and keep every cart step legible. */
+:root .app-shell[data-route] .reference-cart-page.request-checkout-page :is(h1,h2,h3,h4,p,small,strong,span,label,button,input,textarea,select) { font-family: var(--dt-font) !important; }
+:root .app-shell[data-route] .reference-cart-page.request-checkout-page :is(h1,h2,h3,h4,strong) { color:#f7f7f9; font-weight:500 !important; }
+:root .app-shell[data-route] .reference-cart-page.request-checkout-page :is(p,small,label) { color:#c6c8cd !important; opacity:1; }
+:root .app-shell[data-route] .reference-cart-page.request-checkout-page .step-content-head h3 { font-family:var(--dt-font) !important; color:#f7f7f9 !important; }
+:root .app-shell[data-route] .reference-cart-page.request-checkout-page .step-indicator-wrapper.is-active :is(strong,small,.step-number,svg) { color:#16171a !important; }
+:root .app-shell[data-route] .reference-cart-page.request-checkout-page :is(.workspace-call-types button.is-selected,.workspace-time-grid button.is-selected) :is(strong,span,small,svg) { color:#16171a !important; }
+:root .app-shell[data-route] .reference-cart-page.request-checkout-page :is(input,textarea)::placeholder { color:#aeb1b8; opacity:1; }
+@media (max-width: 700px) {
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page { width:100%; padding:20px 14px 130px !important; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .cart-stepper-header { padding:24px 20px !important; gap:18px; border-radius:18px !important; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .cart-stepper-header > div:first-child { width:100%; align-items:flex-start; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .cart-stepper-header h1 { font-size:clamp(29px,8vw,40px) !important; line-height:1.08; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .cart-stepper-card { padding:10px !important; border-radius:18px !important; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .step-indicator-row { gap:5px; padding:5px !important; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .step-indicator-wrapper { min-height:54px; gap:4px; padding:6px 3px !important; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .step-indicator-inner { width:20px; height:20px; font-size:11px; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .step-indicator-label strong { font-size:clamp(10px,2.7vw,12px) !important; line-height:1.2; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .step-content-default { padding:20px 14px !important; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .step-content-head { display:flex; flex-wrap:wrap; gap:14px; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .step-content-head h3 { font-size:25px !important; line-height:1.15; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page :is(.step-content-head p,.reference-empty-card p,.reference-service-chip small,.workspace-date-label,.glass-booking-note) { font-size:13px !important; line-height:1.5; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page :is(.studio-workspace,.reference-enquiry-form) { padding:14px !important; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .glass-booking-layout { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .workspace-call-types { display:grid; grid-template-columns:1fr; gap:8px; overflow:visible; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .workspace-call-types button { width:100%; min-height:54px; }
+  :root .app-shell[data-route] .reference-cart-page.request-checkout-page .footer-container { padding:12px 2px 4px; }
+}

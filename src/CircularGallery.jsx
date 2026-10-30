@@ -93,13 +93,20 @@ export default function CircularGallery({items}) {
   const up=e=>{if(!drag||drag.id!==e.pointerId)return;const moved=drag.moved;drag=null;if(el.hasPointerCapture(e.pointerId))el.releasePointerCapture(e.pointerId);if(moved){target=Math.round(target);wake();return;}const card=hit(e);if(card){target=Math.round(scroll+(wrap(card.i-scroll+items.length/2,items.length)-items.length/2));openTarget=opened>.5&&card.i===current?0:1;setOpen(Boolean(openTarget));wake();}};
   const cancel=()=>{drag=null;target=Math.round(target);wake();};
   const wheel=e=>{if(Math.abs(e.deltaX)<=Math.abs(e.deltaY))return;e.preventDefault();select(Math.round(target)+Math.sign(e.deltaX));};
+  let lastPageY=window.scrollY, scrollSettle;
+  const pageScroll=()=>{
+   const nextY=window.scrollY, delta=nextY-lastPageY;lastPageY=nextY;
+   if(!visible||reduce||openTarget||drag?.moved||!delta)return;
+   target+=clamp(delta,-100,100)/Math.max(width<700?260:360,1);
+   wake();clearTimeout(scrollSettle);scrollSettle=window.setTimeout(()=>{target=Math.round(target);wake();},160);
+  };
   const key=e=>{if(e.key==='Escape'){close();return;}if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();select(Math.round(target)+(e.key==='ArrowRight'?1:-1));}};
   const visibility=()=>{last=0;wake();};
   const ro=new ResizeObserver(resize);ro.observe(el);const io=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;last=0;wake();});io.observe(el);
-  el.addEventListener('pointerdown',down);el.addEventListener('pointermove',move);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',cancel);el.addEventListener('wheel',wheel,{passive:false});el.addEventListener('keydown',key);document.addEventListener('visibilitychange',visibility);
+  el.addEventListener('pointerdown',down);el.addEventListener('pointermove',move);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',cancel);el.addEventListener('wheel',wheel,{passive:false});el.addEventListener('keydown',key);window.addEventListener('scroll',pageScroll,{passive:true});document.addEventListener('visibilitychange',visibility);
   engine.current={step:direction=>select(Math.round(target)+direction),close,open:i=>{select(Math.round(scroll+wrap(i-scroll+items.length/2,items.length)-items.length/2));openTarget=1;setOpen(true);wake();}};
   resize();
-  return()=>{alive=false;cancelAnimationFrame(raf);ro.disconnect();io.disconnect();el.removeEventListener('pointerdown',down);el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',cancel);el.removeEventListener('wheel',wheel);el.removeEventListener('keydown',key);document.removeEventListener('visibilitychange',visibility);textures.forEach(entry=>entry.texture&&gl.deleteTexture(entry.texture));gl.deleteBuffer(vb);gl.deleteBuffer(ib);gl.deleteVertexArray(vao);gl.deleteProgram(program);engine.current=null;};
+  return()=>{alive=false;clearTimeout(scrollSettle);window.removeEventListener('scroll',pageScroll);cancelAnimationFrame(raf);ro.disconnect();io.disconnect();el.removeEventListener('pointerdown',down);el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',cancel);el.removeEventListener('wheel',wheel);el.removeEventListener('keydown',key);document.removeEventListener('visibilitychange',visibility);textures.forEach(entry=>entry.texture&&gl.deleteTexture(entry.texture));gl.deleteBuffer(vb);gl.deleteBuffer(ib);gl.deleteVertexArray(vao);gl.deleteProgram(program);engine.current=null;};
  },[items]);
  return <div className="circular-gallery" ref={root} role="region" aria-label="Poster gallery" aria-roledescription="carousel" tabIndex={0}>
   <canvas ref={canvas} aria-hidden="true"/>

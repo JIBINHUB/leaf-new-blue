@@ -16,3 +16,19 @@
 .leaf-featured-card:nth-child(odd){margin-top:64px}
 @media(max-width:700px){.leaf-featured-card:nth-child(odd){margin-top:24px}}
 @media(max-width:380px){.leaf-featured-card:nth-child(odd){margin-top:0}}
+/* Device frames preserve the real project screenshots inside editorial scenes. */
+.leaf-featured-card { border-radius: 18px; background: #171a20; }
+.leaf-featured-media { position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 5; padding: 9% 12% 16%; background: radial-gradient(circle at 50% 25%, #e5e5e5, #a2a7af); }
+.leaf-featured-card:nth-child(4n + 2) .leaf-featured-media { background: radial-gradient(circle at 65% 20%, #e5d9c9, #8c7770); }
+.leaf-featured-card:nth-child(4n + 3) .leaf-featured-media { background: radial-gradient(circle at 60% 20%, #e8d7e8, #9c899f); }
+.leaf-featured-card:nth-child(4n) .leaf-featured-media { background: linear-gradient(#0003, #0005), url('/assets/portfolio/websites/mockup-studio.png') center / cover; }
+.leaf-featured-device { position: relative; display: block; width: min(70%, 220px); aspect-ratio: 9 / 18.8; padding: 4px; overflow: hidden; border: 2px solid #5e6269; border-radius: 25px; background: #101114; box-shadow: 0 2px 2px #ffffff8a inset, 0 24px 40px #0008; transform: rotate(-7deg); transition: transform .55s ease; }
+.leaf-featured-card:nth-child(3n + 2) .leaf-featured-device { transform: rotate(7deg); border-color: #b0a297; }
+.leaf-featured-card:nth-child(3n) .leaf-featured-device { transform: rotate(-3deg); border-color: #d1c8d2; }
+.leaf-featured-device img { width: 100%; height: 100%; border-radius: 19px; object-fit: cover; object-position: center top; }
+.leaf-featured-device-notch { position: absolute; z-index: 1; left: 50%; top: 7px; width: 29%; height: 9px; border-radius: 999px; background: #101114; transform: translateX(-50%); }
+.leaf-featured-card:hover .leaf-featured-device { transform: rotate(0) translateY(-5px); }
+.leaf-featured-card:hover .leaf-featured-media img { transform: none; }
+.leaf-featured-caption { background: linear-gradient(transparent, #080b12ef); }
+@media (max-width: 700px) { .leaf-featured-media { padding: 9% 9% 18%; } .leaf-featured-device { width: 75%; border-radius: 18px; padding: 3px; } .leaf-featured-device img { border-radius: 13px; } .leaf-featured-device-notch { top: 6px; height: 6px; } }
+@media (prefers-reduced-motion: reduce) { .leaf-featured-device { transition: none; } }

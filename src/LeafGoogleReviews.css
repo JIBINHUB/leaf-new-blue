@@ -46,3 +46,8 @@
 .leaf-google-review{grid-area:1 / 1;opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .35s ease,transform .35s ease,visibility 0s linear .35s;animation:none}
 .leaf-google-review.is-active{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .35s ease,transform .35s ease,visibility 0s}
 @media(prefers-reduced-motion:reduce){.leaf-google-review{transition:none}}
+/* Open testimonial treatment instead of a boxed card. */
+.app-shell .leaf-google-reviews { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; backdrop-filter: none !important; padding: 4px 0 8px !important; min-height: 0; }
+.app-shell .leaf-google-header { border-bottom: 1px solid #ffffff42; padding-bottom: 10px; }
+.app-shell .leaf-google-review { padding-top: 14px; }
+.app-shell .leaf-google-quote { font-size: 12px; line-height: 1.55; color: #e1e3e8; }

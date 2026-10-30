@@ -20,7 +20,7 @@ export default function LeafFeaturedWork({ items, navigateTo }) {
       </div>
       <div className="leaf-featured-grid">
         {items.map((item, index) => <a className="leaf-featured-card" key={`${item.url}-${index}`} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${item.name} website`}>
-          <span className="leaf-featured-media">{previewFor(item) ? <img src={previewFor(item)} alt="" loading="lazy" className={item.name === 'Vero Studio' ? 'is-vero' : item.name === 'Rae' ? 'is-rae' : undefined} /> : <span className="leaf-featured-placeholder"><small>WEBSITE PROJECT</small><strong>{item.name}</strong><span>{item.url.replace(/^https?:\/\//, '')}</span></span>}</span>
+          <span className="leaf-featured-media"><span className="leaf-featured-device"><span className="leaf-featured-device-notch" aria-hidden="true" />{previewFor(item) ? <img src={previewFor(item)} alt="" loading="lazy" className={item.name === 'Vero Studio' ? 'is-vero' : item.name === 'Rae' ? 'is-rae' : undefined} /> : <span className="leaf-featured-placeholder"><small>WEBSITE PROJECT</small><strong>{item.name}</strong><span>{item.url.replace(/^https?:\/\//, '')}</span></span>}</span></span>
           <span className="leaf-featured-caption"><span><strong>{item.name}</strong><small>{item.services.join(' / ')}</small></span><ArrowUpRight size={20}/></span>
         </a>)}
       </div>
