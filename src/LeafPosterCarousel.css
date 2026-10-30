@@ -6,3 +6,6 @@
 .leaf-poster-carousel canvas{mask-image:linear-gradient(to right,transparent 0%,#000 9%,#000 91%,transparent 100%);-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 9%,#000 91%,transparent 100%)}
 .leaf-poster-instruction{margin:0;text-align:center;color:#8995a9;font:10px/1.4 var(--dt-mono);letter-spacing:.12em}.leaf-poster-instruction span{color:#a9c4ff;font-size:16px}
 @media(max-width:700px){.leaf-poster-showcase{padding:72px 0 42px}.leaf-poster-showcase-head{align-items:flex-start;flex-direction:column}.leaf-poster-showcase-head .dt-secondary{margin-top:4px}.leaf-poster-carousel{height:440px;margin-top:16px}.leaf-poster-instruction{font-size:9px}}
+/* The lazy-loaded carousel's generic height must not collapse this section. */
+.flex-carousel.leaf-poster-carousel { height:clamp(420px,53vw,660px); }
+@media(max-width:700px){ .flex-carousel.leaf-poster-carousel { height:440px; } }
