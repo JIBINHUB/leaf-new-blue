@@ -58,3 +58,16 @@
 @media(max-width:700px) { .leaf-process { padding-bottom: 30px; } .leaf-process-scroll { height: 185vh; } }
 @media(prefers-reduced-motion:reduce) { .leaf-process-scroll { height: auto; } }
 @media(max-width:700px){.leaf-process-scroll{height:auto;margin-top:30px}.leaf-process-stage{position:relative;top:auto;height:auto;overflow:visible;display:grid;gap:24px;align-content:start}.leaf-process-globe{width:min(78%,330px);margin:0 auto}.leaf-process-panels{display:flex;flex-direction:column;gap:12px;height:auto;margin-bottom:22px}.leaf-process-brief,.leaf-process-chart{position:relative;inset:auto;width:100%;transform:none;animation:none;box-sizing:border-box}.leaf-process-chart div{max-width:100%;box-sizing:border-box}.leaf-process-details{animation:none}.leaf-process-tabs{padding-bottom:12px}}
+@media(max-width:700px) and (prefers-reduced-motion:no-preference){.leaf-process-scroll{height:240svh}.leaf-process-stage{position:sticky;top:0;height:100svh;gap:8px;align-content:center;overflow:visible}.leaf-process-globe{width:min(58vw,25svh,230px)}.leaf-process-panels{gap:6px;margin-bottom:8px}.leaf-process-brief,.leaf-process-chart{padding:9px 12px}.leaf-process-brief p{margin:6px 0;font-size:12px}.leaf-process-chart div{padding:4px 8px;font-size:11px}.leaf-process-details h3{font-size:20px}.leaf-process-details p{font-size:12px;margin:5px 0}.leaf-process-tabs{margin-top:8px}.leaf-process-tabs button{padding:5px;font-size:10px}}
+@media(max-width:700px) and (prefers-reduced-motion:no-preference){.leaf-process-scroll{height:280svh}.leaf-process-globe{width:min(74vw,32svh,300px)}.leaf-process-stage{gap:5px}.leaf-process-panels{gap:5px}.leaf-process-chart{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.leaf-process-chart div{width:100%;min-width:0;text-align:center;font-size:10px}.leaf-process-point.is-active{box-shadow:0 0 0 7px #1e55df24,0 0 30px #2c68ffae}.leaf-process-globe-art{transform:translateY(calc((.5 - var(--process-progress)) * 18px)) rotate(calc(var(--process-progress) * 55deg))}}
+/* Keep the last process step close to the following section on phones. */
+@media(max-width:700px) and (prefers-reduced-motion:no-preference){
+  .leaf-process-stage{align-content:end;box-sizing:border-box;padding-bottom:90px}
+  .leaf-process{padding-bottom:0}
+}
+@media(max-width:700px) and (prefers-reduced-motion:no-preference){
+  .leaf-process-globe{width:min(78vw,37svh,340px)}
+  .leaf-process-globe-art,.leaf-process-traveller{transition:transform .24s cubic-bezier(.22,1,.36,1);will-change:transform}
+  .leaf-process-point{transition:transform .45s cubic-bezier(.22,1,.36,1),background .35s,box-shadow .45s}
+  .leaf-process-chart,.leaf-process-details{animation:leaf-process-reveal .45s cubic-bezier(.22,1,.36,1) both}
+}

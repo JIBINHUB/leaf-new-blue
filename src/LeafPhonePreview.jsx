@@ -13,10 +13,7 @@ const messages = [
   { service: 'Shopify Development', icon: ShoppingBag },
 ];
 
-const phoneImages = [
-  { url: 'https://orucode.online/', name: 'ORU CODE' },
-  { url: 'https://mallugrapheruk.com/', name: 'Mallugrapher UK' },
-];
+const phoneImages = [{ url: 'https://orucode.online/', name: 'ORU CODE' }];
 
 export default function LeafPhonePreview() {
   const [activeImage, setActiveImage] = useState(0);
@@ -25,7 +22,7 @@ export default function LeafPhonePreview() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return;
     }
-    const interval = window.setInterval(() => setActiveImage(index => (index + 1) % phoneImages.length), 9000);
+    const interval = window.setInterval(() => setActiveImage(index => index + 1), 9000);
     return () => window.clearInterval(interval);
   }, []);
 
@@ -47,7 +44,7 @@ export default function LeafPhonePreview() {
         <span className="leaf-phone-side-button leaf-phone-side-button-three" aria-hidden="true" />
         <div className="leaf-phone-screen">
           <div className="leaf-phone-photo">
-            <iframe key={phoneImages[activeImage].url} className="leaf-phone-live-site" src={phoneImages[activeImage].url} title={`${phoneImages[activeImage].name} live website preview`} tabIndex={-1} />
+            <iframe key={activeImage} className="leaf-phone-live-site" src={phoneImages[0].url} title={`${phoneImages[0].name} live website preview`} tabIndex={-1} />
           </div>
           <div className="leaf-phone-island" aria-hidden="true" />
         </div>
