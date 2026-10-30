@@ -23,3 +23,4 @@
 @media(prefers-reduced-motion:reduce) { .leaf-orbit-dot { display:none; }.leaf-orbit-label { transition:none; } }
 .leaf-service-orbit { padding-top: 72px; }
 @media(max-width:700px) { .leaf-service-orbit { padding-top: 54px; } }
+.leaf-orbit-core.leaf-orbit-glass { background-image:url('/assets/services/glass-forms.png'); background-size:200% 200%; background-repeat:no-repeat; border-radius:20px; }
