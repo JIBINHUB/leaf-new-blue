@@ -44,7 +44,7 @@
 }
 /* Keep phone rendering quiet; motion follows gestures rather than running continuously. */
 @media(max-width:700px){
- .app-shell :is(.leaf-code-background span,.dt-code-rain div,.leaf-phone-float,.leaf-phone-device,.leaf-process-orbit,.leaf-service-feature-visual,.leaf-service-feature-icon,.launch-lattice span){animation:none!important}
+ .app-shell :is(.leaf-code-background span,.dt-code-rain div,.leaf-phone-device,.leaf-process-orbit,.leaf-service-feature-visual,.leaf-service-feature-icon,.launch-lattice span){animation:none!important}
  .app-shell :is(.leaf-code-background,.dt-code-rain){opacity:.35}
  .app-shell .leaf-service-feature-visual{transform:none}
 }

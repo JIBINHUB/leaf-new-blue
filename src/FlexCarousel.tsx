@@ -460,7 +460,7 @@ const FlexCarousel = ({
     let renderer: Renderer;
     try {
       renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio || 1, 2),
+      dpr: Math.min(window.devicePixelRatio || 1, window.matchMedia('(max-width:700px)').matches ? 1 : 2),
       alpha: true,
       premultipliedAlpha: true,
       antialias: false,
@@ -822,7 +822,7 @@ const FlexCarousel = ({
     const resize = () => {
       width = Math.max(1, container.clientWidth);
       height = Math.max(1, container.clientHeight);
-      renderer.dpr = Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(PIXEL_BUDGET / (width * height)));
+      renderer.dpr = Math.min(window.devicePixelRatio || 1, window.matchMedia('(max-width:700px)').matches ? 1 : 2, Math.sqrt(PIXEL_BUDGET / (width * height)));
       renderer.setSize(width, height);
       target.setSize(Math.max(2, Math.round(width * renderer.dpr)), Math.max(2, Math.round(height * renderer.dpr)));
       lensUniforms.tScene.value = target.texture;

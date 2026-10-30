@@ -16,3 +16,8 @@
 .leaf-old-ad-copy span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
 .leaf-old-ad-copy strong{display:block;font-size:24px;line-height:1.1}.leaf-old-ad-copy p{font-size:14px;margin:8px 0}
 .leaf-old-ad-dots{position:absolute;bottom:12px;left:25px;display:flex;gap:7px}.leaf-old-ad-dots button{width:8px;height:8px;border:0;border-radius:50%;background:#ffffff80;padding:0}.leaf-old-ad-dots button[aria-pressed=true]{background:#fff}
+/* Contrast comes from the backdrop instead of outlines around the letters. */
+html body #root .app-shell .leaf-old-ad-copy,html body #root .app-shell .leaf-old-ad-copy *{text-shadow:none!important;-webkit-text-stroke:0!important;filter:none!important}
+.leaf-old-ad-copy{background:linear-gradient(90deg,rgba(12,22,48,.92),rgba(12,22,48,.68) 70%,transparent);padding-right:40px}
+html body #root .app-shell .leaf-old-ad-copy strong{font-weight:500!important;font-size:22px;line-height:1.25;color:white}
+html body #root .app-shell .leaf-old-ad-copy p{color:#e0e5ef!important;font-size:13px;line-height:1.5;max-width:225px}
