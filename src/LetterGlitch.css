@@ -40,3 +40,8 @@ html body #root .app-shell .leaf-old-ad-copy p{max-width:210px}
  .app-shell .dt-hero .dt-code-rain > div{opacity:.23}
  .app-shell .dt-hero .dt-code-rain span{animation:dt-code-drift var(--code-duration) linear var(--code-delay) infinite!important}
 }
+.leaf-ad-track{display:flex;width:100%;height:100%;transition:transform .6s cubic-bezier(.22,1,.36,1)}
+.leaf-ad-slide{position:relative;flex:0 0 100%;min-width:0;height:100%;overflow:hidden;background:#17233e}
+.leaf-ad-slide .leaf-old-ad-copy{position:relative;z-index:1}
+.leaf-old-ad-dots{z-index:2}
+@media(prefers-reduced-motion:reduce){.leaf-ad-track{transition-duration:.01s}}

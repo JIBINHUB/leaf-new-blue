@@ -1,0 +1,15 @@
+.leaf-circular-section{padding:80px 0 40px;background:#090c12;color:#fff;overflow:hidden}
+.leaf-circular-heading{text-align:center;width:min(740px,calc(100% - 40px));margin:0 auto 16px}
+.leaf-circular-heading h2{margin:0 0 20px;font-size:clamp(32px,4vw,54px);line-height:1.1;font-weight:400;letter-spacing:-.04em}
+.leaf-circular-heading p{font-size:15px;line-height:1.6;color:#aeb5c2;margin:0}
+.circular-gallery{position:relative;height:clamp(480px,46vw,650px);width:100%;overflow:hidden;touch-action:pan-y;cursor:grab;outline:none}
+.circular-gallery:active{cursor:grabbing}.circular-gallery:focus-visible{outline:2px solid #93b5ff;outline-offset:-3px}
+.circular-gallery canvas,.circular-gallery-labels{position:absolute;inset:0;width:100%;height:100%}
+.circular-gallery-labels{pointer-events:none}.circular-gallery-labels span{position:absolute;left:0;top:0;max-width:260px;text-align:center;font:400 12px/1.4 Poppins,sans-serif;color:#e7ebf3;opacity:0}
+.circular-gallery-controls{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;white-space:nowrap}
+.circular-gallery-controls span{color:#aeb8c9;font-size:11px}.circular-gallery-controls button,.circular-gallery-close{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:1px solid #596274;background:#151b24;color:#fff;cursor:pointer}
+.circular-gallery-close{position:absolute;top:16px;right:20px;z-index:3}
+.circular-gallery-hidden{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden;white-space:nowrap}
+.circular-gallery-fallback{display:flex;height:100%;align-items:center;overflow-x:auto;gap:24px;padding:30px}
+.circular-gallery-fallback figure{flex:0 0 240px;margin:0}.circular-gallery-fallback img{width:100%;height:320px;object-fit:contain}.circular-gallery-fallback figcaption{font-size:12px;text-align:center}
+@media(max-width:700px){.leaf-circular-section{padding:64px 0 24px}.leaf-circular-heading{margin-bottom:8px}.leaf-circular-heading h2{font-size:32px}.leaf-circular-heading p{font-size:13px;max-width:310px;margin:auto}.circular-gallery{height:530px}.circular-gallery-controls{bottom:22px;gap:12px}.circular-gallery-labels span{max-width:210px;font-size:11px}}
