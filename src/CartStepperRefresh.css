@@ -120,3 +120,26 @@
 :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .cart-stepper-header > div:last-child span:not(:first-child) { color:#e1e2e6 !important; opacity:1 !important; }
 @media(max-width:700px) { :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .step-default { padding:0 !important; } }
 :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .step-indicator-row .step-indicator-wrapper.is-active .active-dot { background:#222326 !important; box-shadow:none !important; }
+/* Mobile checkout uses open sections instead of nested containers. */
+@media (max-width: 700px) {
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page {
+    border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
+    padding: 24px 20px 140px !important;
+  }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page :is(.cart-stepper-header,.cart-stepper-card,.step-content-default,.reference-empty-card,.studio-workspace,.reference-enquiry-form,.glass-booking-date,.glass-booking-times,.glass-booking-calendar,.reference-appointment-card) {
+    background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
+  }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .cart-stepper-header { padding: 8px 0 24px !important; margin-bottom: 12px !important; border-bottom: 1px solid #303136 !important; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .cart-stepper-header > div:first-child { gap: 12px; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .cart-stepper-header > div:last-child { padding: 0 !important; background: transparent !important; border: 0 !important; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .cart-stepper-card { padding: 0 !important; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .step-indicator-row { margin: 0 0 20px; padding: 5px !important; border-radius: 12px !important; background: #1a1b1e !important; border: 0 !important; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .step-content-default { margin: 0; padding: 8px 0 0 !important; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .step-content-head { border: 0; padding: 0 0 18px; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page :is(.reference-empty-card,.studio-workspace,.reference-enquiry-form,.glass-booking-date,.glass-booking-times,.glass-booking-calendar,.reference-appointment-card) { padding: 0 !important; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .reference-empty-card { padding: 24px 0 !important; border-top: 1px solid #303136 !important; border-bottom: 1px solid #303136 !important; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .reference-service-chip { margin: 0; padding: 15px 0 !important; background: transparent !important; border: 0 !important; border-bottom: 1px solid #303136 !important; border-radius: 0 !important; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .glass-booking-layout { gap: 24px; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .reference-appointment-card { margin-top: 20px; padding-top: 16px !important; border-top: 1px solid #303136 !important; }
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .footer-container { margin-top: 18px; padding: 12px 0 0; }
+}
