@@ -120,8 +120,7 @@
 :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .cart-stepper-header > div:last-child span:not(:first-child) { color:#e1e2e6 !important; opacity:1 !important; }
 @media(max-width:700px) { :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .step-default { padding:0 !important; } }
 :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .step-indicator-row .step-indicator-wrapper.is-active .active-dot { background:#222326 !important; box-shadow:none !important; }
-/* Mobile checkout uses open sections instead of nested containers. */
-@media (max-width: 700px) {
+/* Checkout uses open sections instead of nested containers at every size. */
   :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page {
     border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
     padding: 24px 20px 140px !important;
@@ -142,4 +141,11 @@
   :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .glass-booking-layout { gap: 24px; }
   :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .reference-appointment-card { margin-top: 20px; padding-top: 16px !important; border-top: 1px solid #303136 !important; }
   :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .footer-container { margin-top: 18px; padding: 12px 0 0; }
-}
+  :root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .studio-workspace .glass-booking-layout {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+:root .app-shell[data-route='referenceCart'] .reference-cart-page.request-checkout-page .step-default { padding:0 !important; }
