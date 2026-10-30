@@ -5,3 +5,28 @@
 .app-shell .leaf-feature-brief h3{line-height:1.12}
 @media(max-width:700px){html body #root .app-shell .leaf-feature-brief h3{font-size:clamp(25px,6.5vw,32px)!important;line-height:1.08!important;letter-spacing:-.04em;overflow-wrap:normal}}
 @media(max-width:700px){.app-shell .leaf-feature-brief h3{font-size:clamp(20px,5vw,26px)!important}.app-shell .leaf-feature-brief>p{font-size:14px!important;line-height:1.5!important}.leaf-feature-brief .project-folder-scene{inset:37% 0 0}.leaf-feature-brief .project-folder{width:88%;height:190px;transform:none}.leaf-feature-brief .project-folder-back{height:150px}.leaf-feature-brief .project-folder-front{height:132px;padding:14px}.leaf-feature-brief .project-folder-document{height:140px}.leaf-feature-brief .project-folder-front strong{font-size:19px!important}.leaf-feature-brief .project-folder-front small{font-size:9px!important;letter-spacing:.04em!important}.leaf-feature-brief .project-folder-front:after{display:none}.leaf-feature-brief .project-folder[data-open=true] .document-0{transform:translate(-24px,-50px) rotate(-10deg)}.leaf-feature-brief .project-folder[data-open=true] .document-2{transform:translate(24px,-50px) rotate(10deg)}.leaf-feature-brief .project-folder[data-open=true] .document-1{transform:translate(0,-68px)}.leaf-feature-brief .project-folder-hint{font-size:12px;margin-top:12px}}
+/* Charcoal surfaces with restrained blue accents, matching the reference. */
+.app-shell .leaf-feature-cards .leaf-feature-card { background:#141414; border:1px solid #393939; border-radius:14px; box-shadow:inset 0 1px #ffffff08; }
+.app-shell .leaf-feature-cards .leaf-feature-card::after { display:none; }
+.app-shell .leaf-feature-cards .leaf-feature-card h3 { color:#f5f5f5!important; font-weight:500; letter-spacing:-.035em; }
+.app-shell .leaf-feature-cards .leaf-feature-card p { color:#b3b3b3!important; }
+.app-shell .leaf-feature-cards .planning-checklist,.app-shell .leaf-feature-cards .launch-lattice-panel { background:#1b1b1b; border-color:#424242; border-radius:10px; }
+.app-shell .leaf-feature-cards .planning-caption { color:#aaa; }
+.app-shell .leaf-feature-cards .planning-check { color:#eee; }
+.app-shell .leaf-feature-cards .planning-box { border-color:#727272; border-radius:5px; }
+.app-shell .leaf-feature-cards .planning-check input:checked + .planning-box { background:#164bff; border-color:#164bff; }
+.app-shell .leaf-feature-cards .launch-lattice span { background:#164bff; }
+.app-shell .leaf-feature-cards .launch-lattice-panel a { color:#95b5ff; }
+.app-shell .leaf-feature-cards .project-folder-detail { background:#191919; border-color:#555; }
+@media(max-width:700px){
+ .app-shell .leaf-feature-cards .leaf-feature-grid { gap:12px; align-items:stretch; }
+ .app-shell .leaf-feature-cards .leaf-feature-card { min-width:0; padding:20px 14px!important; }
+ .app-shell .leaf-feature-cards .leaf-feature-card h3 { font-size:clamp(20px,4.8vw,27px)!important; line-height:1.15!important; }
+ .app-shell .leaf-feature-cards .leaf-feature-card > p { font-size:13px!important; line-height:1.5!important; }
+ .app-shell .leaf-feature-cards .planning-checklist { padding:12px 10px; }
+ .app-shell .leaf-feature-cards .planning-check { min-height:32px; font-size:11px; line-height:1.4; }
+ .app-shell .leaf-feature-cards .planning-caption { font-size:9px; line-height:1.5; display:block; }
+ .app-shell .leaf-feature-cards .launch-lattice-panel { padding:12px; }
+ .app-shell .leaf-feature-cards .project-folder-scene { inset:42% 0 0; }
+ .app-shell .leaf-feature-cards .project-folder-detail { left:5%;right:5%;padding:12px; }
+}
