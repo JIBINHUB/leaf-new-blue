@@ -32,8 +32,9 @@
 .leaf-featured-caption { background: linear-gradient(transparent, #080b12ef); }
 @media (max-width: 700px) { .leaf-featured-media { padding: 9% 9% 18%; } .leaf-featured-device { width: 75%; border-radius: 18px; padding: 3px; } .leaf-featured-device img { border-radius: 13px; } .leaf-featured-device-notch { top: 6px; height: 6px; } }
 @media (prefers-reduced-motion: reduce) { .leaf-featured-device { transition: none; } }
-/* Reveal each project as it enters view, while the desktop heading stays in place. */
-@media (prefers-reduced-motion: no-preference) {
-  .leaf-featured-card.reveal-pending { opacity: 0; transform: translateY(36px); }
-  .leaf-featured-card.reveal-pending.is-revealed { opacity: 1; transform: translateY(0); }
+/* Keep the introduction pinned while the project grid scrolls. */
+@media (min-width: 701px) {
+  :root .app-shell[data-route='home'] { overflow: clip !important; }
+  :root .app-shell[data-route='home'] .leaf-featured { overflow: clip; }
+  :root .app-shell[data-route='home'] .leaf-featured-heading { position: sticky; top: 110px; align-self: start; }
 }
