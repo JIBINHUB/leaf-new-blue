@@ -69,3 +69,11 @@
  .leaf-process-details{min-height:132px}
  .leaf-process-tabs{min-height:54px}
 }
+/* Replacing stage copy must never move the browser's scroll anchor. */
+#leaf-approach,#leaf-approach *{overflow-anchor:none}
+@media(max-width:700px){
+ .leaf-process-chart,.leaf-process-details{animation:none!important;transform:none}
+ .leaf-process-stage{grid-template-rows:auto auto}
+ .leaf-process-tabs{align-content:start}
+ .leaf-process-right{min-height:382px}
+}
