@@ -36,8 +36,6 @@ const posters = [
 
 export default function DovetailHome({ navigateTo, openServiceModal, serviceCategories, serviceTaglines, studioHeads, websiteProjects, portfolioImages }) {
   const [ad, setAd] = useState(0);
-  const [mobile, setMobile] = useState(() => window.matchMedia('(max-width: 700px)').matches);
-  useEffect(() => { const query = window.matchMedia('(max-width: 700px)'); const update = () => setMobile(query.matches); query.addEventListener('change', update); return () => query.removeEventListener('change', update); }, []);
   const galleryRef = useRef(null);
   const [galleryReady, setGalleryReady] = useState(false);
   useEffect(() => {
@@ -62,7 +60,7 @@ export default function DovetailHome({ navigateTo, openServiceModal, serviceCate
     <section className="dt-hero dt-grid">
       <div className="dt-code-rain" aria-hidden="true">{Array.from({ length: 18 }, (_, i) => <div key={i} style={{ '--code-column': i, '--code-duration': `${18 + (i % 6) * 3}s`, '--code-delay': `${-(i * 3)}s` }}><span>{['01 0 1 0 01 10 001 1 0 10 11 00 101 0 1 10 01 0 101 11 00 1 0 10 01 1 00 101 0 1 01 10 11', '0 1 001 11 0 10 1 01 100 0 1 10 11 00 101 10 01 0 1 00 10 1 001 11 0 10 1 01 100 0 1', '{ } 0 1 / / 01 10 001 1 + 0 10 11 00 101 0 1 10 01 0 101 11 00 1 + 10 01 1 / / 101 0 1'][i % 3]}</span></div>)}</div>
       <div className="dt-container dt-reference-hero">
-        <div className="dt-reference-top"><div className="leaf-old-ad" aria-label="Studio offers"><div className="leaf-old-ad-media">{ads.map((item,index)=><div key={item.title} className={`leaf-ad-frame${ad === index ? " is-active" : ""}`} aria-hidden={ad !== index}>{item.video && !mobile && ad === index ? <video src={item.video} autoPlay muted loop playsInline /> : <img src={item.image || "/assets/ads/best-uiux-design.webp"} alt="" decoding="async" />}</div>)}</div><div className="leaf-old-ad-copy"><span>{ads[ad].tag}</span><strong>{ads[ad].title}</strong><p>{ads[ad].description}</p></div><div className="leaf-old-ad-dots">{ads.map((item,index)=><button key={item.title} type="button" aria-label={`Show ${item.title}`} aria-pressed={ad === index} onClick={()=>setAd(index)} />)}</div></div><LeafGoogleReviews /></div>
+        <div className="dt-reference-top"><div className="leaf-old-ad" aria-label="Studio offers"><div className="leaf-old-ad-media">{ads[ad].video ? <video key={ads[ad].video} src={ads[ad].video} autoPlay muted loop playsInline preload="metadata" /> : <img src={ads[ad].image} alt="" decoding="async" />}</div><div className="leaf-old-ad-copy"><span>{ads[ad].tag}</span><strong>{ads[ad].title}</strong><p>{ads[ad].description}</p></div><div className="leaf-old-ad-dots">{ads.map((item,index)=><button key={item.title} type="button" aria-label={`Show ${item.title}`} aria-pressed={ad === index} onClick={()=>setAd(index)} />)}</div></div><LeafGoogleReviews /></div>
         <h1 className="dt-reference-title"><span>Make <img className="leaf-enter-photo" src="/assets/hero/enter-key-yellow.png" alt="" /> ideas</span><span className="leaf-hero-title-last"><span>worth</span> <span className="leaf-pixel-accent">noticing</span></span></h1>
         <p className="leaf-hero-description">Leaf Creationism is a creative studio in Kerala, building distinctive brands, websites and digital experiences that help businesses grow.</p>
         <LeafPhonePreview navigateTo={navigateTo} />
