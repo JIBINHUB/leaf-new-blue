@@ -35,3 +35,12 @@ html body #root .app-shell .leaf-old-ad-copy p{font-size:11px;line-height:1.5;ma
 .leaf-old-ad-copy{width:65%;max-width:65%;height:100%;box-sizing:border-box;background:transparent;padding:22px 18px 36px;justify-content:center}
 html body #root .app-shell .leaf-old-ad-copy strong{font-size:clamp(17px,3.8vw,21px);line-height:1.3;max-width:235px}
 html body #root .app-shell .leaf-old-ad-copy p{max-width:210px}
+.leaf-ad-frame{position:absolute;inset:0;opacity:0;transition:opacity .85s ease-in-out;pointer-events:none}
+.leaf-ad-frame.is-active{opacity:1}
+.leaf-ad-frame img,.leaf-ad-frame video{display:block;width:100%;height:100%;object-fit:cover}
+@media(prefers-reduced-motion:reduce){.leaf-ad-frame{transition:none}}
+@media(max-width:700px) and (prefers-reduced-motion:no-preference){
+ .app-shell .dt-hero .dt-code-rain{display:block;opacity:1;visibility:visible}
+ .app-shell .dt-hero .dt-code-rain > div{opacity:.23}
+ .app-shell .dt-hero .dt-code-rain span{animation:dt-code-drift var(--code-duration) linear var(--code-delay) infinite!important}
+}

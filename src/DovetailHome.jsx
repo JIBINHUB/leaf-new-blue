@@ -1,7 +1,6 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import LeafAdvantageGallery from './LeafAdvantageGallery';
 import LeafServiceOrbit from './LeafServiceOrbit';
-import LeafCreativeProcess from './LeafCreativeProcess';
 import LeafPhonePreview from './LeafPhonePreview';
 import LeafAbout from './LeafAbout';
 import LeafFeaturedWork from './LeafFeaturedWork';
@@ -63,7 +62,7 @@ export default function DovetailHome({ navigateTo, openServiceModal, serviceCate
     <section className="dt-hero dt-grid">
       <div className="dt-code-rain" aria-hidden="true">{Array.from({ length: 18 }, (_, i) => <div key={i} style={{ '--code-column': i, '--code-duration': `${18 + (i % 6) * 3}s`, '--code-delay': `${-(i * 3)}s` }}><span>{['01 0 1 0 01 10 001 1 0 10 11 00 101 0 1 10 01 0 101 11 00 1 0 10 01 1 00 101 0 1 01 10 11', '0 1 001 11 0 10 1 01 100 0 1 10 11 00 101 10 01 0 1 00 10 1 001 11 0 10 1 01 100 0 1', '{ } 0 1 / / 01 10 001 1 + 0 10 11 00 101 0 1 10 01 0 101 11 00 1 + 10 01 1 / / 101 0 1'][i % 3]}</span></div>)}</div>
       <div className="dt-container dt-reference-hero">
-        <div className="dt-reference-top"><div className="leaf-old-ad" aria-label="Studio offers"><div className="leaf-old-ad-media">{ads[ad].video && !mobile ? <video src={ads[ad].video} autoPlay muted loop playsInline /> : <img src={ads[ad].image || "/assets/ads/best-uiux-design.webp"} alt="" />}</div><div className="leaf-old-ad-copy"><span>{ads[ad].tag}</span><strong>{ads[ad].title}</strong><p>{ads[ad].description}</p></div><div className="leaf-old-ad-dots">{ads.map((item,index)=><button key={item.title} type="button" aria-label={`Show ${item.title}`} aria-pressed={ad === index} onClick={()=>setAd(index)} />)}</div></div><LeafGoogleReviews /></div>
+        <div className="dt-reference-top"><div className="leaf-old-ad" aria-label="Studio offers"><div className="leaf-old-ad-media">{ads.map((item,index)=><div key={item.title} className={`leaf-ad-frame${ad === index ? " is-active" : ""}`} aria-hidden={ad !== index}>{item.video && !mobile && ad === index ? <video src={item.video} autoPlay muted loop playsInline /> : <img src={item.image || "/assets/ads/best-uiux-design.webp"} alt="" decoding="async" />}</div>)}</div><div className="leaf-old-ad-copy"><span>{ads[ad].tag}</span><strong>{ads[ad].title}</strong><p>{ads[ad].description}</p></div><div className="leaf-old-ad-dots">{ads.map((item,index)=><button key={item.title} type="button" aria-label={`Show ${item.title}`} aria-pressed={ad === index} onClick={()=>setAd(index)} />)}</div></div><LeafGoogleReviews /></div>
         <h1 className="dt-reference-title"><span>Make <img className="leaf-enter-photo" src="/assets/hero/enter-key-yellow.png" alt="" /> ideas</span><span className="leaf-hero-title-last"><span>worth</span> <span className="leaf-pixel-accent">noticing</span></span></h1>
         <p className="leaf-hero-description">Leaf Creationism is a creative studio in Kerala, building distinctive brands, websites and digital experiences that help businesses grow.</p>
         <LeafPhonePreview navigateTo={navigateTo} />
@@ -77,7 +76,6 @@ export default function DovetailHome({ navigateTo, openServiceModal, serviceCate
     <LeafAbout navigateTo={navigateTo} />
     <LeafFeaturedWork items={websiteProjects} navigateTo={navigateTo} />
     <LeafStudioHeads heads={studioHeads} />
-    <LeafCreativeProcess navigateTo={navigateTo} />
     <LeafServiceOrbit serviceCategories={serviceCategories} serviceTaglines={serviceTaglines} navigateTo={navigateTo} openServiceModal={openServiceModal} />
     <section className="dt-section dt-container dt-services"><div className="dt-section-head"><div><span className="dt-eyebrow">WHAT WE DO</span><h2>Built to move<br/>your brand forward.</h2></div><button type="button" className="dt-secondary" onClick={() => navigateTo('services')}>All services <ArrowUpRight size={16}/></button></div><div className="dt-service-grid">{services.map(({icon:Icon,label,title,text,id})=><button className="dt-service-card" key={id} type="button" onClick={()=>openServiceModal(id)}><span className="dt-service-top"><Icon size={21}/><ArrowUpRight size={16}/></span><span className="dt-eyebrow">{label}</span><strong>{title}</strong><p>{text}</p><span className="dt-card-link">Explore service <ArrowRight size={15}/></span></button>)}</div></section>
     <LeafAdvantageGallery items={posters} />

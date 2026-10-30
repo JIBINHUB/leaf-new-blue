@@ -20,7 +20,6 @@ html body #root .app-shell :is(
   .dt-cta > div > .dt-eyebrow,
   .leaf-featured-heading > .dt-eyebrow,
   .leaf-people-copy > .dt-eyebrow,
-  .leaf-process-intro > .dt-eyebrow,
   .leaf-service-orbit-heading > .dt-eyebrow,
   .leaf-arc-heading > span,
   .leaf-about-topline,
@@ -33,7 +32,7 @@ html body #root .app-shell :is(
 ) { display: none !important; }
 
 /* Close the gaps left by removed labels and keep section content aligned. */
-html body #root .app-shell :is(.leaf-poster-showcase-head, .leaf-featured-heading, .leaf-people-copy, .leaf-process-intro, .leaf-service-orbit-heading, .launch-simple-heading) h2 { margin-top: 0 !important; }
+html body #root .app-shell :is(.leaf-poster-showcase-head, .leaf-featured-heading, .leaf-people-copy, .leaf-service-orbit-heading, .launch-simple-heading) h2 { margin-top: 0 !important; }
 html body #root .app-shell .leaf-about-copy { padding-top: 24px; }
 html body #root .app-shell .portfolio-editorial-page .pe-head > div { display: none; }
 html body #root .app-shell .portfolio-editorial-page .pe-head { grid-template-columns: 1fr; }
