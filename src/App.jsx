@@ -1347,10 +1347,10 @@ const App = () => {
       title: 'Web Launch',
       icon: Globe,
       label: 'For websites',
-      badge: 'Most simple',
-      price: 'Included',
-      priceNote: 'with eligible website builds',
-      desc: 'Frontend hosting setup for landing pages, portfolios, campaign sites, and fast company websites using the best free-friendly platform for the project.',
+      badge: 'A good start',
+      price: 'Let’s discuss',
+      priceNote: 'quoted for your project',
+      desc: 'For a portfolio, landing page or business website. We’ll help you choose a suitable host and get your site ready to go live.',
       platforms: ['Vercel', 'Netlify', 'Render', 'AWS Amplify', 'Firebase Hosting', 'Cloudflare Pages', 'GitHub Pages'],
       resources: ['1 production website', 'Free SSL setup', 'DNS + redirect check', '1 year domain guidance'],
       items: ['Deployment workflow', 'Static or SPA hosting', 'Basic performance pass', 'Analytics-ready structure', 'Launch handover']
@@ -1363,7 +1363,7 @@ const App = () => {
       badge: 'Popular',
       price: 'Custom',
       priceNote: 'based on backend scope',
-      desc: 'Managed launch planning for apps, dashboards, forms, databases, storage, and API-connected products.',
+      desc: 'For projects that need more than a website, such as dashboards, accounts, forms or a database. We’ll plan the pieces together.',
       platforms: ['AWS', 'Google Cloud', 'DigitalOcean', 'Linode', 'Railway', 'Render'],
       resources: ['API + database plan', 'Auth-ready structure', 'Environment variables', 'Backup approach'],
       items: ['Backend service mapping', 'Production and preview setup', 'Supabase, Firebase, MongoDB Atlas, PostgreSQL, or PlanetScale planning', 'Admin-ready flow', 'Security checklist']
@@ -1374,12 +1374,12 @@ const App = () => {
       icon: Server,
       label: 'For custom stacks',
       badge: 'Advanced',
-      price: 'Managed',
-      priceNote: 'cloud, VPS, or commerce launch',
-      desc: 'A stronger launch path for VPS, cloud hosting, Shopify, custom servers, AI features, and multi-service brand systems.',
+      price: 'Custom',
+      priceNote: 'quoted for your project',
+      desc: 'For more complex projects that need a custom server, an online store or several connected services.',
       platforms: ['AWS autoscaling', 'Google Cloud', 'DigitalOcean', 'Linode', 'Railway', 'Render', 'Custom VPS'],
       resources: ['Server setup support', 'Domain + DNS', 'Monitoring basics', 'Commerce-ready flow'],
-      items: ['CI/CD pipeline', 'Auto-scaling plan', 'Custom AI integrations', '24/7 maintenance option', 'Shopify theme workflow', 'Launch QA']
+      items: ['CI/CD pipeline', 'Auto-scaling plan', 'Custom AI integrations', 'Ongoing support by agreement', 'Shopify theme workflow', 'Launch QA']
     }
   ];
   const launchCreativeBundles = [
@@ -1413,22 +1413,22 @@ const App = () => {
     }
   ];
   const launchServices = [
-    { title: 'Maximum free frontend options', text: 'We can launch eligible frontend projects through Vercel, Netlify, Render, AWS Amplify, Firebase Hosting, Cloudflare Pages, or GitHub Pages.', icon: Cloud },
+    { title: 'Website hosting options', text: 'We can launch eligible frontend projects through Vercel, Netlify, Render, AWS Amplify, Firebase Hosting, Cloudflare Pages, or GitHub Pages.', icon: Cloud },
     { title: 'Domain for 1 year', text: 'For selected website and ads packages, we help arrange a domain for the first year and connect DNS properly.', icon: Globe },
     { title: 'Backend service planning', text: 'We choose the right backend path across AWS, Google Cloud, DigitalOcean, Linode, Railway, Render, VPS, or a custom API stack.', icon: Server },
     { title: 'Secure database setup', text: 'Supabase, Firebase, MongoDB Atlas, PostgreSQL, and PlanetScale options are mapped by auth, data size, budget, and scale needs.', icon: Database },
     { title: 'Shopify CLI + theme design', text: 'Shopify theme customization, CLI workflow, product sections, checkout trust, and storefront launch support.', icon: ShoppingBag },
     { title: 'CI/CD and preview pipeline', text: 'Git-connected deploys, preview links, production checks, environment separation, and roll-forward launch workflow.', icon: Activity },
     { title: 'AI integrations', text: 'Custom AI chat, content tools, smart forms, automations, and product-assist features can be connected to the launch stack.', icon: Cpu },
-    { title: '24/7 maintenance and scaling', text: 'Monitoring, update support, uptime checks, backups, incident response, and auto-scaling planning for growing products.', icon: Shield }
+    { title: 'Maintenance and scaling options', text: 'Monitoring, update support, uptime checks, backups, incident response, and auto-scaling planning for growing products.', icon: Shield }
   ];
   const launchFeatureRows = [
-    { title: 'Frontend-first when free is enough', text: 'We use Vercel, Netlify, Render, AWS Amplify, Firebase Hosting, Cloudflare Pages, or GitHub Pages when the product does not need heavy backend power.', icon: Cloud },
+    { title: 'A straightforward start for websites', text: 'We use Vercel, Netlify, Render, AWS Amplify, Firebase Hosting, Cloudflare Pages, or GitHub Pages when the product does not need heavy backend power.', icon: Cloud },
     { title: 'Backend power when the product grows', text: 'AWS, Google Cloud, DigitalOcean, Linode, Railway, and Render are planned around traffic, APIs, auth, storage, and dashboard logic.', icon: Server },
     { title: 'Secure data and long-term operations', text: 'Databases, CI/CD, custom AI, auto-scaling, backups, 24/7 maintenance, and launch QA are connected before handover.', icon: Shield }
   ];
   const launchFaqs = [
-    { q: 'Can we host simple frontend websites for free?', a: 'Yes. For eligible frontend websites, we can use Vercel, Netlify, Render, AWS Amplify, Firebase Hosting, Cloudflare Pages, or GitHub Pages and set up deployment, SSL, and DNS connection.' },
+    { q: 'Can a simple website use a free hosting plan?', a: 'Some providers offer free plans for eligible projects. Availability, commercial-use rules and usage limits vary; we’ll discuss suitable options and costs before launch.' },
     { q: 'Do we provide backend and cloud service setup?', a: 'Yes. We can plan backend services using AWS, Google Cloud, DigitalOcean, Linode, Railway, Render, VPS hosting, or a custom stack based on the product.' },
     { q: 'Can we set up secure databases?', a: 'Yes. We can plan and connect Supabase, Firebase, MongoDB Atlas, PostgreSQL, or PlanetScale depending on auth, budget, scale, and product logic.' },
     { q: 'Can this include CI/CD, maintenance, AI, and auto-scaling?', a: 'Yes. Launch Cloud can include CI/CD pipelines, preview deployments, 24/7 maintenance options, custom AI integrations, uptime checks, and auto-scaling planning.' },
@@ -1441,9 +1441,9 @@ const App = () => {
   ];
   const launchProviderStacks = [
     {
-      title: 'Free frontend hosting',
+      title: 'Website hosting',
       icon: Cloud,
-      text: 'Best for landing pages, portfolios, campaign sites, documentation, and fast static or SPA launches.',
+      text: 'Hosting for landing pages, portfolios and business websites. The right plan depends on your project, usage and the provider’s terms.',
       options: ['Vercel', 'Netlify', 'Render', 'AWS Amplify', 'Firebase Hosting', 'Cloudflare Pages', 'GitHub Pages']
     },
     {
@@ -1462,13 +1462,13 @@ const App = () => {
       title: 'Launch operations',
       icon: Shield,
       text: 'Best for professional delivery, ongoing reliability, better deployments, and growth-ready systems.',
-      options: ['CI/CD pipelines', '24/7 maintenance', 'Custom AI integrations', 'Auto-scaling', 'Backups', 'Monitoring']
+      options: ['CI/CD pipelines', 'Ongoing support', 'Custom AI integrations', 'Auto-scaling', 'Backups', 'Monitoring']
     }
   ];
   const launchQuickGuide = [
     {
       title: 'Simple website or portfolio',
-      result: 'Use a free frontend host',
+      result: 'Choose website hosting',
       text: 'Best when you need a landing page, brand website, portfolio, or campaign page with fast loading, SSL, DNS, and clean deployment.',
       options: ['Vercel', 'Netlify', 'Cloudflare Pages', 'GitHub Pages'],
       icon: Globe
@@ -1484,7 +1484,7 @@ const App = () => {
       title: 'Brand launch with growth assets',
       result: 'Add creative and maintenance',
       text: 'Best when the launch also needs AI ads, motion graphics, 3D visuals, Shopify sections, CI/CD, uptime checks, and support after launch.',
-      options: ['AI Ads', '3D Animation', 'Motion Graphics', '24/7 Maintenance'],
+      options: ['AI Ads', '3D Animation', 'Motion Graphics', 'Ongoing support'],
       icon: Activity
     }
   ];
@@ -3084,8 +3084,8 @@ const App = () => {
           <section className="launch-simple-hero">
             <div>
               <span><Cloud size={15} /> Launch Cloud</span>
-              <h1>Choose what you want to launch. We handle the technical stack.</h1>
-              <p>Websites, apps, stores, hosting, backend, databases, domains, AI ads, motion, and post-launch support in one clear plan.</p>
+              <h1>Ready to bring your idea online?</h1>
+              <p>Whether you’re launching a website, app or online store, we’ll help you make sense of the technology and get it live.</p>
               <button type="button" onClick={() => navigateTo('workspace')}>Plan my launch <ArrowUpRight size={16} /></button>
             </div>
             <aside>
@@ -3128,7 +3128,7 @@ const App = () => {
             <div className="launch-simple-heading">
               <span>Plans</span>
               <h2>Three clear levels.</h2>
-              <p>Start lean, add backend power, or combine development with a complete creative launch.</p>
+              <p>Choose a starting point. We’ll confirm the scope, costs and support before work begins.</p>
             </div>
             <div className="launch-simple-plans">
               {launchPlans.map((plan, index) => {
@@ -3178,7 +3178,7 @@ const App = () => {
             <div className="launch-simple-heading">
               <span>Available technology</span>
               <h2>Providers we can configure.</h2>
-              <p>We recommend only what the project needs. Free hosting is used when it is the right fit.</p>
+              <p>We’ll recommend tools that fit your project and budget. Hosting, domains and third-party services may have their own fees and terms.</p>
             </div>
             <div className="launch-simple-providers">
               {launchProviderStacks.map((stack) => {
@@ -3207,8 +3207,8 @@ const App = () => {
           </section>
 
           <section className="launch-simple-cta">
-            <div><span>Need help choosing?</span><h2>Send the outcome. We will map the launch.</h2></div>
-            <button type="button" onClick={() => navigateTo('workspace')}>Book a launch call <ArrowRight size={16} /></button>
+            <div><span>Need help choosing?</span><h2>Tell us what you’re planning. We’ll help you find a way forward.</h2></div>
+            <button type="button" onClick={() => navigateTo('workspace')}>Explore our services <ArrowRight size={16} /></button>
           </section>
         </main>
       )}
