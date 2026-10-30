@@ -21,3 +21,11 @@ html body #root .app-shell .leaf-old-ad-copy,html body #root .app-shell .leaf-ol
 .leaf-old-ad-copy{background:linear-gradient(90deg,rgba(12,22,48,.92),rgba(12,22,48,.68) 70%,transparent);padding-right:40px}
 html body #root .app-shell .leaf-old-ad-copy strong{font-weight:500!important;font-size:22px;line-height:1.25;color:white}
 html body #root .app-shell .leaf-old-ad-copy p{color:#e0e5ef!important;font-size:13px;line-height:1.5;max-width:225px}
+/* A solid editorial text column keeps offers separate from the artwork. */
+.leaf-old-ad{display:grid;grid-template-columns:55% 45%;height:190px;background:#141b2c}
+.leaf-old-ad-media{inset:0 0 0 55%;mask-image:none}
+.leaf-old-ad-copy{grid-column:1;max-width:none;padding:24px 18px 34px;background:#141b2c;display:flex;flex-direction:column;justify-content:center}
+html body #root .app-shell .leaf-old-ad-copy strong{font-size:19px;line-height:1.3;letter-spacing:-.025em}
+html body #root .app-shell .leaf-old-ad-copy p{font-size:11px;line-height:1.5;margin:8px 0 0}
+.leaf-old-ad-copy span{font-size:8px;margin-bottom:8px;color:#aab7d2}
+.leaf-old-ad-dots{left:18px}

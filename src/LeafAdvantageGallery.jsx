@@ -42,7 +42,7 @@ export default function LeafAdvantageGallery({ items }) {
       frame = 0;
       const rect = section.getBoundingClientRect();
       const mobile = rect.width <= 640;
-      const height = Math.max(window.innerHeight, mobile ? 640 : 720);
+      const height = section.firstElementChild.offsetHeight;
       const progress = clamp(-rect.top / Math.max(1, rect.height - height));
       const visibleCount = mobile ? 5 : 7;
       const start = (visibleCount - 1) / 2;
@@ -66,7 +66,7 @@ export default function LeafAdvantageGallery({ items }) {
         const angle = (index - center) * step;
         const radians = angle * Math.PI / 180;
         const x = rect.width / 2 + Math.sin(radians) * radius - cardWidth / 2;
-        const y = height * (mobile ? 0.63 : 0.64) + radius * (1 - Math.cos(radians)) - cardWidth / 2 + entrance;
+        const y = height * (mobile ? 0.60 : 0.64) + radius * (1 - Math.cos(radians)) - cardWidth / 2 + entrance;
         const visible = Math.abs(angle) < 78 && x + cardWidth > 0 && x < rect.width && y < height;
         card.style.transform = `translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0) rotate(${(angle * 0.78).toFixed(2)}deg)`;
         card.style.zIndex = `${Math.round(100 - Math.abs(angle))}`;

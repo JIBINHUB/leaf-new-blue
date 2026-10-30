@@ -89,3 +89,4 @@
   .leaf-service-feature-visual { aspect-ratio:3 / 4; background-position:center, 70% center; }
   .leaf-service-feature-intro { min-height:clamp(490px, 110vw, 690px); }
 }
+:root .app-shell[data-route] .leaf-service-feature h2 span{color:#fff!important}

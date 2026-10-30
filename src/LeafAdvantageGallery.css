@@ -77,3 +77,12 @@
 @media(max-width:640px) { .leaf-arc-project { border-radius:8px; } .leaf-arc-footer { bottom:90px; } }
 /* A clipped x-axis must not create a scrolling container around the sticky gallery. */
 :root .app-shell[data-route='home'] { overflow-x:clip !important; overflow-y:visible !important; }
+@media(max-width:640px) and (prefers-reduced-motion:no-preference){
+ :root .app-shell[data-route='home'] .dt-home > section.leaf-advantage-arc{height:190svh;min-height:0}
+ .leaf-arc-sticky{height:clamp(660px,85svh,760px);min-height:0}
+ .leaf-arc-heading{top:38px}
+ :root .app-shell[data-route='home'] .leaf-arc-heading > p{margin-top:16px}
+ .leaf-arc-card{width:128px;height:148px;transition:transform .18s linear}
+ .leaf-arc-detail{top:29%}
+ .leaf-arc-footer{bottom:42px}
+}
