@@ -71,3 +71,10 @@
   .leaf-process-point{transition:transform .45s cubic-bezier(.22,1,.36,1),background .35s,box-shadow .45s}
   .leaf-process-chart,.leaf-process-details{animation:leaf-process-reveal .45s cubic-bezier(.22,1,.36,1) both}
 }
+/* Keep the globe centred and track scroll directly without transitions chasing each frame. */
+.leaf-process-globe-art,.leaf-process-traveller{transition:none}
+.leaf-process-point-0,.leaf-process-point-2{left:50%;translate:-50% 0}
+@media(max-width:700px) and (prefers-reduced-motion:no-preference){
+  .leaf-process-stage{align-content:center;padding:70px 0 80px}
+  .leaf-process-globe{width:min(76vw,34svh,320px);margin-inline:auto}
+}
